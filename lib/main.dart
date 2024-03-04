@@ -1,6 +1,7 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:sofp_front/gaps.dart';
+
+import 'ShapeSearch.dart';
 
 void main() {
   runApp(const MyApp());
@@ -21,35 +22,7 @@ class MyApp extends StatelessWidget {
           ),
         ),
         body: ShapeSearchTotal(),
-        bottomNavigationBar: BottomNavigationBar(
-          items: <BottomNavigationBarItem>[
-
-            BottomNavigationBarItem(
-              icon: Image.asset(
-                  'assets/bottom_icon_bookmark.png',
-                  width: 30,
-                  height: 30,
-              ),
-              label: '즐겨찾기',
-            ),
-            BottomNavigationBarItem(
-              icon: Icon(
-                  Icons.circle_outlined,
-                  size: 50,
-                  color: Color(0xFF53DACA)
-              ),
-              label: '홈',
-            ),
-            BottomNavigationBarItem(
-              icon: Image.asset(
-                  'assets/bottom_icon_mypage.png',
-                  width: 30,
-                  height: 30,
-              ),
-              label: '마이페이지',
-            ),
-          ],
-        ),
+        bottomNavigationBar: BottomBarTotal(),
       ),
     );
   }
@@ -322,7 +295,58 @@ class ShapeSearchRGB extends StatelessWidget {
       width: 130,
       height: 45,
       child: OutlinedButton(
-        onPressed: () {},
+        onPressed: () {
+          showDialog(
+            context: context,
+            barrierDismissible: false,
+            builder: (context) {
+              return AlertDialog(
+                content: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    Wrap(
+                      direction: Axis.horizontal,
+                      alignment: WrapAlignment.start,
+                      spacing: 5,
+                      runSpacing: 5,
+                      children: [
+                        customColorButton('하양', Colors.white, () {}),
+                        customColorButton('노랑', Colors.yellow, () {}),
+                        customColorButton('주황', Colors.orange, () {}),
+                        customColorButton('분홍', Colors.pink, () {}),
+                        customColorButton('빨강', Colors.red, () {}),
+                        customColorButton('갈색', Colors.brown, () {}),
+                        customColorButton('연두', Colors.lightGreen, () {}),
+                        customColorButton('초록', Colors.green, () {}),
+                        customColorButton('청록', Colors.blueGrey, () {}),
+                        customColorButton('파랑', Colors.blue, () {}),
+                        customColorButton('남색', Colors.indigo, () {}),
+                        customColorButton('자주', Colors.deepPurple, () {}),
+                        customColorButton('보라', Colors.purple, () {}),
+                        customColorButton('회색', Colors.grey, () {}),
+                        customColorButton('검정', Colors.black, () {}),
+                        customColorButton('투명', Color(0x00d9d9d9), () {}),
+                        customColorButton('전체', Colors.transparent, () {}),
+                      ],
+                    ),
+                    Gaps.h16,
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        customColorButton('취소', Colors.black12, () {
+                          Navigator.pop(context); // 취소 버튼 클릭 시 대화 상자 닫기
+                        }),
+                        SizedBox(width: 72),
+                        customColorButton('확인', Colors.black12, () {}),
+                      ],
+                    ),
+                  ],
+                ),
+              );
+            },
+          );
+
+        },
         style: OutlinedButton.styleFrom(
           side: BorderSide(
             width: 1,
@@ -528,6 +552,43 @@ class ShapeSearchSearch extends StatelessWidget {
           ],
         ),
       ),
+    );
+  }
+}
+
+class BottomBarTotal extends StatelessWidget {
+  const BottomBarTotal({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return BottomNavigationBar(
+      items: <BottomNavigationBarItem>[
+
+        BottomNavigationBarItem(
+          icon: Image.asset(
+            'assets/bottom_icon_bookmark.png',
+            width: 30,
+            height: 30,
+          ),
+          label: '즐겨찾기',
+        ),
+        BottomNavigationBarItem(
+          icon: Icon(
+              Icons.circle_outlined,
+              size: 50,
+              color: Color(0xFF53DACA)
+          ),
+          label: '홈',
+        ),
+        BottomNavigationBarItem(
+          icon: Image.asset(
+            'assets/bottom_icon_mypage.png',
+            width: 30,
+            height: 30,
+          ),
+          label: '마이페이지',
+        ),
+      ],
     );
   }
 }
