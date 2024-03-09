@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:sofp_front/gaps.dart';
 
-import 'ShapeSearch.dart';
+import 'shapeSearch.dart';
 
 void main() {
-  runApp(const MyApp());
+  runApp(const ShapeSearchColor());
 }
 
 class MyApp extends StatelessWidget {
@@ -230,7 +230,7 @@ class ShapeSearchTotal extends StatelessWidget {
               Gaps.h10,
               Row(
                 children: [
-                  ShapeSearchRGB(),
+                  // ShapeSearchRGB(),
                   Gaps.w28,
                   ShapeSearchShape()
                 ],
@@ -310,7 +310,9 @@ class ShapeSearchRGB extends StatelessWidget {
                       spacing: 5,
                       runSpacing: 5,
                       children: [
-                        customColorButton('하양', Colors.white, () {}),
+                        customColorButton('하양', Colors.white, () {
+
+                        }),
                         customColorButton('노랑', Colors.yellow, () {}),
                         customColorButton('주황', Colors.orange, () {}),
                         customColorButton('분홍', Colors.pink, () {}),
