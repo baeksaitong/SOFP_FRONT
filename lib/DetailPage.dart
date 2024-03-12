@@ -66,7 +66,7 @@ class DetailPage extends StatelessWidget {
         borderRadius: BorderRadius.circular(20),
       ),
       child: Center(
-        child: Image.asset(imageUrl, fit: BoxFit.cover), // 실제 앱에서는 NetworkImage를 사용할 수도 있습니다.
+        child: Image.asset(imageUrl, fit: BoxFit.cover),
       ),
     );
   }
