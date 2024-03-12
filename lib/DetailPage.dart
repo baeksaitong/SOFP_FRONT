@@ -3,20 +3,20 @@ import 'package:flutter/material.dart';
 class DetailPage extends StatelessWidget {
   // 예시 데이터 - 실제 앱에서는 서버나 로컬 데이터베이스에서 데이터를 불러와야 함
   final String productName = "제품명";
-  final String productPhotoUrl = "assets/your_photo.png"; // 알약 사진 경로
-  final String usage = "사용 방법";
-  final String precautions = "사용 시 주의 사항";
-  final String warnings = "주의 사항";
-  final String efficacy = "효능";
-  final String sideEffects = "부작용";
-  final String storageMethod = "보관 방법";
-  final String productCategoryAndManufacturer = "제품 분류명 및 제조 회사";
+  final String productPhotoUrl = "assets/pill.png"; // 알약 사진 경로
+  final String usage = " - ";
+  final String precautions = " - ";
+  final String warnings = " - ";
+  final String efficacy = " - ";
+  final String sideEffects = " - ";
+  final String storageMethod = " - ";
+  final String productCategoryAndManufacturer = " - ";
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('세부 정보'),
+        title: Text('알약 세부 정보'),
       ),
       body: SingleChildScrollView(
         child: Container(
