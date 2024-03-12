@@ -15,7 +15,7 @@ class MyPage extends StatelessWidget {
               top:90,
               left:50,
               child: Text(
-                '???님\n안녕하세요!',
+                '사통백이님\n안녕하세요!',
                 style: TextStyle(fontSize: 25, fontWeight: FontWeight.w400),
               ),
             ),
@@ -27,7 +27,7 @@ class MyPage extends StatelessWidget {
                   // 정보 수정 버튼 클릭 시 동작할 내용
                 },
                 style: ElevatedButton.styleFrom(
-                  primary: Colors.transparent,
+                  backgroundColor: Colors.transparent,
                   elevation: 0,
                   padding: EdgeInsets.zero,
                 ),
@@ -108,7 +108,7 @@ class MyPage extends StatelessWidget {
                               // 정보 수정 버튼 클릭 시 동작할 내용
                             },
                             style: ElevatedButton.styleFrom(
-                              primary: Colors.transparent,
+                              backgroundColor: Colors.transparent,
                               elevation: 0,
                               padding: EdgeInsets.zero,
                             ),
@@ -172,7 +172,7 @@ class MyPage extends StatelessWidget {
                             // 정보 수정 버튼 클릭 시 동작할 내용
                           },
                           style: ElevatedButton.styleFrom(
-                            primary: Colors.transparent,
+                            backgroundColor: Colors.transparent,
                             elevation: 0,
                             padding: EdgeInsets.zero,
                           ),

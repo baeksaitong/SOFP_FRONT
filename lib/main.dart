@@ -1,10 +1,12 @@
 import 'package:flutter/material.dart';
+import 'package:sofp_front/Pill_Details.dart';
 import 'package:sofp_front/gaps.dart';
-
+import 'package:sofp_front/image_search.dart';
 import 'mypage.dart';
+import 'image_search.dart';
 
 void main() {
-  runApp(const MyPage());
+  runApp(MyApp());
 }
 
 class MyApp extends StatelessWidget {
@@ -13,20 +15,7 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      home: Scaffold(
-        appBar: AppBar(
-            title: Row(
-              children: [
-                Text('data'),
-                Gaps.w20, // 여백을 부여할 수 있습니다.
-                IconButton(
-                  onPressed: () {},
-                  icon: Icon(Icons.search),
-                )
-              ],
-            )
-        ),
-      ),
+      home: DetailPage(),
     );
   }
 }
