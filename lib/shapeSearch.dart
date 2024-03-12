@@ -16,6 +16,7 @@ class ShapeSearchColor extends StatelessWidget {
           children: const [
             ShapeSearchRgbButton(),
             ShapeSearchShape(),
+            ShapeSearchFormulation(),
           ],
         ),
       ),
@@ -51,6 +52,22 @@ class ColorItem {
   ColorItem({required this.color, required this.text, this.isSelected = false});
 }
 
+class ShapeItem {
+  final String text;
+  final String image;
+  bool isSelected;
+
+  ShapeItem({required this.text, required this.image, this.isSelected=false});
+}
+
+class FormulationItem {
+  final String text;
+  final String image;
+  bool isSelected;
+  
+  FormulationItem({required this.text, required this.image, this.isSelected=false});
+}
+
 final List<ColorItem> colorItems = [
   ColorItem(color: Colors.white, text: '하양'),
   ColorItem(color: Colors.yellow, text: '노랑'),
@@ -71,52 +88,29 @@ final List<ColorItem> colorItems = [
   ColorItem(color: Colors.transparent, text: '전체'),
 ];
 
-class CustomColorButtonTest extends StatefulWidget {
-  final ColorItem colorItem;
-  final Function(ColorItem) onPressed;
+final List<ShapeItem> shapeItems = [
+  ShapeItem(text: '원형', image: 'assets/shapes/circle.png'),
+  ShapeItem(text: '타원형', image: 'assets/shapes/ellipse-outline.png'),
+  ShapeItem(text: '장방형', image: 'assets/shapes/rectangle.png'),
+  ShapeItem(text: '반원형', image: 'assets/shapes/semicircle.png'),
+  ShapeItem(text: '삼각형', image: 'assets/shapes/triangle-outline.png'),
+  ShapeItem(text: '사각형', image: 'assets/shapes/square-outline.png'),
+  ShapeItem(text: '마름모형', image: 'assets/shapes/rhombus.png'),
+  ShapeItem(text: '오각형', image: 'assets/shapes/pentagon.png'),
+  ShapeItem(text: '육각형', image: 'assets/shapes/hexagon.png'),
+  ShapeItem(text: '팔각형', image: 'assets/shapes/octagon-outline.png'),
+  ShapeItem(text: '기타', image: 'assets/shapes.png'),
+  ShapeItem(text: '전체', image: 'assets/shapes.png'),
+];
 
-  const CustomColorButtonTest({
-    Key? key,
-    required this.colorItem,
-    required this.onPressed,
-  }) : super(key: key);
+final List<FormulationItem> formulationItems = [
+  FormulationItem(text: '정제', image: 'assets/formulations/refine.png'),
+  FormulationItem(text: '경질캡슐', image: 'assets/formulations/reshuffle.png'),
+  FormulationItem(text: '연질캡슐', image: 'assets/formulations/soft.png'),
+  FormulationItem(text: '기타', image: 'assets/drugs.png'),
+  FormulationItem(text: '전체', image: 'assets/drugs.png'),
+];
 
-  @override
-  _CustomColorButtonTestState createState() => _CustomColorButtonTestState();
-}
-
-class _CustomColorButtonTestState extends State<CustomColorButtonTest> {
-  @override
-  Widget build(BuildContext context) {
-    return GestureDetector(
-      onTap: () {
-        widget.onPressed(widget.colorItem);
-      },
-      child: Container(
-        width: 50,
-        height: 30,
-        decoration: BoxDecoration(
-          color: widget.colorItem.color,
-          border: widget.colorItem.isSelected
-              ? Border.all(
-            width: 2.0,
-            color: Colors.redAccent,
-          )
-              : null,
-        ),
-        child: Center(
-          child: Text(
-            widget.colorItem.text,
-            textAlign: TextAlign.center,
-            style: TextStyle(
-              height: 1.0,
-            ),
-          ),
-        ),
-      ),
-    );
-  }
-}
 class ShapeSearchRgbButton extends StatefulWidget {
   const ShapeSearchRgbButton({Key? key}) : super(key: key);
 
@@ -132,7 +126,7 @@ class _ShapeSearchRgbButtonState extends State<ShapeSearchRgbButton> {
   @override
   Widget build(BuildContext context) {
     return SizedBox(
-      width: 130,
+      width: 140,
       height: 45,
       child: OutlinedButton(
           onPressed: () async {
@@ -250,20 +244,115 @@ class _ShapeSearchRgbButtonState extends State<ShapeSearchRgbButton> {
 }
 
 class ShapeSearchShape extends StatefulWidget {
-  const ShapeSearchShape({super.key});
+  const ShapeSearchShape({Key? key}) : super(key: key);
 
   @override
   State<ShapeSearchShape> createState() => _ShapeSearchShapeState();
 }
 
 class _ShapeSearchShapeState extends State<ShapeSearchShape> {
+  ShapeItem? selectedShapeItem;
+  String? finalImage;
+  String? finalText;
+
   @override
   Widget build(BuildContext context) {
     return SizedBox(
-      width: 130,
+      width: 140,
       height: 45,
       child: OutlinedButton(
-        onPressed: () {},
+        onPressed: () async {
+          final ShapeItem? selected = await showDialog<ShapeItem>(
+              context: context,
+              barrierDismissible: false,
+              builder: (BuildContext context) {
+                return AlertDialog(
+                  content: StatefulBuilder(
+                      builder: (BuildContext context, StateSetter setState) {
+                        return Column(
+                          mainAxisSize: MainAxisSize.min,
+                          children: [
+                            Wrap(
+                              direction: Axis.horizontal,
+                              alignment: WrapAlignment.start,
+                              spacing: 5,
+                              runSpacing: 5,
+                              children:shapeItems.map((shapeItem) => GestureDetector(
+                                onTap: () {
+                                  setState(() {
+                                    if(selectedShapeItem != null) {
+                                      selectedShapeItem!.isSelected=false;
+                                    }
+                                    selectedShapeItem = shapeItem;
+                                    selectedShapeItem!.isSelected=true;
+                                  });
+                                },
+                                child: Container(
+                                  width: 65,
+                                  height: 65,
+                                  decoration: BoxDecoration(
+                                    color: Colors.white,
+                                    borderRadius: BorderRadius.circular(10.0),
+                                    border: shapeItem.isSelected
+                                        ? Border.all(
+                                      width: 2.0,
+                                      color: Colors.redAccent,
+                                    )
+                                        : null,
+                                  ),
+                                  child: Center(
+                                    child: Column(
+                                      mainAxisAlignment: MainAxisAlignment.center,
+                                      children: [
+                                        Image.asset(
+                                          shapeItem.image,
+                                          width: 25,
+                                          height: 25,
+                                        ),
+                                        Gaps.h10,
+                                        Text(
+                                          shapeItem.text,
+                                          textAlign: TextAlign.center,
+                                          style: TextStyle(
+                                            height: 1.0,
+                                          ),
+                                        )
+                                      ],
+                                    ),
+                                  ),
+                                ),
+                              )).toList(),
+                            ),
+                            Gaps.h16,
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                              children: [
+                                ElevatedButton(
+                                  onPressed: () {
+                                    Navigator.of(context).pop(); // 취소 버튼 클릭 시 대화 상자 닫기
+                                  },
+                                  child: Text('취소'),
+                                ),
+                                ElevatedButton(
+                                  onPressed: () {
+                                    Navigator.of(context).pop(selectedShapeItem); // 확인 버튼 클릭 시 선택한 색상 정보 반환
+                                  },
+                                  child: Text('확인'),
+                                ),
+                              ],
+                            ),
+                          ],
+                        );
+                      })
+                );
+              });
+          if (selected != null) {
+            setState(() {
+              finalText=selected.text;
+              finalImage=selected.image;
+            });
+          }
+        },
         style: OutlinedButton.styleFrom(
           side: BorderSide(
             width: 1,
@@ -279,9 +368,150 @@ class _ShapeSearchShapeState extends State<ShapeSearchShape> {
         child: Row(
           children: [
             Gaps.w16,
-            Image.asset('assets/shapes.png',width: 30, height: 30,),
+            Image.asset(
+            finalImage ?? "assets/shapes.png",
+              width: 30,
+              height: 30,
+            ),
             Gaps.w20,
-            Text('모양'),
+            Text(finalText ?? '모양'),
+          ],
+        ),
+      ),
+    );
+  }
+}
+
+class ShapeSearchFormulation extends StatefulWidget {
+  const ShapeSearchFormulation({Key? key}) : super(key: key);
+
+  @override
+  State<ShapeSearchFormulation> createState() => _ShapeSearchFormulationState();
+}
+
+class _ShapeSearchFormulationState extends State<ShapeSearchFormulation> {
+  FormulationItem? selectedFormulationItem;
+  String? finalImage;
+  String? finalText;
+
+  @override
+  Widget build(BuildContext context) {
+    return SizedBox(
+      width: 140,
+      height: 45,
+      child: OutlinedButton(
+        onPressed: () async {
+          final FormulationItem? selected = await showDialog<FormulationItem>(
+              context: context,
+              barrierDismissible: false,
+              builder: (BuildContext context) {
+                return AlertDialog(
+                  content: StatefulBuilder(
+                      builder: (BuildContext context, StateSetter setState) {
+                        return Column(
+                          mainAxisSize: MainAxisSize.min,
+                          children: [
+                            Wrap(
+                              direction: Axis.horizontal,
+                              alignment: WrapAlignment.start,
+                              spacing: 5,
+                              runSpacing: 5,
+                              children: formulationItems.map((formulationItem) => GestureDetector(
+                                onTap: () {
+                                  setState(() {
+                                    if (selectedFormulationItem != null) {
+                                      selectedFormulationItem!.isSelected = false;
+                                    }
+                                    selectedFormulationItem = formulationItem;
+                                    selectedFormulationItem!.isSelected = true;
+                                  });
+                                },
+                                child: Container(
+                                  width: 80,
+                                  height: 80,
+                                  decoration: BoxDecoration(
+                                    color: Colors.white,
+                                    borderRadius: BorderRadius.circular(10.0),
+                                    border: formulationItem.isSelected
+                                        ? Border.all(
+                                      width: 2.0,
+                                      color: Colors.redAccent,
+                                    )
+                                        : null,
+                                  ),
+                                  child: Center(
+                                    child: Column(
+                                      mainAxisAlignment: MainAxisAlignment.center,
+                                      children: [
+                                        Image.asset(
+                                          formulationItem.image,
+                                          width: 25,
+                                          height: 25,
+                                        ),
+                                        SizedBox(height: 10), // Gaps.h10,
+                                        Text(
+                                          formulationItem.text,
+                                          textAlign: TextAlign.center,
+                                          style: TextStyle(
+                                            height: 1.0,
+                                          ),
+                                        ),
+                                      ],
+                                    ),
+                                  ),
+                                ),
+                              )).toList(),
+                            ),
+                            SizedBox(height: 16), // Gaps.h16,
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                              children: [
+                                ElevatedButton(
+                                  onPressed: () {
+                                    Navigator.of(context).pop(); // 취소 버튼 클릭 시 대화 상자 닫기
+                                  },
+                                  child: Text('취소'),
+                                ),
+                                ElevatedButton(
+                                  onPressed: () {
+                                    Navigator.of(context).pop(selectedFormulationItem); // 확인 버튼 클릭 시 선택한 정보 반환
+                                  },
+                                  child: Text('확인'),
+                                ),
+                              ],
+                            ),
+                          ],
+                        );
+                      }),
+                );
+              });
+          if (selected != null) {
+            setState(() {
+              finalText = selected.text;
+              finalImage = selected.image;
+            });
+          }
+        },
+        style: OutlinedButton.styleFrom(
+          side: BorderSide(
+            width: 1,
+            color: Color(0xFF53DACA),
+          ),
+          padding: EdgeInsets.all(8),
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.all(Radius.circular(10)),
+          ),
+        ),
+        child: Row(
+          children: [
+            SizedBox(width: 16), // Gaps.w16,
+            Image.asset(
+              finalImage ?? "assets/drugs.png",
+              width: 30,
+              height: 30,
+            ),
+            SizedBox(width: 20), // Gaps.w20,
+            Text(finalText ?? '형태'),
           ],
         ),
       ),
