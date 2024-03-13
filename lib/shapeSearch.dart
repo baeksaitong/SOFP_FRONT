@@ -12,11 +12,23 @@ class ShapeSearchColor extends StatelessWidget {
           centerTitle: true,
           title: Text('모양으로 찾기'),
         ),
-        body: Row(
+        body: Column(
           children: const [
-            ShapeSearchRgbButton(),
-            ShapeSearchShape(),
-            ShapeSearchFormulation(),
+            Row(
+              children: [
+                ShapeSearchRgbButton(),
+                Gaps.w4,
+                ShapeSearchShape(),
+              ],
+            ),
+            Gaps.h4,
+            Row(
+              children: [
+                ShapeSearchFormulation(),
+                Gaps.w4,
+                ShapeSearchDivideLine(),
+              ],
+            ),
           ],
         ),
       ),
@@ -64,8 +76,16 @@ class FormulationItem {
   final String text;
   final String image;
   bool isSelected;
-  
+
   FormulationItem({required this.text, required this.image, this.isSelected=false});
+}
+
+class DivideLineItem {
+  final String text;
+  final String image;
+  bool isSelected;
+
+  DivideLineItem({required this.text, required this.image, this.isSelected=false});
 }
 
 final List<ColorItem> colorItems = [
@@ -109,6 +129,12 @@ final List<FormulationItem> formulationItems = [
   FormulationItem(text: '연질캡슐', image: 'assets/formulations/soft.png'),
   FormulationItem(text: '기타', image: 'assets/drugs.png'),
   FormulationItem(text: '전체', image: 'assets/drugs.png'),
+];
+
+final List<DivideLineItem> divideLineItems = [
+  DivideLineItem(text: '원형', image: 'assets/divideLines/circle.png'),
+  DivideLineItem(text: '( - )형', image: 'assets/divideLines/minus.png'),
+  DivideLineItem(text: '( + )형', image: 'assets/divideLines/add-circular.png'),
 ];
 
 class ShapeSearchRgbButton extends StatefulWidget {
@@ -518,3 +544,141 @@ class _ShapeSearchFormulationState extends State<ShapeSearchFormulation> {
     );
   }
 }
+
+class ShapeSearchDivideLine extends StatefulWidget {
+  const ShapeSearchDivideLine({Key? key}) : super(key: key);
+
+  @override
+  State<ShapeSearchDivideLine> createState() => _ShapeSearchDivideLineState();
+}
+
+class _ShapeSearchDivideLineState extends State<ShapeSearchDivideLine> {
+  DivideLineItem? selectedDivideLineItem;
+  String? finalImage;
+  String? finalText;
+
+  @override
+  Widget build(BuildContext context) {
+    return SizedBox(
+      width: 140,
+      height: 45,
+      child: OutlinedButton(
+        onPressed: () async {
+          final DivideLineItem? selected = await showDialog<DivideLineItem>(
+              context: context,
+              barrierDismissible: false,
+              builder: (BuildContext context) {
+                return AlertDialog(
+                  content: StatefulBuilder(
+                      builder: (BuildContext context, StateSetter setState) {
+                        return Column(
+                          mainAxisSize: MainAxisSize.min,
+                          children: [
+                            Wrap(
+                              direction: Axis.horizontal,
+                              alignment: WrapAlignment.start,
+                              spacing: 5,
+                              runSpacing: 5,
+                              children: divideLineItems.map((divideLineItem) => GestureDetector(
+                                onTap: () {
+                                  setState(() {
+                                    if (selectedDivideLineItem != null) {
+                                      selectedDivideLineItem!.isSelected = false;
+                                    }
+                                    selectedDivideLineItem = divideLineItem;
+                                    selectedDivideLineItem!.isSelected = true;
+                                  });
+                                },
+                                child: Container(
+                                  width: 65,
+                                  height: 65,
+                                  decoration: BoxDecoration(
+                                    color: Colors.white,
+                                    borderRadius: BorderRadius.circular(10.0),
+                                    border: divideLineItem.isSelected
+                                        ? Border.all(
+                                      width: 2.0,
+                                      color: Colors.redAccent,
+                                    )
+                                        : null,
+                                  ),
+                                  child: Center(
+                                    child: Column(
+                                      mainAxisAlignment: MainAxisAlignment.center,
+                                      children: [
+                                        Image.asset(
+                                          divideLineItem.image,
+                                          width: 25,
+                                          height: 25,
+                                        ),
+                                        SizedBox(height: 10),
+                                        Text(
+                                          divideLineItem.text,
+                                          textAlign: TextAlign.center,
+                                          style: TextStyle(
+                                            height: 1.0,
+                                          ),
+                                        ),
+                                      ],
+                                    ),
+                                  ),
+                                ),
+                              )).toList(),
+                            ),
+                            SizedBox(height: 16),
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                              children: [
+                                ElevatedButton(
+                                  onPressed: () {
+                                    Navigator.of(context).pop();
+                                  },
+                                  child: Text('취소'),
+                                ),
+                                ElevatedButton(
+                                  onPressed: () {
+                                    Navigator.of(context).pop(selectedDivideLineItem);
+                                  },
+                                  child: Text('확인'),
+                                ),
+                              ],
+                            ),
+                          ],
+                        );
+                      }),
+                );
+              });
+          if (selected != null) {
+            setState(() {
+              finalText = selected.text;
+              finalImage = selected.image;
+            });
+          }
+        },
+        style: OutlinedButton.styleFrom(
+          side: BorderSide(
+            width: 1,
+            color: Color(0xFF53DACA),
+          ),
+          padding: EdgeInsets.all(8),
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.all(Radius.circular(10)),
+          ),
+        ),
+        child: Row(
+          children: [
+            SizedBox(width: 16),
+            Image.asset(
+              finalImage ?? "assets/pill.png", // Default image or make sure to replace with your default one
+              width: 30,
+              height: 30,
+            ),
+            SizedBox(width: 20),
+            Text(finalText ?? '분할선'),
+          ],
+        ),
+      ),
+    );
+  }
+}
+

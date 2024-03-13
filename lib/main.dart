@@ -594,3 +594,23 @@ class BottomBarTotal extends StatelessWidget {
     );
   }
 }
+
+Widget customColorButton(String colorName, Color color, VoidCallback onPressed) {
+  return GestureDetector(
+    onTap: onPressed,
+    child: Container(
+      width: 50,
+      height: 30,
+      color: color,
+      child: Center(
+        child: Text(
+          colorName,
+          textAlign: TextAlign.center,
+          style: TextStyle(
+            height: 1.0,
+          ),
+        ),
+      ),
+    ),
+  );
+}
