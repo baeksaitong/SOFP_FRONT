@@ -96,16 +96,40 @@ class _BoomarkItemState extends State<BoomarkItem> {
             Positioned(
               top: 0,
               right: 0,
-              child: IconButton(
-                onPressed: () {},
-                icon: Icon(
-                  Icons.star,
-                  color: Color(0xffB0B0B0),
-                ),
-              ),
+              child: ToggleIconButton(),
             ),
           ],
         ),
+      ),
+    );
+  }
+}
+
+class ToggleIconButton extends StatefulWidget {
+  @override
+  _ToggleIconButtonState createState() => _ToggleIconButtonState();
+}
+
+class _ToggleIconButtonState extends State<ToggleIconButton> {
+  Color iconColor = Color(0xffB0B0B0);
+
+  void _toggleIconColor() {
+    setState(() {
+      if (iconColor == Color(0xffB0B0B0)) {
+        iconColor = Colors.yellow;
+      } else {
+        iconColor = Color(0xffB0B0B0);
+      }
+    });
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return IconButton(
+      onPressed: _toggleIconColor,
+      icon: Icon(
+        Icons.star,
+        color: iconColor,
       ),
     );
   }
