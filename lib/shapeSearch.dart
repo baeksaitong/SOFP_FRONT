@@ -1,6 +1,11 @@
 import 'package:flutter/material.dart';
 import 'gaps.dart';
 
+final GlobalKey<_ShapeSearchRgbButtonState> rgbButtonKey = GlobalKey<_ShapeSearchRgbButtonState>();
+final GlobalKey<_ShapeSearchShapeState> shapeButtonKey = GlobalKey<_ShapeSearchShapeState>();
+final GlobalKey<_ShapeSearchFormulationState> formulationButtonKey = GlobalKey<_ShapeSearchFormulationState>();
+final GlobalKey<_ShapeSearchDivideLineState> divideLineButtonKey = GlobalKey<_ShapeSearchDivideLineState>();
+
 class ShapeSearchColor extends StatelessWidget {
   const ShapeSearchColor({super.key});
 
@@ -13,20 +18,63 @@ class ShapeSearchColor extends StatelessWidget {
           title: Text('모양으로 찾기'),
         ),
         body: Column(
-          children: const [
+          children: [
             Row(
               children: [
-                ShapeSearchRgbButton(),
+                ShapeSearchRgbButton(key: rgbButtonKey), // GlobalKey 할당
                 Gaps.w4,
-                ShapeSearchShape(),
+                ShapeSearchShape(key: shapeButtonKey),
               ],
             ),
             Gaps.h4,
             Row(
               children: [
-                ShapeSearchFormulation(),
+                ShapeSearchFormulation(key: formulationButtonKey),
                 Gaps.w4,
-                ShapeSearchDivideLine(),
+                ShapeSearchDivideLine(key: divideLineButtonKey),
+              ],
+            ),
+            Gaps.h4,
+            Row(
+              children: [
+                SizedBox(
+                  width: 140,
+                  height: 45,
+                  child: ElevatedButton(
+                    onPressed: () {
+                      // 각 GlobalKey를 사용하여 위젯의 상태에 접근하고 resetSelection 메서드를 호출
+                      rgbButtonKey.currentState?.resetSelection();
+                      shapeButtonKey.currentState?.resetSelection();
+                      formulationButtonKey.currentState?.resetSelection();
+                      divideLineButtonKey.currentState?.resetSelection();
+                    },
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor: Color(0xFF53DACA),
+                      side: BorderSide(
+                        width: 1,
+                        color: Color(0xFF53DACA),
+                      ),
+                      padding: EdgeInsets.all(8),
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.all(
+                          Radius.circular(10),
+                        ),
+                      ),
+                    ),
+                    child: Row(
+                      children: [
+                        SizedBox(width: 16),
+                        Text("다시 입력"),
+                        Gaps.w8,
+                        Image.asset(
+                          'assets/refresh.png',
+                          width: 30,
+                          height: 30,
+                        ),
+                      ],
+                    ),
+                  ),
+                ),
               ],
             ),
           ],
@@ -148,7 +196,16 @@ class _ShapeSearchRgbButtonState extends State<ShapeSearchRgbButton> {
   ColorItem? selectedColorItem;
   Color? finalColor;
   String? finalText;
-
+  void resetSelection() {
+    setState(() {
+      selectedColorItem = null;
+      finalColor = null;
+      finalText = null;
+      for (var item in colorItems) {
+        item.isSelected = false; // 모든 colorItems의 isSelected를 false로 설정
+      }
+    });
+  }
   @override
   Widget build(BuildContext context) {
     return SizedBox(
@@ -161,6 +218,8 @@ class _ShapeSearchRgbButtonState extends State<ShapeSearchRgbButton> {
               context: context,
               barrierDismissible: false,
               builder: (BuildContext context) {
+                ColorItem? localSelectedColorItem;
+
                 return AlertDialog(
                   content: StatefulBuilder(
                     builder: (BuildContext context, StateSetter setState) {
@@ -237,6 +296,9 @@ class _ShapeSearchRgbButtonState extends State<ShapeSearchRgbButton> {
               setState(() {
                 finalColor = selected.color; // 선택된 색상 적용
                 finalText = selected.text; // 선택된 텍스트 적용
+                for (var item in shapeItems) {
+                  item.isSelected = false; // 모든 shapeItems의 isSelected를 false로 설정
+                }
               });
             }
           },
@@ -280,6 +342,17 @@ class _ShapeSearchShapeState extends State<ShapeSearchShape> {
   ShapeItem? selectedShapeItem;
   String? finalImage;
   String? finalText;
+  // 상태를 리셋하는 메서드
+  void resetSelection() {
+    setState(() {
+      selectedShapeItem = null;
+      finalImage = null;
+      finalText = null;
+      for (var item in shapeItems) {
+        item.isSelected = false; // 모든 shapeItems의 isSelected를 false로 설정
+      }
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -419,7 +492,17 @@ class _ShapeSearchFormulationState extends State<ShapeSearchFormulation> {
   FormulationItem? selectedFormulationItem;
   String? finalImage;
   String? finalText;
-
+  // 상태를 리셋하는 메서드
+  void resetSelection() {
+    setState(() {
+      selectedFormulationItem = null;
+      finalImage = null;
+      finalText = null;
+      for (var item in formulationItems) {
+        item.isSelected = false; // 모든 formulationItems의 isSelected를 false로 설정
+      }
+    });
+  }
   @override
   Widget build(BuildContext context) {
     return SizedBox(
@@ -556,7 +639,17 @@ class _ShapeSearchDivideLineState extends State<ShapeSearchDivideLine> {
   DivideLineItem? selectedDivideLineItem;
   String? finalImage;
   String? finalText;
-
+  // 상태를 리셋하는 메서드
+  void resetSelection() {
+    setState(() {
+      selectedDivideLineItem = null;
+      finalImage = null;
+      finalText = null;
+      for (var item in divideLineItems) {
+        item.isSelected = false; // 모든 divideLineItems의 isSelected를 false로 설정
+      }
+    });
+  }
   @override
   Widget build(BuildContext context) {
     return SizedBox(
