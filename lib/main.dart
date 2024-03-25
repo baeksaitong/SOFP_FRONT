@@ -2,8 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:sofp_front/gaps.dart';
 import 'shapeSearch.dart';
 
+import 'bookmark.dart';
+
 void main() {
-  runApp(const MyApp());
+  runApp(const BookMarkUI());
 }
 
 class MyApp extends StatelessWidget {
