@@ -1,5 +1,19 @@
 import 'package:flutter/material.dart';
 
+class PillDetailPage extends StatelessWidget {
+  const PillDetailPage({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return MaterialApp(
+      home: Scaffold(
+        body: DetailPage(),
+      ),
+    );
+  }
+}
+
+
 class DetailPage extends StatelessWidget {
   // 예시 데이터 - 실제 앱에서는 서버나 로컬 데이터베이스에서 데이터를 불러와야 함
   final String productName = "제품명";
@@ -12,14 +26,23 @@ class DetailPage extends StatelessWidget {
   final String storageMethod = " - ";
   final String productCategoryAndManufacturer = " - ";
 
+  const DetailPage({super.key});
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: Text('알약 세부 정보'),
+      backgroundColor: Colors.white,
+      appBar: PreferredSize(
+        preferredSize: Size.fromHeight(40),
+        child: AppBar(
+          scrolledUnderElevation: 0,
+          backgroundColor: Colors.white,
+          title: Text('알약 세부 정보'),
+        ),
       ),
       body: SingleChildScrollView(
         child: Container(
+          margin: EdgeInsets.symmetric(vertical: 8,horizontal: 16),
           width: 393,
           height: 852,
           clipBehavior: Clip.antiAlias,
@@ -44,7 +67,7 @@ class DetailPage extends StatelessWidget {
 
   Widget _buildHeaderSection(String title) {
     return Padding(
-      padding: const EdgeInsets.only(top: 20, bottom: 20),
+      padding: const EdgeInsets.only(top: 10, bottom: 10),
       child: Text(
         title,
         textAlign: TextAlign.center,
