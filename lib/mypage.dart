@@ -1,27 +1,32 @@
 import 'package:flutter/material.dart';
-import 'package:sofp_front/gaps.dart';
 
-class MyPage extends StatelessWidget {
+class MyPage extends StatefulWidget {
   const MyPage({Key? key}) : super(key: key);
+
+  @override
+  _MyPageState createState() => _MyPageState();
+}
+
+class _MyPageState extends State<MyPage> {
+  final String str = '이한조';
 
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
       home: Scaffold(
-        appBar: null,
         body: Stack(
           children: [
             Positioned(
-              top:90,
-              left:50,
+              top: 90,
+              left: 50,
               child: Text(
-                '???님\n안녕하세요!',
+                '$str 님\n안녕하세요!',
                 style: TextStyle(fontSize: 25, fontWeight: FontWeight.w400),
               ),
             ),
             Positioned(
-              top: 170,
-              left: 60,
+              top: 160,
+              left: 50,
               child: ElevatedButton(
                 onPressed: () {
                   // 정보 수정 버튼 클릭 시 동작할 내용
@@ -35,29 +40,29 @@ class MyPage extends StatelessWidget {
               ),
             ),
             Positioned(
-              top: 90,
-              left: 270,
-              child: InkWell(
-                onTap: () {
-
-                },
-                child: Container(
-                  width: 75,
-                  height: 75,
-                  decoration: BoxDecoration(
-                    shape: BoxShape.circle,
-                    border: Border.all(color: Colors.greenAccent, width: 1),
-                    color: Colors.white,
-                  ),
-                  child: CircleAvatar(
-                    backgroundColor: Colors.transparent,
-                    backgroundImage: AssetImage('free-icon-user-icon-4360835.png'),
+              top: 80,
+              left: 250,
+              child: Container(
+                width: 100,
+                height: 100,
+                decoration: BoxDecoration(
+                  shape: BoxShape.circle,
+                  border: Border.all(color: Colors.greenAccent, width: 1),
+                  color: Colors.white,
+                ),
+                child: CircleAvatar(
+                  backgroundColor: Colors.transparent,
+                  child: Image.asset(
+                    'assets/free-icon-user-icon-4360835.png',
+                    width: 70, // 여기서 이미지의 실제 크기를 조절
+                    height: 70, // 여기서 이미지의 실제 크기를 조절
+                    fit: BoxFit.fill, // 이미지가 할당된 공간을 꽉 채우도록 조절,
                   ),
                 ),
               ),
             ),
             Positioned(
-              top: 240,
+              top: 220,
               left: 35,
               child: Container(
                 width: 330,
@@ -69,7 +74,7 @@ class MyPage extends StatelessWidget {
                       top: 0,
                       child: Container(
                         width: 330,
-                        height: 215,
+                        height: 180,
                         decoration: ShapeDecoration(
                           color: Colors.white,
                           shape: RoundedRectangleBorder(
@@ -121,11 +126,11 @@ class MyPage extends StatelessWidget {
               ),
             ),
             Positioned(
-              top: 490,
+              top: 420,
               left: 35,
               child: Container(
                 width: 330,
-                height: 215,
+                height: 210,
                 child: Stack(
                   children: [
                     Positioned(
@@ -133,7 +138,7 @@ class MyPage extends StatelessWidget {
                       top: 0,
                       child: Container(
                         width: 330,
-                        height: 215,
+                        height: 180,
                         decoration: ShapeDecoration(
                           color: Colors.white,
                           shape: RoundedRectangleBorder(
