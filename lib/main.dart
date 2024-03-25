@@ -1,6 +1,6 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:sofp_front/gaps.dart';
+import 'shapeSearch.dart';
 
 void main() {
   runApp(const MyApp());
@@ -21,35 +21,7 @@ class MyApp extends StatelessWidget {
           ),
         ),
         body: ShapeSearchTotal(),
-        bottomNavigationBar: BottomNavigationBar(
-          items: <BottomNavigationBarItem>[
-
-            BottomNavigationBarItem(
-              icon: Image.asset(
-                  'assets/bottom_icon_bookmark.png',
-                  width: 30,
-                  height: 30,
-              ),
-              label: '즐겨찾기',
-            ),
-            BottomNavigationBarItem(
-              icon: Icon(
-                  Icons.circle_outlined,
-                  size: 50,
-                  color: Color(0xFF53DACA)
-              ),
-              label: '홈',
-            ),
-            BottomNavigationBarItem(
-              icon: Image.asset(
-                  'assets/bottom_icon_mypage.png',
-                  width: 30,
-                  height: 30,
-              ),
-              label: '마이페이지',
-            ),
-          ],
-        ),
+        bottomNavigationBar: BottomBarTotal(),
       ),
     );
   }
@@ -254,30 +226,7 @@ class ShapeSearchTotal extends StatelessWidget {
                   fontWeight: FontWeight.bold,
                 ),
               ),
-              Gaps.h10,
-              Row(
-                children: [
-                  ShapeSearchRGB(),
-                  Gaps.w28,
-                  ShapeSearchShape()
-                ],
-              ),
-              Gaps.h10,
-              Row(
-                children: [
-                  ShapeSearchDrug(),
-                  Gaps.w28,
-                  ShapeSearchDivideLine()
-                ],
-              ),
-              Gaps.h10,
-              Row(
-                children: [
-                  ShapeSearchReset(),
-                  Gaps.w28,
-                  ShapeSearchSearch()
-                ],
-              )
+              ShapeSearhSelect(),
             ],
           ),
         )
@@ -286,248 +235,59 @@ class ShapeSearchTotal extends StatelessWidget {
   }
 }
 
-class ShapeSearchKeyword extends StatelessWidget {
-  const ShapeSearchKeyword({super.key});
+class BottomBarTotal extends StatelessWidget {
+  const BottomBarTotal({super.key});
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      margin: EdgeInsets.symmetric(vertical: 8, horizontal: 16),
-      decoration: BoxDecoration(
-        border: Border.all(
-          width: 1,
-          color: Colors.black,
-        ),
-      ),
-      child: TextField(
-        decoration: InputDecoration(
-          border: InputBorder.none,
-          contentPadding: EdgeInsets.symmetric(
-            vertical: 8,
-            horizontal: 16,
+    return BottomNavigationBar(
+      items: <BottomNavigationBarItem>[
+
+        BottomNavigationBarItem(
+          icon: Image.asset(
+            'assets/bottom_icon_bookmark.png',
+            width: 30,
+            height: 30,
           ),
-          hintText: '검색 키워드를 입력하세요',
+          label: '즐겨찾기',
         ),
-      ),
+        BottomNavigationBarItem(
+          icon: Icon(
+              Icons.circle_outlined,
+              size: 50,
+              color: Color(0xFF53DACA)
+          ),
+          label: '홈',
+        ),
+        BottomNavigationBarItem(
+          icon: Image.asset(
+            'assets/bottom_icon_mypage.png',
+            width: 30,
+            height: 30,
+          ),
+          label: '마이페이지',
+        ),
+      ],
     );
   }
 }
 
-class ShapeSearchRGB extends StatelessWidget {
-  const ShapeSearchRGB({super.key});
-
-  @override
-  Widget build(BuildContext context) {
-    return SizedBox(
-      width: 130,
-      height: 45,
-      child: OutlinedButton(
-        onPressed: () {},
-        style: OutlinedButton.styleFrom(
-          side: BorderSide(
-            width: 1,
-            color: Color(0xFF53DACA),
+Widget customColorButton(String colorName, Color color, VoidCallback onPressed) {
+  return GestureDetector(
+    onTap: onPressed,
+    child: Container(
+      width: 50,
+      height: 30,
+      color: color,
+      child: Center(
+        child: Text(
+          colorName,
+          textAlign: TextAlign.center,
+          style: TextStyle(
+            height: 1.0,
           ),
-          padding: EdgeInsets.all(8),
-          shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.all(
-                Radius.circular(10)
-            ),
-          ),
-        ),
-        child: Row(
-          children: [
-            Gaps.w16,
-            Image.asset('assets/rgb.png',width: 30, height: 30,),
-            Gaps.w20,
-            Text('색상'),
-          ],
         ),
       ),
-    );
-  }
-}
-
-class ShapeSearchShape extends StatelessWidget {
-  const ShapeSearchShape({super.key});
-
-  @override
-  Widget build(BuildContext context) {
-    return SizedBox(
-      width: 130,
-      height: 45,
-      child: OutlinedButton(
-        onPressed: () {},
-        style: OutlinedButton.styleFrom(
-          side: BorderSide(
-            width: 1,
-            color: Color(0xFF53DACA),
-          ),
-          padding: EdgeInsets.all(8),
-          shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.all(
-                Radius.circular(10)
-            ),
-          ),
-        ),
-        child: Row(
-          children: [
-            Gaps.w16,
-            Image.asset('assets/shapes.png',width: 30, height: 30,),
-            Gaps.w20,
-            Text('모양'),
-          ],
-        ),
-      ),
-    );
-  }
-}
-
-class ShapeSearchDrug extends StatelessWidget {
-  const ShapeSearchDrug({super.key});
-
-  @override
-  Widget build(BuildContext context) {
-    return SizedBox(
-      width: 130,
-      height: 45,
-      child: OutlinedButton(
-        onPressed: () {},
-        style: OutlinedButton.styleFrom(
-          side: BorderSide(
-            width: 1,
-            color: Color(0xFF53DACA),
-          ),
-          padding: EdgeInsets.all(8),
-          shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.all(
-                Radius.circular(10)
-            ),
-          ),
-        ),
-        child: Row(
-          children: [
-            Gaps.w16,
-            Image.asset('assets/drugs.png',width: 30, height: 30,),
-            Gaps.w20,
-            Text('제형'),
-          ],
-        ),
-      ),
-    );
-  }
-}
-
-class ShapeSearchDivideLine extends StatelessWidget {
-  const ShapeSearchDivideLine({super.key});
-
-  @override
-  Widget build(BuildContext context) {
-    return SizedBox(
-      width: 130,
-      height: 45,
-      child: OutlinedButton(
-        onPressed: () {},
-        style: OutlinedButton.styleFrom(
-          side: BorderSide(
-            width: 1,
-            color: Color(0xFF53DACA),
-          ),
-          padding: EdgeInsets.all(8),
-          shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.all(
-                Radius.circular(10)
-            ),
-          ),
-        ),
-        child: Row(
-          children: [
-            Gaps.w16,
-            Image.asset('assets/pill.png',width: 30, height: 30,),
-            Gaps.w20,
-            Text('분할선'),
-          ],
-        ),
-      ),
-    );
-  }
-}
-
-class ShapeSearchReset extends StatelessWidget {
-  const ShapeSearchReset({super.key});
-
-  @override
-  Widget build(BuildContext context) {
-    return SizedBox(
-      width: 130,
-      height: 45,
-      child: OutlinedButton(
-        onPressed: () {},
-        style: OutlinedButton.styleFrom(
-          backgroundColor: Color(0xFF53DACA),
-          side: BorderSide(
-            width: 1,
-            color: Color(0xFF53DACA),
-          ),
-          padding: EdgeInsets.all(8),
-          shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.all(
-                Radius.circular(10)
-            ),
-          ),
-        ),
-        child: Row(
-          children: [
-            Gaps.w8,
-            Text(
-              '다시 입력',
-              style: TextStyle(
-                fontSize: 18
-              ),
-            ),
-            Gaps.w6,
-            Image.asset('assets/refresh.png',width: 30, height: 30,),
-          ],
-        ),
-      ),
-    );
-  }
-}
-
-class ShapeSearchSearch extends StatelessWidget {
-  const ShapeSearchSearch({super.key});
-
-  @override
-  Widget build(BuildContext context) {
-    return SizedBox(
-      width: 130,
-      height: 45,
-      child: OutlinedButton(
-        onPressed: () {},
-        style: OutlinedButton.styleFrom(
-          side: BorderSide(
-            width: 1,
-            color: Color(0xFF53DACA),
-          ),
-          padding: EdgeInsets.all(8),
-          shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.all(
-                Radius.circular(10)
-            ),
-          ),
-        ),
-        child: Row(
-          children: const [
-            Gaps.w16,
-            Icon(
-              Icons.search,
-              size: 30,
-            ),
-            Gaps.w20,
-            Text('검색'),
-          ],
-        ),
-      ),
-    );
-  }
+    ),
+  );
 }
