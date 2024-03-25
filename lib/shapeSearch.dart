@@ -1,10 +1,12 @@
 import 'package:flutter/material.dart';
 import 'gaps.dart';
+import 'main.dart';
 
 final GlobalKey<_ShapeSearchRgbButtonState> rgbButtonKey = GlobalKey<_ShapeSearchRgbButtonState>();
 final GlobalKey<_ShapeSearchShapeState> shapeButtonKey = GlobalKey<_ShapeSearchShapeState>();
 final GlobalKey<_ShapeSearchFormulationState> formulationButtonKey = GlobalKey<_ShapeSearchFormulationState>();
 final GlobalKey<_ShapeSearchDivideLineState> divideLineButtonKey = GlobalKey<_ShapeSearchDivideLineState>();
+final GlobalKey<_ShapeSearchKeywordState> keywordKey = GlobalKey<_ShapeSearchKeywordState>();
 
 class ShapeSearchColor extends StatelessWidget {
   const ShapeSearchColor({super.key});
@@ -19,6 +21,8 @@ class ShapeSearchColor extends StatelessWidget {
         ),
         body: Column(
           children: [
+            ShapeSearchKeyword(key: keywordKey,),
+            Gaps.h4,
             Row(
               children: [
                 ShapeSearchRgbButton(key: rgbButtonKey), // GlobalKey 할당
@@ -47,6 +51,7 @@ class ShapeSearchColor extends StatelessWidget {
                       shapeButtonKey.currentState?.resetSelection();
                       formulationButtonKey.currentState?.resetSelection();
                       divideLineButtonKey.currentState?.resetSelection();
+                      keywordKey.currentState?.resetSelection();
                     },
                     style: ElevatedButton.styleFrom(
                       backgroundColor: Color(0xFF53DACA),
@@ -75,6 +80,52 @@ class ShapeSearchColor extends StatelessWidget {
                     ),
                   ),
                 ),
+                Gaps.w4,
+                SizedBox(
+                  width: 140,
+                  height: 45,
+                  child: OutlinedButton(
+                    onPressed: () {
+                      // 여기에서 선택된 항목들의 상태를 로그로 출력
+                      final color = rgbButtonKey.currentState?.finalText ?? "색상 없음";
+                      final shape = shapeButtonKey.currentState?.finalText ?? "모양 없음";
+                      final formulation = formulationButtonKey.currentState?.finalText ?? "제형 없음";
+                      final divideLine = divideLineButtonKey.currentState?.finalText ?? "분할선 없음";
+                      final keyword = keywordKey.currentState?._controller.text ?? "키워드 없음";
+
+                      // 선택된 항목 로그로 출력
+                      debugPrint('입력한 키워드: $keyword');
+                      debugPrint('선택된 색상: $color');
+                      debugPrint('선택된 모양: $shape');
+                      debugPrint('선택된 제형: $formulation');
+                      debugPrint('선택된 분할선: $divideLine');
+                    },
+                    style: OutlinedButton.styleFrom(
+                      side: BorderSide(
+                        width: 1,
+                        color: Color(0xFF53DACA),
+                      ),
+                      padding: EdgeInsets.all(8),
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.all(
+                          Radius.circular(10),
+                        ),
+                      ),
+                    ),
+
+                    child: Row(
+                      children: const [
+                        Gaps.w16,
+                        Icon(
+                            Icons.search,
+                          size: 30,
+                        ),
+                        Gaps.w20,
+                        Text("검색"),
+                      ],
+                    )
+                  ),
+                ),
               ],
             ),
           ],
@@ -83,6 +134,143 @@ class ShapeSearchColor extends StatelessWidget {
     );
   }
 }
+
+class ShapeSearhSelect extends StatefulWidget {
+  const ShapeSearhSelect({super.key});
+
+  @override
+  State<ShapeSearhSelect> createState() => _ShapeSearhSelectState();
+}
+
+class _ShapeSearhSelectState extends State<ShapeSearhSelect> {
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      children: [
+        ShapeSearchKeyword(key: keywordKey,),
+        Gaps.h4,
+        Row(
+          children: [
+            ShapeSearchRgbButton(key: rgbButtonKey), // GlobalKey 할당
+            Gaps.w4,
+            ShapeSearchShape(key: shapeButtonKey),
+          ],
+        ),
+        Gaps.h4,
+        Row(
+          children: [
+            ShapeSearchFormulation(key: formulationButtonKey),
+            Gaps.w4,
+            ShapeSearchDivideLine(key: divideLineButtonKey),
+          ],
+        ),
+        Gaps.h4,
+        Row(
+          children: [
+            SizedBox(
+              width: 140,
+              height: 45,
+              child: ElevatedButton(
+                onPressed: () {
+                  // 각 GlobalKey를 사용하여 위젯의 상태에 접근하고 resetSelection 메서드를 호출
+                  rgbButtonKey.currentState?.resetSelection();
+                  shapeButtonKey.currentState?.resetSelection();
+                  formulationButtonKey.currentState?.resetSelection();
+                  divideLineButtonKey.currentState?.resetSelection();
+                  keywordKey.currentState?.resetSelection();
+                  },
+                style: ElevatedButton.styleFrom(
+                  backgroundColor: Color(0xFF53DACA),
+                  side: BorderSide(
+                    width: 1,
+                    color: Color(0xFF53DACA),
+                  ),
+                  padding: EdgeInsets.all(8),
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.all(
+                      Radius.circular(10),
+                    ),
+                  ),
+                ),
+                child: Row(
+                  children: [
+                    SizedBox(width: 16),
+                    Text("다시 입력"),
+                    Gaps.w8,
+                    Image.asset(
+                      'assets/refresh.png',
+                      width: 30,
+                      height: 30,
+                    ),
+                  ],
+                ),
+              ),
+            ),
+            Gaps.w4,
+            SizedBox(
+              width: 140,
+              height: 45,
+              child: OutlinedButton(
+                  onPressed: () {
+                    // 여기에서 선택된 항목들의 상태를 로그로 출력
+                    final color = rgbButtonKey.currentState?.finalText ?? "색상 없음";
+                    final shape = shapeButtonKey.currentState?.finalText ?? "모양 없음";
+                    final formulation = formulationButtonKey.currentState?.finalText ?? "제형 없음";
+                    final divideLine = divideLineButtonKey.currentState?.finalText ?? "분할선 없음";
+                    final keyword = keywordKey.currentState?._controller.text ?? "키워드 없음";
+
+                    // 선택된 항목 로그로 출력
+                    debugPrint('입력한 키워드: $keyword');
+                    debugPrint('선택된 색상: $color');
+                    debugPrint('선택된 모양: $shape');
+                    debugPrint('선택된 제형: $formulation');
+                    debugPrint('선택된 분할선: $divideLine');
+
+                    for (var item in colorItems) {
+                      item.isSelected = false; // 모든 colorItems의 isSelected를 false로 설정
+                    }
+                    for (var item in shapeItems) {
+                      item.isSelected = false; // 모든 colorItems의 isSelected를 false로 설정
+                    }
+                    for (var item in formulationItems) {
+                      item.isSelected = false; // 모든 colorItems의 isSelected를 false로 설정
+                    }
+                    for (var item in divideLineItems) {
+                      item.isSelected = false; // 모든 colorItems의 isSelected를 false로 설정
+                    }
+                  },
+                  style: OutlinedButton.styleFrom(
+                    side: BorderSide(
+                      width: 1,
+                      color: Color(0xFF53DACA),
+                    ),
+                    padding: EdgeInsets.all(8),
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.all(
+                        Radius.circular(10),
+                      ),
+                    ),
+                  ),
+                  child: Row(
+                    children: const [
+                      Gaps.w16,
+                      Icon(
+                        Icons.search,
+                        size: 30,
+                      ),
+                      Gaps.w20,
+                      Text("검색"),
+                    ],
+                  )
+              ),
+            ),
+          ],
+        ),
+      ],
+    );
+  }
+}
+
 
 Widget customColorButton(String colorName, Color color, VoidCallback onPressed) {
   return GestureDetector(
@@ -775,3 +963,48 @@ class _ShapeSearchDivideLineState extends State<ShapeSearchDivideLine> {
   }
 }
 
+class ShapeSearchKeyword extends StatefulWidget {
+  const ShapeSearchKeyword({super.key});
+
+  @override
+  State<ShapeSearchKeyword> createState() => _ShapeSearchKeywordState();
+}
+
+class _ShapeSearchKeywordState extends State<ShapeSearchKeyword> {
+  final TextEditingController _controller = TextEditingController();
+
+  @override
+  void dispose() {
+    // 사용하지 않을 때는 컨트롤러를 dispose 해야 합니다.
+    _controller.dispose();
+    super.dispose();
+  }
+
+  void resetSelection() {
+    setState(() {
+      _controller.clear();
+    });
+  }
+  Widget build(BuildContext context) {
+    return Container(
+      margin: EdgeInsets.symmetric(vertical: 8, horizontal: 8),
+      decoration: BoxDecoration(
+        border: Border.all(
+          width: 1,
+          color: Colors.black,
+        ),
+      ),
+      child: TextField(
+        controller: _controller,
+        decoration: InputDecoration(
+          border: InputBorder.none,
+          contentPadding: EdgeInsets.symmetric(
+            vertical: 8,
+            horizontal: 16,
+          ),
+          hintText: '검색 키워드를 입력하세요',
+        ),
+      ),
+    );
+  }
+}
