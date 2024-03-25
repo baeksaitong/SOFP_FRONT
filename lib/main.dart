@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:sofp_front/gaps.dart';
+import 'DetailPage.dart';
 import 'shapeSearch.dart';
-
 import 'bookmark.dart';
 
 void main() {
