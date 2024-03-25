@@ -8,6 +8,7 @@ class MyPage extends StatefulWidget {
 }
 
 class _MyPageState extends State<MyPage> {
+  
   final String str = '이한조';
 
   @override
