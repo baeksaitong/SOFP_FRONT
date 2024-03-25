@@ -6,7 +6,7 @@ import 'shapeSearch.dart';
 import 'bookmark.dart';
 
 void main() {
-  runApp(const PillDetailPage());
+  runApp(const MyApp());
 }
 
 class MyApp extends StatelessWidget {

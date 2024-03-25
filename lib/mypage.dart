@@ -1,5 +1,19 @@
 import 'package:flutter/material.dart';
 
+class MyPagePage extends StatelessWidget {
+  const MyPagePage({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return MaterialApp(
+      home: Scaffold(
+        body: MyPage(),
+      ),
+    );
+  }
+}
+
+
 class MyPage extends StatefulWidget {
   const MyPage({Key? key}) : super(key: key);
 
@@ -18,7 +32,7 @@ class _MyPageState extends State<MyPage> {
           children: [
             Positioned(
               top: 90,
-              left: 50,
+              left: 20,
               child: Text(
                 '$str 님\n안녕하세요!',
                 style: TextStyle(fontSize: 25, fontWeight: FontWeight.w400),
@@ -26,7 +40,7 @@ class _MyPageState extends State<MyPage> {
             ),
             Positioned(
               top: 160,
-              left: 50,
+              left: 20,
               child: ElevatedButton(
                 onPressed: () {
                   // 정보 수정 버튼 클릭 시 동작할 내용
@@ -41,7 +55,7 @@ class _MyPageState extends State<MyPage> {
             ),
             Positioned(
               top: 80,
-              left: 250,
+              left: 220,
               child: Container(
                 width: 100,
                 height: 100,
@@ -63,7 +77,7 @@ class _MyPageState extends State<MyPage> {
             ),
             Positioned(
               top: 220,
-              left: 35,
+              left: 15,
               child: Container(
                 width: 330,
                 height: 215,
@@ -127,7 +141,7 @@ class _MyPageState extends State<MyPage> {
             ),
             Positioned(
               top: 420,
-              left: 35,
+              left: 15,
               child: Container(
                 width: 330,
                 height: 210,
