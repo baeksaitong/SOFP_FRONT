@@ -5,10 +5,8 @@ class PillDetailPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      home: Scaffold(
-        body: DetailPage(),
-      ),
+    return Scaffold(
+      body: DetailPage(),
     );
   }
 }

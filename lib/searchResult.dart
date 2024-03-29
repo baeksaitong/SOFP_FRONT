@@ -1,17 +1,17 @@
 import 'package:flutter/material.dart';
 
-class MyApp extends StatelessWidget {
-  const MyApp({Key? key}) : super(key: key);
-
-  @override
-  Widget build(BuildContext context) {
-    return MaterialApp(
-      title: 'First App',
-      theme: ThemeData(primarySwatch: Colors.blue),
-      home: SearchResult(),
-    );
-  }
-}
+// class MyApp extends StatelessWidget {
+//   const MyApp({Key? key}) : super(key: key);
+//
+//   @override
+//   Widget build(BuildContext context) {
+//     return MaterialApp(
+//       title: 'First App',
+//       theme: ThemeData(primarySwatch: Colors.blue),
+//       home: SearchResult(),
+//     );
+//   }
+// }
 
 class SearchResult extends StatefulWidget {
   const SearchResult({Key? key}) : super(key: key);

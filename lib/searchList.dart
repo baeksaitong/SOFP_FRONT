@@ -1,17 +1,17 @@
 import 'package:flutter/material.dart';
 
-class MyApp extends StatelessWidget {
-  const MyApp({Key? key}) : super(key: key);
-
-  @override
-  Widget build(BuildContext context) {
-    return MaterialApp(
-      title: 'Search History',
-      theme: ThemeData(primarySwatch: Colors.blue),
-      home: SearchHistoryScreen(),
-    );
-  }
-}
+// class MyApp extends StatelessWidget {
+//   const MyApp({Key? key}) : super(key: key);
+//
+//   @override
+//   Widget build(BuildContext context) {
+//     return MaterialApp(
+//       title: 'Search History',
+//       theme: ThemeData(primarySwatch: Colors.blue),
+//       home: SearchHistoryScreen(),
+//     );
+//   }
+// }
 
 class SearchHistoryScreen extends StatefulWidget {
   const SearchHistoryScreen({Key? key}) : super(key: key);

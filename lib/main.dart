@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:sofp_front/gaps.dart';
+import 'package:sofp_front/searchResult.dart';
 import 'mypage.dart';
 import 'DetailPage.dart';
 import 'shapeSearch.dart';
@@ -7,6 +8,27 @@ import 'bookmark.dart';
 
 void main() {
   runApp(const MyApp());
+}
+
+void navigateToMyPagePage(BuildContext context) {
+  Navigator.push(
+    context,
+    MaterialPageRoute(builder: (context) => MyPagePage()),
+  );
+}
+
+void navigateToSearchResult(BuildContext context) {
+  Navigator.push(
+    context,
+    MaterialPageRoute(builder: (context) => SearchResult()),
+  );
+}
+
+void navigateToBookMark(BuildContext context) {
+  Navigator.push(
+    context,
+    MaterialPageRoute(builder: (context) => BookMarkUI()),
+  );
 }
 
 class MyApp extends StatelessWidget {
@@ -23,7 +45,7 @@ class MyApp extends StatelessWidget {
             title: Center(child: AppBarTotal()),
           ),
         ),
-        body: ShapeSearchTotal(),
+        body: BodyTotal(),
         bottomNavigationBar: BottomBarTotal(),
       ),
     );
@@ -133,7 +155,7 @@ class UserProfileImageName extends StatelessWidget {
           ),
         ),
         IconButton(
-          onPressed: () {},
+          onPressed: () => navigateToMyPagePage(context),
           icon: Icon(Icons.arrow_forward_ios_outlined),
         ),
       ],
@@ -201,8 +223,8 @@ class UserProfileFeature extends StatelessWidget {
   }
 }
 
-class ShapeSearchTotal extends StatelessWidget {
-  const ShapeSearchTotal({super.key});
+class BodyTotal extends StatelessWidget {
+  const BodyTotal({super.key});
 
   @override
   Widget build(BuildContext context) {

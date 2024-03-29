@@ -7,46 +7,44 @@ class BookMarkUI extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      home: Scaffold(
-        appBar: AppBar(
-          scrolledUnderElevation: 0,
-          title: Row(
-            children: [
-              IconButton(
-                onPressed: () {},
-                icon: Icon(
-                    Icons.arrow_back,
-                ),
+    return Scaffold(
+      appBar: AppBar(
+        scrolledUnderElevation: 0,
+        title: Row(
+          children: [
+            IconButton(
+              onPressed: () {},
+              icon: Icon(
+                  Icons.arrow_back,
               ),
-              Gaps.w12,
-              Text(
-                  '즐겨찾기',
-                style: TextStyle(
-                  color: Color(0xffd9d9d9),
-                  fontSize: 25,
-                  fontWeight: FontWeight.bold,
-                ),
+            ),
+            Gaps.w12,
+            Text(
+                '즐겨찾기',
+              style: TextStyle(
+                color: Color(0xffd9d9d9),
+                fontSize: 25,
+                fontWeight: FontWeight.bold,
               ),
-            ],
-          ),
+            ),
+          ],
         ),
-        body: Scrollbar(
-          thickness: 4.0,
-          radius: Radius.circular(8.0),
-          child: ListView(
-            children: const <Widget>[
-              BoomarkItem(),
-              BoomarkItem(),
-              BoomarkItem(),
-              BoomarkItem(),
-              BoomarkItem(),
-              BoomarkItem(),
-              BoomarkItem(),
-              BoomarkItem(),
-              BoomarkItem(),
-            ],
-          ),
+      ),
+      body: Scrollbar(
+        thickness: 4.0,
+        radius: Radius.circular(8.0),
+        child: ListView(
+          children: const <Widget>[
+            BoomarkItem(),
+            BoomarkItem(),
+            BoomarkItem(),
+            BoomarkItem(),
+            BoomarkItem(),
+            BoomarkItem(),
+            BoomarkItem(),
+            BoomarkItem(),
+            BoomarkItem(),
+          ],
         ),
       ),
     );
