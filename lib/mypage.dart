@@ -86,7 +86,7 @@ class _MyPageState extends State<MyPage> {
           Positioned(
             top: 220,
             left: 15,
-            child: Container(
+            child: SizedBox(
               width: 330,
               height: 215,
               child: Stack(
@@ -150,7 +150,7 @@ class _MyPageState extends State<MyPage> {
           Positioned(
             top: 420,
             left: 15,
-            child: Container(
+            child: SizedBox(
               width: 330,
               height: 210,
               child: Stack(

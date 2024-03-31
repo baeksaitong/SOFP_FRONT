@@ -1,4 +1,3 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:sofp_front/gaps.dart';
 
@@ -104,6 +103,8 @@ class _BoomarkItemState extends State<BoomarkItem> {
 }
 
 class ToggleIconButton extends StatefulWidget {
+  const ToggleIconButton({super.key});
+
   @override
   _ToggleIconButtonState createState() => _ToggleIconButtonState();
 }
