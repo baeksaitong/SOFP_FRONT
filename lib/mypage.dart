@@ -1,8 +1,6 @@
 import 'package:flutter/material.dart';
 
-void popCurrentScreen(BuildContext context) {
-  Navigator.pop(context);
-}
+import 'main.dart';
 
 class MyPagePage extends StatelessWidget {
   const MyPagePage({super.key});

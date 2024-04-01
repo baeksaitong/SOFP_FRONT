@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:sofp_front/gaps.dart';
 
+import 'main.dart';
+
 class BookMarkUI extends StatelessWidget {
   const BookMarkUI({Key? key}) : super(key: key);
 
@@ -8,11 +10,12 @@ class BookMarkUI extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
+        automaticallyImplyLeading: false,
         scrolledUnderElevation: 0,
         title: Row(
           children: [
             IconButton(
-              onPressed: () {},
+              onPressed: () => popCurrentScreen(context),
               icon: Icon(
                   Icons.arrow_back,
               ),
