@@ -5,17 +5,15 @@ class PillDetailPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
+      return Scaffold(
       body: DetailPage(),
     );
   }
 }
 
-
 class DetailPage extends StatelessWidget {
-  // 예시 데이터 - 실제 앱에서는 서버나 로컬 데이터베이스에서 데이터를 불러와야 함
   final String productName = "제품명";
-  final String productPhotoUrl = "assets/pill.png"; // 알약 사진 경로
+  final String productPhotoUrl = "assets/pill.png";
   final String usage = " - ";
   final String precautions = " - ";
   final String warnings = " - ";
@@ -35,16 +33,12 @@ class DetailPage extends StatelessWidget {
         child: AppBar(
           scrolledUnderElevation: 0,
           backgroundColor: Colors.white,
-          title: Text('알약 세부 정보'),
+          title: Text('알약 세부 정보', style: TextStyle(color: Colors.black)),
         ),
       ),
       body: SingleChildScrollView(
         child: Container(
-          margin: EdgeInsets.symmetric(vertical: 8,horizontal: 16),
-          width: 393,
-          height: 852,
-          clipBehavior: Clip.antiAlias,
-          decoration: BoxDecoration(color: Colors.white),
+          margin: EdgeInsets.symmetric(vertical: 8, horizontal: 16),
           child: Column(
             children: [
               _buildHeaderSection(productName),
@@ -63,68 +57,42 @@ class DetailPage extends StatelessWidget {
     );
   }
 
-  Widget _buildHeaderSection(String title) {
-    return Padding(
-      padding: const EdgeInsets.only(top: 10, bottom: 10),
-      child: Text(
-        title,
-        textAlign: TextAlign.center,
-        style: TextStyle(
-          color: Colors.black,
-          fontSize: 18,
-          fontWeight: FontWeight.w400,
-        ),
-      ),
-    );
-  }
+  BoxDecoration _infoBoxDecoration() => BoxDecoration(
+    color: Color(0xFFFFFF), // Easily changeable background color
+    borderRadius: BorderRadius.circular(20),
+    border: Border.all(color: Colors.greenAccent, width: 3), // Easily changeable border color and width
+  );
 
-  Widget _buildImageSection(String imageUrl) {
-    return Container(
-      width: 370,
-      height: 200,
-      decoration: BoxDecoration(
-        color: Color(0xFFD9D9D9),
-        borderRadius: BorderRadius.circular(20),
-      ),
-      child: Center(
-        child: Image.asset(imageUrl, fit: BoxFit.cover),
-      ),
-    );
-  }
+  Widget _buildHeaderSection(String title) => Padding(
+    padding: const EdgeInsets.only(left: 0, top: 10, right:10, bottom: 10),
+    child: Text(title, textAlign: TextAlign.center, style: TextStyle(fontSize: 18, fontWeight: FontWeight.w400)),
+  );
 
-  Widget _buildInfoSection(String title, String content) {
-    return Container(
-      margin: EdgeInsets.only(top: 10),
-      width: 370,
-      decoration: BoxDecoration(
-        color: Color(0xFFD9D9D9),
-        borderRadius: BorderRadius.circular(20),
+  Widget _buildImageSection(String imageUrl) => Container(
+    margin: EdgeInsets.symmetric(horizontal: 10, vertical: 10), // 좌우 여백을 10으로 설정
+    decoration: _infoBoxDecoration(),
+    child: ClipRRect( // 이미지의 모서리를 둥글게 하고 싶다면, ClipRRect를 사용
+      borderRadius: BorderRadius.circular(20), // 컨테이너와 동일한 BorderRadius를 사용
+      child: Image.asset(
+        imageUrl,
+        fit: BoxFit.cover, //BoxFit.cover로 설정하여 이미지가 컨테이너를 꽉 채우도록 함
       ),
-      child: Padding(
-        padding: const EdgeInsets.all(8.0),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Text(
-              title,
-              style: TextStyle(
-                color: Colors.black,
-                fontSize: 12,
-                fontWeight: FontWeight.w400,
-              ),
-            ),
-            SizedBox(height: 5),
-            Text(
-              content,
-              style: TextStyle(
-                color: Colors.black,
-                fontSize: 12,
-                fontWeight: FontWeight.w400,
-              ),
-            ),
-          ],
-        ),
+    ),
+  );
+
+  Widget _buildInfoSection(String title, String content) => Container(
+    margin: EdgeInsets.only(left: 10, top: 10, right: 10), // 좌우 여백을 10으로 설정하여 일치시킴
+    decoration: _infoBoxDecoration(), // Use decoration function
+    child: Padding(
+      padding: const EdgeInsets.all(10.0),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.stretch, // 컨텐츠를 가로로 늘림
+        children: [
+          Text(title, style: TextStyle(fontSize: 12, fontWeight: FontWeight.w400)),
+          SizedBox(height: 5),
+          Text(content, style: TextStyle(fontSize: 12, fontWeight: FontWeight.w400)),
+        ],
       ),
-    );
-  }
+    ),
+  );
 }
