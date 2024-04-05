@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'gaps.dart';
-import 'main.dart';
+import 'home.dart';
 
 final GlobalKey<_ShapeSearchRgbButtonState> rgbButtonKey = GlobalKey<_ShapeSearchRgbButtonState>();
 final GlobalKey<_ShapeSearchShapeState> shapeButtonKey = GlobalKey<_ShapeSearchShapeState>();
