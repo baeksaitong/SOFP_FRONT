@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:sofp_front/gaps.dart';
+import 'package:sofp_front/home.dart';
 
 import 'api-docs.dart';
+import 'loginNaverTest.dart';
 
 class TestLogin extends StatefulWidget {
   const TestLogin({super.key});
@@ -42,10 +44,23 @@ class _TestLoginState extends State<TestLogin> {
           ),
           Gaps.h10,
           ElevatedButton(
-            onPressed: () async { // 여기에 async 키워드를 추가해 비동기 함수를 호출
-              await loginAcess(_emailController.text,_passwordController.text);
+            onPressed: () async {
+              // 로그인 접근 함수를 비동기로 호출
+              await loginAcess(_emailController.text, _passwordController.text);
+              // 네비게이터를 사용하여 홈 페이지로 이동
+              Navigator.of(context).push(
+                MaterialPageRoute(builder: (context) => HomePage()),
+              );
             },
             child: Text('로그인'),
+          ),
+          ElevatedButton(
+            onPressed: () {
+              Navigator.of(context).push(
+                MaterialPageRoute(builder: (context) => NaverLoginScreen()),
+              );
+            },
+            child: Text('네이버 로그인'),
           )
         ],
       ),

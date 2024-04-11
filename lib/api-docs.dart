@@ -38,7 +38,7 @@ Future<void> signUp(String name, String selectedYear, String selectedMonth, Stri
       "name": name,
       "birthday": birthday,
       "email": email,
-      "gender": "남",
+      "gender": "male",
       "password": pwd,
       "advertisement": advertisement
     }),
@@ -98,3 +98,55 @@ Future<void> mailTokenCheck(String email, String code) async {
     print('실패했습니다: ${response.body}');
   }
 }
+
+Future<void> loginNaverAcess(String code) async {
+  final url = Uri.parse('http://15.164.18.65:8080/app/oauth/naver');
+  final response = await http.post(
+    url,
+    headers: <String, String>{
+      'Content-Type': 'application/json; charset=UTF-8',
+    },
+    body: jsonEncode(<String, String>{
+      "code" : code,
+    }),
+  );
+
+  if (response.statusCode == 200) {
+    // 회원가입 성공 처리
+    print('인증완료: ${response.body}');
+  } else {
+    // 에러 처리
+    print(response.statusCode);
+    print('실패했습니다: ${response.body}');
+  }
+}
+
+Future<void> searchTextnShape(String keyword) async {
+  final url = Uri.parse('http://15.164.18.65:8080/app/search/keyword');
+  final response = await http.post(
+    url,
+    headers: <String, String>{
+      'Content-Type': 'application/json; charset=UTF-8',
+    },
+    body: jsonEncode(<String, dynamic>{
+      "keyword": keyword,
+      "shape": "",
+      "sign": "",
+      "color": "",
+      "formulation": "",
+      "line": "",
+      "page": 0,
+      "limit": 5,
+    }),
+  );
+
+  if (response.statusCode == 200) {
+    // 회원가입 성공 처리
+    print('인증완료: ${response.body}');
+  } else {
+    // 에러 처리
+    print(response.statusCode);
+    print('실패했습니다: ${response.body}');
+  }
+}
+

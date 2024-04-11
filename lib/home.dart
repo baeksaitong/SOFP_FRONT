@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:sofp_front/api-docs.dart';
 import 'package:sofp_front/searchResult.dart';
 import 'package:sofp_front/shapeSearch.dart';
 
@@ -52,52 +53,62 @@ class AppBarTotal extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Row(
-      crossAxisAlignment: CrossAxisAlignment.center,
-      children: const [
-        AppBarKeywordSearch(),
-        Gaps.w10,
-        Icon(
-          Icons.search,
-          size: 40,
-        ),
-      ],
-    );
+    return AppBarKeywordSearch();
   }
 }
 
-class AppBarKeywordSearch extends StatelessWidget {
+class AppBarKeywordSearch extends StatefulWidget {
   const AppBarKeywordSearch({super.key});
 
   @override
+  State<AppBarKeywordSearch> createState() => _AppBarKeywordSearchState();
+}
+
+class _AppBarKeywordSearchState extends State<AppBarKeywordSearch> {
+  final TextEditingController _controller = TextEditingController();
+
+  @override
   Widget build(BuildContext context) {
-    return Flexible(
-        child: Container(
-          decoration: BoxDecoration(
-            border: Border.all(
-                width: 3,
-                color: Color(0xFF53DACA)
-            ),
-          ),
-          child: Row(
-            children: [
-              Flexible(child: TextField(
-                decoration: InputDecoration(
-                  border: InputBorder.none,
-                  contentPadding: EdgeInsets.symmetric(
-                    vertical: 8,
-                    horizontal: 16,
-                  ),
-                  hintText: '검색 키워드를 입력하세요',
+    return Row(
+      crossAxisAlignment: CrossAxisAlignment.center,
+      children: [
+        Flexible(
+            child: Container(
+              decoration: BoxDecoration(
+                border: Border.all(
+                    width: 3,
+                    color: Color(0xFF53DACA)
                 ),
-              )),
-              IconButton(
-                onPressed: () {},
-                icon: Icon(Icons.camera_alt_outlined),
               ),
-            ],
-          ),
+              child: Row(
+                children: [
+                  Flexible(child: TextField(
+                    controller: _controller,
+                    decoration: InputDecoration(
+                      border: InputBorder.none,
+                      contentPadding: EdgeInsets.symmetric(
+                        vertical: 8,
+                        horizontal: 16,
+                      ),
+                      hintText: '검색 키워드를 입력하세요',
+                    ),
+                  )),
+                  IconButton(
+                    onPressed: () {},
+                    icon: Icon(Icons.camera_alt_outlined),
+                  ),
+                ],
+              ),
+            )
+        ),
+        Gaps.w10,
+        IconButton(
+            onPressed: () async {
+              await searchTextnShape(_controller.text);
+            },
+            icon: Icon(Icons.search),
         )
+      ],
     );
   }
 }
