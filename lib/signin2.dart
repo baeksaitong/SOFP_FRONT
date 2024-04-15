@@ -27,7 +27,6 @@ class _SigninPageState extends State<SigninPage> {
       buttonLabel = '인증번호 확인';
     });
   }
-
   // 성별 선택 시 수행되는 함수
   void onGenderChanged(String? value) {
     setState(() {
@@ -143,38 +142,39 @@ class _SigninPageState extends State<SigninPage> {
                     ],
                   ),
                 ),
-                Gaps.h20, // 공간 추가
+                Gaps.h20,
                 EmailTextBox(
                   onChanged: (value) {
                     setState(() {
-                      email = value; // 이메일 값 업데이트
+                      email = value;
                     });
                   },
-                ), // 이메일 입력란
-                Gaps.h20, // 공간 추가
+                ), // 이메일
+                Gaps.h20,
                 Row(
                   mainAxisAlignment: MainAxisAlignment.end,
                   children: const [
-                    CheckIDButton(), // 아이디 중복 검사 버튼
-                    SendVerificationButton(), // 인증번호 전송 버튼
+                    CheckIDButton(), // 아이디 중복 검사 버튼 추가
+                    SendVerificationButton(),
                   ],
-                ),
-                Gaps.h20, // 공간 추가
-                Verification(), // 인증번호 입력란
-                Gaps.h20, // 공간 추가
-                VerificationButton(), // 인증번호 확인 버튼
-                Gaps.h20, // 공간 추가
-                PasswordFieldsContainer(), // 비밀번호 입력란
-                Gaps.h32, // 공간 추가
-                LabeledCheckboxExample(), // 이용약관 동의 체크박스
-                LabeledCheckboxExample(), // 개인정보 처리방침 동의 체크박스
-                LabeledCheckboxExample(), // 이메일 수신 동의 체크박스
-                Gaps.h32, // 공간 추가
+                ), // 인증번호 전송
+                Gaps.h20,
+                Verification(), // 인증번호
+                Gaps.h20,
+                VerificationButton(), // 인증번호 확인 버튼 추가
+                Gaps.h20,
+                PasswordFieldsContainer(),
+                Gaps.h32,
+                LabeledCheckboxExample(),
+                LabeledCheckboxExample(),
+                LabeledCheckboxExample(),
+                Gaps.h32,
+                // 추가: 회원가입 버튼
                 ElevatedButton(
-                  onPressed: onSignupButtonClicked, // 회원가입 버튼 클릭 시 함수 실행
-                  child: Text('회원가입'), // 회원가입 버튼 텍스트
+                  onPressed: onSignupButtonClicked,
+                  child: Text('회원가입'),
                 ),
-                Gaps.h40, // 공간 추가
+                Gaps.h40,
               ],
             ),
           ),
@@ -192,13 +192,10 @@ class Verification extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return TextField(
-      style: TextStyle(
-        letterSpacing: 1.5, // 글자 간격 조절
-      ),
       decoration: InputDecoration(
-        contentPadding: EdgeInsets.fromLTRB(12, 10, 12, 10),
+        contentPadding: EdgeInsets.symmetric(vertical: 10.0), // 위아래 패딩 설정
         border: OutlineInputBorder(),
-        labelText: '인증번호',
+        labelText: '   인증번호',
       ),
     );
   }
@@ -317,15 +314,12 @@ class PasswordTextBox extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return TextField(
-      style: TextStyle(
-        letterSpacing: 1.5, // 글자 간격 조절
-      ),
       onChanged: onPasswordChanged,
       obscureText: true,
       decoration: const InputDecoration(
-        contentPadding: EdgeInsets.fromLTRB(12, 10, 12, 10),
+        contentPadding: EdgeInsets.symmetric(vertical: 10.0),
         border: OutlineInputBorder(),
-        labelText: '비밀번호',
+        labelText: '   비밀번호',
       ),
     );
   }
@@ -345,14 +339,11 @@ class PasswordCheckTextBox extends StatelessWidget {
   Widget build(BuildContext context) {
     return TextField(
       onChanged: onConfirmPasswordChanged,
-      style: TextStyle(
-        letterSpacing: 1.5, // 글자 간격 조절
-      ),
       obscureText: true,
       decoration: InputDecoration(
-        contentPadding: EdgeInsets.fromLTRB(12, 10, 12, 10),
+        contentPadding: EdgeInsets.symmetric(vertical: 10.0), // 위아래 패딩 설정
         border: OutlineInputBorder(),
-        labelText: '비밀번호 확인',
+        labelText: '   비밀번호 확인',
         errorText: passwordsMatch ? null : '비밀번호가 일치하지 않습니다',
       ),
     );
@@ -371,13 +362,10 @@ class EmailTextBox extends StatelessWidget {
   Widget build(BuildContext context) {
     return TextField(
       onChanged: onChanged,
-      style: TextStyle(
-        letterSpacing: 1.5, // 글자 간격 조절
-      ),
       decoration: const InputDecoration(
-        contentPadding: EdgeInsets.fromLTRB(12, 10, 12, 10),
+        contentPadding: EdgeInsets.symmetric(vertical: 10.0), // 위아래 패딩 설정
         border: OutlineInputBorder(),
-        labelText: '이메일',
+        labelText: '   이메일',
       ),
     );
   }
@@ -397,13 +385,10 @@ class _NameTextBoxState extends State<NameTextBox> {
   Widget build(BuildContext context) {
     return TextField(
       onChanged: widget.onChanged,
-      style: TextStyle(
-        letterSpacing: 3.5, // 글자 간격 조절
-      ),
       decoration: const InputDecoration(
-        contentPadding: EdgeInsets.fromLTRB(12, 10, 12, 10),
+        contentPadding: EdgeInsets.symmetric(vertical: 10.0), // 위아래 패딩 설정
         border: OutlineInputBorder(),
-        labelText: '이름',
+        labelText: '   이름',
       ),
     );
   }
@@ -473,22 +458,7 @@ class CheckIDButton extends StatelessWidget {
 }
 
 class DateOfBirthDropdown extends StatefulWidget {
-  const DateOfBirthDropdown({
-    Key? key,
-    this.selectedYear,
-    this.selectedMonth,
-    this.selectedDay,
-    required this.onYearChanged,
-    required this.onMonthChanged,
-    required this.onDayChanged,
-  }) : super(key: key);
-
-  final String? selectedYear;
-  final String? selectedMonth;
-  final String? selectedDay;
-  final ValueChanged<String?> onYearChanged;
-  final ValueChanged<String?> onMonthChanged;
-  final ValueChanged<String?> onDayChanged;
+  const DateOfBirthDropdown({Key? key}) : super(key: key);
 
   @override
   _DateOfBirthDropdownState createState() => _DateOfBirthDropdownState();
@@ -499,23 +469,12 @@ class _DateOfBirthDropdownState extends State<DateOfBirthDropdown> {
   String? _selectedMonth;
   String? _selectedDay;
 
-  // 생년월일을 저장하는 변수
-  String? dateOfBirth;
-
   final List<String> years = List.generate(
       100, (index) => (DateTime.now().year - 80 + index).toString());
   final List<String> months =
       List.generate(12, (index) => (index + 1).toString().padLeft(2, '0'));
   final List<String> days =
       List.generate(31, (index) => (index + 1).toString().padLeft(2, '0'));
-
-  @override
-  void initState() {
-    super.initState();
-    _selectedYear = widget.selectedYear;
-    _selectedMonth = widget.selectedMonth;
-    _selectedDay = widget.selectedDay;
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -535,8 +494,6 @@ class _DateOfBirthDropdownState extends State<DateOfBirthDropdown> {
                 onChanged: (newValue) {
                   setState(() {
                     _selectedYear = newValue;
-                    widget.onYearChanged(newValue); // 부모 위젯으로 선택된 연도 전달
-                    updateDateOfBirth(); // 업데이트 함수 호출
                   });
                 },
                 items: years
@@ -561,8 +518,6 @@ class _DateOfBirthDropdownState extends State<DateOfBirthDropdown> {
                 onChanged: (newValue) {
                   setState(() {
                     _selectedMonth = newValue;
-                    widget.onMonthChanged(newValue); // 부모 위젯으로 선택된 월 전달
-                    updateDateOfBirth(); // 업데이트 함수 호출
                   });
                 },
                 items: months
@@ -587,8 +542,6 @@ class _DateOfBirthDropdownState extends State<DateOfBirthDropdown> {
                 onChanged: (newValue) {
                   setState(() {
                     _selectedDay = newValue;
-                    widget.onDayChanged(newValue); // 부모 위젯으로 선택된 일 전달
-                    updateDateOfBirth(); // 업데이트 함수 호출
                   });
                 },
                 items: days
@@ -607,7 +560,6 @@ class _DateOfBirthDropdownState extends State<DateOfBirthDropdown> {
       ],
     );
   }
-
   // 생년월일을 업데이트하는 함수
   void updateDateOfBirth() {
     setState(() {
