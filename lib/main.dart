@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:sofp_front/DetailPage.dart';
 import 'package:sofp_front/gaps.dart';
 import 'package:sofp_front/searchResult.dart';
 import 'mypage.dart';
