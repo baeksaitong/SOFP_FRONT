@@ -105,6 +105,7 @@ class _AppBarKeywordSearchState extends State<AppBarKeywordSearch> {
         IconButton(
             onPressed: () async {
               await searchTextnShape(_controller.text);
+              print(_controller.text);
             },
             icon: Icon(Icons.search),
         )

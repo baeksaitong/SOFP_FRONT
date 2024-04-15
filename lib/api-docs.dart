@@ -1,6 +1,8 @@
 import 'dart:convert';
 import 'package:http/http.dart' as http;
 
+import 'acessToken.dart';
+
 Future<void> loginAcess(String email, String password) async {
   final url = Uri.parse('http://15.164.18.65:8080/app/auth/login');
   final response = await http.post(
@@ -15,8 +17,11 @@ Future<void> loginAcess(String email, String password) async {
   );
 
   if (response.statusCode == 200) {
-    // 회원가입 성공 처리
-    print('로그인: ${response.body}');
+    final responseBody = json.decode(response.body);
+    if (responseBody['token'] != null) {
+      AuthTokenManager().setToken(responseBody['token']);
+      print('Token 저장 완료: ${AuthTokenManager().getToken()}');
+    }
   } else if (response.statusCode == 404) {
     // 에러 처리
     print(response.statusCode);
@@ -123,30 +128,34 @@ Future<void> loginNaverAcess(String code) async {
 
 Future<void> searchTextnShape(String keyword) async {
   final url = Uri.parse('http://15.164.18.65:8080/app/search/keyword');
+  print(keyword);
   final response = await http.post(
     url,
     headers: <String, String>{
       'Content-Type': 'application/json; charset=UTF-8',
+      'Accept': 'application/json',
+      'Authorization': 'Bearer ${AuthTokenManager().getToken()}',  // 인증 토큰 추가
     },
     body: jsonEncode(<String, dynamic>{
       "keyword": keyword,
-      "shape": "",
-      "sign": "",
-      "color": "",
-      "formulation": "",
-      "line": "",
+      "shape": null,
+      "sign": null,
+      "color": null,
+      "formulation": null,
+      "line": null,
       "page": 0,
       "limit": 5,
     }),
   );
 
   if (response.statusCode == 200) {
-    // 회원가입 성공 처리
-    print('인증완료: ${response.body}');
+    // 성공적으로 처리된 경우
+    print('인증완료: ${utf8.decode(response.bodyBytes)}');
   } else {
-    // 에러 처리
+    // 실패 처리
     print(response.statusCode);
     print('실패했습니다: ${response.body}');
   }
 }
+
 
