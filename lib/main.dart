@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:sofp_front/DetailPage.dart';
 import 'package:sofp_front/gaps.dart';
 import 'package:sofp_front/searchResult.dart';
 import 'mypage.dart';
@@ -28,6 +29,17 @@ void navigateToBookMark(BuildContext context) {
     context,
     MaterialPageRoute(builder: (context) => BookMarkUI()),
   );
+}
+
+void navigateToMyApp(BuildContext context) {
+  Navigator.push(
+      context,
+      MaterialPageRoute(builder: (context) => MyApp()),
+  );
+}
+
+void popCurrentScreen(BuildContext context) {
+  Navigator.pop(context);
 }
 
 class MyApp extends StatelessWidget {
@@ -259,42 +271,211 @@ class BodyTotal extends StatelessWidget {
   }
 }
 
-class BottomBarTotal extends StatelessWidget {
-  const BottomBarTotal({super.key});
+// class BottomBarTotal extends StatefulWidget {
+//   const BottomBarTotal({super.key});
+//
+//   @override
+//   State<BottomBarTotal> createState() => _BottomBarTotalState();
+// }
+//
+// class _BottomBarTotalState extends State<BottomBarTotal> {
+//   int _selectedIndex=1;
+//
+//   static final List<Widget> _widgetOptions = <Widget>[
+//     BookMarkUI(),
+//     MyApp(),
+//     MyApp(),
+//   ];
+//
+//   void _onItemTapped(int index) {
+//     setState(() {
+//       _selectedIndex=index;
+//     });
+//   }
+//
+//   @override
+//   Widget build(BuildContext context) {
+//     return BottomNavigationBar(
+//       items: <BottomNavigationBarItem>[
+//
+//         BottomNavigationBarItem(
+//           icon: Image.asset(
+//             'assets/bottom_icon_bookmark.png',
+//             width: 30,
+//             height: 30,
+//           ),
+//           label: '즐겨찾기',
+//         ),
+//         BottomNavigationBarItem(
+//           icon: Icon(
+//               Icons.circle_outlined,
+//               size: 50,
+//               color: Color(0xFF53DACA)
+//           ),
+//           label: '홈',
+//         ),
+//         BottomNavigationBarItem(
+//           icon: Image.asset(
+//             'assets/bottom_icon_mypage.png',
+//             width: 30,
+//             height: 30,
+//           ),
+//           label: '마이페이지',
+//         ),
+//       ],
+//       currentIndex: _selectedIndex,
+//       onTap: _onItemTapped,
+//     );
+//   }
+// }
+
+// class BottomBarTotal extends StatelessWidget {
+//   BottomBarTotal({Key? key}) : super(key: key);
+//
+//   final List<BottomNavigationBarItem> _bottomBarItems = [
+//     BottomNavigationBarItem(
+//       icon: Image.asset('assets/bottom_icon_bookmark.png', width: 30, height: 30),
+//       label: '즐겨찾기',
+//     ),
+//     BottomNavigationBarItem(
+//       icon: Icon(Icons.circle_outlined, size: 50, color: Color(0xFF53DACA)),
+//       label: '홈',
+//     ),
+//     BottomNavigationBarItem(
+//       icon: Image.asset('assets/bottom_icon_mypage.png', width: 30, height: 30),
+//       label: '마이페이지',
+//     ),
+//   ];
+//
+//   void _onItemTapped(BuildContext context, int index) {
+//     switch (index) {
+//       case 0:
+//         navigateToBookMark(context);
+//         break;
+//       case 1:
+//         navigateToMyApp(context);
+//         break;
+//       case 2:
+//         navigateToMyPagePage(context);
+//         break;
+//     }
+//   }
+//
+//   @override
+//   Widget build(BuildContext context) {
+//     return BottomNavigationBar(
+//       items: _bottomBarItems,
+//       onTap: (index) => _onItemTapped(context, index),
+//     );
+//   }
+// }
+
+class BottomBarTotal extends StatefulWidget {
+  const BottomBarTotal({Key? key}) : super(key: key);
+
+  @override
+  _BottomBarTotalState createState() => _BottomBarTotalState();
+}
+
+class _BottomBarTotalState extends State<BottomBarTotal> {
+  int _selectedIndex = 1; // 기본 선택 인덱스를 홈으로 설정
+
+  void _onItemTapped(BuildContext context, int index) {
+    // 현재 선택된 인덱스와 같은 인덱스를 탭하면 아무 것도 하지 않음
+    if (index == _selectedIndex) {
+      return;
+    }
+
+    setState(() {
+      _selectedIndex = index;
+    });
+
+    switch (index) {
+      case 0:
+        navigateToBookMark(context);
+        break;
+      case 1:
+        navigateToMyApp(context);
+        break;
+      case 2:
+        navigateToMyPagePage(context);
+        break;
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
     return BottomNavigationBar(
-      items: <BottomNavigationBarItem>[
-
+      currentIndex: _selectedIndex,
+      onTap: (index) => _onItemTapped(context, index),
+      items: [
         BottomNavigationBarItem(
-          icon: Image.asset(
-            'assets/bottom_icon_bookmark.png',
-            width: 30,
-            height: 30,
-          ),
+          icon: Image.asset('assets/bottom_icon_bookmark.png', width: 30, height: 30),
           label: '즐겨찾기',
         ),
         BottomNavigationBarItem(
-          icon: Icon(
-              Icons.circle_outlined,
-              size: 50,
-              color: Color(0xFF53DACA)
-          ),
+          icon: Icon(Icons.circle_outlined, size: 50, color: Color(0xFF53DACA)),
           label: '홈',
         ),
         BottomNavigationBarItem(
-          icon: Image.asset(
-            'assets/bottom_icon_mypage.png',
-            width: 30,
-            height: 30,
-          ),
+          icon: Image.asset('assets/bottom_icon_mypage.png', width: 30, height: 30),
           label: '마이페이지',
         ),
       ],
     );
   }
 }
+
+// class BottomBarTotal extends StatefulWidget {
+//   const BottomBarTotal({Key? key}) : super(key: key);
+//
+//   @override
+//   _BottomBarTotalState createState() => _BottomBarTotalState();
+// }
+//
+// class _BottomBarTotalState extends State<BottomBarTotal> {
+//   int _selectedIndex = 1; // 기본 선택 인덱스를 홈으로 설정
+//
+//   static const List<Widget> _widgetOptions = <Widget>[
+//     BookMarkUI(),
+//     MyApp(),
+//     MyPage(),
+//   ];
+//
+//   void _onItemTapped(int index) {
+//     setState(() {
+//       _selectedIndex = index;
+//     });
+//   }
+//
+//   @override
+//   Widget build(BuildContext context) {
+//     return Scaffold(
+//       body: Center(
+//         child: _widgetOptions.elementAt(_selectedIndex),
+//       ),
+//       bottomNavigationBar: BottomNavigationBar(
+//         items: const <BottomNavigationBarItem>[
+//           BottomNavigationBarItem(
+//             icon: Icon(Icons.bookmark),
+//             label: '즐겨찾기',
+//           ),
+//           BottomNavigationBarItem(
+//             icon: Icon(Icons.home),
+//             label: '홈',
+//           ),
+//           BottomNavigationBarItem(
+//             icon: Icon(Icons.person),
+//             label: '마이페이지',
+//           ),
+//         ],
+//         currentIndex: _selectedIndex,
+//         selectedItemColor: Colors.amber[800],
+//         onTap: _onItemTapped,
+//       ),
+//     );
+//   }
+// }
 
 Widget customColorButton(String colorName, Color color, VoidCallback onPressed) {
   return GestureDetector(

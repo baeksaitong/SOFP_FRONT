@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:fluttertoast/fluttertoast.dart'; // 추가: 토스트 메시지를 위한 패키지
+import 'package:fluttertoast/fluttertoast.dart'; // 토스트 메시지 패키지 추가
 import 'package:sofp_front/gaps.dart';
 
 void main() => runApp(SigninPage());
@@ -15,14 +15,19 @@ class _SigninPageState extends State<SigninPage> {
   String name = ''; // 이름
   String email = ''; // 이메일
   String gender = ''; // 성별을 저장하는 변수
-  String buttonLabel = '인증번호 전송';
+  String buttonLabel = '인증번호 전송'; // 버튼 레이블 초기값 설정
+  String? selectedYear; // 선택된 년도
+  String? selectedMonth; // 선택된 월
+  String? selectedDay; // 선택된 일
+  final String _password = ''; //비밀번호
 
+  // 인증번호 전송 버튼 클릭 시 수행되는 함수
   void onSendVerificationButtonClicked() {
     setState(() {
       buttonLabel = '인증번호 확인';
     });
   }
-
+  // 성별 선택 시 수행되는 함수
   void onGenderChanged(String? value) {
     setState(() {
       gender = value ?? ''; // 선택된 성별을 저장
@@ -30,9 +35,15 @@ class _SigninPageState extends State<SigninPage> {
   }
 
   void onSignupButtonClicked() {
-    // 모든 필수 입력란이 채워졌는지 확인
-    if (name.isEmpty || email.isEmpty || gender.isEmpty) {
-      // 비어있는 필드가 있을 경우 토스트 메시지 표시
+    // 필수 입력란이 모두 채워져 있는지 확인
+    if (name.isEmpty ||
+        email.isEmpty ||
+        gender.isEmpty ||
+        selectedYear == null ||
+        selectedMonth == null ||
+        selectedDay == null ||
+        _password.isEmpty) {
+      // 필수 입력란 중 하나라도 비어 있으면 토스트 메시지 출력
       Fluttertoast.showToast(
         msg: '모든 필수 입력란을 채워주세요.',
         gravity: ToastGravity.BOTTOM,
@@ -40,9 +51,23 @@ class _SigninPageState extends State<SigninPage> {
         textColor: Colors.white,
       );
     } else {
-      // 모든 필수 입력란이 채워져 있을 경우 회원가입 로직 실행
-      // 여기에 회원가입 로직을 추가하면 됩니다.
-      print('회원가입 완료');
+      // 모든 필수 입력란이 채워져 있으면 회원가입 정보 출력
+      print('회원가입 정보:');
+      print('이름: $name');
+      print('생년월일: $selectedYear년 $selectedMonth월 $selectedDay일');
+      print('성별: $gender');
+      print('이메일: $email');
+      print('비밀번호: $_password');
+
+      // 여기에 실제 회원가입 로직을 추가할 수 있습니다.
+
+      // 회원가입 완료 메시지 출력
+      Fluttertoast.showToast(
+        msg: '회원가입이 완료되었습니다.',
+        gravity: ToastGravity.BOTTOM,
+        backgroundColor: Colors.green,
+        textColor: Colors.white,
+      );
     }
   }
 
@@ -55,33 +80,53 @@ class _SigninPageState extends State<SigninPage> {
             padding: const EdgeInsets.symmetric(horizontal: 30),
             child: Column(
               children: [
-                Gaps.h40,
+                Gaps.h40, // 공간 추가
                 Center(
                   child: Text(
-                    '회원가입',
+                    '회원가입', // 화면 제목
                     style: TextStyle(
                       fontSize: 25,
                       fontWeight: FontWeight.w400,
                     ),
                   ),
                 ),
-                Gaps.h40,
+                Gaps.h40, // 공간 추가
                 NameTextBox(
                   onChanged: (value) {
                     setState(() {
-                      name = value;
+                      name = value; // 이름 값 업데이트
                     });
                   },
-                ), // 이름
-                Gaps.h20,
-                DateOfBirthDropdown(),
-                Gaps.h20,
+                ), // 이름 입력란
+                Gaps.h20, // 공간 추가
+                DateOfBirthDropdown(
+                  // 생년월일 드롭다운
+                  selectedYear: selectedYear,
+                  selectedMonth: selectedMonth,
+                  selectedDay: selectedDay,
+                  onYearChanged: (value) {
+                    setState(() {
+                      selectedYear = value; // 선택된 년도 값 업데이트
+                    });
+                  },
+                  onMonthChanged: (value) {
+                    setState(() {
+                      selectedMonth = value; // 선택된 월 값 업데이트
+                    });
+                  },
+                  onDayChanged: (value) {
+                    setState(() {
+                      selectedDay = value; // 선택된 일 값 업데이트
+                    });
+                  },
+                ),
+                Gaps.h20, // 공간 추가
                 Padding(
                   padding: const EdgeInsets.symmetric(vertical: 10.0),
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.start,
                     children: [
-                      Text('성별 선택: '),
+                      Text('성별 선택: '), // 성별 선택 안내 문구
                       Radio<String>(
                         value: '남자',
                         groupValue: gender,
@@ -514,5 +559,17 @@ class _DateOfBirthDropdownState extends State<DateOfBirthDropdown> {
         ),
       ],
     );
+  }
+  // 생년월일을 업데이트하는 함수
+  void updateDateOfBirth() {
+    setState(() {
+      if (_selectedYear != null &&
+          _selectedMonth != null &&
+          _selectedDay != null) {
+        dateOfBirth = '$_selectedYear년 $_selectedMonth월 $_selectedDay일';
+      } else {
+        dateOfBirth = null;
+      }
+    });
   }
 }
