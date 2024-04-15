@@ -1,10 +1,75 @@
 import 'package:flutter/material.dart';
+import 'package:fluttertoast/fluttertoast.dart'; // 토스트 메시지 패키지 추가
 import 'package:sofp_front/gaps.dart';
 
 void main() => runApp(SigninPage());
 
-class SigninPage extends StatelessWidget {
-  const SigninPage({super.key});
+class SigninPage extends StatefulWidget {
+  const SigninPage({Key? key}) : super(key: key);
+
+  @override
+  _SigninPageState createState() => _SigninPageState();
+}
+
+class _SigninPageState extends State<SigninPage> {
+  String name = ''; // 이름
+  String email = ''; // 이메일
+  String gender = ''; // 성별을 저장하는 변수
+  String buttonLabel = '인증번호 전송'; // 버튼 레이블 초기값 설정
+  String? selectedYear; // 선택된 년도
+  String? selectedMonth; // 선택된 월
+  String? selectedDay; // 선택된 일
+  final String _password = ''; //비밀번호
+
+  // 인증번호 전송 버튼 클릭 시 수행되는 함수
+  void onSendVerificationButtonClicked() {
+    setState(() {
+      buttonLabel = '인증번호 확인';
+    });
+  }
+  // 성별 선택 시 수행되는 함수
+  void onGenderChanged(String? value) {
+    setState(() {
+      gender = value ?? ''; // 선택된 성별을 저장
+    });
+  }
+
+  void onSignupButtonClicked() {
+    // 필수 입력란이 모두 채워져 있는지 확인
+    if (name.isEmpty ||
+        email.isEmpty ||
+        gender.isEmpty ||
+        selectedYear == null ||
+        selectedMonth == null ||
+        selectedDay == null ||
+        _password.isEmpty) {
+      // 필수 입력란 중 하나라도 비어 있으면 토스트 메시지 출력
+      Fluttertoast.showToast(
+        msg: '모든 필수 입력란을 채워주세요.',
+        gravity: ToastGravity.BOTTOM,
+        backgroundColor: Colors.red,
+        textColor: Colors.white,
+      );
+    } else {
+      // 모든 필수 입력란이 채워져 있으면 회원가입 정보 출력
+      print('회원가입 정보:');
+      print('이름: $name');
+      print('생년월일: $selectedYear년 $selectedMonth월 $selectedDay일');
+      print('성별: $gender');
+      print('이메일: $email');
+      print('비밀번호: $_password');
+
+      // 여기에 실제 회원가입 로직을 추가할 수 있습니다.
+
+      // 회원가입 완료 메시지 출력
+      Fluttertoast.showToast(
+        msg: '회원가입이 완료되었습니다.',
+        gravity: ToastGravity.BOTTOM,
+        backgroundColor: Colors.green,
+        textColor: Colors.white,
+      );
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -12,29 +77,83 @@ class SigninPage extends StatelessWidget {
       home: Scaffold(
         body: SingleChildScrollView(
           child: Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 20),
+            padding: const EdgeInsets.symmetric(horizontal: 30),
             child: Column(
-              children: const [
-                Gaps.h40,
+              children: [
+                Gaps.h40, // 공간 추가
                 Center(
                   child: Text(
-                    '회원가입',
+                    '회원가입', // 화면 제목
                     style: TextStyle(
                       fontSize: 25,
                       fontWeight: FontWeight.w400,
                     ),
                   ),
                 ),
-                Gaps.h40,
-                NameTextBox(), // 이름
-                Gaps.h40,
-                DateOfBirthDropdown(),
-                Gaps.h40,
-                EmailTextBox(), // 이메일
-                Gaps.h10,
+                Gaps.h40, // 공간 추가
+                NameTextBox(
+                  onChanged: (value) {
+                    setState(() {
+                      name = value; // 이름 값 업데이트
+                    });
+                  },
+                ), // 이름 입력란
+                Gaps.h20, // 공간 추가
+                DateOfBirthDropdown(
+                  // 생년월일 드롭다운
+                  selectedYear: selectedYear,
+                  selectedMonth: selectedMonth,
+                  selectedDay: selectedDay,
+                  onYearChanged: (value) {
+                    setState(() {
+                      selectedYear = value; // 선택된 년도 값 업데이트
+                    });
+                  },
+                  onMonthChanged: (value) {
+                    setState(() {
+                      selectedMonth = value; // 선택된 월 값 업데이트
+                    });
+                  },
+                  onDayChanged: (value) {
+                    setState(() {
+                      selectedDay = value; // 선택된 일 값 업데이트
+                    });
+                  },
+                ),
+                Gaps.h20, // 공간 추가
+                Padding(
+                  padding: const EdgeInsets.symmetric(vertical: 10.0),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.start,
+                    children: [
+                      Text('성별 선택: '), // 성별 선택 안내 문구
+                      Radio<String>(
+                        value: '남자',
+                        groupValue: gender,
+                        onChanged: onGenderChanged,
+                      ),
+                      Text('남자'),
+                      Radio<String>(
+                        value: '여자',
+                        groupValue: gender,
+                        onChanged: onGenderChanged,
+                      ),
+                      Text('여자'),
+                    ],
+                  ),
+                ),
+                Gaps.h20,
+                EmailTextBox(
+                  onChanged: (value) {
+                    setState(() {
+                      email = value;
+                    });
+                  },
+                ), // 이메일
+                Gaps.h20,
                 Row(
                   mainAxisAlignment: MainAxisAlignment.end,
-                  children: [
+                  children: const [
                     CheckIDButton(), // 아이디 중복 검사 버튼 추가
                     SendVerificationButton(),
                   ],
@@ -45,10 +164,16 @@ class SigninPage extends StatelessWidget {
                 VerificationButton(), // 인증번호 확인 버튼 추가
                 Gaps.h20,
                 PasswordFieldsContainer(),
-                Gaps.h40,
+                Gaps.h32,
                 LabeledCheckboxExample(),
                 LabeledCheckboxExample(),
                 LabeledCheckboxExample(),
+                Gaps.h32,
+                // 추가: 회원가입 버튼
+                ElevatedButton(
+                  onPressed: onSignupButtonClicked,
+                  child: Text('회원가입'),
+                ),
                 Gaps.h40,
               ],
             ),
@@ -68,8 +193,9 @@ class Verification extends StatelessWidget {
   Widget build(BuildContext context) {
     return TextField(
       decoration: InputDecoration(
+        contentPadding: EdgeInsets.symmetric(vertical: 10.0), // 위아래 패딩 설정
         border: OutlineInputBorder(),
-        labelText: '인증번호',
+        labelText: '   인증번호',
       ),
     );
   }
@@ -191,8 +317,9 @@ class PasswordTextBox extends StatelessWidget {
       onChanged: onPasswordChanged,
       obscureText: true,
       decoration: const InputDecoration(
+        contentPadding: EdgeInsets.symmetric(vertical: 10.0),
         border: OutlineInputBorder(),
-        labelText: '비밀번호',
+        labelText: '   비밀번호',
       ),
     );
   }
@@ -214,8 +341,9 @@ class PasswordCheckTextBox extends StatelessWidget {
       onChanged: onConfirmPasswordChanged,
       obscureText: true,
       decoration: InputDecoration(
+        contentPadding: EdgeInsets.symmetric(vertical: 10.0), // 위아래 패딩 설정
         border: OutlineInputBorder(),
-        labelText: '비밀번호 확인',
+        labelText: '   비밀번호 확인',
         errorText: passwordsMatch ? null : '비밀번호가 일치하지 않습니다',
       ),
     );
@@ -223,32 +351,44 @@ class PasswordCheckTextBox extends StatelessWidget {
 }
 
 class EmailTextBox extends StatelessWidget {
+  final ValueChanged<String> onChanged;
+
   const EmailTextBox({
-    super.key,
-  });
+    Key? key,
+    required this.onChanged,
+  }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return TextField(
+      onChanged: onChanged,
       decoration: const InputDecoration(
+        contentPadding: EdgeInsets.symmetric(vertical: 10.0), // 위아래 패딩 설정
         border: OutlineInputBorder(),
-        labelText: '이메일',
+        labelText: '   이메일',
       ),
     );
   }
 }
 
-class NameTextBox extends StatelessWidget {
-  const NameTextBox({
-    super.key,
-  });
+class NameTextBox extends StatefulWidget {
+  final ValueChanged<String> onChanged;
 
+  const NameTextBox({Key? key, required this.onChanged}) : super(key: key);
+
+  @override
+  _NameTextBoxState createState() => _NameTextBoxState();
+}
+
+class _NameTextBoxState extends State<NameTextBox> {
   @override
   Widget build(BuildContext context) {
     return TextField(
+      onChanged: widget.onChanged,
       decoration: const InputDecoration(
+        contentPadding: EdgeInsets.symmetric(vertical: 10.0), // 위아래 패딩 설정
         border: OutlineInputBorder(),
-        labelText: '이름',
+        labelText: '   이름',
       ),
     );
   }
@@ -359,7 +499,10 @@ class _DateOfBirthDropdownState extends State<DateOfBirthDropdown> {
                 items: years
                     .map((year) => DropdownMenuItem<String>(
                           value: year,
-                          child: Text(year),
+                          child: SizedBox(
+                            width: 70, // 버튼 너비 조절
+                            child: Text(year),
+                          ),
                         ))
                     .toList(),
               ),
@@ -380,7 +523,10 @@ class _DateOfBirthDropdownState extends State<DateOfBirthDropdown> {
                 items: months
                     .map((month) => DropdownMenuItem<String>(
                           value: month,
-                          child: Text(month),
+                          child: SizedBox(
+                            width: 50, // 버튼 너비 조절
+                            child: Text(month),
+                          ),
                         ))
                     .toList(),
               ),
@@ -401,7 +547,10 @@ class _DateOfBirthDropdownState extends State<DateOfBirthDropdown> {
                 items: days
                     .map((day) => DropdownMenuItem<String>(
                           value: day,
-                          child: Text(day),
+                          child: SizedBox(
+                            width: 50, // 버튼 너비 조절
+                            child: Text(day),
+                          ),
                         ))
                     .toList(),
               ),
@@ -410,5 +559,17 @@ class _DateOfBirthDropdownState extends State<DateOfBirthDropdown> {
         ),
       ],
     );
+  }
+  // 생년월일을 업데이트하는 함수
+  void updateDateOfBirth() {
+    setState(() {
+      if (_selectedYear != null &&
+          _selectedMonth != null &&
+          _selectedDay != null) {
+        dateOfBirth = '$_selectedYear년 $_selectedMonth월 $_selectedDay일';
+      } else {
+        dateOfBirth = null;
+      }
+    });
   }
 }
