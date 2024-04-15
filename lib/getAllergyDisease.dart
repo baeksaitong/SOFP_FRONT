@@ -21,6 +21,7 @@ class _GetAllergyDiseaseState extends State<GetAllergyDisease> {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
+            SizedBox(height: 100),
             Padding(
               padding: EdgeInsets.only(left: 20),
               child: Text(
