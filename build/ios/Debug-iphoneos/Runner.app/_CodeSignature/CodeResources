@@ -46,7 +46,7 @@
 		</data>
 		<key>Frameworks/App.framework/App</key>
 		<data>
-		Bbz0H+jFuSxqNJTxH3IDCT7d+YA=
+		Q+Q32xUXyJDm8HdEikyBvIqT36w=
 		</data>
 		<key>Frameworks/App.framework/Info.plist</key>
 		<data>
@@ -54,15 +54,15 @@
 		</data>
 		<key>Frameworks/App.framework/_CodeSignature/CodeResources</key>
 		<data>
-		Fm7khYFTJe9Q9GvmAfoU5V5QiJ0=
+		Z6Wz5TpD2t/vibru+1Eo8ebLjIA=
 		</data>
 		<key>Frameworks/App.framework/flutter_assets/AssetManifest.bin</key>
 		<data>
-		8bFi8YJC6+ODsbQcUCrA2NgGXeM=
+		FTy7LAbCZFmgxZ/+0MgllCodT08=
 		</data>
 		<key>Frameworks/App.framework/flutter_assets/AssetManifest.json</key>
 		<data>
-		2Bl2QpKzzCkYDpovfFDDTN1+e2E=
+		561iRGhRiG71PsgXQLfGP81q/2c=
 		</data>
 		<key>Frameworks/App.framework/flutter_assets/FontManifest.json</key>
 		<data>
@@ -71,6 +71,22 @@
 		<key>Frameworks/App.framework/flutter_assets/NOTICES.Z</key>
 		<data>
 		sEzUcP8szJOChZ1wjqKOD5t0LFE=
+		</data>
+		<key>Frameworks/App.framework/flutter_assets/assets/bottom_star.png</key>
+		<data>
+		sp7xnOZ4qnx1arwG9tNDvpL8eQA=
+		</data>
+		<key>Frameworks/App.framework/flutter_assets/assets/bottom_user-bold.png</key>
+		<data>
+		x0FSDhAmcOi1o39nG8I4Bbn51bU=
+		</data>
+		<key>Frameworks/App.framework/flutter_assets/assets/fluent_home-32-filled.png</key>
+		<data>
+		rVa2ykmuqLUW04o1DcDMrHazOfQ=
+		</data>
+		<key>Frameworks/App.framework/flutter_assets/assets/fluent_pill-16-filled.png</key>
+		<data>
+		/vFROhttpDQq7AnKkOV4pFs2cko=
 		</data>
 		<key>Frameworks/App.framework/flutter_assets/assets/fonts/Pretendard-Black.ttf</key>
 		<data>
@@ -108,6 +124,38 @@
 		<data>
 		ytyIUW26rxngAJ8tDB42Mp/iXH8=
 		</data>
+		<key>Frameworks/App.framework/flutter_assets/assets/icon_search_text_search.png</key>
+		<data>
+		KRkdoWv+EJAku0jd4M17+ZkjLiU=
+		</data>
+		<key>Frameworks/App.framework/flutter_assets/assets/ion_search.png</key>
+		<data>
+		X3in2E/8g6xM4hvCDJLJ3JKi9E8=
+		</data>
+		<key>Frameworks/App.framework/flutter_assets/assets/majesticons_camera.png</key>
+		<data>
+		vp6LLemHIClW/HyD9KECotBOZ9w=
+		</data>
+		<key>Frameworks/App.framework/flutter_assets/assets/mdi_pill-tablet.png</key>
+		<data>
+		1/CcYLeqoa7i70FY6gvdmFgSvqs=
+		</data>
+		<key>Frameworks/App.framework/flutter_assets/assets/mdi_shape-plus.png</key>
+		<data>
+		jTZJd5l9NEq/Fp6fXjnj/2AlNuY=
+		</data>
+		<key>Frameworks/App.framework/flutter_assets/assets/mypage_allergy.png</key>
+		<data>
+		UcDMFp+mV7DK18X1Rlrw9jeChpk=
+		</data>
+		<key>Frameworks/App.framework/flutter_assets/assets/mypage_pill.png</key>
+		<data>
+		Y6xOc37wXHMKoQWXIIkhvjygLVI=
+		</data>
+		<key>Frameworks/App.framework/flutter_assets/assets/solar_pallete-2-bold-duotone.png</key>
+		<data>
+		SK50BY0Tjp7OCSdD7/lQEB8z6qQ=
+		</data>
 		<key>Frameworks/App.framework/flutter_assets/assets/two_transparent_capsules.png</key>
 		<data>
 		4Sf2hEBtZ+rZ7Y/Hl60cGhioziQ=
@@ -122,7 +170,7 @@
 		</data>
 		<key>Frameworks/App.framework/flutter_assets/kernel_blob.bin</key>
 		<data>
-		vJy+fn4nZflq7TyTCPFJURvo4gE=
+		q71K5OZNgJ0q5Adx1vKvj4IT2Bc=
 		</data>
 		<key>Frameworks/App.framework/flutter_assets/packages/cupertino_icons/assets/CupertinoIcons.ttf</key>
 		<data>
@@ -313,7 +361,7 @@
 		<dict>
 			<key>hash2</key>
 			<data>
-			heUSWrF4zJtrPuRZfx8xUkAfpLyhSn7imASLOuyMSLc=
+			oP9GGEZ74eRa9QEsQdgBD1FCvSe89+4qEeyXBL2GOPA=
 			</data>
 		</dict>
 		<key>Frameworks/App.framework/Info.plist</key>
@@ -327,21 +375,21 @@
 		<dict>
 			<key>hash2</key>
 			<data>
-			beuDr/NG7HImmBmfdS6WValrTME9f+zx+IFcnp+U6YI=
+			gkNmSRC3RcLkCJpMinDJFNWN1NBSDZ1MzUz/iRafckY=
 			</data>
 		</dict>
 		<key>Frameworks/App.framework/flutter_assets/AssetManifest.bin</key>
 		<dict>
 			<key>hash2</key>
 			<data>
-			vMfu4ZhSWjLEddPTBUXI7PbmM8umvK5+KONcizEMNRM=
+			FniS2g1y4ngXhqT/j6wrDNG1hE/u1uIhb6LYCfT2ubs=
 			</data>
 		</dict>
 		<key>Frameworks/App.framework/flutter_assets/AssetManifest.json</key>
 		<dict>
 			<key>hash2</key>
 			<data>
-			Y+wyr412k5fklpUMD8BhkoYJZLBefS3/nhwLsr0kTG4=
+			75VVeN+E+d2+Ux+WfStSuIZjEX3ZYD9wczGk5ZSmr2s=
 			</data>
 		</dict>
 		<key>Frameworks/App.framework/flutter_assets/FontManifest.json</key>
@@ -356,6 +404,34 @@
 			<key>hash2</key>
 			<data>
 			qIshGhnt9x0o1cEL2zGCG6WiLpjhDMTDb8/2KdtINLM=
+			</data>
+		</dict>
+		<key>Frameworks/App.framework/flutter_assets/assets/bottom_star.png</key>
+		<dict>
+			<key>hash2</key>
+			<data>
+			QctkQdSmK+5XmNaCjjy8RVydm1gerReFcz6UkQdpb04=
+			</data>
+		</dict>
+		<key>Frameworks/App.framework/flutter_assets/assets/bottom_user-bold.png</key>
+		<dict>
+			<key>hash2</key>
+			<data>
+			peBJhBLjAPRBFmbz9rFW2j654jTL7K1Zwx0ck8WHzzc=
+			</data>
+		</dict>
+		<key>Frameworks/App.framework/flutter_assets/assets/fluent_home-32-filled.png</key>
+		<dict>
+			<key>hash2</key>
+			<data>
+			s7hcqrRJCBGKpmrFHHi9OEHrzZy3vVd3snUAGIQqXaE=
+			</data>
+		</dict>
+		<key>Frameworks/App.framework/flutter_assets/assets/fluent_pill-16-filled.png</key>
+		<dict>
+			<key>hash2</key>
+			<data>
+			VhZugNJfvAZ/y4YA4LMe72XorcjG8E6FqJj6GqAXZgA=
 			</data>
 		</dict>
 		<key>Frameworks/App.framework/flutter_assets/assets/fonts/Pretendard-Black.ttf</key>
@@ -421,6 +497,62 @@
 			X2XP59mZNO5z3pg98mFUZmxlQY1zpi9jQRCUXy3cDK8=
 			</data>
 		</dict>
+		<key>Frameworks/App.framework/flutter_assets/assets/icon_search_text_search.png</key>
+		<dict>
+			<key>hash2</key>
+			<data>
+			LOumj/MJGh+9mfv5P75fqhd7KxamdfKFoFtavo7twyI=
+			</data>
+		</dict>
+		<key>Frameworks/App.framework/flutter_assets/assets/ion_search.png</key>
+		<dict>
+			<key>hash2</key>
+			<data>
+			/nvjVt/05t6vzNZr0Qqa0N4wDLQBL0BBgZRfFlSxmQY=
+			</data>
+		</dict>
+		<key>Frameworks/App.framework/flutter_assets/assets/majesticons_camera.png</key>
+		<dict>
+			<key>hash2</key>
+			<data>
+			Hu7+Fybi4edZALJNRSn/O07ejQFc8upm20gwdJ4xZDU=
+			</data>
+		</dict>
+		<key>Frameworks/App.framework/flutter_assets/assets/mdi_pill-tablet.png</key>
+		<dict>
+			<key>hash2</key>
+			<data>
+			i/NcZ7tSdp8BprIi0s+l+cGPkwem+hI2h1/HfK6zjmg=
+			</data>
+		</dict>
+		<key>Frameworks/App.framework/flutter_assets/assets/mdi_shape-plus.png</key>
+		<dict>
+			<key>hash2</key>
+			<data>
+			p1MrAavGj1Rsqn8JBWuT31zl/94Nnm41ky+NbEzvd4Q=
+			</data>
+		</dict>
+		<key>Frameworks/App.framework/flutter_assets/assets/mypage_allergy.png</key>
+		<dict>
+			<key>hash2</key>
+			<data>
+			j1CnhakcjmfWzjgySBX0Q/By6Oq/nTuTMopJUwPdLu8=
+			</data>
+		</dict>
+		<key>Frameworks/App.framework/flutter_assets/assets/mypage_pill.png</key>
+		<dict>
+			<key>hash2</key>
+			<data>
+			O038AKpNoryVeRRqjEqlGgbFQGfeIIlq/QTo6xkln0o=
+			</data>
+		</dict>
+		<key>Frameworks/App.framework/flutter_assets/assets/solar_pallete-2-bold-duotone.png</key>
+		<dict>
+			<key>hash2</key>
+			<data>
+			X4nLKgDtE1INnAerXRgpHg19J/xjSAujJpPLRRfDcI8=
+			</data>
+		</dict>
 		<key>Frameworks/App.framework/flutter_assets/assets/two_transparent_capsules.png</key>
 		<dict>
 			<key>hash2</key>
@@ -446,7 +578,7 @@
 		<dict>
 			<key>hash2</key>
 			<data>
-			n8C6UQ/DasUuuV0dRcUmIiAh7KkVwQR2jjPl3lgCTRI=
+			kT2wxRe4AKpnN1gziznw5veT9q5WnoVxBA/s6nXKtes=
 			</data>
 		</dict>
 		<key>Frameworks/App.framework/flutter_assets/packages/cupertino_icons/assets/CupertinoIcons.ttf</key>

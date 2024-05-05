@@ -144,53 +144,171 @@ class HomePage extends StatelessWidget {
                                 decoration: InputDecoration(
                                   border: InputBorder.none,
                                   hintText: "알약 이름을 검색해보세요",
-                                ),
                               ),
                             ),
-                          ],
-                        ),
+                          ),
+                        ],
                       ),
-                      Gaps.h8,
-                      SizedBox(
-                        width: 78,
-                        height: 78,
-                        child: Column(
-                          children: [
-                            OutlinedButton(
-                              style: OutlinedButton.styleFrom(
-                                side: BorderSide(
-                                  width: 1,
-                                  color: AppColors.wh,
-                                ),
-                                padding: EdgeInsets.all(8),
-                                shape: RoundedRectangleBorder(
-                                  borderRadius: BorderRadius.all(Radius.circular(10)),
-                                ),
-                                backgroundColor: AppColors.wh,
-                              ),
-                                onPressed: () {},
-                                child: Column(
-                                  children: [
-                                    Image.asset(
-                                        'assets/solar_pallete-2-bold-duotone.png',
-                                      width: 32,
-                                      height: 32,
-                                    ),
-                                    Text(
-                                      '색상',
-                                      style: AppTextStyles.body5M14,
-                                    ),
-                                  ],
-                                ),
+                    ),
+                    Gaps.h8,
+                    Row(
+                      children: [
+                        OutlinedButton(
+                          style: OutlinedButton.styleFrom(
+                            side: BorderSide.none,
+                            padding: EdgeInsets.zero,  // 패딩 제거
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.all(Radius.circular(10)),
                             ),
-                          ],
+                            backgroundColor: AppColors.wh,
+                            minimumSize: Size(75.5, 75.5),  // 버튼의 최소 크기 설정
+                          ),
+                            onPressed: () {},
+                            child: Column(
+                              children: [
+                                Image.asset(
+                                    'assets/solar_pallete-2-bold-duotone.png',
+                                  width: 32,
+                                  height: 32,
+                                ),
+                                Gaps.h4,
+                                Text(
+                                  '색상',
+                                  style: AppTextStyles.body5M14,
+                                ),
+                              ],
+                            ),
                         ),
-                      ),
+                        Gaps.w8,
+                        OutlinedButton(
+                          style: OutlinedButton.styleFrom(
+                            side: BorderSide.none,
+                            padding: EdgeInsets.zero,  // 패딩 제거
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.all(Radius.circular(10)),
+                            ),
+                            backgroundColor: AppColors.wh,
+                            minimumSize: Size(75.5, 75.5),  // 버튼의 최소 크기 설정
+                          ),
+                          onPressed: () {},
+                          child: Column(
+                            children: [
+                              Image.asset(
+                                'assets/solar_pallete-2-bold-duotone.png',
+                                width: 32,
+                                height: 32,
+                              ),
+                              Gaps.h4,
+                              Text(
+                                '색상',
+                                style: AppTextStyles.body5M14,
+                              ),
+                            ],
+                          ),
+                        ),
+                        Gaps.w8,
+                        OutlinedButton(
+                          style: OutlinedButton.styleFrom(
+                            side: BorderSide.none,
+                            padding: EdgeInsets.zero,  // 패딩 제거
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.all(Radius.circular(10)),
+                            ),
+                            backgroundColor: AppColors.wh,
+                            minimumSize: Size(75.5, 75.5),  // 버튼의 최소 크기 설정
+                          ),
+                          onPressed: () {},
+                          child: Column(
+                            children: [
+                              Image.asset(
+                                'assets/solar_pallete-2-bold-duotone.png',
+                                width: 32,
+                                height: 32,
+                              ),
+                              Gaps.h4,
+                              Text(
+                                '색상',
+                                style: AppTextStyles.body5M14,
+                              ),
+                            ],
+                          ),
+                        ),
+                        Gaps.w8,
+                        OutlinedButton(
+                          style: OutlinedButton.styleFrom(
+                            side: BorderSide.none,
+                            padding: EdgeInsets.zero,  // 패딩 제거
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.all(Radius.circular(10)),
+                            ),
+                            backgroundColor: AppColors.wh,
+                            minimumSize: Size(75.5, 75.5),  // 버튼의 최소 크기 설정
+                          ),
+                          onPressed: () {},
+                          child: Column(
+                            children: [
+                              Image.asset(
+                                'assets/solar_pallete-2-bold-duotone.png',
+                                width: 32,
+                                height: 32,
+                              ),
+                              Gaps.h4,
+                              Text(
+                                '색상',
+                                style: AppTextStyles.body5M14,
+                              ),
+                            ],
+                          ),
+                        ),
+                      ],
+                    ),
+                    Gaps.h14,
+                    OutlinedButton(
+                        onPressed: () {},
+                      style: OutlinedButton.styleFrom(
+                        side: BorderSide.none,
+                        minimumSize: Size(335, 48),
+                        backgroundColor: AppColors.softTeal,
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.all(Radius.circular(8)),
+                        ),                      ),
+                        child: Image(image: AssetImage('assets/icon_search_text_search.png')),
+                    )
                   ],
                 ),
               )
           ),
         ],
+      ),
+      bottomNavigationBar: BottomAppBar(
+        color: AppColors.gr100,
+        child: Row(
+          mainAxisSize: MainAxisSize.max,
+          mainAxisAlignment: MainAxisAlignment.spaceAround,
+          children: <Widget>[
+            IconButton(
+                onPressed: () {},
+                icon: Image.asset(
+                    'assets/bottom_star.png',
+                  width: 28,
+                  height: 27,
+                ),
+            ),
+            FloatingActionButton(
+                onPressed: () {},
+              child: Image.asset('assets/fluent_home-32-filled.png'),
+              backgroundColor: AppColors.vibrantTeal,
+            ),
+            IconButton(
+              onPressed: () {},
+              icon: Image.asset(
+                'assets/bottom_user-bold.png',
+                width: 28,
+                height: 27,
+              ),
+            )
+          ],
+        ),
       ),
     );
   }
