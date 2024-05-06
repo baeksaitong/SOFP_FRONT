@@ -6,6 +6,10 @@ import 'appTextStyles.dart';
 import 'gaps.dart';
 
 final GlobalKey<_RgbButtonState> rgbButtonKey = GlobalKey<_RgbButtonState>();
+final GlobalKey<_ShapeButtonState> shapeButtonKey = GlobalKey<_ShapeButtonState>();
+final GlobalKey<_FormulationButtonState> formulationButtonKey = GlobalKey<_FormulationButtonState>();
+final GlobalKey<_DivideLineButtonState> divideLineButtonKey = GlobalKey<_DivideLineButtonState>();
+final GlobalKey<_KeywordFieldState> keywordKey = GlobalKey<_KeywordFieldState>();
 
 class ShapeSearch extends StatefulWidget {
   const ShapeSearch({super.key});
@@ -42,14 +46,7 @@ class _ShapeSearchState extends State<ShapeSearch> {
                   height: 20,
                 ),
               ),
-              Flexible(
-                child: TextField(
-                  decoration: InputDecoration(
-                    border: InputBorder.none,
-                    hintText: "알약 이름을 검색해보세요",
-                  ),
-                ),
-              ),
+              KeywordField(key: keywordKey,),
               IconButton(
                 onPressed: () {},
                 icon: Image.asset(
@@ -93,38 +90,138 @@ class _ShapeSearchState extends State<ShapeSearch> {
           children: [
             RgbButton(key: rgbButtonKey,),
             Gaps.w8,
-            ShapeButton(),
+            ShapeButton(key: shapeButtonKey,),
             Gaps.w8,
-            FormulationButton(),
+            FormulationButton(key: formulationButtonKey,),
             Gaps.w8,
-            divideLineButton(),
+            DivideLineButton(key: divideLineButtonKey,),
           ],
         ),
         Gaps.h14,
-        OutlinedButton(
-          onPressed: () {},
-          style: OutlinedButton.styleFrom(
-            side: BorderSide.none,
-            minimumSize: Size(335, 48),
-            backgroundColor: AppColors.softTeal,
-            shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.all(Radius.circular(8)),
+        Row(
+          children: [
+            OutlinedButton(
+                onPressed: () {
+                  rgbButtonKey.currentState?.resetSelection();
+                  shapeButtonKey.currentState?.resetSelection();
+                  formulationButtonKey.currentState?.resetSelection();
+                  divideLineButtonKey.currentState?.resetSelection();
+                  keywordKey.currentState?.resetSelection();
+                },
+
+              style: OutlinedButton.styleFrom(
+                  side: BorderSide.none,
+                  minimumSize: Size(20, 48),
+                  backgroundColor: AppColors.softTeal,
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.all(Radius.circular(8)),
+                  ),
+                ),
+                child: Icon(
+                    Icons.refresh,
+                  color: AppColors.deepTeal,
+                  size: 20,
+                ),
             ),
-          ),
-          child: Image(image: AssetImage('assets/icon_search_text_search.png')),
+            Gaps.w10,
+            OutlinedButton(
+              onPressed: () async {
+                // 여기에서 선택된 항목들의 상태를 로그로 출력
+                final color = rgbButtonKey.currentState?.finalText;
+                final shape = shapeButtonKey.currentState?.finalText;
+                final formulation = formulationButtonKey.currentState?.finalText;
+                final divideLine = divideLineButtonKey.currentState?.finalText;
+                final keyword = keywordKey.currentState?._keywordController.text;
+
+                // 선택된 항목 로그로 출력
+                debugPrint('입력한 키워드: $keyword');
+                debugPrint('선택된 색상: $color');
+                debugPrint('선택된 모양: $shape');
+                debugPrint('선택된 제형: $formulation');
+                debugPrint('선택된 분할선: $divideLine');
+
+                for (var item in colorItems) {
+                  item.isSelected = false; // 모든 colorItems의 isSelected를 false로 설정
+                }
+                for (var item in shapeItems) {
+                  item.isSelected = false; // 모든 shapeItems isSelected를 false로 설정
+                }
+                for (var item in formulationItems) {
+                  item.isSelected = false; // 모든 formulationItems isSelected를 false로 설정
+                }
+                for (var item in divideLineItems) {
+                  item.isSelected = false; // 모든 divideLineItems isSelected를 false로 설정
+                }
+              },
+              style: OutlinedButton.styleFrom(
+                side: BorderSide.none,
+                minimumSize: Size(295, 48),
+                backgroundColor: AppColors.softTeal,
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.all(Radius.circular(8)),
+                ),
+              ),
+              child: Image(image: AssetImage('assets/icon_search_text_search.png')),
+            ),
+          ],
         )
       ],
     );
   }
 }
-class divideLineButton extends StatefulWidget {
-  const divideLineButton({super.key});
+class KeywordField extends StatefulWidget {
+  const KeywordField({super.key});
 
   @override
-  State<divideLineButton> createState() => _divideLineButtonState();
+  State<KeywordField> createState() => _KeywordFieldState();
 }
 
-class _divideLineButtonState extends State<divideLineButton> {
+class _KeywordFieldState extends State<KeywordField> {
+  final TextEditingController _keywordController = TextEditingController();
+
+  void resetSelection() {
+    setState(() {
+      _keywordController.clear();
+    });
+  }
+  @override
+  Widget build(BuildContext context) {
+    return Flexible(
+      child: TextField(
+        controller: _keywordController,
+        decoration: InputDecoration(
+          border: InputBorder.none,
+          hintText: "알약 이름을 검색해보세요",
+        ),
+      ),
+    );
+  }
+}
+
+
+class DivideLineButton extends StatefulWidget {
+  const DivideLineButton({super.key});
+
+  @override
+  State<DivideLineButton> createState() => _DivideLineButtonState();
+}
+
+class _DivideLineButtonState extends State<DivideLineButton> {
+  DivideLineItem? selectedDivideLineItem;
+  String? finalImage;
+  String? finalText;
+  // 상태를 리셋하는 메서드
+  void resetSelection() {
+    setState(() {
+      selectedDivideLineItem = null;
+      finalImage = null;
+      finalText = null;
+      for (var item in divideLineItems) {
+        item.isSelected = false; // 모든 divideLineItems의 isSelected를 false로 설정
+      }
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     return OutlinedButton(
@@ -137,22 +234,106 @@ class _divideLineButtonState extends State<divideLineButton> {
         backgroundColor: AppColors.wh,
         minimumSize: Size(75.5, 75.5),  // 버튼의 최소 크기 설정
       ),
-      onPressed: () {},
-      child: Column(
+      onPressed: () async {
+        final DivideLineItem? selected = await showModalBottomSheet<DivideLineItem>(
+          context: context,
+          builder: (BuildContext context) {
+            return Container(
+              height: 300,
+              padding: EdgeInsets.fromLTRB(24, 30, 24, 0),
+              decoration: BoxDecoration(
+                borderRadius: BorderRadius.all(Radius.circular(20)),
+                color: AppColors.gr150,
+              ),              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    '모양 선택',
+                    style: AppTextStyles.title3S18,
+                  ),
+                  Gaps.h16,
+                  Expanded(
+                    child: GridView.count(
+                      crossAxisCount: 4,
+                      crossAxisSpacing: 10,
+                      mainAxisSpacing: 10,
+                      childAspectRatio: (76 / 68),
+                      // 아이템 폭 대 높이 비율 조정
+
+                      children: List.generate(divideLineItems.length, (index) {
+                        return GestureDetector(
+                          onTap: () {
+                            setState(() {
+                              if (selectedDivideLineItem != null) {
+                                selectedDivideLineItem!.isSelected = false;
+                              }
+                              selectedDivideLineItem = divideLineItems[index];
+                              selectedDivideLineItem!.isSelected = true;
+                            }); // 색상 선택 로직 구현
+                            Navigator.of(context).pop(selectedDivideLineItem);
+                          },
+                          child: Container(
+                            decoration: BoxDecoration(
+                              color: AppColors.gr200,
+                              border: divideLineItems[index].isSelected
+                                    ? Border.all(
+                                  width: 2.0,
+                                  color: Colors.redAccent,
+                                )
+                                    : null,
+                            ),
+                            width: 76,
+                            height: 68,
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.center,
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                Image.asset(
+                                  divideLineItems[index].image,
+                                  width: 36,
+                                  height: 36,
+                                ),
+                                Gaps.h10,
+                                Text(
+                                  divideLineItems[index].text,
+                                  textAlign: TextAlign.center,
+                                  style: AppTextStyles.body5M14.copyWith(
+                                      color: AppColors.gr800),
+                                )
+                              ],
+                            ),
+                          ),
+                        );
+                      }),
+                    ),
+                  ),
+                  Gaps.h32,
+                ],
+              ),
+            );
+          },
+        );
+        if (selected != null) {
+          setState(() {
+            finalText = selected.text;
+            finalImage = selected.image;
+          });
+        }
+      },      child: Column(
         children: [
           Image.asset(
-            'assets/mdi_pill-tablet.png',
+            finalImage ?? 'assets/mdi_pill-tablet.png',
             width: 32,
             height: 32,
           ),
           Gaps.h4,
           Text(
-            '분할선',
+            finalText ?? '분할선',
             style: AppTextStyles.body5M14.copyWith(color: AppColors.bk),
           ),
         ],
       ),
-    ),
+    );
   }
 }
 
@@ -198,7 +379,10 @@ class _FormulationButtonState extends State<FormulationButton> {
             return Container(
               height: 300,
               padding: EdgeInsets.fromLTRB(24, 30, 24, 0),
-              color: AppColors.gr150,
+              decoration: BoxDecoration(
+                borderRadius: BorderRadius.all(Radius.circular(20)),
+                color: AppColors.gr150,
+              ),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
@@ -230,6 +414,12 @@ class _FormulationButtonState extends State<FormulationButton> {
                           child: Container(
                             decoration: BoxDecoration(
                               color: AppColors.gr200,
+                              border: formulationItems[index].isSelected
+                                  ? Border.all(
+                                width: 2.0,
+                                color: Colors.redAccent,
+                              )
+                                  : null,
                             ),
                             width: 76,
                             height: 68,
@@ -330,8 +520,10 @@ class _ShapeButtonState extends State<ShapeButton> {
             return Container(
               height: 400,
               padding: EdgeInsets.fromLTRB(24, 30, 24, 0),
-              color: AppColors.gr150,
-              child: Column(
+              decoration: BoxDecoration(
+                borderRadius: BorderRadius.all(Radius.circular(20)),
+                color: AppColors.gr150,
+              ),              child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Text(
@@ -362,6 +554,12 @@ class _ShapeButtonState extends State<ShapeButton> {
                           child: Container(
                             decoration: BoxDecoration(
                               color: AppColors.gr200,
+                              border: shapeItems[index].isSelected
+                                  ? Border.all(
+                                width: 2.0,
+                                color: Colors.redAccent,
+                              )
+                                  : null,
                             ),
                             width: 76,
                             height: 68,
@@ -471,8 +669,10 @@ class _RgbButtonState extends State<RgbButton> {
           builder: (BuildContext context) {
             return Container(
               height: 300,
-              color: AppColors.gr150,
-              padding: EdgeInsets.fromLTRB(24, 30, 24, 0),
+              decoration: BoxDecoration(
+                borderRadius: BorderRadius.all(Radius.circular(20)),
+                color: AppColors.gr150,
+              ),              padding: EdgeInsets.fromLTRB(24, 30, 24, 0),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
