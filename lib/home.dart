@@ -2,6 +2,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:sopf_front/appColors.dart';
 import 'package:sopf_front/gaps.dart';
+import 'package:sopf_front/shapeSearch.dart';
 
 import 'appTextStyles.dart';
 
@@ -79,203 +80,7 @@ class HomePage extends StatelessWidget {
                 ),
                 padding: EdgeInsets.symmetric(horizontal: 32, vertical: 16),
                 alignment: Alignment.topLeft,
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text(
-                      '약을 검색해 보세요',
-                      style: AppTextStyles.title3S18,
-                    ),
-                    Gaps.h16,
-                    Container(
-                      width: 335,
-                      height: 48,
-                      decoration: BoxDecoration(
-                        color: AppColors.wh,
-                        borderRadius: BorderRadius.circular(16.0), // 둥근 모서리를 만들기
-                      ),
-                      child: Row(
-                        children: [
-                          IconButton(
-                              onPressed: () {},
-                              icon: Image.asset(
-                                'assets/ion_search.png',
-                                width: 20,
-                                height: 20,
-                              ),
-                          ),
-                          Flexible(
-                            child: TextField(
-                              decoration: InputDecoration(
-                                border: InputBorder.none,
-                                hintText: "알약 이름을 검색해보세요",
-                              ),
-                            ),
-                          ),
-                          IconButton(
-                              onPressed: () {},
-                              icon: Image.asset(
-                                  'assets/majesticons_camera.png',
-                                width: 24,
-                                height: 24,
-                              ),
-                          ),
-                        ],
-                      ),
-                    ),
-                    Gaps.h20,
-                    Text(
-                        '모양으로 찾기',
-                      style: AppTextStyles.body5M14,
-                    ),
-                    Gaps.h8,
-                    Container(
-                      width: 335,
-                      height: 48,
-                      decoration: BoxDecoration(
-                        color: AppColors.wh,
-                        borderRadius: BorderRadius.circular(16.0), // 둥근 모서리를 만들기
-                      ),
-                      child: Row(
-                        children: const [
-                          Gaps.w16,
-                            Flexible(
-                              child: TextField(
-                                decoration: InputDecoration(
-                                  border: InputBorder.none,
-                                  hintText: "알약 이름을 검색해보세요",
-                              ),
-                            ),
-                          ),
-                        ],
-                      ),
-                    ),
-                    Gaps.h8,
-                    Row(
-                      children: [
-                        OutlinedButton(
-                          style: OutlinedButton.styleFrom(
-                            side: BorderSide.none,
-                            padding: EdgeInsets.zero,  // 패딩 제거
-                            shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.all(Radius.circular(10)),
-                            ),
-                            backgroundColor: AppColors.wh,
-                            minimumSize: Size(75.5, 75.5),  // 버튼의 최소 크기 설정
-                          ),
-                            onPressed: () {},
-                            child: Column(
-                              children: [
-                                Image.asset(
-                                    'assets/solar_pallete-2-bold-duotone.png',
-                                  width: 32,
-                                  height: 32,
-                                ),
-                                Gaps.h4,
-                                Text(
-                                  '색상',
-                                  style: AppTextStyles.body5M14,
-                                ),
-                              ],
-                            ),
-                        ),
-                        Gaps.w8,
-                        OutlinedButton(
-                          style: OutlinedButton.styleFrom(
-                            side: BorderSide.none,
-                            padding: EdgeInsets.zero,  // 패딩 제거
-                            shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.all(Radius.circular(10)),
-                            ),
-                            backgroundColor: AppColors.wh,
-                            minimumSize: Size(75.5, 75.5),  // 버튼의 최소 크기 설정
-                          ),
-                          onPressed: () {},
-                          child: Column(
-                            children: [
-                              Image.asset(
-                                'assets/solar_pallete-2-bold-duotone.png',
-                                width: 32,
-                                height: 32,
-                              ),
-                              Gaps.h4,
-                              Text(
-                                '색상',
-                                style: AppTextStyles.body5M14,
-                              ),
-                            ],
-                          ),
-                        ),
-                        Gaps.w8,
-                        OutlinedButton(
-                          style: OutlinedButton.styleFrom(
-                            side: BorderSide.none,
-                            padding: EdgeInsets.zero,  // 패딩 제거
-                            shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.all(Radius.circular(10)),
-                            ),
-                            backgroundColor: AppColors.wh,
-                            minimumSize: Size(75.5, 75.5),  // 버튼의 최소 크기 설정
-                          ),
-                          onPressed: () {},
-                          child: Column(
-                            children: [
-                              Image.asset(
-                                'assets/solar_pallete-2-bold-duotone.png',
-                                width: 32,
-                                height: 32,
-                              ),
-                              Gaps.h4,
-                              Text(
-                                '색상',
-                                style: AppTextStyles.body5M14,
-                              ),
-                            ],
-                          ),
-                        ),
-                        Gaps.w8,
-                        OutlinedButton(
-                          style: OutlinedButton.styleFrom(
-                            side: BorderSide.none,
-                            padding: EdgeInsets.zero,  // 패딩 제거
-                            shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.all(Radius.circular(10)),
-                            ),
-                            backgroundColor: AppColors.wh,
-                            minimumSize: Size(75.5, 75.5),  // 버튼의 최소 크기 설정
-                          ),
-                          onPressed: () {},
-                          child: Column(
-                            children: [
-                              Image.asset(
-                                'assets/solar_pallete-2-bold-duotone.png',
-                                width: 32,
-                                height: 32,
-                              ),
-                              Gaps.h4,
-                              Text(
-                                '색상',
-                                style: AppTextStyles.body5M14,
-                              ),
-                            ],
-                          ),
-                        ),
-                      ],
-                    ),
-                    Gaps.h14,
-                    OutlinedButton(
-                        onPressed: () {},
-                      style: OutlinedButton.styleFrom(
-                        side: BorderSide.none,
-                        minimumSize: Size(335, 48),
-                        backgroundColor: AppColors.softTeal,
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.all(Radius.circular(8)),
-                        ),                      ),
-                        child: Image(image: AssetImage('assets/icon_search_text_search.png')),
-                    )
-                  ],
-                ),
+                child: ShapeSearch(),
               )
           ),
         ],
@@ -294,11 +99,7 @@ class HomePage extends StatelessWidget {
                   height: 27,
                 ),
             ),
-            FloatingActionButton(
-                onPressed: () {},
-              child: Image.asset('assets/fluent_home-32-filled.png'),
-              backgroundColor: AppColors.vibrantTeal,
-            ),
+            Gaps.w48,
             IconButton(
               onPressed: () {},
               icon: Image.asset(
@@ -310,6 +111,37 @@ class HomePage extends StatelessWidget {
           ],
         ),
       ),
+      floatingActionButton: SizedBox(
+        width: 70,
+        height: 70,
+        child: FloatingActionButton(
+          onPressed: () {},
+          backgroundColor: AppColors.vibrantTeal,
+          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(45)),
+          child: Image.asset(
+            'assets/fluent_home-32-filled.png',
+            width: 28,
+            height: 28,
+          ),
+        ),
+      ),
+      floatingActionButtonLocation: CustomFloatingActionButtonLocation(
+          FloatingActionButtonLocation.centerDocked, 0, 20
+      ),
     );
+  }
+}
+
+class CustomFloatingActionButtonLocation extends FloatingActionButtonLocation {
+  final FloatingActionButtonLocation location;
+  final double offsetX; // Horizontal offset
+  final double offsetY; // Vertical offset
+
+  CustomFloatingActionButtonLocation(this.location, this.offsetX, this.offsetY);
+
+  @override
+  Offset getOffset(ScaffoldPrelayoutGeometry scaffoldGeometry) {
+    final Offset offset = location.getOffset(scaffoldGeometry);
+    return Offset(offset.dx + offsetX, offset.dy + offsetY);
   }
 }
