@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:sopf_front/exColorsText.dart';
 
 import 'home.dart';
+import 'mypage.dart';
 
 void main() {
   runApp(const MyApp());
