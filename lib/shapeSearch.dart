@@ -25,66 +25,11 @@ class _ShapeSearchState extends State<ShapeSearch> {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Text(
-          '약을 검색해 보세요',
-          style: AppTextStyles.title3S18,
-        ),
-        Gaps.h16,
-        Container(
-          width: 335,
-          height: 48,
-          decoration: BoxDecoration(
-            color: AppColors.wh,
-            borderRadius: BorderRadius.circular(16.0), // 둥근 모서리를 만들기
-          ),
-          child: Row(
-            children: [
-              IconButton(
-                onPressed: () {},
-                icon: Image.asset(
-                  'assets/ion_search.png',
-                  width: 20,
-                  height: 20,
-                ),
-              ),
-              KeywordField(key: keywordKey,),
-              IconButton(
-                onPressed: () {},
-                icon: Image.asset(
-                  'assets/majesticons_camera.png',
-                  width: 24,
-                  height: 24,
-                ),
-              ),
-            ],
-          ),
-        ),
-        Gaps.h20,
-        Text(
           '모양으로 찾기',
           style: AppTextStyles.body5M14,
         ),
         Gaps.h8,
-        Container(
-          width: 335,
-          height: 48,
-          decoration: BoxDecoration(
-            color: AppColors.wh,
-            borderRadius: BorderRadius.circular(16.0), // 둥근 모서리를 만들기
-          ),
-          child: Row(
-            children: const [
-              Gaps.w16,
-              Flexible(
-                child: TextField(
-                  decoration: InputDecoration(
-                    border: InputBorder.none,
-                    hintText: "알약 이름을 검색해보세요",
-                  ),
-                ),
-              ),
-            ],
-          ),
-        ),
+        KeywordField(key: keywordKey,),
         Gaps.h8,
         Row(
           children: [
@@ -249,13 +194,26 @@ class _KeywordFieldState extends State<KeywordField> {
   }
   @override
   Widget build(BuildContext context) {
-    return Flexible(
-      child: TextField(
-        controller: _keywordController,
-        decoration: InputDecoration(
-          border: InputBorder.none,
-          hintText: "알약 이름을 검색해보세요",
-        ),
+    return Container(
+      width: 335,
+      height: 48,
+      decoration: BoxDecoration(
+        color: AppColors.wh,
+        borderRadius: BorderRadius.circular(16.0), // 둥근 모서리를 만들기
+      ),
+      child: Row(
+        children: [
+          Gaps.w16,
+          Flexible(
+            child: TextField(
+              controller: _keywordController,
+              decoration: InputDecoration(
+                border: InputBorder.none,
+                hintText: "알약 이름을 검색해보세요",
+              ),
+            ),
+          ),
+        ],
       ),
     );
   }
