@@ -62,6 +62,18 @@
       "languageVersion": "3.2"
     },
     {
+      "name": "flutter_web_plugins",
+      "rootUri": "file:///Users/mingmaengmung/flutter/packages/flutter_web_plugins",
+      "packageUri": "lib/",
+      "languageVersion": "3.2"
+    },
+    {
+      "name": "fluttertoast",
+      "rootUri": "file:///Users/mingmaengmung/.pub-cache/hosted/pub.dev/fluttertoast-8.2.5",
+      "packageUri": "lib/",
+      "languageVersion": "2.12"
+    },
+    {
       "name": "leak_tracker",
       "rootUri": "file:///Users/mingmaengmung/.pub-cache/hosted/pub.dev/leak_tracker-10.0.0",
       "packageUri": "lib/",
@@ -170,7 +182,7 @@
       "languageVersion": "3.3"
     }
   ],
-  "generated": "2024-05-08T15:05:43.920715Z",
+  "generated": "2024-05-08T17:56:12.280088Z",
   "generator": "pub",
   "generatorVersion": "3.3.3"
 }
