@@ -102,26 +102,88 @@ class _ShapeSearchState extends State<ShapeSearch> {
           children: [
             OutlinedButton(
                 onPressed: () {
-                  rgbButtonKey.currentState?.resetSelection();
-                  shapeButtonKey.currentState?.resetSelection();
-                  formulationButtonKey.currentState?.resetSelection();
-                  divideLineButtonKey.currentState?.resetSelection();
-                  keywordKey.currentState?.resetSelection();
+                  showDialog(
+                    context: context,
+                    builder: (BuildContext context) {
+                      return AlertDialog(
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(20),
+                        ),
+                        title: Text(
+                          '다시 입력하시겠습니까?',
+                          style: AppTextStyles.body2M16,
+                          selectionColor: AppColors.gr800,
+                          textAlign: TextAlign.center,
+                        ),
+                        content: Text(
+                          '입력하신 내용이 전부 사라집니다',
+                          style: AppTextStyles.body5M14,
+                          selectionColor: AppColors.gr600,
+                          textAlign: TextAlign.center,
+                        ),
+                        actions: <Widget>[
+                          OutlinedButton(
+                            onPressed: () {
+                              Navigator.of(context).pop();
+                            },
+                            style: OutlinedButton.styleFrom(
+                              backgroundColor: AppColors.gr250,
+                              minimumSize: Size(120, 44),
+                              side: BorderSide.none,
+                              shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.all(Radius.circular(8)),
+                              ),
+                            ),
+                            child: Text(
+                              '취소',
+                              style: AppTextStyles.body1S16,
+                              selectionColor: AppColors.gr600,
+                            ),
+                          ),
+                          OutlinedButton(
+                            onPressed: () {
+                              rgbButtonKey.currentState?.resetSelection();
+                              shapeButtonKey.currentState?.resetSelection();
+                              formulationButtonKey.currentState?.resetSelection();
+                              divideLineButtonKey.currentState?.resetSelection();
+                              keywordKey.currentState?.resetSelection();
+
+                              Navigator.of(context).pop();
+                              // 초기화 로직을 추가하세요.
+                            },
+                            style: OutlinedButton.styleFrom(
+                              backgroundColor: AppColors.softTeal,
+                              minimumSize: Size(120, 44),
+                              side: BorderSide.none,
+                              shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.all(Radius.circular(8)),
+                              ),
+                            ),
+                            child: Text(
+                              '초기화',
+                              style: AppTextStyles.body1S16,
+                              selectionColor: AppColors.deepTeal,
+                            ),
+                          ),
+                        ],
+                      );
+                    },
+                  );
                 },
 
               style: OutlinedButton.styleFrom(
                   side: BorderSide.none,
-                  minimumSize: Size(20, 48),
-                  backgroundColor: AppColors.softTeal,
+                  minimumSize: Size(78, 48),
+                  backgroundColor: AppColors.gr300,
                   shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.all(Radius.circular(8)),
                   ),
                 ),
-                child: Icon(
-                    Icons.refresh,
-                  color: AppColors.deepTeal,
-                  size: 20,
-                ),
+                child: Text(
+                  '초기화',
+                  style: AppTextStyles.body3S15,
+                  selectionColor: AppColors.gr600,
+                )
             ),
             Gaps.w10,
             OutlinedButton(
@@ -155,7 +217,8 @@ class _ShapeSearchState extends State<ShapeSearch> {
               },
               style: OutlinedButton.styleFrom(
                 side: BorderSide.none,
-                minimumSize: Size(295, 48),
+                minimumSize: Size(228, 48),
+                maximumSize: Size(228, 48),
                 backgroundColor: AppColors.softTeal,
                 shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.all(Radius.circular(8)),
