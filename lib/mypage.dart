@@ -1,284 +1,441 @@
-import 'package:flutter/material.dart';
-import 'package:sopf_front/appColors.dart';
-import 'package:sopf_front/appTextStyles.dart';
-
-class NewMyPage extends StatelessWidget {
-  const NewMyPage({super.key});
-
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      body: MyPage(),
-    );
+  import 'package:flutter/material.dart';
+  import 'package:sopf_front/appColors.dart';
+  import 'package:sopf_front/appTextStyles.dart';
+  
+  class NewMyPage extends StatelessWidget {
+    const NewMyPage({super.key});
+  
+    @override
+    Widget build(BuildContext context) {
+      return Scaffold(
+        body: MyPage(),
+      );
+    }
   }
-}
+  
+  class MyPage extends StatefulWidget {
+    const MyPage({Key? key}) : super(key: key);
+  
+    @override
+    _MyPageState createState() => _MyPageState();
+  }
+  
+  class _MyPageState extends State<MyPage> {
+    Map<String, dynamic>? memberInfo = {'name': '이한조'};
+    final List<String> _allergiesanddisease = [
+      "꽃가루",
+      "먼지",
+      "견과류",
+      "우유",
+      "생선",
+      "달걀",
+      "조개류",
+      "밀",
+      "대두",
+      "땅콩",
+    ];
+    final List<String> _medications = [
+      "이부프로펜",
+      "아세트아미노펜",
+      "아목시실린",
+      "메트포르민",
+      "암로디핀",
+      "시모바스타틴",
+      "오메프라졸",
+      "로사르탄",
+      "아스피린",
+      "가바펜틴"
+    ];
+  
+    List<String> _selectedAllergiesanddisease = [];
+    List<String> _selectedMedications = [];
 
-class MyPage extends StatefulWidget {
-  const MyPage({Key? key}) : super(key: key);
-
-  @override
-  _MyPageState createState() => _MyPageState();
-}
-
-class _MyPageState extends State<MyPage> {
-  Map<String, dynamic>? memberInfo = {'name': '이한조'};
-  final List<String> _allergiesanddisease = [
-    "꽃가루",
-    "먼지",
-    "견과류",
-    "우유",
-    "생선",
-    "달걀",
-    "조개류",
-    "밀",
-    "대두",
-    "땅콩"
-  ];
-  final List<String> _medications = [
-    "이부프로펜",
-    "아세트아미노펜",
-    "아목시실린",
-    "메트포르민",
-    "암로디핀",
-    "시모바스타틴",
-    "오메프라졸",
-    "로사르탄",
-    "아스피린",
-    "가바펜틴"
-  ];
-  List<String> _filteredAllergiesanddisease = [];
-  List<String> _filteredMedications = [];
-  List<String> _selectedAllergiesanddisease = [];
-  List<String> _selectedMedications = [];
-
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      body: SingleChildScrollView(
-        child: Container(
-          height: MediaQuery
-              .of(context)
-              .size
-              .height,
-          padding: EdgeInsets.symmetric(horizontal: 20),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              SizedBox(height: 60),
-              buildProfileHeader(),
-              SizedBox(height: 60),
-              Wrap(
+    void showEditBottomSheet(BuildContext context, String title, String type) {
+      showModalBottomSheet(
+          context: context,
+          builder: (BuildContext context) {
+            return Container(
+              padding: EdgeInsets.all(20),
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
                 children: [
-                  buildInfoSection(
-                      context, '내 알레르기 및 질병', "알레르기 및 질병 정보를 입력하세요.",
-                      'allergy'),
-                  buildInfoSection(context, '내가 복용 중인 약', "복용 중인 약 정보를 입력하세요.",
-                      'medication'),
+                  Text('Edit $title', style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold)),
+                  SizedBox(height: 20),
+                  ...((type == 'allergy' ? _allergiesanddisease : _medications).map((item) => CheckboxListTile(
+                    title: Text(item),
+                    value: type == 'allergy' ? _selectedAllergiesanddisease.contains(item) : _selectedMedications.contains(item),
+                    onChanged: (bool? value) {
+                      setState(() {
+                        if (value == true) {
+                          type == 'allergy' ? _selectedAllergiesanddisease.add(item) : _selectedMedications.add(item);
+                        } else {
+                          type == 'allergy' ? _selectedAllergiesanddisease.remove(item) : _selectedMedications.remove(item);
+                        }
+                      });
+                      Navigator.pop(context);
+                    },
+                  )).toList())
                 ],
               ),
-            ],
-          ),
-        ),
-      ),
-    );
-  }
+            );
+          }
+      );
+    }
 
-  Widget buildProfileHeader() {
-    return Row(
-      children: [
-        Padding(
-          padding: EdgeInsets.only(left: 40),
-          child: CircleAvatar(
-            radius: 50,
-            backgroundColor: Color(0xFFDFE0E3),
-            child: Image.asset('assets/user-icon.png', width: 70, height: 70),
-          ),
-        ),
-        Expanded(
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.end,
-            children: [
-              Padding(
-                padding: EdgeInsets.only(right: 200),
-                child: Text(
-                  '${memberInfo?['name']} 님',
-                  style: TextStyle(
-                      fontSize: 24,
-                      fontFamily: 'Pretendard',
-                      fontWeight: FontWeight.w700),
-                ),
-              ),
-              TextButton(
-                onPressed: () {
-                  print("정보 수정 기능 구현 필요");
-                },
-                style: TextButton.styleFrom(
-                  padding: EdgeInsets.only(right: 220),
-                ),
-                child: Text('정보 수정', style: TextStyle(
-                  fontSize: 16,
-                  fontFamily: 'Pretendard',
-                  fontWeight: FontWeight.w600,
-                  color: AppColors.gr550,
-                )),
-              ),
-            ],
-          ),
-        ),
-      ],
-    );
-  }
+    void showEditAllergiesBottomSheet(BuildContext context) {
+      TextEditingController textEditingController = TextEditingController();
+      showModalBottomSheet(
+        backgroundColor: AppColors.wh,
+          context: context,
+          builder: (BuildContext context) {
+            return StatefulBuilder(
+              builder: (BuildContext context, StateSetter setModalState) {
+                return SingleChildScrollView(
+                  child: Container(
+                    padding: EdgeInsets.all(20),
+                    child: Column(
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        Text("내 알레르기 & 질병 수정", style: TextStyle(fontSize: 18, fontWeight: FontWeight.w600)),
+                        SizedBox(height: 10),
+                        TextField(
+                          controller: textEditingController,
+                          decoration: InputDecoration(
+                            hintText: "알레르기나 질병 입력",
+                            suffixIcon: Container(
+                              width: 12,
+                              child: TextButton(
+                                child: Text(
+                                  "추가 +",
+                                  style: TextStyle(
+                                    color: AppColors.wh,
+                                    fontWeight: FontWeight.w600,
+                                  ),
+                                ),
+                                onPressed: () {
 
-  Widget buildInfoSection(BuildContext context, String title, String type,
-      String s) {
-    List<String> selectedItems = type == 'allergy'
-        ? _selectedAllergiesanddisease
-        : _selectedMedications;
-    return Container(
-      width: double.infinity,
-      decoration: BoxDecoration(
-        color: AppColors.gr150,
-        borderRadius: BorderRadius.circular(8),
-      ),
-      margin: EdgeInsets.only(bottom: 20),
-      padding: EdgeInsets.all(15),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Text(
-            title,
-            style: TextStyle(
-              fontSize: 15,
-              fontFamily: 'Pretendard',
-              fontWeight: FontWeight.w600,
-              color: Colors.black,
-            ),
-          ),
-          SizedBox(height: 10),
-          Wrap(
-            spacing: 8,
-            children: selectedItems.map((item) =>
-                Chip(
-                  label: Text(item),
-                  onDeleted: () {
-                    setState(() {
-                      selectedItems.remove(item);
-                    });
-                  },
-                )).toList(),
-          ),
-          SizedBox(height: 10),
-          ElevatedButton(
-            onPressed: () => showEditBottomSheet(context, title, type),
-            style: ElevatedButton.styleFrom(
-              minimumSize: Size(double.infinity, 36),
-              backgroundColor: Colors.white,
-              elevation: 0,
-              shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(8),
-              ),
-            ),
-            child: Text(
-              '수정하기',
+                                },
+                              ),
+                            ),
+                            border: OutlineInputBorder(
+                              borderRadius: BorderRadius.circular(8),
+                            ),
+                          ),
+                          onChanged: (value) {
+                            setModalState(() {});
+                          },
+                        ),
+                        SizedBox(height: 10),
+                        Wrap(
+                          spacing: 8,
+                          children: _allergiesanddisease.where((allergy) {
+                            return allergy.toLowerCase().contains(textEditingController.text.toLowerCase());
+                          }).map((filteredAllergy) {
+                            bool isSelected = _selectedAllergiesanddisease.contains(filteredAllergy);
+                            return ChoiceChip(
+                              label: Text(filteredAllergy),
+                              selected: isSelected,
+                              onSelected: (bool selected) {
+                                setModalState(() {
+                                  if (selected && !isSelected) {
+                                    _selectedAllergiesanddisease.add(filteredAllergy);
+                                  } else if (!selected && isSelected) {
+                                    _selectedAllergiesanddisease.remove(filteredAllergy);
+                                  }
+                                });
+                              },
+                              backgroundColor: AppColors.wh, // 비활성화 상태의 배경색
+                              selectedColor: AppColors.wh, // 활성화 상태의 배경색
+                              labelStyle: isSelected
+                                  ? TextStyle(color: Colors.black) // 선택됐을 때의 텍스트 스타일
+                                  : TextStyle(color: Colors.black), // 선택되지 않았을 때의 텍스트 스타일
+                              shape: RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(20),
+                                  side: BorderSide(color: isSelected ? AppColors.vibrantTeal : AppColors.gr300) // 선택 여부에 따라 테두리 색상 변경
+                              ),
+                            );
+                          }).toList(),
+                        ),
+                        SizedBox(height: 20),
+                        ElevatedButton(
+                          onPressed: () {
+                            Navigator.pop(context); // 닫기 전에 상태 업데이트
+                            setState(() {}); // InfoSection 업데이트를 위한 상태 갱신
+                          },
+                          child: Text("저장하기",
+                            style: TextStyle(
+                              fontSize: 16,
+                              fontWeight: FontWeight.w600,
+                              fontFamily: 'pretendard',
+                              color: AppColors.vibrantTeal,
+                            ),
+                          ),
+                          style: ElevatedButton.styleFrom(
+                              backgroundColor: AppColors.softTeal,
+                              minimumSize: Size(double.infinity, 36),
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(8),
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                );
+              },
+            );
+          }
+      );
+    }
+
+    void showEditMedicationsBottomSheet(BuildContext context) {
+      TextEditingController textEditingController = TextEditingController();
+      showModalBottomSheet(
+        backgroundColor: AppColors.wh,
+          context: context,
+          builder: (BuildContext context) {
+            return StatefulBuilder(
+              builder: (BuildContext context, StateSetter setModalState) {
+                return SingleChildScrollView(
+                  child: Container(
+                    padding: EdgeInsets.all(20),
+                    child: Column(
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        Text("내가 복용 중인 약 수정", style: TextStyle(fontSize: 18, fontWeight: FontWeight.w600)),
+                        SizedBox(height: 10),
+                        TextField(
+                          controller: textEditingController,
+                          decoration: InputDecoration(
+                            hintText: "복용중인 약 이름 입력",
+                            suffixIcon: IconButton(
+                              icon: Icon(Icons.add),
+                              onPressed: () {
+                                // 추후 추가 기능 구현
+                              },
+                            ),
+                            border: OutlineInputBorder(
+                              borderRadius: BorderRadius.circular(8),
+                            ),
+                          ),
+                          onChanged: (value) {
+                            setModalState(() {});
+                          },
+                        ),
+
+
+                        SizedBox(height: 10),
+
+
+                        Wrap(
+                          spacing: 8,
+                          children: _medications.where((medication) {
+                            return medication.toLowerCase().contains(textEditingController.text.toLowerCase());
+                          }).map((filteredMedication) {
+                            bool isSelected = _selectedMedications.contains(filteredMedication);
+                            return ChoiceChip(
+                              label: Text(filteredMedication),
+                              selected: isSelected,
+                              onSelected: (bool selected) {
+                                setModalState(() {
+                                  if (selected && !isSelected) {
+                                    _selectedMedications.add(filteredMedication);
+                                  } else if (!selected && isSelected) {
+                                    _selectedMedications.remove(filteredMedication);
+                                  }
+                                });
+                              },
+                              backgroundColor: AppColors.wh, // 비활성화 상태의 배경색
+                              selectedColor: AppColors.wh, // 활성화 상태의 배경색
+                              labelStyle: isSelected
+                                  ? TextStyle(color: Colors.black) // 선택됐을 때의 텍스트 스타일
+                                  : TextStyle(color: Colors.black), // 선택되지 않았을 때의 텍스트 스타일
+                              shape: RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(20),
+                                  side: BorderSide(color: isSelected ? AppColors.vibrantTeal : AppColors.gr300) // 선택 여부에 따라 테두리 색상 변경
+                              ),
+                            );
+                          }).toList(),
+                        ),
+
+                        SizedBox(height: 20),
+
+                        ElevatedButton(
+                          onPressed: () {
+                            Navigator.pop(context); // 닫기 전에 상태 업데이트
+                            setState(() {}); // InfoSection 업데이트를 위한 상태 갱신
+                          },
+                          child: Text("저장하기",
+                            style: TextStyle(
+                              fontSize: 16,
+                              fontWeight: FontWeight.w600,
+                              fontFamily: 'pretendard',
+                              color: AppColors.vibrantTeal,
+                            ),
+                          ),
+                          style: ElevatedButton.styleFrom(
+                            backgroundColor: AppColors.softTeal,
+                            minimumSize: Size(double.infinity, 36),
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(8),
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                );
+              },
+            );
+          }
+      );
+    }
+
+
+    Widget buildInfoSection(BuildContext context, String title, String prompt, String type) {
+      List<String> selectedItems = type == 'allergy' ? _selectedAllergiesanddisease : _selectedMedications;
+      Function showEditSheet = type == 'allergy' ? showEditAllergiesBottomSheet : showEditMedicationsBottomSheet;
+
+      return Container(
+        width: double.infinity,
+        decoration: BoxDecoration(
+          color: AppColors.gr150,
+          borderRadius: BorderRadius.circular(8),
+        ),
+        margin: EdgeInsets.only(bottom: 20),
+        padding: EdgeInsets.all(15),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Text(
+              title,
               style: TextStyle(
-                fontSize: 14,
+                fontSize: 15,
                 fontFamily: 'Pretendard',
                 fontWeight: FontWeight.w600,
                 color: Colors.black,
               ),
             ),
-          ),
-        ],
-      ),
-    );
-  }
-
-  void showEditBottomSheet(BuildContext context, String title, String type) {
-    List<String> fullList = (type == 'allergy')
-        ? _medications
-        : _allergiesanddisease;
-    List<String> selectedList = (type == 'allergy')
-        ? _selectedMedications
-        : _selectedAllergiesanddisease;
-    List<String> filteredList = fullList;
-
-    showModalBottomSheet(
-        context: context,
-        builder: (BuildContext context) {
-          return StatefulBuilder(
-            builder: (BuildContext context, StateSetter setState) {
-              return Container(
-                padding: EdgeInsets.all(20),
-                height: 400,
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: <Widget>[
-                    Text(
-                      title,
+            SizedBox(height: 10),
+            Wrap(
+              spacing: 8,
+              children: selectedItems.map((item) =>
+                  Chip(
+                    backgroundColor: AppColors.vibrantTeal,
+                    label: Text(item,
                       style: TextStyle(
-                        fontSize: 20,
-                        fontWeight: FontWeight.bold,
+                        fontSize: 14,
+                        fontFamily: 'Pretendard',
+                        fontWeight: FontWeight.w600,
+                        color: AppColors.wh,
                       ),
                     ),
-                    SizedBox(height: 20),
-                    TextField(
-                      onChanged: (value) {
-                        setState(() {
-                          filteredList = fullList
-                              .where((item) =>
-                              item.toLowerCase().contains(value.toLowerCase()))
-                              .toList();
-                          if (filteredList.length > 10) {
-                            filteredList = filteredList.sublist(
-                                0, 10); // 최대 10개의 결과만 보여줍니다.
-                          }
-                        });
-                      },
-                      decoration: InputDecoration(
-                        labelText: '검색',
-                        border: OutlineInputBorder(),
-                      ),
+                    elevation: 0,
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(8),
+                      side: BorderSide(color: AppColors.vibrantTeal),
                     ),
-                    SizedBox(height: 20),
-                    Expanded(
-                      child: ListView.builder(
-                        itemCount: filteredList.length,
-                        itemBuilder: (context, index) {
-                          return CheckboxListTile(
-                            title: Text(filteredList[index]),
-                            value: selectedList.contains(filteredList[index]),
-                            onChanged: (bool? value) {
-                              setState(() {
-                                if (value!) {
-                                  if (!selectedList.contains(
-                                      filteredList[index])) {
-                                    selectedList.add(filteredList[index]);
-                                  } else {
-                                    selectedList.remove(filteredList[index]);
-                                  }
-                                }
-                              });
-                            },
-                          );
-                        },
-                      ),
-                    ),
-                    Align(
-                      alignment: Alignment.centerRight,
-                      child: ElevatedButton(
-                        onPressed: () {
-                          Navigator.pop(context); // 하단 시트 닫기
-                          setState(() {}); // 메인 화면 업데이트를 위해 상태 업데이트
-                        },
-                        child: Text('저장'),
-                      ),
-                    )
+                  ),
+              ).toList(),
+            ),
+            SizedBox(height: 10),
+            ElevatedButton(
+              onPressed: () => showEditSheet(context),
+              style: ElevatedButton.styleFrom(
+                minimumSize: Size(double.infinity, 36),
+                backgroundColor: AppColors.wh,
+                elevation: 0,
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(8),
+                ),
+              ),
+              child: Text(
+                '수정하기',
+                style: TextStyle(
+                  fontSize: 14,
+                  fontFamily: 'Pretendard',
+                  fontWeight: FontWeight.w600,
+                  color: Colors.black,
+                ),
+              ),
+            ),
+          ],
+        ),
+      );
+    }
+
+
+    @override
+    Widget build(BuildContext context) {
+      return Scaffold(
+        body: SingleChildScrollView(
+          child: Container(
+            height: MediaQuery.of(context).size.height,
+            padding: EdgeInsets.symmetric(horizontal: 20),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                SizedBox(height: 60),
+                buildProfileHeader(),
+                SizedBox(height: 60),
+                Wrap(
+                  children: [
+                    buildInfoSection(
+                        context, '내 알레르기 및 질병', "알레르기 및 질병 정보를 입력하세요.", 'allergy'),
+                    buildInfoSection(context, '내가 복용 중인 약', "복용 중인 약 정보를 입력하세요.", 'medication'),
                   ],
                 ),
-              );
-            },
-          );
-        }
-    );
+              ],
+            ),
+          ),
+        ),
+      );
+    }
+  
+    Widget buildProfileHeader() {
+      return Row(
+        children: [
+          Padding(
+            padding: EdgeInsets.only(left: 40),
+            child: CircleAvatar(
+              radius: 50,
+              backgroundColor: AppColors.gr200,
+              child: Image.asset('assets/user-icon.png', width: 70, height: 70),
+            ),
+          ),
+
+          Expanded(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.end,
+              children: [
+                Padding(
+                  padding: EdgeInsets.only(top: 10 ,right: 100),
+                  child: Text(
+                    '${memberInfo?['name']} 님',
+                    style: TextStyle(
+                        fontSize: 24,
+                        fontFamily: 'Pretendard',
+                        fontWeight: FontWeight.w700),
+                  ),
+                ),
+                TextButton(
+                  onPressed: () {
+                    print("정보 수정 기능 구현 필요");
+                  },
+                  style: TextButton.styleFrom(
+                    padding: EdgeInsets.only(top: 10, right: 125),
+                  ),
+                  child: Text('정보 수정', style: TextStyle(
+                    fontSize: 16,
+                    fontFamily: 'Pretendard',
+                    fontWeight: FontWeight.w600,
+                    color: AppColors.gr550,
+                  )),
+                ),
+              ],
+            ),
+          ),
+        ],
+      );
+    }
   }
-}

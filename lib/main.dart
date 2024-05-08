@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:sopf_front/exColorsText.dart';
-
 import 'home.dart';
 import 'mypage.dart';
 
@@ -18,7 +17,7 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       navigatorKey: navigatorKey,
-      home: const AppColorsText(),
+      home: NewMyPage(),
     );
   }
 }
