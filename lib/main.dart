@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:sopf_front/exColorsText.dart';
+import 'package:sopf_front/mypageEdit.dart';
 
 import 'home.dart';
 
@@ -17,7 +18,7 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       navigatorKey: navigatorKey,
-      home: const AppColorsText(),
+      home: MyPageEdit(),
     );
   }
 }
