@@ -1,0 +1,49 @@
+{
+	"sources" : 
+	[
+		{
+			"file" : "C:/Users/rktgk/Desktop/SOFP_FRONT/build/windows/x64/_deps/nuget-subbuild/CMakeFiles/nuget-populate"
+		},
+		{
+			"file" : "C:/Users/rktgk/Desktop/SOFP_FRONT/build/windows/x64/_deps/nuget-subbuild/CMakeFiles/374fbf1b7f77aabc040cd8461f00adb5/nuget-populate.rule"
+		},
+		{
+			"file" : "C:/Users/rktgk/Desktop/SOFP_FRONT/build/windows/x64/_deps/nuget-subbuild/CMakeFiles/7013b00bdd8076e6d5532fc0bcc30859/nuget-populate-complete.rule"
+		},
+		{
+			"file" : "C:/Users/rktgk/Desktop/SOFP_FRONT/build/windows/x64/_deps/nuget-subbuild/CMakeFiles/c9571952fdec584462f300649c7cb6de/nuget-populate-build.rule"
+		},
+		{
+			"file" : "C:/Users/rktgk/Desktop/SOFP_FRONT/build/windows/x64/_deps/nuget-subbuild/CMakeFiles/c9571952fdec584462f300649c7cb6de/nuget-populate-configure.rule"
+		},
+		{
+			"file" : "C:/Users/rktgk/Desktop/SOFP_FRONT/build/windows/x64/_deps/nuget-subbuild/CMakeFiles/c9571952fdec584462f300649c7cb6de/nuget-populate-copyfile.rule"
+		},
+		{
+			"file" : "C:/Users/rktgk/Desktop/SOFP_FRONT/build/windows/x64/_deps/nuget-subbuild/CMakeFiles/c9571952fdec584462f300649c7cb6de/nuget-populate-download.rule"
+		},
+		{
+			"file" : "C:/Users/rktgk/Desktop/SOFP_FRONT/build/windows/x64/_deps/nuget-subbuild/CMakeFiles/c9571952fdec584462f300649c7cb6de/nuget-populate-install.rule"
+		},
+		{
+			"file" : "C:/Users/rktgk/Desktop/SOFP_FRONT/build/windows/x64/_deps/nuget-subbuild/CMakeFiles/c9571952fdec584462f300649c7cb6de/nuget-populate-mkdir.rule"
+		},
+		{
+			"file" : "C:/Users/rktgk/Desktop/SOFP_FRONT/build/windows/x64/_deps/nuget-subbuild/CMakeFiles/c9571952fdec584462f300649c7cb6de/nuget-populate-patch.rule"
+		},
+		{
+			"file" : "C:/Users/rktgk/Desktop/SOFP_FRONT/build/windows/x64/_deps/nuget-subbuild/CMakeFiles/c9571952fdec584462f300649c7cb6de/nuget-populate-test.rule"
+		},
+		{
+			"file" : "C:/Users/rktgk/Desktop/SOFP_FRONT/build/windows/x64/_deps/nuget-subbuild/CMakeFiles/c9571952fdec584462f300649c7cb6de/nuget-populate-update.rule"
+		}
+	],
+	"target" : 
+	{
+		"labels" : 
+		[
+			"nuget-populate"
+		],
+		"name" : "nuget-populate"
+	}
+}

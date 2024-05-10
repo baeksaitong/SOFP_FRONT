@@ -1,0 +1,10 @@
+^C:\USERS\RKTGK\DESKTOP\SOFP_FRONT\BUILD\WINDOWS\X64\CMAKEFILES\3FFD628DBD45F8C6788F54E96BAF9EEF\GENERATE.STAMP.RULE
+setlocal
+"C:\Program Files\Microsoft Visual Studio\2022\Community\Common7\IDE\CommonExtensions\Microsoft\CMake\CMake\bin\cmake.exe" -SC:/Users/rktgk/Desktop/SOFP_FRONT/windows -BC:/Users/rktgk/Desktop/SOFP_FRONT/build/windows/x64 --check-stamp-list CMakeFiles/generate.stamp.list --vs-solution-file C:/Users/rktgk/Desktop/SOFP_FRONT/build/windows/x64/sopf_front.sln
+if %errorlevel% neq 0 goto :cmEnd
+:cmEnd
+endlocal & call :cmErrorLevel %errorlevel% & goto :cmDone
+:cmErrorLevel
+exit /b %1
+:cmDone
+if %errorlevel% neq 0 goto :VCEnd
