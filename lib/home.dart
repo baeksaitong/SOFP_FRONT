@@ -16,7 +16,9 @@ class HomePage extends StatelessWidget {
 
     return Scaffold(
       backgroundColor: AppColors.wh,
-      appBar: AppBar(),
+      appBar: AppBar(
+        backgroundColor: AppColors.wh,
+      ),
       body: SingleChildScrollView(
         child: Column(
           children: [

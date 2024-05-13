@@ -1,10 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:sopf_front/searchResult.dart';
-
 import 'appColors.dart';
 import 'appTextStyles.dart';
 import 'gaps.dart';
-import 'main.dart';
 import 'navigates.dart';
 
 class TextSearch extends StatefulWidget {
@@ -101,6 +99,7 @@ class _TextSearchDetailState extends State<TextSearchDetail> {
     return Scaffold(
       backgroundColor: AppColors.wh,
       appBar: AppBar(
+        backgroundColor: AppColors.wh,
         title: Text(
           '알약 검색',
           style: AppTextStyles.body1S16,

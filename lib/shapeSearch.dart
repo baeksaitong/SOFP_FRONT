@@ -265,7 +265,8 @@ class _DivideLineButtonState extends State<DivideLineButton> {
               decoration: BoxDecoration(
                 borderRadius: BorderRadius.all(Radius.circular(20)),
                 color: AppColors.gr150,
-              ),              child: Column(
+              ),
+              child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Text(
