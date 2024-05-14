@@ -133,7 +133,7 @@ class _CameraScreenState extends State<CameraScreen> {
         backgroundColor: AppColors.wh, // 테두리 색
         child: CircleAvatar(
           backgroundColor: AppColors.gr500,
-          radius: 28,
+          radius: 27,
         ),
       ),
     );
