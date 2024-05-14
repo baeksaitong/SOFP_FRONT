@@ -3,6 +3,7 @@ C:/Users/rktgk/Desktop/SOFP_FRONT/build/windows/x64/runner/Debug/flutter_windows
 C:/Users/rktgk/Desktop/SOFP_FRONT/build/windows/x64/runner/Debug/file_selector_windows_plugin.dll
 C:/Users/rktgk/Desktop/SOFP_FRONT/build/windows/x64/runner/Debug/permission_handler_windows_plugin.dll
 C:/Users/rktgk/Desktop/SOFP_FRONT/build/windows/x64/runner/Debug/data/flutter_assets/AssetManifest.bin
+C:/Users/rktgk/Desktop/SOFP_FRONT/build/windows/x64/runner/Debug/data/flutter_assets/AssetManifest.bin.json
 C:/Users/rktgk/Desktop/SOFP_FRONT/build/windows/x64/runner/Debug/data/flutter_assets/AssetManifest.json
 C:/Users/rktgk/Desktop/SOFP_FRONT/build/windows/x64/runner/Debug/data/flutter_assets/assets/bottom_star.png
 C:/Users/rktgk/Desktop/SOFP_FRONT/build/windows/x64/runner/Debug/data/flutter_assets/assets/bottom_user-bold.png
@@ -26,6 +27,8 @@ C:/Users/rktgk/Desktop/SOFP_FRONT/build/windows/x64/runner/Debug/data/flutter_as
 C:/Users/rktgk/Desktop/SOFP_FRONT/build/windows/x64/runner/Debug/data/flutter_assets/assets/formulations/reshuffle.png
 C:/Users/rktgk/Desktop/SOFP_FRONT/build/windows/x64/runner/Debug/data/flutter_assets/assets/formulations/soft.png
 C:/Users/rktgk/Desktop/SOFP_FRONT/build/windows/x64/runner/Debug/data/flutter_assets/assets/icon_search_text_search.png
+C:/Users/rktgk/Desktop/SOFP_FRONT/build/windows/x64/runner/Debug/data/flutter_assets/assets/imagesearch/defaultgallery.png
+C:/Users/rktgk/Desktop/SOFP_FRONT/build/windows/x64/runner/Debug/data/flutter_assets/assets/imagesearch/switchcamera.png
 C:/Users/rktgk/Desktop/SOFP_FRONT/build/windows/x64/runner/Debug/data/flutter_assets/assets/ion_search.png
 C:/Users/rktgk/Desktop/SOFP_FRONT/build/windows/x64/runner/Debug/data/flutter_assets/assets/majesticons_camera.png
 C:/Users/rktgk/Desktop/SOFP_FRONT/build/windows/x64/runner/Debug/data/flutter_assets/assets/mdi_pill-tablet.png
@@ -48,6 +51,7 @@ C:/Users/rktgk/Desktop/SOFP_FRONT/build/windows/x64/runner/Debug/data/flutter_as
 C:/Users/rktgk/Desktop/SOFP_FRONT/build/windows/x64/runner/Debug/data/flutter_assets/FontManifest.json
 C:/Users/rktgk/Desktop/SOFP_FRONT/build/windows/x64/runner/Debug/data/flutter_assets/fonts/MaterialIcons-Regular.otf
 C:/Users/rktgk/Desktop/SOFP_FRONT/build/windows/x64/runner/Debug/data/flutter_assets/kernel_blob.bin
+C:/Users/rktgk/Desktop/SOFP_FRONT/build/windows/x64/runner/Debug/data/flutter_assets/NOTICES
 C:/Users/rktgk/Desktop/SOFP_FRONT/build/windows/x64/runner/Debug/data/flutter_assets/NOTICES.Z
 C:/Users/rktgk/Desktop/SOFP_FRONT/build/windows/x64/runner/Debug/data/flutter_assets/packages/cupertino_icons/assets/CupertinoIcons.ttf
 C:/Users/rktgk/Desktop/SOFP_FRONT/build/windows/x64/runner/Debug/data/flutter_assets/packages/fluttertoast/assets/toastify.css

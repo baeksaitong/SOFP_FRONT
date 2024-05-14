@@ -25,7 +25,7 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       navigatorKey: navigatorKey,
-      home: CameraScreen(camera: camera), // `CameraScreen`에 카메라 객체를 전달합니다.
+      home: ImageSearch(cameras: [camera],), // `CameraScreen`에 카메라 객체를 전달합니다.
     );
   }
 }
