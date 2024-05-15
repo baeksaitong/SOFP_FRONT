@@ -1,11 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:sopf_front/exColorsText.dart';
-import 'package:sopf_front/appColors.dart';
-import 'package:sopf_front/appTextStyles.dart';
-import 'package:sopf_front/exColorsText.dart';
-import 'package:sopf_front/gaps.dart';
-import 'dart:async';
 import 'package:fluttertoast/fluttertoast.dart';
+import 'dart:async';
 
 void main() {
   runApp(MaterialApp(
@@ -27,18 +22,35 @@ class _SignUpPageState extends State<SignUpPage> {
   String email = ''; // 이메일
   String gender = ''; // 성별을 저장하는 변수
   String buttonLabel = '인증번호 전송'; // 버튼 레이블 초기값 설정
-  String? selectedYear; // 선택된 년도
-  String? selectedMonth; // 선택된 월
-  String? selectedDay; // 선택된 일
-  String? _password; //비밀번호
-  String? emailCode; //인증번호
-  late Timer startTimer; // 타이머 선언
+  String? dateOfBirth; // 생년월일
+  String? _password; // 비밀번호
+  String? emailCode; // 인증번호
+  Timer? startTimer; // 타이머 선언
+  final TextEditingController _dateOfBirthController = TextEditingController();
+  bool _timerStarted = false; // 타이머 시작 여부
 
   // 인증번호 전송 버튼 클릭 시 수행되는 함수
   void onSendVerificationButtonClicked() {
-    setState(() {
-      buttonLabel = '인증번호 확인';
-    });
+    if (!_timerStarted) {
+      setState(() {
+        buttonLabel = '인증번호 확인';
+        _timerStarted = true;
+      });
+      startTimer = Timer.periodic(Duration(seconds: 1), (timer) {
+        setState(() {
+          if (_seconds > 0) {
+            _seconds--;
+          } else {
+            if (_minutes > 0) {
+              _minutes--;
+              _seconds = 59;
+            } else {
+              startTimer?.cancel();
+            }
+          }
+        });
+      });
+    }
   }
 
   // 성별 선택 시 수행되는 함수
@@ -53,9 +65,7 @@ class _SignUpPageState extends State<SignUpPage> {
     if (name.isEmpty ||
         email.isEmpty ||
         gender.isEmpty ||
-        selectedYear == null ||
-        selectedMonth == null ||
-        selectedDay == null ||
+        dateOfBirth == null ||
         _password == null ||
         emailCode == null) {
       // 필수 입력란 중 하나라도 비어 있으면 토스트 메시지 출력
@@ -69,7 +79,7 @@ class _SignUpPageState extends State<SignUpPage> {
       // 모든 필수 입력란이 채워져 있으면 회원가입 정보 출력
       print('회원가입 정보:');
       print('이름: $name');
-      print('생년월일: $selectedYear년 $selectedMonth월 $selectedDay일');
+      print('생년월일: $dateOfBirth');
       print('성별: $gender');
       print('이메일: $email');
       print('비밀번호: $_password');
@@ -114,7 +124,7 @@ class _SignUpPageState extends State<SignUpPage> {
           padding: const EdgeInsets.symmetric(horizontal: 30),
           child: Column(
             children: [
-              Gaps.h40, // 공간 추가
+              SizedBox(height: 40), // 공간 추가
               NameTextBox(
                 onChanged: (value) {
                   setState(() {
@@ -122,29 +132,21 @@ class _SignUpPageState extends State<SignUpPage> {
                   });
                 },
               ), // 이름 입력란
-              Gaps.h20, // 공간 추가
-              DateOfBirthDropdown(
-                // 생년월일 드롭다운
-                selectedYear: selectedYear,
-                selectedMonth: selectedMonth,
-                selectedDay: selectedDay,
-                onYearChanged: (value) {
-                  setState(() {
-                    selectedYear = value; // 선택된 년도 값 업데이트
-                  });
-                },
-                onMonthChanged: (value) {
-                  setState(() {
-                    selectedMonth = value; // 선택된 월 값 업데이트
-                  });
-                },
-                onDayChanged: (value) {
-                  setState(() {
-                    selectedDay = value; // 선택된 일 값 업데이트
-                  });
-                },
+              SizedBox(height: 20), // 공간 추가
+              Text(
+                '생년월일',
+                style: TextStyle(fontWeight: FontWeight.bold),
               ),
-              Gaps.h20, // 공간 추가
+              TextField(
+                controller: _dateOfBirthController,
+                onChanged: _onDateOfBirthChanged,
+                keyboardType: TextInputType.number,
+                decoration: InputDecoration(
+                  hintText: 'YYYY.MM.DD',
+                  border: OutlineInputBorder(),
+                ),
+              ),
+              SizedBox(height: 20), // 공간 추가
               Padding(
                 padding: const EdgeInsets.symmetric(vertical: 10.0),
                 child: Row(
@@ -166,7 +168,7 @@ class _SignUpPageState extends State<SignUpPage> {
                   ],
                 ),
               ),
-              Gaps.h20, // 공간 추가
+              SizedBox(height: 20), // 공간 추가
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
@@ -183,11 +185,14 @@ class _SignUpPageState extends State<SignUpPage> {
                   SizedBox(width: 16), // 간격 추가
                   Expanded(
                     flex: 1,
-                    child: SendVerificationButton(email: email), // 인증번호 전송 버튼
+                    child: SendVerificationButton(
+                      email: email,
+                      onPressed: onSendVerificationButtonClicked,
+                    ), // 인증번호 전송 버튼
                   ),
                 ],
               ),
-              Gaps.h20, // 공간 추가
+              SizedBox(height: 20), // 공간 추가
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
@@ -199,6 +204,8 @@ class _SignUpPageState extends State<SignUpPage> {
                           emailCode = value; // 인증번호 업데이트
                         });
                       },
+                      minutes: _minutes,
+                      seconds: _seconds,
                     ),
                   ),
                   SizedBox(width: 16),
@@ -215,7 +222,7 @@ class _SignUpPageState extends State<SignUpPage> {
                 ],
               ), // 인증번호 확인 버튼
 
-              Gaps.h40, // 공간 추가
+              SizedBox(height: 40), // 공간 추가
               PasswordFieldsContainer(
                 onPasswordChanged: (password) {
                   setState(() {
@@ -223,11 +230,11 @@ class _SignUpPageState extends State<SignUpPage> {
                   });
                 },
               ), // 비밀번호 입력란
-              Gaps.h32, // 공간 추가
+              SizedBox(height: 32), // 공간 추가
               LabeledCheckboxExample(), // 이용약관 동의 체크박스
               LabeledCheckboxExample(), // 개인정보 처리방침 동의 체크박스
               LabeledCheckboxExample(), // 이메일 수신 동의 체크박스
-              Gaps.h32, // 공간 추가
+              SizedBox(height: 32), // 공간 추가
               ElevatedButton(
                 onPressed: () async {
                   //await signUp(name, selectedYear!, selectedMonth!,
@@ -258,20 +265,57 @@ class _SignUpPageState extends State<SignUpPage> {
                   ),
                 ),
               ),
-
-              Gaps.h40, // 공간 추가
+              SizedBox(height: 40), // 공간 추가
             ],
           ),
         ),
       ),
     );
   }
+
+  void _onDateOfBirthChanged(String value) {
+    // 점을 추가하는 로직
+    final newValue = value.replaceAll('.', '');
+    if (newValue.length > 8) return;
+
+    String formattedValue = '';
+    for (int i = 0; i < newValue.length; i++) {
+      formattedValue += newValue[i];
+      if (i == 3 || i == 5) {
+        formattedValue += '.';
+      }
+    }
+    _dateOfBirthController.value = TextEditingValue(
+      text: formattedValue,
+      selection: TextSelection.collapsed(offset: formattedValue.length),
+    );
+    setState(() {
+      dateOfBirth = formattedValue;
+    });
+  }
+
+  int _minutes = 5;
+  int _seconds = 0;
+
+  @override
+  void dispose() {
+    startTimer?.cancel();
+    _dateOfBirthController.dispose();
+    super.dispose();
+  }
 }
 
 class Verification extends StatefulWidget {
   final ValueChanged<String> onChanged;
+  final int minutes;
+  final int seconds;
 
-  const Verification({super.key, required this.onChanged});
+  const Verification({
+    super.key,
+    required this.onChanged,
+    required this.minutes,
+    required this.seconds,
+  });
 
   @override
   _VerificationState createState() => _VerificationState();
@@ -280,13 +324,14 @@ class Verification extends StatefulWidget {
 class _VerificationState extends State<Verification> {
   final TextEditingController _controller = TextEditingController();
   late Timer _timer;
-  int _minutes = 5;
-  int _seconds = 0;
-  final bool _timerStarted = false; // 타이머 시작 여부를 나타내는 변수
+  late int _minutes;
+  late int _seconds;
 
   @override
   void initState() {
     super.initState();
+    _minutes = widget.minutes;
+    _seconds = widget.seconds;
     startTimer();
   }
 
@@ -446,7 +491,7 @@ class _PasswordFieldsContainerState extends State<PasswordFieldsContainer> {
             widget.onPasswordChanged(value); // 부모 위젯에 비밀번호 전달
           },
         ),
-        Gaps.h40,
+        SizedBox(height: 40),
         PasswordCheckTextBox(
           onConfirmPasswordChanged: (value) {
             _confirmPassword = value;
@@ -677,9 +722,13 @@ class VerificationButton extends StatelessWidget {
 
 class SendVerificationButton extends StatelessWidget {
   final String email; // 이메일 프로퍼티 추가
+  final VoidCallback onPressed; // onPressed 콜백 추가
 
-  const SendVerificationButton(
-      {super.key, required this.email}); // 생성자에서 이메일을 받도록 수정
+  const SendVerificationButton({
+    super.key,
+    required this.email,
+    required this.onPressed, // onPressed 콜백 받기
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -691,11 +740,7 @@ class SendVerificationButton extends StatelessWidget {
           child: SizedBox(
             height: 48.0, // 버튼의 위아래 크기를 텍스트 박스와 동일하게 설정
             child: ElevatedButton(
-              onPressed: () async {
-                // 인증번호 전송 로직 구현
-                print('인증번호 전송 버튼이 클릭되었습니다.');
-                //await mailTokenSend(email);
-              },
+              onPressed: onPressed, // onPressed 콜백 사용
               style: ButtonStyle(
                 backgroundColor: MaterialStateProperty.all<Color>(
                     Color(0xFFE6F6F4)), // 배경색 설정
@@ -717,177 +762,5 @@ class SendVerificationButton extends StatelessWidget {
         ),
       ],
     );
-  }
-}
-
-// class CheckIDButton extends StatelessWidget {
-//   final String email; // 이메일 프로퍼티 추가
-
-//   const CheckIDButton({super.key, required this.email}); // 생성자에서 이메일을 받도록 수정
-
-//   @override
-//   Widget build(BuildContext context) {
-//     return Row(
-//       mainAxisAlignment: MainAxisAlignment.end,
-//       children: [
-//         ElevatedButton(
-//           onPressed: () async {
-//             // 로그인 접근 함수를 비동기로 호출, 이메일을 사용
-//             await idCheck(email);
-//           },
-//           child: const Text('아이디 중복 검사'), // 버튼 텍스트 설정
-//         ),
-//       ],
-//     );
-//   }
-// }
-
-class DateOfBirthDropdown extends StatefulWidget {
-  const DateOfBirthDropdown({
-    super.key,
-    this.selectedYear,
-    this.selectedMonth,
-    this.selectedDay,
-    required this.onYearChanged,
-    required this.onMonthChanged,
-    required this.onDayChanged,
-  });
-
-  final String? selectedYear;
-  final String? selectedMonth;
-  final String? selectedDay;
-  final ValueChanged<String?> onYearChanged;
-  final ValueChanged<String?> onMonthChanged;
-  final ValueChanged<String?> onDayChanged;
-
-  @override
-  _DateOfBirthDropdownState createState() => _DateOfBirthDropdownState();
-}
-
-class _DateOfBirthDropdownState extends State<DateOfBirthDropdown> {
-  String? _selectedYear;
-  String? _selectedMonth;
-  String? _selectedDay;
-
-  // 생년월일을 저장하는 변수
-  String? dateOfBirth;
-
-  final List<String> years = List.generate(
-      100, (index) => (DateTime.now().year - 80 + index).toString());
-  final List<String> months =
-      List.generate(12, (index) => (index + 1).toString().padLeft(2, '0'));
-  final List<String> days =
-      List.generate(31, (index) => (index + 1).toString().padLeft(2, '0'));
-
-  @override
-  void initState() {
-    super.initState();
-    _selectedYear = widget.selectedYear;
-    _selectedMonth = widget.selectedMonth;
-    _selectedDay = widget.selectedDay;
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        Text('생년월일', style: TextStyle(fontWeight: FontWeight.bold)),
-        Row(
-          children: [
-            Expanded(
-              child: DropdownButtonFormField<String>(
-                decoration: InputDecoration(
-                  labelText: '년',
-                  border: OutlineInputBorder(),
-                ),
-                value: _selectedYear,
-                onChanged: (newValue) {
-                  setState(() {
-                    _selectedYear = newValue;
-                    widget.onYearChanged(newValue); // 부모 위젯으로 선택된 연도 전달
-                    updateDateOfBirth(); // 업데이트 함수 호출
-                  });
-                },
-                items: years
-                    .map((year) => DropdownMenuItem<String>(
-                          value: year,
-                          child: SizedBox(
-                            width: 70, // 버튼 너비 조절
-                            child: Text(year),
-                          ),
-                        ))
-                    .toList(),
-              ),
-            ),
-            SizedBox(width: 10),
-            Expanded(
-              child: DropdownButtonFormField<String>(
-                decoration: InputDecoration(
-                  labelText: '월',
-                  border: OutlineInputBorder(),
-                ),
-                value: _selectedMonth,
-                onChanged: (newValue) {
-                  setState(() {
-                    _selectedMonth = newValue;
-                    widget.onMonthChanged(newValue); // 부모 위젯으로 선택된 월 전달
-                    updateDateOfBirth(); // 업데이트 함수 호출
-                  });
-                },
-                items: months
-                    .map((month) => DropdownMenuItem<String>(
-                          value: month,
-                          child: SizedBox(
-                            width: 50, // 버튼 너비 조절
-                            child: Text(month),
-                          ),
-                        ))
-                    .toList(),
-              ),
-            ),
-            SizedBox(width: 10),
-            Expanded(
-              child: DropdownButtonFormField<String>(
-                decoration: InputDecoration(
-                  labelText: '일',
-                  border: OutlineInputBorder(),
-                ),
-                value: _selectedDay,
-                onChanged: (newValue) {
-                  setState(() {
-                    _selectedDay = newValue;
-                    widget.onDayChanged(newValue); // 부모 위젯으로 선택된 일 전달
-                    updateDateOfBirth(); // 업데이트 함수 호출
-                  });
-                },
-                items: days
-                    .map((day) => DropdownMenuItem<String>(
-                          value: day,
-                          child: SizedBox(
-                            width: 50, // 버튼 너비 조절
-                            child: Text(day),
-                          ),
-                        ))
-                    .toList(),
-              ),
-            ),
-          ],
-        ),
-      ],
-    );
-  }
-
-  // 생년월일을 업데이트하는 함수
-  void updateDateOfBirth() {
-    setState(() {
-      if (_selectedYear != null &&
-          _selectedMonth != null &&
-          _selectedDay != null) {
-        dateOfBirth = '$_selectedYear년 $_selectedMonth월 $_selectedDay일';
-      } else {
-        dateOfBirth = null;
-      }
-    });
   }
 }
