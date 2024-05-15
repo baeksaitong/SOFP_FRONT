@@ -8,6 +8,9 @@
       <FullPath>C:\Users\rktgk\Desktop\SOFP_FRONT\build\windows\x64\flutter\x64\Debug\flutter_assemble</FullPath>
     </ProjectOutput>
     <ProjectOutput>
+      <FullPath>C:\Users\rktgk\Desktop\SOFP_FRONT\build\windows\x64\plugins\file_selector_windows\Debug\file_selector_windows_plugin.dll</FullPath>
+    </ProjectOutput>
+    <ProjectOutput>
       <FullPath>C:\Users\rktgk\Desktop\SOFP_FRONT\build\windows\x64\runner\Debug\sopf_front.exe</FullPath>
     </ProjectOutput>
   </ProjectOutputs>
