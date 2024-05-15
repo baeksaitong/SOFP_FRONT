@@ -2,13 +2,13 @@ import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'dart:async';
 
-void main() {
-  runApp(MaterialApp(
-    title: 'First App',
-    theme: ThemeData(primarySwatch: Colors.blue),
-    home: SignUpPage(),
-  ));
-}
+// void main() {
+//   runApp(MaterialApp(
+//     title: 'First App',
+//     theme: ThemeData(primarySwatch: Colors.blue),
+//     home: SignUpPage(),
+//   ));
+// }
 
 class SignUpPage extends StatefulWidget {
   const SignUpPage({super.key});
