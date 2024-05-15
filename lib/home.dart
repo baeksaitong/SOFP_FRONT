@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:sopf_front/appColors.dart';
 import 'package:sopf_front/gaps.dart';
 import 'package:sopf_front/shapeSearch.dart';
+import 'package:sopf_front/textSearch.dart';
 
 import 'appTextStyles.dart';
 
@@ -11,79 +12,89 @@ class HomePage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final TextEditingController _textcontroller = TextEditingController();
+    final bool isKeyboardVisible = MediaQuery.of(context).viewInsets.bottom != 0; // 키보드 위치 확인
+
     return Scaffold(
       backgroundColor: AppColors.wh,
-      appBar: AppBar(),
-      body: Column(
-        children: [
-          Container(
-            padding: EdgeInsets.symmetric(horizontal: 32),
-            child: Column(
-              children: [
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.start,
-                  children: [
-                    Text(
-                      '000님\n좋은 하루 보내세요!',
-                      style: AppTextStyles.title1B24,
-                    ),
-                    Gaps.w96,
-                    Image.asset(
-                      'assets/two_transparent_capsules.png',
-                      width: 42,
-                      height: 60,
-                    ),
-                  ],
-                ),
-                Gaps.h40,
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.start,
-                  children: [
-                    Image.asset(
-                      'assets/mypage_pill.png',
-                      width: 28,
-                      height: 28,
-                    ),
-                    Gaps.w8,
-                    Text(
-                      '복용 중인 약',
-                      style: AppTextStyles.body5M14,
-                    ),
-                  ],
-                ),
-                Gaps.h8,
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.start,
-                  children: [
-                    Image.asset(
-                      'assets/mypage_allergy.png',
-                      width: 28,
-                      height: 28,
-                    ),
-                    Gaps.w8,
-                    Text(
-                      '알레르기 현황',
-                      style: AppTextStyles.body5M14,
-                    ),
-                  ],
-                )
-              ],
+      appBar: AppBar(
+        backgroundColor: AppColors.wh,
+      ),
+      body: SingleChildScrollView(
+        child: Column(
+          children: [
+            Container(
+              padding: EdgeInsets.symmetric(horizontal: 32),
+              child: Column(
+                children: [
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.start,
+                    children: [
+                      Text(
+                        '000님\n좋은 하루 보내세요!',
+                        style: AppTextStyles.title1B24,
+                      ),
+                      Spacer(), // Flexible space
+                      Image.asset(
+                        'assets/two_transparent_capsules.png',
+                        width: 42,
+                        height: 60,
+                      ),
+                    ],
+                  ),
+                  SizedBox(height: 40),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.start,
+                    children: [
+                      Image.asset(
+                        'assets/mypage_pill.png',
+                        width: 28,
+                        height: 28,
+                      ),
+                      SizedBox(width: 8),
+                      Text(
+                        '복용 중인 약',
+                        style: AppTextStyles.body5M14,
+                      ),
+                    ],
+                  ),
+                  SizedBox(height: 8),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.start,
+                    children: [
+                      Image.asset(
+                        'assets/mypage_allergy.png',
+                        width: 28,
+                        height: 28,
+                      ),
+                      SizedBox(width: 8),
+                      Text(
+                        '알레르기 현황',
+                        style: AppTextStyles.body5M14,
+                      ),
+                    ],
+                  )
+                ],
+              ),
             ),
-          ),
-          Gaps.h16,
-          Expanded(
-              child: Container(
-                decoration: BoxDecoration(
-                  color: AppColors.gr150,
-                  borderRadius: BorderRadius.circular(16.0), // 둥근 모서리를 만들기
-                ),
-                padding: EdgeInsets.symmetric(horizontal: 32, vertical: 16),
-                alignment: Alignment.topLeft,
-                child: ShapeSearch(),
-              )
-          ),
-        ],
+            SizedBox(height: 16),
+            Container(
+              decoration: BoxDecoration(
+                color: AppColors.gr150,
+                borderRadius: BorderRadius.circular(16.0),
+              ),
+              padding: EdgeInsets.symmetric(horizontal: 32, vertical: 16),
+              alignment: Alignment.topLeft,
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: const [
+                  TextSearch(),
+                  Gaps.h20,
+                  ShapeSearch(),
+                ],
+              ),
+            ),
+          ],
+        ),
       ),
       bottomNavigationBar: BottomAppBar(
         color: AppColors.gr100,
@@ -111,7 +122,7 @@ class HomePage extends StatelessWidget {
           ],
         ),
       ),
-      floatingActionButton: SizedBox(
+      floatingActionButton: isKeyboardVisible ? null : SizedBox(
         width: 70,
         height: 70,
         child: FloatingActionButton(

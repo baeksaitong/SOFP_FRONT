@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:sopf_front/exColorsText.dart';
+import 'package:sopf_front/searchResult.dart';
+import 'package:sopf_front/textSearch.dart';
 import 'home.dart';
 import 'mypage.dart';
 
