@@ -13,20 +13,22 @@ class ImageSearch extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        appBar: AppBar(
-          title: Text('사진 검색', textAlign: TextAlign.center,
-            style: TextStyle(
-              fontSize: 16,
-              fontFamily: 'pretendard',
-              fontWeight: FontWeight.w600,
-              color: Colors.white,
-            ),
+      appBar: AppBar(
+        title: Text(
+          '사진 검색',
+          textAlign: TextAlign.center,
+          style: TextStyle(
+            fontSize: 16,
+            fontFamily: 'pretendard',
+            fontWeight: FontWeight.w600,
+            color: Colors.white,
           ),
-          centerTitle: true,
-          backgroundColor: Color(0xFF4D4D4D),
         ),
-        body: CameraScreen(cameras: cameras),
-      );
+        centerTitle: true,
+        backgroundColor: Color(0xFF4D4D4D),
+      ),
+      body: CameraScreen(cameras: cameras),
+    );
   }
 }
 
@@ -41,9 +43,12 @@ class CameraScreen extends StatefulWidget {
 
 class _CameraScreenState extends State<CameraScreen> {
   CameraController? _controller;
-  XFile? _imageFile;
+  XFile? _firstImageFile;
+  XFile? _secondImageFile;
   final ImagePicker _picker = ImagePicker();
   File? _latestImage;
+  bool _isLoadingImage = false;
+  bool _isTakingPicture = false;
 
   @override
   void initState() {
@@ -54,32 +59,31 @@ class _CameraScreenState extends State<CameraScreen> {
 
   Future<void> _initializeCamera() async {
     if (widget.cameras.isNotEmpty) {
-      _controller =
-          CameraController(widget.cameras.first, ResolutionPreset.high);
+      _controller = CameraController(widget.cameras.first, ResolutionPreset.high);
       await _controller!.initialize();
       setState(() {});
     }
   }
 
   Future<void> _loadLatestImage() async {
-    final XFile? pickedFile = await _picker.pickImage(
-        source: ImageSource.gallery);
-    if (pickedFile != null) {
-      setState(() {
-        _latestImage = File(pickedFile.path); // 파일로 변환
-      });
-    } else {
-      setState(() {
-        _latestImage = File('assets/imagesearch/defaultgallery.png');
-      });
-    }
+    setState(() {
+      _isLoadingImage = true;
+    });
+
+    final XFile? pickedFile = await _picker.pickImage(source: ImageSource.gallery);
+    setState(() {
+      _latestImage = pickedFile != null ? File(pickedFile.path) : null;
+      _isLoadingImage = false;
+    });
   }
 
   @override
   Widget build(BuildContext context) {
     return Stack(
       children: <Widget>[
-        _cameraPreviewWidget(),
+        Positioned.fill(
+          child: _cameraPreviewWidget(),
+        ),
         _cameraOverlayWidget(),
       ],
     );
@@ -95,14 +99,36 @@ class _CameraScreenState extends State<CameraScreen> {
     return Align(
       alignment: Alignment.bottomCenter,
       child: Container(
-        height: 150,
-        color: AppColors.bk.withOpacity(0.1),
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+        height: 160,
+        color: AppColors.bk.withOpacity(0.3),
+        child: Stack(
           children: [
-            _galleryButton(),
-            _shootButton(),
-            _toggleCameraButton(),
+            Align(
+              alignment: Alignment.center,
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  Text(
+                    '알약을 선명하게 찍어주세요',
+                    style: TextStyle(
+                      color: Colors.white,
+                      fontSize: 16,
+                      fontWeight: FontWeight.w500,
+                      fontFamily: 'pretendard',
+                    ),
+                  ),
+                  SizedBox(height: 8),
+                  _shootButton(),
+                ],
+              ),
+            ),
+            Align(
+              alignment: Alignment.centerLeft,
+              child: Padding(
+                padding: const EdgeInsets.only(left: 16.0),
+                child: _galleryButton(),
+              ),
+            ),
           ],
         ),
       ),
@@ -110,41 +136,48 @@ class _CameraScreenState extends State<CameraScreen> {
   }
 
   Widget _galleryButton() {
-    return InkWell(
+    return GestureDetector(
       onTap: _loadLatestImage,
       child: CircleAvatar(
         radius: 22,
         backgroundColor: AppColors.wh,
-        child: CircleAvatar(
-          backgroundImage: _latestImage != null
-              ? FileImage(_latestImage!) as ImageProvider
-              : const AssetImage('assets/imagesearch/defaultgallery.png'),
-          radius: 20,
+        child: Container(
+          width: 20,
+          height: 20,
+          decoration: BoxDecoration(
+            shape: BoxShape.circle,
+            image: DecorationImage(
+              image: _latestImage != null
+                  ? FileImage(_latestImage!) as ImageProvider
+                  : const AssetImage('assets/imagesearch/defaultgallery.png'),
+              fit: BoxFit.fill,
+            ),
+          ),
         ),
       ),
     );
   }
 
   Widget _shootButton() {
-    return InkWell(
+    return GestureDetector(
       onTap: _takePicture,
       child: CircleAvatar(
         radius: 30,
-        backgroundColor: AppColors.wh, // 테두리 색
+        backgroundColor: AppColors.wh,
         child: CircleAvatar(
-          backgroundColor: AppColors.gr500,
+          backgroundColor: AppColors.gr600,
           radius: 27,
         ),
       ),
     );
   }
 
-  Widget _toggleCameraButton() {
-    return InkWell(
+  /* Widget _toggleCameraButton() {
+    return GestureDetector(
       onTap: _switchCamera,
       child: CircleAvatar(
         radius: 22,
-        backgroundColor: AppColors.gr500,
+        backgroundColor: AppColors.gr600,
         child: Container(
           width: 44,
           height: 44,
@@ -157,49 +190,173 @@ class _CameraScreenState extends State<CameraScreen> {
         ),
       ),
     );
-  }
+  } */
 
   Future<void> _takePicture() async {
     if (_controller == null || !_controller!.value.isInitialized) {
       print('Error: 카메라를 선택해주세요.');
       return;
     }
-    if (_controller!.value.isTakingPicture) {
+    if (_isTakingPicture) {
       return;
     }
 
     try {
-      final XFile? picture = await _controller!.takePicture();
       setState(() {
-        _imageFile = picture;
+        _isTakingPicture = true;
       });
+      final XFile? picture = await _controller!.takePicture();
+      if (picture == null) {
+        print('Error: 사진을 찍지 못했습니다.');
+        return;
+      }
+      if (_firstImageFile == null) {
+        setState(() {
+          _firstImageFile = picture;
+        });
+        _showFirstConfirmationDialog();
+      } else if (_secondImageFile == null) {
+        setState(() {
+          _secondImageFile = picture;
+        });
+        _showSecondConfirmationDialog();
+      }
     } catch (e) {
       print('사진 촬영에 실패했습니다: $e');
+    } finally {
+      setState(() {
+        _isTakingPicture = false;
+      });
     }
   }
 
+  void _showFirstConfirmationDialog() {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: Text('알림',
+            style: TextStyle(
+              fontSize: 22,
+              fontWeight: FontWeight.w600,
+              fontFamily: 'pretendard',
+              color: AppColors.bk,
+            ),
+          ),
+          content: Text('알약의 뒷면 촬영으로 넘어갈까요? \n다시 촬영하려면 아니오를 누르시오'),
+          actions: <Widget>[
+            TextButton(
+              child: Text('아니요',
+                style: TextStyle(
+                  fontSize: 14,
+                  fontWeight: FontWeight.w600,
+                  fontFamily: 'pretendard',
+                  color: AppColors.bk,
+                ),
+              ),
+              onPressed: () {
+                Navigator.of(context).pop();
+                setState(() {
+                  _firstImageFile = null;
+                });
+              },
+            ),
+            TextButton(
+              child: Text('네',
+                style: TextStyle(
+                  fontSize: 14,
+                  fontWeight: FontWeight.w600,
+                  fontFamily: 'pretendard',
+                  color: AppColors.vibrantTeal,
+                ),
+              ),
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+            ),
+          ],
+        );
+      },
+    );
+  }
+
+  void _showSecondConfirmationDialog() {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: Text('알림',
+            style: TextStyle(
+              fontSize: 22,
+              fontWeight: FontWeight.w600,
+              fontFamily: 'pretendard',
+              color: AppColors.bk,
+            ),
+          ),
+          content: Text('검색하시겠습니까? \n처음부터 다시하려면 아니요를 누르시오'),
+          actions: <Widget>[
+            TextButton(
+              child: Text('아니요',
+                style: TextStyle(
+                  fontSize: 14,
+                  fontWeight: FontWeight.w600,
+                  fontFamily: 'pretendard',
+                  color: AppColors.bk,
+                ),
+              ),
+              onPressed: () {
+                Navigator.of(context).pop();
+                setState(() {
+                  _firstImageFile = null;
+                  _secondImageFile = null;
+                });
+              },
+            ),
+            TextButton(
+              child: Text('검색',
+                style: TextStyle(
+                  fontSize: 14,
+                  fontWeight: FontWeight.w600,
+                  fontFamily: 'pretendard',
+                  color: AppColors.vibrantTeal,
+                ),
+              ),
+              onPressed: () {
+                Navigator.of(context).pop();
+                _performSearch();
+              },
+            ),
+          ],
+        );
+      },
+    );
+  }
+
+  void _performSearch() {
+    print('Performing search with the captured images.');
+    // _firstImageFile와 _secondImageFile을 사용하여 검색 기능을 구현합니다.
+  }
+
   void _switchCamera() async {
-    // 현재 카메라의 렌즈 방향
+    if (_controller == null) return;
+
     final currentDirection = _controller!.description.lensDirection;
 
-    // 전환할 카메라를 결정
     CameraDescription newCamera = widget.cameras.firstWhere(
-            (camera) => camera.lensDirection != currentDirection,
-        orElse: () => _controller!.description // 같은 카메라 유지를 위한 기본값
+          (camera) => camera.lensDirection != currentDirection,
+      orElse: () => _controller!.description,
     );
 
-    // 새로운 카메라로 컨트롤러를 초기화
     if (newCamera != _controller!.description) {
       CameraController newController = CameraController(
-          newCamera,
-          ResolutionPreset.high
+        newCamera,
+        ResolutionPreset.high,
       );
 
-      // 기존 컨트롤러를 정리하고 새 컨트롤러로 업데이트
       await _controller?.dispose();
       _controller = newController;
       await _controller?.initialize();
-      setState(() {}); // UI 업데이트
+      setState(() {});
     }
   }
 }
