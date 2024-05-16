@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'dart:async';
 
+import 'api_client.dart';
+
 // void main() {
 //   runApp(MaterialApp(
 //     title: 'First App',
@@ -237,8 +239,14 @@ class _SignUpPageState extends State<SignUpPage> {
               SizedBox(height: 32), // 공간 추가
               ElevatedButton(
                 onPressed: () async {
-                  //await signUp(name, selectedYear!, selectedMonth!,
-                  //    selectedDay!, email, gender, _password!, true);
+                  onSignupButtonClicked();
+                  print('회원가입 버튼 클릭');
+                  if(gender=="남자") {
+                    await signUp(name, dateOfBirth!, email, "male", _password!, true);
+                  } else {
+                    await signUp(name, dateOfBirth!, email, "female", _password!, true);
+
+                  }
                 }, // 회원가입 버튼 클릭 시 함수 실행
                 style: ButtonStyle(
                   backgroundColor: MaterialStateProperty.all<Color>(
@@ -285,12 +293,14 @@ class _SignUpPageState extends State<SignUpPage> {
         formattedValue += '.';
       }
     }
+    String transformedValue = formattedValue.replaceAll('.', '-');
+
     _dateOfBirthController.value = TextEditingValue(
       text: formattedValue,
       selection: TextSelection.collapsed(offset: formattedValue.length),
     );
     setState(() {
-      dateOfBirth = formattedValue;
+      dateOfBirth = transformedValue;
     });
   }
 
