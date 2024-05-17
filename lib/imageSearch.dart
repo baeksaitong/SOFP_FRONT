@@ -4,6 +4,7 @@ import 'package:camera/camera.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:sopf_front/appColors.dart';
 import 'package:sopf_front/appTextStyles.dart';
+import 'package:sopf_front/gaps.dart';
 
 class ImageSearch extends StatelessWidget {
   final List<CameraDescription> cameras;
@@ -117,7 +118,7 @@ class _CameraScreenState extends State<CameraScreen> {
                       fontFamily: 'pretendard',
                     ),
                   ),
-                  SizedBox(height: 8),
+                  Gaps.h8,
                   _shootButton(),
                 ],
               ),
@@ -334,7 +335,7 @@ class _CameraScreenState extends State<CameraScreen> {
 
   void _performSearch() {
     print('Performing search with the captured images.');
-    // _firstImageFile와 _secondImageFile을 사용하여 검색 기능을 구현합니다.
+    // gpt에서 만들어준 텍스트 일단 그냥 두겠음
   }
 
   void _switchCamera() async {
