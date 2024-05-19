@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:sopf_front/api_client.dart';
 import 'package:sopf_front/gaps.dart';
 
 void main() {
@@ -24,12 +25,12 @@ class LoginPage extends StatelessWidget {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            Image.asset('promiss.png'),
+            // Image.asset('promiss.png'),
             IdTextField(idController: idController),
             SizedBox(height: 20),
             PassTextField(passwordController: passwordController),
             SizedBox(height: 20),
-            LoginButton(),
+            LoginButton(idController: idController, passwordController: passwordController,),
             SizedBox(height: 10),
             SignupButton(),
             SizedBox(height: 20),
@@ -89,7 +90,12 @@ class SignupButton extends StatelessWidget {
 class LoginButton extends StatelessWidget {
   const LoginButton({
     super.key,
+    required this.passwordController,
+    required this.idController
   });
+
+  final TextEditingController passwordController;
+  final TextEditingController idController;
 
   @override
   Widget build(BuildContext context) {
@@ -98,6 +104,7 @@ class LoginButton extends StatelessWidget {
       child: ElevatedButton(
         onPressed: () async {
           // Handle login button pressed
+          await login(idController.text, passwordController.text);
         },
         style: ElevatedButton.styleFrom(
           padding: EdgeInsets.symmetric(

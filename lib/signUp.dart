@@ -189,7 +189,10 @@ class _SignUpPageState extends State<SignUpPage> {
                     flex: 1,
                     child: SendVerificationButton(
                       email: email,
-                      onPressed: onSendVerificationButtonClicked,
+                      onPressed: () async{
+                        onSendVerificationButtonClicked;
+                        await idCheck(email);
+                      },
                     ), // 인증번호 전송 버튼
                   ),
                 ],
@@ -218,6 +221,7 @@ class _SignUpPageState extends State<SignUpPage> {
                         // 인증번호 확인 로직 구현
                         print('인증번호 확인 버튼이 클릭되었습니다.');
                         //await mailTokenCheck(email, code);
+                        await mailCheck(email, emailCode!);
                       },
                     ),
                   ),
