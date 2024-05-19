@@ -1,14 +1,18 @@
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'dart:async';
+import 'gaps.dart';
+import 'appcolors.dart';
+import 'appTextStyles.dart';
+import 'package:flutter/services.dart';
 
-// void main() {
-//   runApp(MaterialApp(
-//     title: 'First App',
-//     theme: ThemeData(primarySwatch: Colors.blue),
-//     home: SignUpPage(),
-//   ));
-// }
+void main() {
+  runApp(MaterialApp(
+    title: 'First App',
+    theme: ThemeData(primarySwatch: Colors.blue),
+    home: SignUpPage(),
+  ));
+}
 
 class SignUpPage extends StatefulWidget {
   const SignUpPage({super.key});
@@ -28,6 +32,17 @@ class _SignUpPageState extends State<SignUpPage> {
   Timer? startTimer; // 타이머 선언
   final TextEditingController _dateOfBirthController = TextEditingController();
   bool _timerStarted = false; // 타이머 시작 여부
+  final int _minutes = 5;
+  final int _seconds = 0;
+  bool privacyPolicyAccepted = false; // 개인정보 처리방침 동의 여부 필수체크
+  bool emailSubscriptionAccepted = false; // 광고성이메일 수신 동의 여부 선택체크
+
+  @override
+  void dispose() {
+    startTimer?.cancel();
+    _dateOfBirthController.dispose();
+    super.dispose();
+  }
 
   // 인증번호 전송 버튼 클릭 시 수행되는 함수
   void onSendVerificationButtonClicked() {
@@ -35,20 +50,6 @@ class _SignUpPageState extends State<SignUpPage> {
       setState(() {
         buttonLabel = '인증번호 확인';
         _timerStarted = true;
-      });
-      startTimer = Timer.periodic(Duration(seconds: 1), (timer) {
-        setState(() {
-          if (_seconds > 0) {
-            _seconds--;
-          } else {
-            if (_minutes > 0) {
-              _minutes--;
-              _seconds = 59;
-            } else {
-              startTimer?.cancel();
-            }
-          }
-        });
       });
     }
   }
@@ -67,7 +68,8 @@ class _SignUpPageState extends State<SignUpPage> {
         gender.isEmpty ||
         dateOfBirth == null ||
         _password == null ||
-        emailCode == null) {
+        emailCode == null ||
+        privacyPolicyAccepted) {
       // 필수 입력란 중 하나라도 비어 있으면 토스트 메시지 출력
       Fluttertoast.showToast(
         msg: '모든 필수 입력란을 채워주세요.',
@@ -96,6 +98,29 @@ class _SignUpPageState extends State<SignUpPage> {
     }
   }
 
+  void _onDateOfBirthChanged(String value) {
+    // 점을 추가하는 로직
+    final newValue = value.replaceAll('.', '');
+    if (newValue.length > 8) return;
+
+    String formattedValue = '';
+    if (newValue.length == 8) {
+      formattedValue =
+          '${newValue.substring(0, 4)}.${newValue.substring(4, 6)}.${newValue.substring(6, 8)}';
+    } else {
+      formattedValue = newValue;
+    }
+
+    _dateOfBirthController.value = TextEditingValue(
+      text: formattedValue,
+      selection: TextSelection.collapsed(offset: formattedValue.length),
+    );
+
+    setState(() {
+      dateOfBirth = formattedValue;
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -112,10 +137,7 @@ class _SignUpPageState extends State<SignUpPage> {
           child: Text(
             '회원가입',
             textAlign: TextAlign.center,
-            style: TextStyle(
-              fontSize: 25,
-              fontWeight: FontWeight.w400,
-            ),
+            style: AppTextStyles.body1S16,
           ),
         ),
       ),
@@ -124,7 +146,7 @@ class _SignUpPageState extends State<SignUpPage> {
           padding: const EdgeInsets.symmetric(horizontal: 30),
           child: Column(
             children: [
-              SizedBox(height: 40), // 공간 추가
+              Gaps.h40,
               NameTextBox(
                 onChanged: (value) {
                   setState(() {
@@ -132,43 +154,61 @@ class _SignUpPageState extends State<SignUpPage> {
                   });
                 },
               ), // 이름 입력란
-              SizedBox(height: 20), // 공간 추가
-              Text(
-                '생년월일',
-                style: TextStyle(fontWeight: FontWeight.bold),
+              Gaps.h20,
+              Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.start,
+                  children: const [
+                    Text(
+                      '생년월일',
+                      style: AppTextStyles.body5M14,
+                    ),
+                  ],
+                ),
               ),
               TextField(
                 controller: _dateOfBirthController,
                 onChanged: _onDateOfBirthChanged,
                 keyboardType: TextInputType.number,
+                inputFormatters: [LengthLimitingTextInputFormatter(10)],
                 decoration: InputDecoration(
-                  hintText: 'YYYY.MM.DD',
+                  hintText: '8자리 생년월일을 입력해주세요',
                   border: OutlineInputBorder(),
                 ),
               ),
-              SizedBox(height: 20), // 공간 추가
+              Gaps.h20,
               Padding(
                 padding: const EdgeInsets.symmetric(vertical: 10.0),
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.start,
                   children: [
-                    Text('성별 선택: '), // 성별 선택 안내 문구
+                    Text(
+                      '성별 선택: ',
+                      style: AppTextStyles.body5M14,
+                    ), // 성별 선택 안내 문구
                     Radio<String>(
                       value: '남자',
                       groupValue: gender,
                       onChanged: onGenderChanged,
                     ),
-                    Text('남자'),
+                    Text(
+                      '남자',
+                      style: AppTextStyles.body5M14,
+                    ),
                     Radio<String>(
                       value: '여자',
                       groupValue: gender,
                       onChanged: onGenderChanged,
                     ),
-                    Text('여자'),
+                    Text(
+                      '여자',
+                      style: AppTextStyles.body5M14,
+                    ),
                   ],
                 ),
               ),
-              SizedBox(height: 20), // 공간 추가
+              Gaps.h20,
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
@@ -182,7 +222,7 @@ class _SignUpPageState extends State<SignUpPage> {
                       },
                     ), // 이메일 입력란
                   ),
-                  SizedBox(width: 16), // 간격 추가
+                  Gaps.w16,
                   Expanded(
                     flex: 1,
                     child: SendVerificationButton(
@@ -192,7 +232,7 @@ class _SignUpPageState extends State<SignUpPage> {
                   ),
                 ],
               ),
-              SizedBox(height: 20), // 공간 추가
+              Gaps.h20,
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
@@ -206,9 +246,10 @@ class _SignUpPageState extends State<SignUpPage> {
                       },
                       minutes: _minutes,
                       seconds: _seconds,
+                      timerStarted: _timerStarted,
                     ),
                   ),
-                  SizedBox(width: 16),
+                  Gaps.w16,
                   Expanded(
                     flex: 1,
                     child: VerificationButton(
@@ -221,8 +262,7 @@ class _SignUpPageState extends State<SignUpPage> {
                   ),
                 ],
               ), // 인증번호 확인 버튼
-
-              SizedBox(height: 40), // 공간 추가
+              Gaps.h40,
               PasswordFieldsContainer(
                 onPasswordChanged: (password) {
                   setState(() {
@@ -230,19 +270,31 @@ class _SignUpPageState extends State<SignUpPage> {
                   });
                 },
               ), // 비밀번호 입력란
-              SizedBox(height: 32), // 공간 추가
-              LabeledCheckboxExample(), // 이용약관 동의 체크박스
-              LabeledCheckboxExample(), // 개인정보 처리방침 동의 체크박스
-              LabeledCheckboxExample(), // 이메일 수신 동의 체크박스
-              SizedBox(height: 32), // 공간 추가
+              Gaps.h32,
+              LabeledCheckboxExample(
+                label: '개인정보 처리방침에 동의합니다.',
+                value: privacyPolicyAccepted,
+                onChanged: (bool newValue) {
+                  setState(() {
+                    privacyPolicyAccepted = newValue;
+                  });
+                },
+              ), // 개인정보 처리방침 동의 체크박스
+              LabeledCheckboxExample(
+                label: '이메일 수신에 동의합니다.',
+                value: emailSubscriptionAccepted,
+                onChanged: (bool newValue) {
+                  setState(() {
+                    emailSubscriptionAccepted = newValue;
+                  });
+                },
+              ), // 이메일 수신 동의 체크박스
+              Gaps.h32,
               ElevatedButton(
-                onPressed: () async {
-                  //await signUp(name, selectedYear!, selectedMonth!,
-                  //    selectedDay!, email, gender, _password!, true);
-                }, // 회원가입 버튼 클릭 시 함수 실행
+                onPressed: onSignupButtonClicked, // 회원가입 버튼 클릭 시 함수 실행
                 style: ButtonStyle(
                   backgroundColor: MaterialStateProperty.all<Color>(
-                      Color(0xFF00AD98)), // 배경색 설정
+                      AppColors.deepTeal), // 배경색 설정
                   shape: MaterialStateProperty.all<RoundedRectangleBorder>(
                     RoundedRectangleBorder(
                       borderRadius:
@@ -258,50 +310,18 @@ class _SignUpPageState extends State<SignUpPage> {
                   child: Center(
                     child: Text(
                       '회원가입', // 회원가입 버튼 텍스트
-                      style: TextStyle(
-                        color: Color(0xFFFFFFFF), // 글씨색 설정
-                      ),
+                      style:
+                          AppTextStyles.body5M14.copyWith(color: AppColors.wh),
                     ),
                   ),
                 ),
               ),
-              SizedBox(height: 40), // 공간 추가
+              Gaps.h40,
             ],
           ),
         ),
       ),
     );
-  }
-
-  void _onDateOfBirthChanged(String value) {
-    // 점을 추가하는 로직
-    final newValue = value.replaceAll('.', '');
-    if (newValue.length > 8) return;
-
-    String formattedValue = '';
-    for (int i = 0; i < newValue.length; i++) {
-      formattedValue += newValue[i];
-      if (i == 3 || i == 5) {
-        formattedValue += '.';
-      }
-    }
-    _dateOfBirthController.value = TextEditingValue(
-      text: formattedValue,
-      selection: TextSelection.collapsed(offset: formattedValue.length),
-    );
-    setState(() {
-      dateOfBirth = formattedValue;
-    });
-  }
-
-  int _minutes = 5;
-  int _seconds = 0;
-
-  @override
-  void dispose() {
-    startTimer?.cancel();
-    _dateOfBirthController.dispose();
-    super.dispose();
   }
 }
 
@@ -309,12 +329,14 @@ class Verification extends StatefulWidget {
   final ValueChanged<String> onChanged;
   final int minutes;
   final int seconds;
+  final bool timerStarted;
 
   const Verification({
     super.key,
     required this.onChanged,
     required this.minutes,
     required this.seconds,
+    required this.timerStarted,
   });
 
   @override
@@ -332,7 +354,17 @@ class _VerificationState extends State<Verification> {
     super.initState();
     _minutes = widget.minutes;
     _seconds = widget.seconds;
-    startTimer();
+    if (widget.timerStarted) {
+      startTimer();
+    }
+  }
+
+  @override
+  void didUpdateWidget(Verification oldWidget) {
+    super.didUpdateWidget(oldWidget);
+    if (widget.timerStarted && !oldWidget.timerStarted) {
+      startTimer();
+    }
   }
 
   @override
@@ -342,9 +374,7 @@ class _VerificationState extends State<Verification> {
       children: [
         Text(
           '인증번호',
-          style: TextStyle(
-            fontWeight: FontWeight.bold,
-          ),
+          style: AppTextStyles.body5M14,
         ),
         Padding(
           padding: EdgeInsets.only(top: 18.0), // 위쪽에 18.0의 패딩 추가
@@ -370,7 +400,7 @@ class _VerificationState extends State<Verification> {
                   '$_minutes:${_seconds.toString().padLeft(2, '0')}',
                   style: TextStyle(
                     fontWeight: FontWeight.bold,
-                    color: Color(0xFF00AD98),
+                    color: AppColors.deepTeal,
                   ),
                 ),
               ),
@@ -442,26 +472,44 @@ class LabeledCheckbox extends StatelessWidget {
   }
 }
 
-class LabeledCheckboxExample extends StatefulWidget {
-  const LabeledCheckboxExample({super.key});
+class LabeledCheckboxExample extends StatelessWidget {
+  const LabeledCheckboxExample({
+    super.key,
+    required this.label,
+    required this.value,
+    required this.onChanged,
+  });
 
-  @override
-  State<LabeledCheckboxExample> createState() => _LabeledCheckboxExampleState();
-}
-
-class _LabeledCheckboxExampleState extends State<LabeledCheckboxExample> {
-  bool _isSelected = false;
+  final String label;
+  final bool value;
+  final ValueChanged<bool> onChanged;
 
   @override
   Widget build(BuildContext context) {
-    return LabeledCheckbox(
-      label: '이용 약관에 동의합니다.',
-      value: _isSelected,
-      onChanged: (bool newValue) {
-        setState(() {
-          _isSelected = newValue;
-        });
+    return InkWell(
+      onTap: () {
+        onChanged(!value);
       },
+      child: Padding(
+        padding: const EdgeInsets.symmetric(horizontal: 20.0),
+        child: Row(
+          children: <Widget>[
+            Expanded(
+              child: Text(
+                label,
+                style: AppTextStyles.body5M14.copyWith(
+                    color: AppColors.gr600), // Apply the new text style
+              ),
+            ),
+            Checkbox(
+              value: value,
+              onChanged: (bool? newValue) {
+                onChanged(newValue!);
+              },
+            ),
+          ],
+        ),
+      ),
     );
   }
 }
@@ -491,7 +539,7 @@ class _PasswordFieldsContainerState extends State<PasswordFieldsContainer> {
             widget.onPasswordChanged(value); // 부모 위젯에 비밀번호 전달
           },
         ),
-        SizedBox(height: 40),
+        Gaps.h40,
         PasswordCheckTextBox(
           onConfirmPasswordChanged: (value) {
             _confirmPassword = value;
@@ -514,17 +562,25 @@ class PasswordTextBox extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return TextField(
-      style: TextStyle(
-        letterSpacing: 1.5, // 글자 간격 조절
-      ),
-      onChanged: onPasswordChanged,
-      obscureText: true,
-      decoration: const InputDecoration(
-        contentPadding: EdgeInsets.fromLTRB(12, 10, 12, 10),
-        border: OutlineInputBorder(),
-        labelText: '비밀번호',
-      ),
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Text(
+          '비밀번호',
+          style: AppTextStyles.body5M14,
+        ),
+        TextField(
+          style: TextStyle(
+            letterSpacing: 1.5, // 글자 간격 조절
+          ),
+          onChanged: onPasswordChanged,
+          obscureText: true,
+          decoration: const InputDecoration(
+            contentPadding: EdgeInsets.fromLTRB(12, 10, 12, 10),
+            border: OutlineInputBorder(),
+          ),
+        ),
+      ],
     );
   }
 }
@@ -541,18 +597,26 @@ class PasswordCheckTextBox extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return TextField(
-      onChanged: onConfirmPasswordChanged,
-      style: TextStyle(
-        letterSpacing: 1.5, // 글자 간격 조절
-      ),
-      obscureText: true,
-      decoration: InputDecoration(
-        contentPadding: EdgeInsets.fromLTRB(12, 10, 12, 10),
-        border: OutlineInputBorder(),
-        labelText: '비밀번호 확인',
-        errorText: passwordsMatch ? null : '비밀번호가 일치하지 않습니다',
-      ),
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Text(
+          '비밀번호 확인',
+          style: AppTextStyles.body5M14,
+        ),
+        TextField(
+          onChanged: onConfirmPasswordChanged,
+          style: TextStyle(
+            letterSpacing: 1.5, // 글자 간격 조절
+          ),
+          obscureText: true,
+          decoration: InputDecoration(
+            contentPadding: EdgeInsets.fromLTRB(12, 10, 12, 10),
+            border: OutlineInputBorder(),
+            errorText: passwordsMatch ? null : '비밀번호가 일치하지 않습니다',
+          ),
+        ),
+      ],
     );
   }
 }
@@ -581,9 +645,7 @@ class _EmailTextBoxState extends State<EmailTextBox> {
       children: [
         Text(
           '이메일',
-          style: TextStyle(
-            fontWeight: FontWeight.bold,
-          ),
+          style: AppTextStyles.body5M14,
         ),
         TextField(
           controller: _controller,
@@ -647,9 +709,7 @@ class _NameTextBoxState extends State<NameTextBox> {
       children: [
         Text(
           '이름',
-          style: TextStyle(
-            fontWeight: FontWeight.bold,
-          ),
+          style: AppTextStyles.body5M14,
         ),
         TextField(
           controller: _controller,
@@ -701,7 +761,7 @@ class VerificationButton extends StatelessWidget {
           onPressed: onPressed,
           style: ButtonStyle(
             backgroundColor:
-                MaterialStateProperty.all<Color>(Color(0xFFE6F6F4)), // 배경색 설정
+                MaterialStateProperty.all<Color>(AppColors.softTeal), // 배경색 설정
             shape: MaterialStateProperty.all<RoundedRectangleBorder>(
               RoundedRectangleBorder(
                 borderRadius: BorderRadius.circular(10.0), // 모서리를 둥근 사각형으로 설정
@@ -710,9 +770,7 @@ class VerificationButton extends StatelessWidget {
           ),
           child: Text(
             '인증번호 확인', // 버튼 텍스트 설정
-            style: TextStyle(
-              color: Color(0xFF00574B), // 글씨색 설정
-            ),
+            style: AppTextStyles.body5M14.copyWith(color: AppColors.deepTeal),
           ),
         ),
       ),
@@ -743,7 +801,7 @@ class SendVerificationButton extends StatelessWidget {
               onPressed: onPressed, // onPressed 콜백 사용
               style: ButtonStyle(
                 backgroundColor: MaterialStateProperty.all<Color>(
-                    Color(0xFFE6F6F4)), // 배경색 설정
+                    AppColors.softTeal), // 배경색 설정
                 shape: MaterialStateProperty.all<RoundedRectangleBorder>(
                   RoundedRectangleBorder(
                     borderRadius:
@@ -753,9 +811,8 @@ class SendVerificationButton extends StatelessWidget {
               ),
               child: Text(
                 '인증번호 전송', // 버튼 텍스트 설정
-                style: TextStyle(
-                  color: Color(0xFF00574B), // 글씨색 설정
-                ),
+                style:
+                    AppTextStyles.body5M14.copyWith(color: AppColors.deepTeal),
               ),
             ),
           ),
