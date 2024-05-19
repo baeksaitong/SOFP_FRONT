@@ -171,9 +171,9 @@
     },
     {
       "name": "intl",
-      "rootUri": "file:///C:/Users/j/AppData/Local/Pub/Cache/hosted/pub.dev/intl-0.19.0",
+      "rootUri": "file:///C:/Users/j/AppData/Local/Pub/Cache/hosted/pub.dev/intl-0.17.0",
       "packageUri": "lib/",
-      "languageVersion": "3.0"
+      "languageVersion": "2.12"
     },
     {
       "name": "leak_tracker",
@@ -273,9 +273,9 @@
     },
     {
       "name": "table_calendar",
-      "rootUri": "file:///C:/Users/j/AppData/Local/Pub/Cache/hosted/pub.dev/table_calendar-3.1.1",
+      "rootUri": "file:///C:/Users/j/AppData/Local/Pub/Cache/hosted/pub.dev/table_calendar-3.0.8",
       "packageUri": "lib/",
-      "languageVersion": "3.0"
+      "languageVersion": "2.12"
     },
     {
       "name": "term_glyph",
@@ -320,7 +320,7 @@
       "languageVersion": "3.3"
     }
   ],
-  "generated": "2024-05-19T11:53:51.810564Z",
+  "generated": "2024-05-19T22:48:23.473205Z",
   "generator": "pub",
   "generatorVersion": "3.3.4"
 }
