@@ -148,9 +148,7 @@ class _CalendarPageState extends State<CalendarPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: Text('달력 앱'), // 앱바 제목 설정
-      ),
+      appBar: AppBar(),
       body: SingleChildScrollView(
         child: Padding(
           padding: const EdgeInsets.all(16.0), // 화면 전체에 패딩 추가
