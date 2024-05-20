@@ -1,54 +1,85 @@
 import 'package:flutter/material.dart';
-import 'package:sopf_front/api_client.dart';
+import 'package:sopf_front/apiClient.dart';
 import 'package:sopf_front/gaps.dart';
 
-void main() {
-  runApp(MaterialApp(
-    title: 'First App',
-    theme: ThemeData(primarySwatch: Colors.blue),
-    home: LoginPage(),
-  ));
-}
+import 'home.dart';
 
-class LoginPage extends StatelessWidget {
+// void main() {
+//   runApp(MaterialApp(
+//     title: 'First App',
+//     theme: ThemeData(primarySwatch: Colors.blue),
+//     home: LoginPage(),
+//   ));
+// }
+
+class LoginPage extends StatefulWidget {
   const LoginPage({super.key});
 
   @override
-  Widget build(BuildContext context) {
-    final TextEditingController idController = TextEditingController();
-    final TextEditingController passwordController = TextEditingController();
+  State<LoginPage> createState() => _LoginPageState();
+}
 
+class _LoginPageState extends State<LoginPage> {
+  final APIClient apiClient = APIClient();
+  final TextEditingController idController = TextEditingController();
+  final TextEditingController passwordController = TextEditingController();
+
+  void initSate() {
+    super.initState();
+    _checkLoginStatus();
+  }
+
+  Future<void> _checkLoginStatus() async {
+    try {
+      final accessToken = await apiClient.getValidAccessToken();
+      navigateToHome();
+    } catch (e) {
+      print('Error checking login status: $e');
+    }
+  }
+
+  // Future<void> _login() async {
+  //
+  // }
+
+  @override
+  Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(),
-      body: Padding(
-        padding: const EdgeInsets.all(20.0),
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            // Image.asset('promiss.png'),
-            IdTextField(idController: idController),
-            SizedBox(height: 20),
-            PassTextField(passwordController: passwordController),
-            SizedBox(height: 20),
-            LoginButton(idController: idController, passwordController: passwordController,),
-            SizedBox(height: 10),
-            SignupButton(),
-            SizedBox(height: 20),
-            Gaps.h48,
-            Text(
-              'SNS 계정으로 로그인',
-              style: TextStyle(fontSize: 11),
-            ),
-            SizedBox(height: 10),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: const [
-                NaverButton(),
-                SizedBox(width: 10),
-                KakaoButton(),
-              ],
-            ),
-          ],
+      resizeToAvoidBottomInset: true,
+      body: SingleChildScrollView(
+        child: Container(
+          height: MediaQuery.of(context).size.height,
+          alignment: Alignment.center,
+          padding: EdgeInsets.all(20.0),
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              // Image.asset('promiss.png'),
+              IdTextField(idController: idController),
+              SizedBox(height: 20),
+              PassTextField(passwordController: passwordController),
+              SizedBox(height: 20),
+              LoginButton(idController: idController, passwordController: passwordController,),
+              SizedBox(height: 10),
+              SignupButton(),
+              SizedBox(height: 20),
+              Gaps.h48,
+              Text(
+                'SNS 계정으로 로그인',
+                style: TextStyle(fontSize: 11),
+              ),
+              SizedBox(height: 10),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: const [
+                  NaverButton(),
+                  SizedBox(width: 10),
+                  KakaoButton(),
+                ],
+              ),
+            ],
+          ),
         ),
       ),
     );
@@ -88,7 +119,7 @@ class SignupButton extends StatelessWidget {
 }
 
 class LoginButton extends StatelessWidget {
-  const LoginButton({
+  LoginButton({
     super.key,
     required this.passwordController,
     required this.idController
@@ -96,6 +127,7 @@ class LoginButton extends StatelessWidget {
 
   final TextEditingController passwordController;
   final TextEditingController idController;
+  final APIClient apiClient = APIClient();
 
   @override
   Widget build(BuildContext context) {
@@ -103,8 +135,17 @@ class LoginButton extends StatelessWidget {
       width: double.infinity,
       child: ElevatedButton(
         onPressed: () async {
-          // Handle login button pressed
-          await login(idController.text, passwordController.text);
+          try {
+            bool success = await apiClient.login(idController.text, passwordController.text);
+            if (success) {
+              navigateToHome();
+            } else {
+              print('Login Failed');
+            }
+          } catch (e) {
+            print('Error: $e');
+            print('Login Failed');
+          }
         },
         style: ElevatedButton.styleFrom(
           padding: EdgeInsets.symmetric(

@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'dart:async';
 
-import 'api_client.dart';
+import 'apiClient.dart';
 
 // void main() {
 //   runApp(MaterialApp(
@@ -30,6 +30,8 @@ class _SignUpPageState extends State<SignUpPage> {
   Timer? startTimer; // 타이머 선언
   final TextEditingController _dateOfBirthController = TextEditingController();
   bool _timerStarted = false; // 타이머 시작 여부
+
+  final APIClient apiClient = APIClient();
 
   // 인증번호 전송 버튼 클릭 시 수행되는 함수
   void onSendVerificationButtonClicked() {
@@ -191,7 +193,7 @@ class _SignUpPageState extends State<SignUpPage> {
                       email: email,
                       onPressed: () async{
                         onSendVerificationButtonClicked;
-                        await idCheck(email);
+                        await apiClient.idCheck(email);
                       },
                     ), // 인증번호 전송 버튼
                   ),
@@ -221,7 +223,7 @@ class _SignUpPageState extends State<SignUpPage> {
                         // 인증번호 확인 로직 구현
                         print('인증번호 확인 버튼이 클릭되었습니다.');
                         //await mailTokenCheck(email, code);
-                        await mailCheck(email, emailCode!);
+                        await apiClient.mailCheck(email, emailCode!);
                       },
                     ),
                   ),
@@ -246,9 +248,9 @@ class _SignUpPageState extends State<SignUpPage> {
                   onSignupButtonClicked();
                   print('회원가입 버튼 클릭');
                   if(gender=="남자") {
-                    await signUp(name, dateOfBirth!, email, "male", _password!, true);
+                    await apiClient.signUp(name, dateOfBirth!, email, "male", _password!, true);
                   } else {
-                    await signUp(name, dateOfBirth!, email, "female", _password!, true);
+                    await apiClient.signUp(name, dateOfBirth!, email, "female", _password!, true);
 
                   }
                 }, // 회원가입 버튼 클릭 시 함수 실행

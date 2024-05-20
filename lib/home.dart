@@ -6,6 +6,13 @@ import 'package:sopf_front/shapeSearch.dart';
 import 'package:sopf_front/textSearch.dart';
 
 import 'appTextStyles.dart';
+import 'main.dart';
+
+void navigateToHome() {
+  navigatorKey.currentState?.push(
+    MaterialPageRoute(builder: (context) => HomePage()),
+  );
+}
 
 class HomePage extends StatelessWidget {
   const HomePage({super.key});
