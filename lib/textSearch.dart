@@ -81,7 +81,7 @@ class _TextSearchDetailState extends State<TextSearchDetail> {
 
   void _addSearchTerm(String term) async{
     if (term.isNotEmpty) {
-      await apiClient.searchTextAndShape('가스', null, null, null, null, null);
+      await apiClient.searchTextAndShape(term, null, null, null, null, null);
 
       setState(() {
         _recentSearches.remove(term);

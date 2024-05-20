@@ -224,6 +224,7 @@ class APIClient {
     final String? accessToken = await _jwtManager.getAccessToken();
     final url = Uri.parse('$baseUrl/app/search/keyword');
     print(keyword);
+    print(accessToken);
     final response = await http.post(
       url,
       headers: <String, String>{

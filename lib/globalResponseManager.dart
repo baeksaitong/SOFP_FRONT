@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'dart:ffi';
 
 class GlobalResponseManager {
   static final GlobalResponseManager _instance = GlobalResponseManager._internal();
@@ -24,8 +25,9 @@ class DrugInfo {
   final String classification;
   final String enterprise;
   final String imgUrl;
+  bool isBookmarked;
 
-  DrugInfo({required this.name, required this.classification, required this.enterprise, required this.imgUrl});
+  DrugInfo({required this.name, required this.classification, required this.enterprise, required this.imgUrl, required this.isBookmarked});
 
   factory DrugInfo.fromJson(Map<String, dynamic> json) {
     return DrugInfo(
@@ -33,6 +35,7 @@ class DrugInfo {
       classification: json['classification'],
       enterprise: json['enterprise'],
       imgUrl: json['imgUrl'],
+      isBookmarked: false,
     );
   }
 }
