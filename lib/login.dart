@@ -3,6 +3,7 @@ import 'package:sopf_front/apiClient.dart';
 import 'package:sopf_front/gaps.dart';
 
 import 'home.dart';
+import 'navigates.dart';
 
 // void main() {
 //   runApp(MaterialApp(
@@ -135,17 +136,7 @@ class LoginButton extends StatelessWidget {
       width: double.infinity,
       child: ElevatedButton(
         onPressed: () async {
-          try {
-            bool success = await apiClient.login(idController.text, passwordController.text);
-            if (success) {
-              navigateToHome();
-            } else {
-              print('Login Failed');
-            }
-          } catch (e) {
-            print('Error: $e');
-            print('Login Failed');
-          }
+          await apiClient.login(idController.text, passwordController.text);
         },
         style: ElevatedButton.styleFrom(
           padding: EdgeInsets.symmetric(

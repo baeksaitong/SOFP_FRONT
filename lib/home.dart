@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:sopf_front/appColors.dart';
@@ -6,13 +8,8 @@ import 'package:sopf_front/shapeSearch.dart';
 import 'package:sopf_front/textSearch.dart';
 
 import 'appTextStyles.dart';
+import 'globalResponseManager.dart';
 import 'main.dart';
-
-void navigateToHome() {
-  navigatorKey.currentState?.push(
-    MaterialPageRoute(builder: (context) => HomePage()),
-  );
-}
 
 class HomePage extends StatelessWidget {
   const HomePage({super.key});
@@ -20,6 +17,8 @@ class HomePage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final bool isKeyboardVisible = MediaQuery.of(context).viewInsets.bottom != 0; // 키보드 위치 확인
+    List<String> memberResponses = GlobalResponseManager().getResponses();
+    Map<String, dynamic> responseJson = jsonDecode(memberResponses.first);
 
     return Scaffold(
       backgroundColor: AppColors.wh,
@@ -37,7 +36,7 @@ class HomePage extends StatelessWidget {
                     mainAxisAlignment: MainAxisAlignment.start,
                     children: [
                       Text(
-                        '000님\n좋은 하루 보내세요!',
+                        '${responseJson['name']}님\n좋은 하루 보내세요!',
                         style: AppTextStyles.title1B24,
                       ),
                       Spacer(), // Flexible space

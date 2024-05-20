@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:sopf_front/apiClient.dart';
 import 'package:sopf_front/searchResult.dart';
 import 'appColors.dart';
 import 'appTextStyles.dart';
@@ -74,15 +75,20 @@ class TextSearchDetail extends StatefulWidget {
 class _TextSearchDetailState extends State<TextSearchDetail> {
   final TextEditingController _controller = TextEditingController();
   final FocusNode _focusNode = FocusNode();
+  final APIClient apiClient = APIClient();
+
   List<String> _recentSearches = [];
 
-  void _addSearchTerm(String term) {
+  void _addSearchTerm(String term) async{
     if (term.isNotEmpty) {
+      await apiClient.searchTextAndShape('가스', null, null, null, null, null);
+
       setState(() {
         _recentSearches.remove(term);
         _recentSearches.insert(0, term);  // Add new search term to the beginning of the list
         _controller.clear();
-        _focusNode.requestFocus();  // Request focus back to the text field
+        _focusNode.requestFocus();
+        // Request focus back to the text field
         navigateToSearchResult();
       });
     }

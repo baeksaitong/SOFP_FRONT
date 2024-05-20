@@ -1,4 +1,10 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
+import 'package:sopf_front/apiClient.dart';
+import 'package:sopf_front/navigates.dart';
+
+import 'globalResponseManager.dart';
 
 // void main() {
 //   runApp(MaterialApp(
@@ -16,7 +22,26 @@ class AddAllergyPage extends StatefulWidget {
 }
 
 class _AddAllergyPageState extends State<AddAllergyPage> {
+  final APIClient apiClient = APIClient();
   List<String> allergies = [];
+  Map<String, dynamic>? responseJson;
+
+  @override
+  void initState() {
+    super.initState();
+    _fetchMemberDetails();
+  }
+
+  Future<void> _fetchMemberDetails() async {
+    await apiClient.memberDetail();
+    List<String> memberResponses = GlobalResponseManager().getResponses();
+
+    if (memberResponses.isNotEmpty) {
+      setState(() {
+        responseJson = jsonDecode(memberResponses.first);
+      });
+    }
+  }
 
   void _addAllergy(String input) {
     setState(() {
@@ -40,7 +65,8 @@ class _AddAllergyPageState extends State<AddAllergyPage> {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Text(
-              'ㅇㅇㅇ님 환영합니다',
+              '${responseJson?['name']},환영합니다',
+              // 'ㅋ',
               style: TextStyle(
                 fontSize: 20,
                 fontWeight: FontWeight.bold,
@@ -144,6 +170,7 @@ class _AddAllergyPageState extends State<AddAllergyPage> {
                   child: ElevatedButton(
                     onPressed: () {
                       // 버튼이 눌렸을 때 실행할 동작 추가
+                      navigateToHome();
                     },
                     style: ElevatedButton.styleFrom(
                       shape: RoundedRectangleBorder(
