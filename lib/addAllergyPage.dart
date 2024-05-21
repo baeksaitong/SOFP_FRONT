@@ -1,12 +1,12 @@
 import 'package:flutter/material.dart';
 
-// void main() {
-//   runApp(MaterialApp(
-//     title: 'First App',
-//     theme: ThemeData(primarySwatch: Colors.blue),
-//     home: AddAllergyPage(),
-//   ));
-// }
+void main() {
+  runApp(MaterialApp(
+    title: 'First App',
+    theme: ThemeData(primarySwatch: Colors.blue),
+    home: AddAllergyPage(),
+  ));
+}
 
 class AddAllergyPage extends StatefulWidget {
   const AddAllergyPage({super.key});
