@@ -1,6 +1,7 @@
   import 'package:flutter/cupertino.dart';
   import 'package:flutter/material.dart';
   import 'package:flutter/widgets.dart';
+import 'package:sopf_front/apiClient.dart';
   import 'package:sopf_front/shapeSearch.dart';
 
   import 'appColors.dart';
@@ -27,6 +28,8 @@
     String divideLineText = '분할선';
     String colorText = '색상';
     String formulationText = '제형';
+    
+    APIClient apiClient = APIClient();
 
     List<String> _resultSearches = [];
     List<DrugInfo> drugs = [];
@@ -34,6 +37,7 @@
     void _toggleBookmark(int index) {
       setState(() {
         drugs[index].isBookmarked = !drugs[index].isBookmarked;
+        apiClient.favoriteAdd("COMMON(common)/IMAGE(image)", drugs[index].serialNumber, drugs[index].imgUrl);
       });
     }
 

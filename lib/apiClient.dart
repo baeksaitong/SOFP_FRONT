@@ -254,4 +254,33 @@ class APIClient {
       print('실패: ${utf8.decode(response.bodyBytes)}');
     }
   }
+
+  Future<void> favoriteAdd(String searchType, int serialNumber, String image) async {
+    final String? accessToken = await _jwtManager.getAccessToken();
+    final url = Uri.parse('$baseUrl/app/favorite/add');
+    print(accessToken);
+    final response = await http.post(
+      url,
+      headers: <String, String>{
+        'Content-Type': 'application/json; charset=UTF-8',
+        'Accept': 'application/json',
+        'Authorization': 'Bearer $accessToken',  // 인증 헤더 추가
+      },
+      body: jsonEncode(<String, dynamic>{
+        "searchType": searchType,
+        "pillSearchNumber": serialNumber,
+        "image": image,
+      }),
+    );
+
+    if (response.statusCode == 200) {
+      // 성공적으로 처리된 경우
+      print('검색완료: ${utf8.decode(response.bodyBytes)}');
+      GlobalManager().updateDrugs(utf8.decode(response.bodyBytes));
+    } else {
+      // 실패 처리
+      print(response.statusCode);
+      print('실패: ${utf8.decode(response.bodyBytes)}');
+    }
+  }
 }
