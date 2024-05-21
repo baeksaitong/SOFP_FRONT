@@ -2,16 +2,16 @@ import 'package:flutter/material.dart';
 import 'package:table_calendar/table_calendar.dart';
 import 'package:intl/intl.dart'; // DateFormat 사용을 위해 intl 패키지 임포트
 import 'package:intl/date_symbol_data_local.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'appTextStyles.dart'; // 원하는 글꼴 스타일이 정의된 파일을 임포트
 import 'appColors.dart'; // 색상 정의 파일을 임포트
 import 'gaps.dart';
-// import 'package:http/http.dart' as http; // HTTP 요청을 위해 임포트
+import 'dart:convert'; // JSON 변환을 위해 임포트
 
-// 메인 함수: 앱을 시작하는 함수
 void main() {
   // 날짜 형식을 초기화하고 앱을 시작합니다.
   initializeDateFormatting().then((_) {
-    runApp(CalendarApp());
+    runApp(const CalendarApp());
   });
 }
 
@@ -26,18 +26,34 @@ class CalendarApp extends StatelessWidget {
       theme: ThemeData(
         primarySwatch: Colors.blue,
       ),
-      home: CalendarPage(),
+      home: const CalendarPage(),
     );
   }
 }
 
-// 약 이벤트 데이터 클래스
+// MedicineEvent 클래스 수정
 class MedicineEvent {
   final String name;
-  final String time;
-  bool isTaken;
+  bool isTaken12;
+  bool isTaken15;
+  bool isTaken18;
 
-  MedicineEvent(this.name, this.time, {this.isTaken = false});
+  MedicineEvent(this.name,
+      {this.isTaken12 = false, this.isTaken15 = false, this.isTaken18 = false});
+
+  Map<String, dynamic> toJson() => {
+        'name': name,
+        'isTaken12': isTaken12,
+        'isTaken15': isTaken15,
+        'isTaken18': isTaken18,
+      };
+
+  static MedicineEvent fromJson(Map<String, dynamic> json) => MedicineEvent(
+        json['name'],
+        isTaken12: json['isTaken12'],
+        isTaken15: json['isTaken15'],
+        isTaken18: json['isTaken18'],
+      );
 }
 
 // CalendarPage 클래스: 달력 페이지의 상태를 관리
@@ -62,6 +78,7 @@ class _CalendarPageState extends State<CalendarPage> {
     super.initState();
     _focusedDay = DateTime.now(); // 현재 날짜로 초기화
     _selectedDay = _focusedDay; // 선택된 날짜도 현재 날짜로 초기화
+    _loadEvents();
   }
 
   // 날짜를 선택할 때 호출되는 함수
@@ -93,7 +110,7 @@ class _CalendarPageState extends State<CalendarPage> {
           style: AppTextStyles.title2B20,
         ),
         IconButton(
-          icon: Icon(Icons.add),
+          icon: const Icon(Icons.add),
           onPressed: _showBottomSheet,
         ),
       ],
@@ -109,41 +126,58 @@ class _CalendarPageState extends State<CalendarPage> {
     );
   }
 
-  void _onOptionSelected(String account, Color color) {
+  Future<void> _onOptionSelected(Map<String, Color> selectedAccounts) async {
     setState(() {
-      _selectedAccount = account;
-      _selectedColor = color;
+      _selectedAccount = selectedAccounts.keys.join(', ');
+      _selectedColor = selectedAccounts.values.first;
     });
 
-    // 백엔드로 선택된 계정 정보를 전송
-    // _sendAccountToBackend(account);
-
-    // 예시 이벤트 데이터 (백엔드에서 받아오는 데이터로 대체 필요)
-    _events = {
+    // 예시 데이터
+    Map<DateTime, List<MedicineEvent>> exampleEvents = {
       DateTime.utc(2024, 5, 20): [
-        MedicineEvent('$account 약', '15:00'),
-        MedicineEvent('$account 약', '18:00'),
+        MedicineEvent('계정 1 약'),
+        MedicineEvent('계정 2 약'),
       ],
       DateTime.utc(2024, 5, 21): [
-        MedicineEvent('$account 약', '10:00'),
+        MedicineEvent('계정 1 약'),
+      ],
+      DateTime.utc(2024, 5, 22): [
+        MedicineEvent('계정 2 약'),
+        MedicineEvent('계정 3 약'),
       ],
     };
+
+    setState(() {
+      _events = exampleEvents;
+    });
+
+    // 로컬에 저장
+    await _saveEvents();
   }
 
-  // Future<void> _sendAccountToBackend(String account) async {
-  //   // 여기에 실제 백엔드 URL을 입력하세요.
-  //   final url = Uri.parse('https://your-backend-api.com/selected_account');
-  //   final response = await http.post(
-  //     url,
-  //     body: {'account': account},
-  //   );
+  // 이벤트 데이터를 로컬 저장소에 저장하는 함수
+  Future<void> _saveEvents() async {
+    final prefs = await SharedPreferences.getInstance();
+    final eventsJson = _events.map((key, value) =>
+        MapEntry(key.toString(), value.map((e) => e.toJson()).toList()));
+    await prefs.setString('events', json.encode(eventsJson));
+  }
 
-  //   if (response.statusCode == 200) {
-  //     print('계정 정보가 성공적으로 전송되었습니다.');
-  //   } else {
-  //     print('계정 정보 전송에 실패했습니다.');
-  //   }
-  // }
+  // 이벤트 데이터를 로컬 저장소에서 불러오는 함수
+  Future<void> _loadEvents() async {
+    final prefs = await SharedPreferences.getInstance();
+    final eventsJson = prefs.getString('events');
+    if (eventsJson != null) {
+      final decodedEvents = Map<String, dynamic>.from(json.decode(eventsJson));
+      setState(() {
+        _events = decodedEvents.map((key, value) => MapEntry(
+            DateTime.parse(key),
+            (value as List<dynamic>)
+                .map((e) => MedicineEvent.fromJson(e))
+                .toList()));
+      });
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -173,8 +207,8 @@ class _CalendarPageState extends State<CalendarPage> {
                   eventLoader: _getEventsForDay, // 이벤트 로더 설정
                   calendarStyle: CalendarStyle(
                     outsideDaysVisible: false, // 달력 외부의 날짜를 숨김
-                    cellMargin: EdgeInsets.all(2.0), // 날짜 셀의 마진을 키움
-                    cellPadding: EdgeInsets.only(
+                    cellMargin: const EdgeInsets.all(2.0), // 날짜 셀의 마진을 키움
+                    cellPadding: const EdgeInsets.only(
                         top: 1.0, bottom: 5.0), // 날짜 셀의 패딩을 위쪽으로 설정
                     defaultTextStyle:
                         AppTextStyles.caption3M10, // 기본 텍스트 스타일 적용
@@ -192,7 +226,7 @@ class _CalendarPageState extends State<CalendarPage> {
                         AppTextStyles.body1S16, // 선택된 날짜 텍스트 스타일 적용
                     todayTextStyle: AppTextStyles.caption3M10.copyWith(
                         color: AppColors.deepTeal), // 오늘 날짜 텍스트 스타일 적용
-                    todayDecoration: BoxDecoration(),
+                    todayDecoration: const BoxDecoration(),
                     holidayTextStyle:
                         AppTextStyles.caption3M10, // 공휴일 텍스트 스타일 적용
                     cellAlignment: Alignment.topCenter, // 셀의 정렬을 위쪽 가운데로 설정
@@ -251,28 +285,84 @@ class _CalendarPageState extends State<CalendarPage> {
   Widget _buildEventList() {
     final events = _getEventsForDay(_selectedDay);
     return ListView.builder(
-      physics: NeverScrollableScrollPhysics(), // 이 리스트는 스크롤하지 않음
+      physics: const NeverScrollableScrollPhysics(), // 이 리스트는 스크롤하지 않음
       shrinkWrap: true, // 부모의 크기에 맞게 축소
       itemCount: events.length,
       itemBuilder: (context, index) {
         final event = events[index];
-        return ListTile(
-          leading: Checkbox(
-            value: event.isTaken,
-            onChanged: (bool? value) {
-              setState(() {
-                event.isTaken = value ?? false;
-              });
-            },
-            activeColor: _selectedColor, // 체크박스 색상 설정
-          ),
-          title: Text(event.name),
-          subtitle: Text(event.time),
-          trailing: IconButton(
-            icon: Icon(Icons.arrow_forward),
-            onPressed: () {
-              // 이벤트 세부 정보 페이지로 이동하는 동작을 여기에 정의합니다.
-            },
+        return Card(
+          margin: const EdgeInsets.symmetric(vertical: 8.0),
+          child: Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start, // 세로 정렬
+              children: [
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Text(
+                      event.name,
+                      style: AppTextStyles.body2M16,
+                    ),
+                    IconButton(
+                      icon: const Icon(Icons.arrow_forward),
+                      onPressed: () {
+                        // 이벤트 세부 정보 페이지로 이동하는 동작을 여기에 정의합니다.
+                      },
+                    ),
+                  ],
+                ),
+                const Divider(),
+                Row(
+                  children: [
+                    Checkbox(
+                      value: event.isTaken12,
+                      onChanged: (bool? value) {
+                        setState(() {
+                          event.isTaken12 = value ?? false;
+                        });
+                        _saveEvents();
+                      },
+                      activeColor: _selectedColor, // 체크박스 색상 설정
+                    ),
+                    const SizedBox(width: 8.0),
+                    const Text('12:00'),
+                  ],
+                ),
+                Row(
+                  children: [
+                    Checkbox(
+                      value: event.isTaken15,
+                      onChanged: (bool? value) {
+                        setState(() {
+                          event.isTaken15 = value ?? false;
+                        });
+                        _saveEvents();
+                      },
+                      activeColor: _selectedColor, // 체크박스 색상 설정
+                    ),
+                    const SizedBox(width: 8.0),
+                    const Text('15:00'),
+                  ],
+                ),
+                Row(
+                  children: [
+                    Checkbox(
+                      value: event.isTaken18,
+                      onChanged: (bool? value) {
+                        setState(() {
+                          event.isTaken18 = value ?? false;
+                        });
+                        _saveEvents();
+                      },
+                      activeColor: _selectedColor, // 체크박스 색상 설정
+                    ),
+                    const SizedBox(width: 8.0),
+                    const Text('18:00'),
+                  ],
+                ),
+              ],
+            ),
           ),
         );
       },
@@ -281,7 +371,7 @@ class _CalendarPageState extends State<CalendarPage> {
 }
 
 class BottomDialog extends StatefulWidget {
-  final void Function(String account, Color color) onOptionSelected;
+  final void Function(Map<String, Color>) onOptionSelected;
 
   const BottomDialog({required this.onOptionSelected, super.key});
 
@@ -290,49 +380,41 @@ class BottomDialog extends StatefulWidget {
 }
 
 class _BottomDialogState extends State<BottomDialog> {
-  bool _isChecked1 = false;
-  bool _isChecked2 = false;
-  bool _isChecked3 = false;
+  bool isChecked1 = false;
+  bool isChecked2 = false;
+  bool isChecked3 = false;
 
-  void _toggleCheck(int index) {
+  void toggleCheck(int index) {
     setState(() {
       if (index == 1) {
-        _isChecked1 = !_isChecked1;
+        isChecked1 = !isChecked1;
       } else if (index == 2) {
-        _isChecked2 = !_isChecked2;
+        isChecked2 = !isChecked2;
       } else if (index == 3) {
-        _isChecked3 = !_isChecked3;
+        isChecked3 = !isChecked3;
       }
     });
   }
 
-  void _showSelectedOption() {
-    List<String> selectedOptions = [];
-    if (_isChecked1) {
-      selectedOptions.add('계정 1');
+  void showSelectedOption() {
+    Map<String, Color> selectedOptions = {};
+    if (isChecked1) {
+      selectedOptions['계정 1'] = AppColors.customBlue;
     }
-    if (_isChecked2) {
-      selectedOptions.add('계정 2');
+    if (isChecked2) {
+      selectedOptions['계정 2'] = AppColors.customTeal;
     }
-    if (_isChecked3) {
-      selectedOptions.add('계정 3');
+    if (isChecked3) {
+      selectedOptions['계정 3'] = AppColors.customCyan;
     }
 
     String selectedOptionText = selectedOptions.isNotEmpty
-        ? '선택된 계정: ${selectedOptions.join(', ')}'
+        ? '선택된 계정: ${selectedOptions.keys.join(', ')}'
         : '선택된 계정이 없습니다';
 
     print(selectedOptionText);
 
-    if (_isChecked1) {
-      widget.onOptionSelected('계정 1', AppColors.customBlue);
-    }
-    if (_isChecked2) {
-      widget.onOptionSelected('계정 2', AppColors.customTeal);
-    }
-    if (_isChecked3) {
-      widget.onOptionSelected('계정 3', AppColors.customCyan);
-    }
+    widget.onOptionSelected(selectedOptions);
 
     Navigator.pop(context); // 다이얼로그 닫기
   }
@@ -345,22 +427,22 @@ class _BottomDialogState extends State<BottomDialog> {
       child: Column(
         mainAxisSize: MainAxisSize.min,
         children: [
-          _buildOptionButton(context, '옵션 1', _isChecked1,
-              () => _toggleCheck(1), AppColors.customBlue),
+          buildOptionButton(context, '옵션 1', isChecked1, () => toggleCheck(1),
+              AppColors.customBlue),
           Gaps.h10,
-          _buildOptionButton(context, '옵션 2', _isChecked2,
-              () => _toggleCheck(2), AppColors.customTeal),
+          buildOptionButton(context, '옵션 2', isChecked2, () => toggleCheck(2),
+              AppColors.customTeal),
           Gaps.h10,
-          _buildOptionButton(context, '옵션 3', _isChecked3,
-              () => _toggleCheck(3), AppColors.customCyan),
+          buildOptionButton(context, '옵션 3', isChecked3, () => toggleCheck(3),
+              AppColors.customCyan),
           Gaps.h20,
-          _buildTextButton(context, '텍스트 버튼 1', _showSelectedOption),
+          buildTextButton(context, '텍스트 버튼 1', showSelectedOption),
         ],
       ),
     );
   }
 
-  Widget _buildOptionButton(BuildContext context, String text, bool isChecked,
+  Widget buildOptionButton(BuildContext context, String text, bool isChecked,
       VoidCallback onPressed, Color color) {
     return SizedBox(
       width: double.infinity,
@@ -373,7 +455,7 @@ class _BottomDialogState extends State<BottomDialog> {
         child: Container(
           decoration: BoxDecoration(
             color: isChecked ? color : AppColors.gr150,
-            borderRadius: BorderRadius.only(
+            borderRadius: const BorderRadius.only(
               topLeft: Radius.circular(0),
               bottomLeft: Radius.circular(0),
               topRight: Radius.circular(8.0),
@@ -386,7 +468,7 @@ class _BottomDialogState extends State<BottomDialog> {
               ),
             ),
           ),
-          padding: EdgeInsets.symmetric(vertical: 16.0, horizontal: 12.0),
+          padding: const EdgeInsets.symmetric(vertical: 16.0, horizontal: 12.0),
           child: Row(
             children: [
               Icon(
@@ -395,7 +477,7 @@ class _BottomDialogState extends State<BottomDialog> {
                     : Icons.radio_button_unchecked,
                 color: isChecked ? Colors.white : color,
               ),
-              SizedBox(width: 16.0),
+              const SizedBox(width: 16.0),
               Text(
                 text,
                 style: AppTextStyles.body2M16.copyWith(
@@ -409,7 +491,7 @@ class _BottomDialogState extends State<BottomDialog> {
     );
   }
 
-  Widget _buildTextButton(
+  Widget buildTextButton(
       BuildContext context, String text, VoidCallback onPressed) {
     return SizedBox(
       width: double.infinity,
@@ -420,7 +502,7 @@ class _BottomDialogState extends State<BottomDialog> {
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(8.0),
           ),
-          padding: EdgeInsets.symmetric(vertical: 16.0),
+          padding: const EdgeInsets.symmetric(vertical: 16.0),
         ),
         onPressed: onPressed,
         child: Text(
