@@ -8,7 +8,7 @@ import 'package:sopf_front/textSearch.dart';
 import 'home.dart';
 import 'mypage.dart';
 
-/*
+
 import 'package:camera/camera.dart';
 import 'package:sopf_front/exColorsText.dart';
 import 'package:sopf_front/imageSearch.dart';
@@ -22,7 +22,7 @@ void main() async {
 
   runApp(MyApp(camera: firstCamera));
 }
-*/
+
 final GlobalKey<NavigatorState> navigatorKey = GlobalKey<NavigatorState>();
 
 class MyApp extends StatelessWidget {
