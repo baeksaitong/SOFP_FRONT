@@ -1,12 +1,16 @@
 import 'package:flutter/material.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+import 'appColors.dart';
+import 'appTextStyles.dart';
+import 'gaps.dart';
 
-// void main() {
-//   runApp(MaterialApp(
-//     title: 'First App',
-//     theme: ThemeData(primarySwatch: Colors.blue),
-//     home: AddAllergyPage(),
-//   ));
-// }
+void main() {
+  runApp(MaterialApp(
+    title: 'First App',
+    theme: ThemeData(primarySwatch: Colors.blue),
+    home: AddAllergyPage(),
+  ));
+}
 
 class AddAllergyPage extends StatefulWidget {
   const AddAllergyPage({super.key});
@@ -18,16 +22,104 @@ class AddAllergyPage extends StatefulWidget {
 class _AddAllergyPageState extends State<AddAllergyPage> {
   List<String> allergies = [];
 
+  @override
+  void initState() {
+    super.initState();
+    _loadAllergies();
+  }
+
+  // 알레르기 정보를 캐시 메모리에 저장
+  void _saveAllergies() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    await prefs.setStringList('allergies', allergies);
+  }
+
+  // 캐시 메모리에서 알레르기 정보를 불러오기
+  void _loadAllergies() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    setState(() {
+      allergies = prefs.getStringList('allergies') ?? [];
+    });
+  }
+
   void _addAllergy(String input) {
     setState(() {
       allergies.add(input);
+      _saveAllergies();
     });
   }
 
   void _removeAllergy(int index) {
     setState(() {
       allergies.removeAt(index);
+      _saveAllergies();
     });
+  }
+
+  void _showBottomSheet() {
+    showModalBottomSheet(
+      context: context,
+      isScrollControlled: true, // 키보드가 올라올 때 모달도 같이 올라오도록 설정
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
+      ),
+      builder: (BuildContext context) {
+        String inputText = '';
+        return Padding(
+          padding: MediaQuery.of(context).viewInsets, // 키보드 크기만큼 패딩 추가
+          child: Padding(
+            padding: const EdgeInsets.all(20.0),
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text('알레르기 & 질병 추가', style: AppTextStyles.title1B24),
+                TextField(
+                  autofocus: true, // 커서가 자동으로 들어감
+                  onChanged: (value) {
+                    inputText = value;
+                  },
+                  onSubmitted: (value) {
+                    _addAllergy(value);
+                    Navigator.of(context).pop();
+                  },
+                  decoration: InputDecoration(
+                    hintText: '알레르기를 입력하세요',
+                    hintStyle: AppTextStyles.body5M14,
+                  ),
+                ),
+                Gaps.h20,
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.end,
+                  children: [
+                    TextButton(
+                      child: Text(
+                        '추가',
+                        style: AppTextStyles.body5M14,
+                      ),
+                      onPressed: () {
+                        _addAllergy(inputText);
+                        Navigator.of(context).pop();
+                      },
+                    ),
+                    TextButton(
+                      child: Text(
+                        '취소',
+                        style: AppTextStyles.body5M14,
+                      ),
+                      onPressed: () {
+                        Navigator.of(context).pop();
+                      },
+                    ),
+                  ],
+                ),
+                Gaps.h20,
+              ],
+            ),
+          ),
+        );
+      },
+    );
   }
 
   @override
@@ -39,21 +131,10 @@ class _AddAllergyPageState extends State<AddAllergyPage> {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Text(
-              'ㅇㅇㅇ님 환영합니다',
-              style: TextStyle(
-                fontSize: 20,
-                fontWeight: FontWeight.bold,
-              ),
-            ),
-            SizedBox(height: 20),
-            Text(
-              '현재 앓고있는 알레르기가 있다면 추가 해주세요',
-              style: TextStyle(
-                fontSize: 16,
-              ),
-            ),
-            SizedBox(height: 10),
+            Text('ㅇㅇㅇ님 환영합니다', style: AppTextStyles.title1B24),
+            Gaps.h20,
+            Text('현재 앓고있는 알레르기가 있다면 추가 해주세요', style: AppTextStyles.body2M16),
+            Gaps.h10,
             SizedBox(
               height: 100, // 리스트의 높이를 설정하세요
               child: Wrap(
@@ -62,76 +143,46 @@ class _AddAllergyPageState extends State<AddAllergyPage> {
                 children: [
                   for (int i = 0; i < allergies.length; i++)
                     Chip(
-                      backgroundColor: Color(0xFFE6F6F4), // 배경색
+                      backgroundColor: AppColors.softTeal, // 배경색
                       label: Text(
                         allergies[i],
                         style: TextStyle(
-                          color: Color(0xFF00AD98), // 텍스트 색상
+                          color: AppColors.deepTeal, // 텍스트 색상
                         ),
                       ),
-                      deleteIconColor: Color(0xFF00AD98), // 삭제 아이콘 색상
+                      deleteIconColor: AppColors.deepTeal, // 삭제 아이콘 색상
                       onDeleted: () => _removeAllergy(i),
                       shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(10),
                         side: BorderSide(
-                          color: Color(0xFFE6F6F4), // 테두리 색상
+                          color: AppColors.softTeal, // 테두리 색상
                         ),
                       ),
                     ),
                 ],
               ),
             ),
-            SizedBox(height: 20),
+            Gaps.h20,
             Container(
               width: double.infinity,
               decoration: BoxDecoration(
                 borderRadius: BorderRadius.circular(10),
               ),
               child: ElevatedButton(
-                onPressed: () {
-                  showDialog(
-                    context: context,
-                    builder: (BuildContext context) {
-                      String inputText = '';
-                      return AlertDialog(
-                        title: Text('알레르기 추가'),
-                        content: TextField(
-                          autofocus: true, // 커서가 자동으로 들어감
-                          onChanged: (value) {
-                            inputText = value;
-                          },
-                          decoration: InputDecoration(
-                            hintText: '알레르기를 입력하세요',
-                          ),
-                        ),
-                        actions: <Widget>[
-                          TextButton(
-                            child: Text('추가'),
-                            onPressed: () {
-                              _addAllergy(inputText);
-                              Navigator.of(context).pop();
-                            },
-                          ),
-                          TextButton(
-                            child: Text('취소'),
-                            onPressed: () {
-                              Navigator.of(context).pop();
-                            },
-                          ),
-                        ],
-                      );
-                    },
-                  );
-                },
+                onPressed: _showBottomSheet,
                 style: ElevatedButton.styleFrom(
                   shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(10),
                   ),
                 ),
-                child: Text('+ 추가하기'),
+                child: Text(
+                  '+ 추가하기',
+                  style: AppTextStyles.body1S16
+                      .copyWith(color: AppColors.deepTeal),
+                ),
               ),
             ),
-            SizedBox(height: 20),
+            Gaps.h20,
             Expanded(
               child: Align(
                 alignment: Alignment.bottomCenter,
@@ -149,13 +200,12 @@ class _AddAllergyPageState extends State<AddAllergyPage> {
                       shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(10), // 모서리 둥글기 설정
                       ),
-                      backgroundColor: Color(0xFF00AD98), // 배경색 지정
+                      backgroundColor: AppColors.deepTeal, // 배경색 지정
                     ),
                     child: Text(
                       '약속 시작하기', // 버튼 텍스트
-                      style: TextStyle(
-                        color: Colors.white, // 텍스트 색상
-                      ),
+                      style: AppTextStyles.body1S16
+                          .copyWith(color: AppColors.softTeal),
                     ),
                   ),
                 ),
