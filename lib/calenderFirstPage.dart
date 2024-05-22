@@ -34,15 +34,17 @@ class CalendarApp extends StatelessWidget {
 // MedicineEvent 클래스 수정
 class MedicineEvent {
   final String name;
+  final Color color; // 색상 추가
   bool isTaken12;
   bool isTaken15;
   bool isTaken18;
 
-  MedicineEvent(this.name,
+  MedicineEvent(this.name, this.color,
       {this.isTaken12 = false, this.isTaken15 = false, this.isTaken18 = false});
 
   Map<String, dynamic> toJson() => {
         'name': name,
+        'color': color.value, // 색상을 int로 저장
         'isTaken12': isTaken12,
         'isTaken15': isTaken15,
         'isTaken18': isTaken18,
@@ -50,6 +52,7 @@ class MedicineEvent {
 
   static MedicineEvent fromJson(Map<String, dynamic> json) => MedicineEvent(
         json['name'],
+        Color(json['color']), // int에서 Color로 변환
         isTaken12: json['isTaken12'],
         isTaken15: json['isTaken15'],
         isTaken18: json['isTaken18'],
@@ -135,15 +138,25 @@ class _CalendarPageState extends State<CalendarPage> {
     // 예시 데이터
     Map<DateTime, List<MedicineEvent>> exampleEvents = {
       DateTime.utc(2024, 5, 20): [
-        MedicineEvent('계정 1 약'),
-        MedicineEvent('계정 2 약'),
+        if (selectedAccounts.containsKey('계정 1'))
+          MedicineEvent('감기약', selectedAccounts['계정 1']!,
+              isTaken12: false, isTaken15: false),
+        if (selectedAccounts.containsKey('계정 2'))
+          MedicineEvent('배탈약', selectedAccounts['계정 2']!,
+              isTaken12: false, isTaken15: false, isTaken18: false),
       ],
       DateTime.utc(2024, 5, 21): [
-        MedicineEvent('계정 1 약'),
+        if (selectedAccounts.containsKey('계정 1'))
+          MedicineEvent('감기약', selectedAccounts['계정 1']!,
+              isTaken12: false, isTaken15: false),
       ],
       DateTime.utc(2024, 5, 22): [
-        MedicineEvent('계정 2 약'),
-        MedicineEvent('계정 3 약'),
+        if (selectedAccounts.containsKey('계정 2'))
+          MedicineEvent('배탈약', selectedAccounts['계정 2']!,
+              isTaken12: false, isTaken15: false, isTaken18: false),
+        if (selectedAccounts.containsKey('계정 3'))
+          MedicineEvent('계정 3 약', selectedAccounts['계정 3']!,
+              isTaken12: false, isTaken15: false),
       ],
     };
 
@@ -271,13 +284,18 @@ class _CalendarPageState extends State<CalendarPage> {
 
   // 약 이벤트 마커 생성
   Widget _buildEventsMarker(DateTime date, List events) {
-    return Container(
-      decoration: BoxDecoration(
-        shape: BoxShape.circle,
-        color: _selectedColor,
-      ),
-      width: 7.0,
-      height: 7.0,
+    return Row(
+      children: events.map((event) {
+        return Container(
+          margin: const EdgeInsets.symmetric(horizontal: 1.0), // 마커 간 간격 설정
+          decoration: BoxDecoration(
+            shape: BoxShape.circle,
+            color: (event as MedicineEvent).color, // 각 이벤트의 색상 사용
+          ),
+          width: 7.0,
+          height: 7.0,
+        );
+      }).toList(),
     );
   }
 
@@ -290,79 +308,86 @@ class _CalendarPageState extends State<CalendarPage> {
       itemCount: events.length,
       itemBuilder: (context, index) {
         final event = events[index];
-        return Card(
+        return Container(
           margin: const EdgeInsets.symmetric(vertical: 8.0),
-          child: Padding(
-            padding: const EdgeInsets.all(8.0),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start, // 세로 정렬
-              children: [
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    Text(
-                      event.name,
-                      style: AppTextStyles.body2M16,
-                    ),
-                    IconButton(
-                      icon: const Icon(Icons.arrow_forward),
-                      onPressed: () {
-                        // 이벤트 세부 정보 페이지로 이동하는 동작을 여기에 정의합니다.
-                      },
-                    ),
-                  ],
-                ),
-                const Divider(),
-                Row(
-                  children: [
-                    Checkbox(
-                      value: event.isTaken12,
-                      onChanged: (bool? value) {
-                        setState(() {
-                          event.isTaken12 = value ?? false;
-                        });
-                        _saveEvents();
-                      },
-                      activeColor: _selectedColor, // 체크박스 색상 설정
-                    ),
-                    const SizedBox(width: 8.0),
-                    const Text('12:00'),
-                  ],
-                ),
-                Row(
-                  children: [
-                    Checkbox(
-                      value: event.isTaken15,
-                      onChanged: (bool? value) {
-                        setState(() {
-                          event.isTaken15 = value ?? false;
-                        });
-                        _saveEvents();
-                      },
-                      activeColor: _selectedColor, // 체크박스 색상 설정
-                    ),
-                    const SizedBox(width: 8.0),
-                    const Text('15:00'),
-                  ],
-                ),
-                Row(
-                  children: [
-                    Checkbox(
-                      value: event.isTaken18,
-                      onChanged: (bool? value) {
-                        setState(() {
-                          event.isTaken18 = value ?? false;
-                        });
-                        _saveEvents();
-                      },
-                      activeColor: _selectedColor, // 체크박스 색상 설정
-                    ),
-                    const SizedBox(width: 8.0),
-                    const Text('18:00'),
-                  ],
-                ),
-              ],
+          padding: const EdgeInsets.all(8.0),
+          decoration: BoxDecoration(
+            color: Colors.white,
+            border: Border(
+              left: BorderSide(
+                color: event.color,
+                width: 5.0, // 원하는 두께로 설정
+              ),
             ),
+          ),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start, // 세로 정렬
+            children: [
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Text(
+                    event.name,
+                    style: AppTextStyles.body2M16,
+                  ),
+                  IconButton(
+                    icon: const Icon(Icons.arrow_forward),
+                    onPressed: () {
+                      // 이벤트 세부 정보 페이지로 이동하는 동작을 여기에 정의합니다.
+                    },
+                  ),
+                ],
+              ),
+              const Divider(),
+              Row(
+                children: [
+                  Checkbox(
+                    value: event.isTaken12,
+                    onChanged: (bool? value) {
+                      setState(() {
+                        event.isTaken12 = value ?? false;
+                      });
+                      _saveEvents();
+                    },
+                    activeColor: event.color, // 체크박스 색상 설정
+                  ),
+                  const SizedBox(width: 8.0),
+                  const Text('12:00'),
+                ],
+              ),
+              Row(
+                children: [
+                  Checkbox(
+                    value: event.isTaken15,
+                    onChanged: (bool? value) {
+                      setState(() {
+                        event.isTaken15 = value ?? false;
+                      });
+                      _saveEvents();
+                    },
+                    activeColor: event.color, // 체크박스 색상 설정
+                  ),
+                  const SizedBox(width: 8.0),
+                  const Text('15:00'),
+                ],
+              ),
+              Row(
+                children: [
+                  Checkbox(
+                    value: event.isTaken18,
+                    onChanged: (bool? value) {
+                      setState(() {
+                        event.isTaken18 = value ?? false;
+                      });
+                      _saveEvents();
+                    },
+                    activeColor: event.color, // 체크박스 색상 설정
+                  ),
+                  const SizedBox(width: 8.0),
+                  const Text('18:00'),
+                ],
+              ),
+            ],
           ),
         );
       },
