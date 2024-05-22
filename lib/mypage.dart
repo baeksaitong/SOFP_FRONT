@@ -1,17 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:sopf_front/appColors.dart';
 import 'package:sopf_front/appTextStyles.dart';
+import 'appColors.dart';
+import 'appTextStyles.dart';
+import 'gaps.dart';
 
-class NewMyPage extends StatelessWidget {
-  const NewMyPage({super.key});
-
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      body: MyPage(),
-    );
-  }
-}
 
 class MyPage extends StatefulWidget {
   const MyPage({super.key});
@@ -397,7 +390,8 @@ class _MyPageState extends State<MyPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: SingleChildScrollView(
+    /*
+    body: SingleChildScrollView(
         child: Container(
           height: MediaQuery.of(context).size.height,
           padding: EdgeInsets.symmetric(horizontal: 20),
@@ -418,6 +412,19 @@ class _MyPageState extends State<MyPage> {
             ],
           ),
         ),
+      */
+      body: ListView(
+        padding: const EdgeInsets.symmetric(horizontal: 20),
+        children: [
+          const SizedBox(height: 60),
+          buildProfileHeader(),
+          const SizedBox(height: 60),
+          buildInfoSection(
+              context, '내 알레르기 및 질병', "알레르기 및 질병 정보를 입력하세요.", 'allergy'),
+          buildInfoSection(
+              context, '내가 복용 중인 약', "복용 중인 약 정보를 입력하세요.", 'medication'),
+          buildPageNavigationSection(context),
+        ],
       ),
     );
   }
@@ -466,6 +473,47 @@ class _MyPageState extends State<MyPage> {
           ),
         ),
       ],
+    );
+  }
+  Widget buildPageNavigationSection(BuildContext context) {
+    return Column(
+      children: [
+        buildNavigationItem(context, Icons.person, "멀티 프로필", () {
+          // 멀티 프로필 페이지로 이동하는 기능 구현
+        }),
+        Gaps.h16,
+        buildNavigationItem(context, Icons.star, "즐겨찾기", () {
+          // 즐겨찾기 페이지로 이동하는 기능 구현
+        }),
+        Gaps.h16,
+        buildNavigationItem(context, Icons.history, "검색 히스토리", () {
+          // 검색 히스토리 페이지로 이동하는 기능 구현
+        }),
+        Gaps.h16,
+        buildNavigationItem(context, Icons.headset_mic, "고객센터", () {
+          // 고객센터 페이지로 이동하는 기능 구현
+        }),
+        Gaps.h16,
+        buildNavigationItem(context, Icons.settings, "환경설정", () {
+          // 환경설정 페이지로 이동하는 기능 구현
+        }),
+        Gaps.h16,
+        buildNavigationItem(context, Icons.logout, "로그아웃", () {
+          // 로그아웃 기능 구현
+        }),
+      ],
+    );
+  }
+
+  Widget buildNavigationItem(
+      BuildContext context, IconData icon, String title, VoidCallback onTap) {
+    return ListTile(
+      leading: Icon(icon, color: AppColors.gr700),
+      title: Text(
+        title,
+        style: AppTextStyles.body1S16.copyWith(color: AppColors.gr700),
+      ),
+      onTap: onTap,
     );
   }
 }
