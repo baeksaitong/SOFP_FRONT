@@ -125,6 +125,7 @@ class APIClient {
     final response = await http.post(
       url,
       headers: <String, String>{
+        'accept': '*/*',
         'Content-Type': 'application/json; charset=UTF-8',
       },
       body: jsonEncode(<String, dynamic>{
@@ -147,6 +148,7 @@ class APIClient {
 
       await _jwtManager.saveTokens(accessToken, refreshToken);
       print('로그인 성공: $jsonResponse');
+
       if(jsonResponse['isNew']==false) {
         navigateToAddAllergy();
       } else {
@@ -169,7 +171,7 @@ class APIClient {
 
   Future<void> memberDetail() async {
     final String? accessToken = await _jwtManager.getAccessToken();
-    final url = Uri.parse('$baseUrl/app/member/info/detail');
+    final url = Uri.parse('$baseUrl/app/member/info');
     final response = await http.post(
       url,
       headers: <String, String>{

@@ -99,6 +99,7 @@ class SignupButton extends StatelessWidget {
       child: ElevatedButton(
         onPressed: () {
           // Handle sign up button pressed
+          navigateToSignUp();
         },
         style: ElevatedButton.styleFrom(
           padding: EdgeInsets.symmetric(
