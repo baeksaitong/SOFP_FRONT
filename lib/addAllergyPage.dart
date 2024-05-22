@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'appColors.dart';
 import 'appTextStyles.dart';
 import 'gaps.dart';
@@ -21,15 +22,37 @@ class AddAllergyPage extends StatefulWidget {
 class _AddAllergyPageState extends State<AddAllergyPage> {
   List<String> allergies = [];
 
+  @override
+  void initState() {
+    super.initState();
+    _loadAllergies();
+  }
+
+  // 알레르기 정보를 캐시 메모리에 저장
+  void _saveAllergies() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    await prefs.setStringList('allergies', allergies);
+  }
+
+  // 캐시 메모리에서 알레르기 정보를 불러오기
+  void _loadAllergies() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    setState(() {
+      allergies = prefs.getStringList('allergies') ?? [];
+    });
+  }
+
   void _addAllergy(String input) {
     setState(() {
       allergies.add(input);
+      _saveAllergies();
     });
   }
 
   void _removeAllergy(int index) {
     setState(() {
       allergies.removeAt(index);
+      _saveAllergies();
     });
   }
 
