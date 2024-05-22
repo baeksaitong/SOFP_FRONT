@@ -42,11 +42,11 @@ class _TextSearchState extends State<TextSearch> {
                 ),
                 Gaps.w6,
                 Expanded(
-                  child: Text(
-                    '알약 이름을 검색해 보세요',
-                    style: AppTextStyles.body5M14.copyWith(color: AppColors.gr500),
-                  )
-                ),
+                    child: Text(
+                  '알약 이름을 검색해 보세요',
+                  style:
+                      AppTextStyles.body5M14.copyWith(color: AppColors.gr500),
+                )),
                 IconButton(
                   onPressed: () {},
                   icon: Image.asset(
@@ -74,15 +74,16 @@ class TextSearchDetail extends StatefulWidget {
 class _TextSearchDetailState extends State<TextSearchDetail> {
   final TextEditingController _controller = TextEditingController();
   final FocusNode _focusNode = FocusNode();
-  List<String> _recentSearches = [];
+  final List<String> _recentSearches = [];
 
   void _addSearchTerm(String term) {
     if (term.isNotEmpty) {
       setState(() {
         _recentSearches.remove(term);
-        _recentSearches.insert(0, term);  // Add new search term to the beginning of the list
+        _recentSearches.insert(
+            0, term); // Add new search term to the beginning of the list
         _controller.clear();
-        _focusNode.requestFocus();  // Request focus back to the text field
+        _focusNode.requestFocus(); // Request focus back to the text field
         navigateToSearchResult();
       });
     }
@@ -90,7 +91,7 @@ class _TextSearchDetailState extends State<TextSearchDetail> {
 
   void _removeSearchTerm(int index) {
     setState(() {
-      _recentSearches.removeAt(index);  // Remove search term by index
+      _recentSearches.removeAt(index); // Remove search term by index
     });
   }
 
@@ -106,7 +107,7 @@ class _TextSearchDetailState extends State<TextSearchDetail> {
         ),
         leading: IconButton(
           icon: Image.asset(
-              'assets/IconHeaderLeft.png',
+            'assets/IconHeaderLeft.png',
             width: 20,
             height: 20,
           ),
@@ -116,7 +117,7 @@ class _TextSearchDetailState extends State<TextSearchDetail> {
         ),
       ),
       body: Container(
-        margin: EdgeInsets.symmetric(vertical: 10,horizontal: 20),
+        margin: EdgeInsets.symmetric(vertical: 10, horizontal: 20),
         width: 335,
         child: Column(
           mainAxisAlignment: MainAxisAlignment.start,
@@ -163,17 +164,20 @@ class _TextSearchDetailState extends State<TextSearchDetail> {
                 itemCount: _recentSearches.length,
                 itemBuilder: (context, index) {
                   return ListTile(
-                    contentPadding: EdgeInsets.zero,  // Remove padding inside ListTile
+                    contentPadding:
+                        EdgeInsets.zero, // Remove padding inside ListTile
                     title: GestureDetector(
-                      onTap: () {print(_recentSearches[index]);},
+                      onTap: () {
+                        print(_recentSearches[index]);
+                      },
                       child: Text(
-                          _recentSearches[index],
+                        _recentSearches[index],
                         style: AppTextStyles.body5M14,
                       ),
                     ),
                     trailing: IconButton(
                       icon: Image.asset(
-                          'assets/IconChat.png',
+                        'assets/IconChat.png',
                         width: 24,
                         height: 24,
                       ),
