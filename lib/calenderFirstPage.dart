@@ -8,12 +8,12 @@ import 'appColors.dart'; // 색상 정의 파일을 임포트
 import 'gaps.dart';
 import 'dart:convert'; // JSON 변환을 위해 임포트
 
-void main() {
-  // 날짜 형식을 초기화하고 앱을 시작합니다.
-  initializeDateFormatting().then((_) {
-    runApp(const CalendarApp());
-  });
-}
+// void main() {
+//   // 날짜 형식을 초기화하고 앱을 시작합니다.
+//   initializeDateFormatting().then((_) {
+//     runApp(const CalendarApp());
+//   });
+// }
 
 // CalendarApp 클래스: 앱의 루트 위젯
 class CalendarApp extends StatelessWidget {

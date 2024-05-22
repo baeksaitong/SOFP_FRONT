@@ -1,10 +1,12 @@
 import 'package:flutter/material.dart';
+import 'package:intl/date_symbol_data_local.dart';
 import 'package:sopf_front/addAllergyPage.dart';
 import 'package:sopf_front/exColorsText.dart';
 import 'package:sopf_front/login.dart';
 import 'package:sopf_front/searchResult.dart';
 import 'package:sopf_front/signUp.dart';
 import 'package:sopf_front/textSearch.dart';
+import 'calenderFirstPage.dart';
 import 'home.dart';
 import 'mypage.dart';
 
@@ -20,7 +22,9 @@ void main() async {
   final cameras = await availableCameras();
   final firstCamera = cameras.first; // 첫 번째 카메라를 사용합니다.
 
-  runApp(MyApp(camera: firstCamera));
+  initializeDateFormatting().then((value) =>
+    runApp(MyApp(camera: firstCamera))
+  );
 }
 
 final GlobalKey<NavigatorState> navigatorKey = GlobalKey<NavigatorState>();
@@ -35,7 +39,7 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       navigatorKey: navigatorKey,
-      home: const SignUpPage(),
+      home: const CalendarPage(),
       // home: ImageSearch(cameras: [camera],), // `CameraScreen`에 카메라 객체를 전달합니다.
     );
   }

@@ -46,7 +46,7 @@
 		</data>
 		<key>Frameworks/App.framework/App</key>
 		<data>
-		HAr+OSPiEYUvl0YIzx7uJSvztfU=
+		d00eRyY2JLe86XmLHgImOsZqajM=
 		</data>
 		<key>Frameworks/App.framework/Info.plist</key>
 		<data>
@@ -54,7 +54,7 @@
 		</data>
 		<key>Frameworks/App.framework/_CodeSignature/CodeResources</key>
 		<data>
-		MDKUezIXky/qtDV51PrQVqNw/+A=
+		6Hyz2sFU2VPf/gXFjC43ug6zrGw=
 		</data>
 		<key>Frameworks/App.framework/flutter_assets/AssetManifest.bin</key>
 		<data>
@@ -70,7 +70,7 @@
 		</data>
 		<key>Frameworks/App.framework/flutter_assets/NOTICES.Z</key>
 		<data>
-		DB1gdkacm0ecDSe2OlJaOEMAx1g=
+		PCafHJB5RYaLT0499trblWbky10=
 		</data>
 		<key>Frameworks/App.framework/flutter_assets/assets/IconChat.png</key>
 		<data>
@@ -286,7 +286,7 @@
 		</data>
 		<key>Frameworks/App.framework/flutter_assets/kernel_blob.bin</key>
 		<data>
-		SLkXR4CgJZK4Noevk029mz22dKI=
+		r/Qmc90nKtbSLEkWvU/zkIWv/IE=
 		</data>
 		<key>Frameworks/App.framework/flutter_assets/packages/cupertino_icons/assets/CupertinoIcons.ttf</key>
 		<data>
@@ -310,7 +310,7 @@
 		</data>
 		<key>Frameworks/Flutter.framework/Flutter</key>
 		<data>
-		WGGI31suIecwvxntPr47r/SU8/0=
+		xVmApK652BHCansbS37E8TG8Q0k=
 		</data>
 		<key>Frameworks/Flutter.framework/Headers/Flutter.h</key>
 		<data>
@@ -406,7 +406,7 @@
 		</data>
 		<key>Frameworks/Toast.framework/Toast</key>
 		<data>
-		nvb4IqG2OLN4h0SQejCH21EnZKc=
+		EIP5WQHx+z+veLil2UAzLt3SHps=
 		</data>
 		<key>Frameworks/Toast.framework/_CodeSignature/CodeResources</key>
 		<data>
@@ -422,7 +422,7 @@
 		</data>
 		<key>Frameworks/camera_avfoundation.framework/camera_avfoundation</key>
 		<data>
-		XJuOG09mVVtjsQr7AA6O2GdgGng=
+		odQTewd0FQW5abL1ydexw6c/zNw=
 		</data>
 		<key>Frameworks/camera_avfoundation.framework/camera_avfoundation_privacy.bundle/Info.plist</key>
 		<data>
@@ -442,7 +442,7 @@
 		</data>
 		<key>Frameworks/fluttertoast.framework/fluttertoast</key>
 		<data>
-		o6GO7Y0QJ4UiWuK4+JfVBL7xBeM=
+		1osKs5O/hlX2xIA3ZdCyo524o9Y=
 		</data>
 		<key>Frameworks/fluttertoast.framework/fluttertoast_privacy.bundle/Info.plist</key>
 		<data>
@@ -462,7 +462,7 @@
 		</data>
 		<key>Frameworks/image_picker_ios.framework/image_picker_ios</key>
 		<data>
-		7x7UD6rMVpxUNYHGksDTAW+RvxM=
+		gkkK4r3w/ioj8w6dvxhappgoBFI=
 		</data>
 		<key>Frameworks/image_picker_ios.framework/image_picker_ios_privacy.bundle/Info.plist</key>
 		<data>
@@ -471,6 +471,26 @@
 		<key>Frameworks/image_picker_ios.framework/image_picker_ios_privacy.bundle/PrivacyInfo.xcprivacy</key>
 		<data>
 		/LX0ZlwxwIAIhjZaDB8EiH5KpXA=
+		</data>
+		<key>Frameworks/shared_preferences_foundation.framework/Info.plist</key>
+		<data>
+		cRvr0oJ3fl8yGco0xYVG9qKfNXk=
+		</data>
+		<key>Frameworks/shared_preferences_foundation.framework/_CodeSignature/CodeResources</key>
+		<data>
+		lnm5nH+Bwcn6Wez+Rq1B6N+RKco=
+		</data>
+		<key>Frameworks/shared_preferences_foundation.framework/shared_preferences_foundation</key>
+		<data>
+		EzSgiGlQsudqEnh4doSVHhmzjVs=
+		</data>
+		<key>Frameworks/shared_preferences_foundation.framework/shared_preferences_foundation_privacy.bundle/Info.plist</key>
+		<data>
+		gEE0MzhQYFH0pWEVci/ogXJL4KI=
+		</data>
+		<key>Frameworks/shared_preferences_foundation.framework/shared_preferences_foundation_privacy.bundle/PrivacyInfo.xcprivacy</key>
+		<data>
+		6uLTlq7fgHHWA8emYDf4ImHC+AY=
 		</data>
 		<key>Info.plist</key>
 		<data>
@@ -569,7 +589,7 @@
 		<dict>
 			<key>hash2</key>
 			<data>
-			IViRhL02KBLRA7MEo9Dt9nxF37pw6dAD2l8SapK46Uc=
+			UbgcwIbnoF+95A2HxAePpEEvJyZxHxhcO9doawL0YnA=
 			</data>
 		</dict>
 		<key>Frameworks/App.framework/Info.plist</key>
@@ -583,7 +603,7 @@
 		<dict>
 			<key>hash2</key>
 			<data>
-			8DD/bxHPEyaHXxEwrF3ko/KG8ZiR/1pT749rSAgDQbs=
+			dvZo+qcMWm9oM7ZUBNCmfZnYk5J5Oowb6OXy4eNxfjA=
 			</data>
 		</dict>
 		<key>Frameworks/App.framework/flutter_assets/AssetManifest.bin</key>
@@ -611,7 +631,7 @@
 		<dict>
 			<key>hash2</key>
 			<data>
-			hwaVBN3Ai8MBu2mBgrBNyp8+Lmizi6E1OO3lViaoUGA=
+			dVb3jWrqjALzGh/Rot2CADUK0VYQWLtp15LpCDVwu34=
 			</data>
 		</dict>
 		<key>Frameworks/App.framework/flutter_assets/assets/IconChat.png</key>
@@ -989,7 +1009,7 @@
 		<dict>
 			<key>hash2</key>
 			<data>
-			Xo+BtOSkSj2EbfP36hMAXAjyNdMmMAIVDHFgfuU9C7Y=
+			Fwe68z0EpSWLdOkoisJrXy6D1PFGCZi8ueXmEhPKcOg=
 			</data>
 		</dict>
 		<key>Frameworks/App.framework/flutter_assets/packages/cupertino_icons/assets/CupertinoIcons.ttf</key>
@@ -1031,7 +1051,7 @@
 		<dict>
 			<key>hash2</key>
 			<data>
-			8qphqwYH+k+tdhMbNTg9jPjco5SwlvPXGB9piBP9QXA=
+			jfS6O5M8ip+LBIusJm7iG0eDQ3eGXTPlFdPFCMqfC50=
 			</data>
 		</dict>
 		<key>Frameworks/Flutter.framework/Headers/Flutter.h</key>
@@ -1199,7 +1219,7 @@
 		<dict>
 			<key>hash2</key>
 			<data>
-			RwPTq4ITkRvGrHt0iGDsQJpF7z7jRiG1EMIUmeNkgTU=
+			ys+NMtV0Ex5Rh71jaE2ZV6NoiUMOphFp052nFdYiyts=
 			</data>
 		</dict>
 		<key>Frameworks/Toast.framework/_CodeSignature/CodeResources</key>
@@ -1227,7 +1247,7 @@
 		<dict>
 			<key>hash2</key>
 			<data>
-			RYQmH6+06ORtnmKkd9k3WlE0pnDsU2f9hkzo45E0NMc=
+			huZXZcC5vDqWcAQmrK2ZLWYLaBpR6lVsbKZj6HxAXzE=
 			</data>
 		</dict>
 		<key>Frameworks/camera_avfoundation.framework/camera_avfoundation_privacy.bundle/Info.plist</key>
@@ -1262,7 +1282,7 @@
 		<dict>
 			<key>hash2</key>
 			<data>
-			Mh7ZBDHx0B6lAnvY1mhhXOTxuYHWL2GTmlkncuefa1A=
+			sn6i1DcG14RFxBSV3ntTOaqAnhg2P8MhMAaU+FKiBzA=
 			</data>
 		</dict>
 		<key>Frameworks/fluttertoast.framework/fluttertoast_privacy.bundle/Info.plist</key>
@@ -1297,7 +1317,7 @@
 		<dict>
 			<key>hash2</key>
 			<data>
-			nVcu+vKq/YEkJklkoN9Mzwd+jcuxTdbWEZQONx1wQgg=
+			e9olBWOPIP6clkV0WT8eekDNU0jpv/B8olfqWTlqi6o=
 			</data>
 		</dict>
 		<key>Frameworks/image_picker_ios.framework/image_picker_ios_privacy.bundle/Info.plist</key>
@@ -1312,6 +1332,41 @@
 			<key>hash2</key>
 			<data>
 			bS2g2NkwIn1CjB2TY7CtbjoS4sm2jFzilxWKdBL8jDE=
+			</data>
+		</dict>
+		<key>Frameworks/shared_preferences_foundation.framework/Info.plist</key>
+		<dict>
+			<key>hash2</key>
+			<data>
+			lc4jH7ymEoAx4yecBBvTHOE/Mca20kvKfgyoIfvwo4I=
+			</data>
+		</dict>
+		<key>Frameworks/shared_preferences_foundation.framework/_CodeSignature/CodeResources</key>
+		<dict>
+			<key>hash2</key>
+			<data>
+			vMcahgJpwDmDrge5zl5fs+r/fS4FMlbHYuUSDTtSlYs=
+			</data>
+		</dict>
+		<key>Frameworks/shared_preferences_foundation.framework/shared_preferences_foundation</key>
+		<dict>
+			<key>hash2</key>
+			<data>
+			4bVZaHLfqZ19H+pDfTGEMjNy++AeMl5Sk4/iAnWOYeI=
+			</data>
+		</dict>
+		<key>Frameworks/shared_preferences_foundation.framework/shared_preferences_foundation_privacy.bundle/Info.plist</key>
+		<dict>
+			<key>hash2</key>
+			<data>
+			dMe3ZdkFB3cY2iOqXUfQMirbs3wh0bSi/tNmLIqfKMs=
+			</data>
+		</dict>
+		<key>Frameworks/shared_preferences_foundation.framework/shared_preferences_foundation_privacy.bundle/PrivacyInfo.xcprivacy</key>
+		<dict>
+			<key>hash2</key>
+			<data>
+			BWQouTi9VwGKYAGdFcPB7i+nJ/I2h1mLu9k0hIsYCxo=
 			</data>
 		</dict>
 		<key>embedded.mobileprovision</key>
