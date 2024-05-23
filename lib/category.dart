@@ -5,6 +5,14 @@ import 'gaps.dart';
 import 'textSearchForcategory.dart';
 import 'shapeSearch.dart';
 
+void main() {
+  runApp(MaterialApp(
+    title: 'First App',
+    theme: ThemeData(primarySwatch: Colors.blue),
+    home: MedicationPage(),
+  ));
+}
+
 class MedicationPage extends StatefulWidget {
   const MedicationPage({super.key});
 
@@ -14,10 +22,10 @@ class MedicationPage extends StatefulWidget {
 
 class _MedicationPageState extends State<MedicationPage> {
   List<String> medications = [
-    '가스디알정50밀리그람',
-    '가스디알정50밀리그람',
-    '가스디알정50밀리그람',
-    '가스디알정50밀리그람'
+    '가디알정50밀리그람',
+    '가스디알50밀리그람',
+    '가스디알정5밀리그람',
+    '가스디알정50밀그람'
   ];
   bool isEditMode = false;
   Set<int> selectedIndexes = <int>{};
@@ -42,10 +50,10 @@ class _MedicationPageState extends State<MedicationPage> {
                 Gaps.h20,
                 TextField(
                   autofocus: true,
-                  keyboardType: TextInputType.text, // Add this line
-                  textInputAction: TextInputAction.search, // Add this line
+                  keyboardType: TextInputType.text,
+                  textInputAction: TextInputAction.search,
                   decoration: InputDecoration(
-                    hintText: '약약 이름을 검색해 보세요',
+                    hintText: '알약 이름을 검색해 보세요',
                     hintStyle: AppTextStyles.body5M14,
                     prefixIcon: Icon(Icons.search),
                     suffixIcon: IconButton(
@@ -68,46 +76,67 @@ class _MedicationPageState extends State<MedicationPage> {
                 ),
                 Gaps.h20,
                 Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                   children: [
-                    IconButton(
-                      icon: Icon(Icons.shape_line),
-                      onPressed: () {
-                        // 모양으로 검색 기능 구현
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                            builder: (context) => ShapeSearch(),
+                    Expanded(
+                      child: OutlinedButton(
+                        style: OutlinedButton.styleFrom(
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(8),
                           ),
-                        );
-                      },
-                      iconSize: 40,
-                    ),
-                    IconButton(
-                      icon: Icon(Icons.category),
-                      onPressed: () {
-                        // 카테고리 검색 기능 구현
-                      },
-                      iconSize: 40,
-                    ),
-                  ],
-                ),
-                Gaps.h20,
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.end,
-                  children: [
-                    TextButton(
-                      child: Text(
-                        '취소',
-                        style: AppTextStyles.body5M14,
+                          backgroundColor: AppColors.gr150,
+                          minimumSize: Size(120, 100), // Adjust size as needed
+                        ),
+                        onPressed: () {
+                          // 모양으로 검색 기능 구현
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) => ShapeSearch(),
+                            ),
+                          );
+                        },
+                        child: Column(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            Image.asset(
+                              'assets/mdi_shape-plus.png', // 이미지 경로
+                              width: 32,
+                              height: 32,
+                            ),
+                            Gaps.h4,
+                            Text('모양으로 검색', style: AppTextStyles.body5M14),
+                          ],
+                        ),
                       ),
-                      onPressed: () {
-                        Navigator.of(context).pop();
-                      },
+                    ),
+                    Gaps.w10, // 버튼 사이의 간격
+                    Expanded(
+                      child: OutlinedButton(
+                        style: OutlinedButton.styleFrom(
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(8),
+                          ),
+                          backgroundColor: AppColors.gr150,
+                          minimumSize: Size(120, 100), // Adjust size as needed
+                        ),
+                        onPressed: () {
+                          // 카테고리 검색 기능 구현
+                        },
+                        child: Column(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: const [
+                            Icon(
+                              Icons.category, // 카테고리 아이콘
+                              size: 32,
+                            ),
+                            Gaps.h4,
+                            Text('카테고리', style: AppTextStyles.body5M14),
+                          ],
+                        ),
+                      ),
                     ),
                   ],
                 ),
-                Gaps.h20,
               ],
             ),
           ),
@@ -123,16 +152,24 @@ class _MedicationPageState extends State<MedicationPage> {
       context: context,
       builder: (BuildContext context) {
         return AlertDialog(
-          title: Text('알약 삭제'),
+          title: Text(
+            '알약 삭제',
+            style: AppTextStyles.title3S18,
+          ),
           content: Column(
             mainAxisSize: MainAxisSize.min,
             children: selectedMedications.map((medication) {
-              return Text('$medication을 삭제하시겠습니까?');
+              return Text('$medication을(를) 삭제하시겠습니까?',
+                  style: AppTextStyles.caption1M12);
             }).toList(),
           ),
           actions: [
             TextButton(
-              child: Text('취소'),
+              child: Text(
+                '취소',
+                style:
+                    AppTextStyles.body5M14.copyWith(color: AppColors.deepTeal),
+              ),
               onPressed: () {
                 Navigator.of(context).pop();
                 setState(() {
@@ -142,7 +179,11 @@ class _MedicationPageState extends State<MedicationPage> {
               },
             ),
             TextButton(
-              child: Text('확인'),
+              child: Text(
+                '확인',
+                style:
+                    AppTextStyles.body5M14.copyWith(color: AppColors.deepTeal),
+              ),
               onPressed: () {
                 _removeSelectedMedications();
                 Navigator.of(context).pop();
@@ -243,7 +284,7 @@ class _MedicationPageState extends State<MedicationPage> {
                             },
                           ),
                         Image.asset(
-                          'assets/medication.png', // 약 이미지 경로
+                          'assets/medication.png',
                           width: 50,
                           height: 50,
                         ),
@@ -260,12 +301,6 @@ class _MedicationPageState extends State<MedicationPage> {
                             ],
                           ),
                         ),
-                        IconButton(
-                          icon: Icon(Icons.star_border),
-                          onPressed: () {
-                            // 즐겨찾기 기능 추가
-                          },
-                        ),
                       ],
                     ),
                   );
@@ -279,25 +314,33 @@ class _MedicationPageState extends State<MedicationPage> {
                     child: ElevatedButton(
                       onPressed: _showDeleteConfirmationDialog,
                       style: ElevatedButton.styleFrom(
-                        backgroundColor: Colors.red,
+                        padding: EdgeInsets.symmetric(vertical: 16.0),
+                        backgroundColor: AppColors.gr250,
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(8),
+                        ),
                       ),
                       child: Text('삭제',
                           style: AppTextStyles.body1S16
-                              .copyWith(color: Colors.white)),
+                              .copyWith(color: AppColors.gr600)),
                     ),
                   ),
-                  Gaps.h10,
+                  Gaps.w10,
                   Expanded(
                     child: ElevatedButton(
                       onPressed: () {
                         // 이동 기능 추가
                       },
                       style: ElevatedButton.styleFrom(
+                        padding: EdgeInsets.symmetric(vertical: 16.0),
                         backgroundColor: AppColors.softTeal,
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(8),
+                        ),
                       ),
                       child: Text('이동',
                           style: AppTextStyles.body1S16
-                              .copyWith(color: AppColors.wh)),
+                              .copyWith(color: AppColors.deepTeal)),
                     ),
                   ),
                 ],
@@ -314,27 +357,33 @@ class _MedicationPageState extends State<MedicationPage> {
                       },
                       style: ElevatedButton.styleFrom(
                         padding: EdgeInsets.symmetric(vertical: 16.0),
-                        backgroundColor: AppColors.softTeal,
+                        backgroundColor: AppColors.gr250,
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(8),
+                        ),
                       ),
                       child: Text(
                         '편집',
                         style: AppTextStyles.body1S16
-                            .copyWith(color: AppColors.wh),
+                            .copyWith(color: AppColors.gr600),
                       ),
                     ),
                   ),
-                  Gaps.h10,
+                  Gaps.w10,
                   Expanded(
                     child: ElevatedButton(
                       onPressed: _showAddMedicationDialog,
                       style: ElevatedButton.styleFrom(
                         padding: EdgeInsets.symmetric(vertical: 16.0),
-                        backgroundColor: AppColors.deepTeal,
+                        backgroundColor: AppColors.softTeal,
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(8),
+                        ),
                       ),
                       child: Text(
                         '추가',
                         style: AppTextStyles.body1S16
-                            .copyWith(color: AppColors.wh),
+                            .copyWith(color: AppColors.deepTeal),
                       ),
                     ),
                   ),
