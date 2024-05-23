@@ -4,6 +4,8 @@ import 'package:image_picker/image_picker.dart';
 import 'package:sopf_front/appColors.dart';
 import 'package:sopf_front/appTextStyles.dart';
 import 'package:sopf_front/gaps.dart';
+import 'package:http/http.dart' as http;
+import 'dart:convert';
 
 class multiProfileEdit extends StatefulWidget {
   @override
@@ -29,6 +31,44 @@ class _multiProfileEditState extends State<multiProfileEdit> {
       });
     } else {
       print('No image selected.');
+    }
+  }
+
+  Future<void> saveProfile() async {
+    final String name = nameController.text;
+    final String birthdate = birthdateController.text;
+
+    var requestData = {
+      "name": name,
+      "birthdate": birthdate,
+      "gender": gender,
+    };
+
+    if (_image != null) {
+      var request = http.MultipartRequest('POST', Uri.parse('15.164.18.65'));
+      request.fields['name'] = name;
+      request.fields['birthdate'] = birthdate;
+      request.fields['gender'] = gender;
+      request.files.add(await http.MultipartFile.fromPath('profile_image', _image!.path));
+
+      var response = await request.send();
+      if (response.statusCode == 200) {
+        print('Profile saved successfully');
+      } else {
+        print('Failed to save profile');
+      }
+    } else {
+      // 파일이 없으면 일반 POST 요청
+      var response = await http.post(
+        Uri.parse('15.164.18.65'),
+        headers: {"Content-Type": "application/json"},
+        body: jsonEncode(requestData),
+      );
+      if (response.statusCode == 200) {
+        print('Profile saved successfully');
+      } else {
+        print('Failed to save profile');
+      }
     }
   }
 
@@ -131,9 +171,7 @@ class _multiProfileEditState extends State<multiProfileEdit> {
                 ),
                 Gaps.h20,
                 ElevatedButton(
-                  onPressed: () {
-                    // 저장 기능 추가 필요
-                  },
+                  onPressed: saveProfile,
                   child: Text('저장',
                     style: TextStyle(
                       fontSize: 16,
