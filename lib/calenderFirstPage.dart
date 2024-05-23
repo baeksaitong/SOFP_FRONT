@@ -289,6 +289,7 @@ class _CalendarPageState extends State<CalendarPage> {
         return Container(
           margin: const EdgeInsets.symmetric(horizontal: 1.0), // 마커 간 간격 설정
           decoration: BoxDecoration(
+            shape: BoxShape.circle,
             color: (event as MedicineEvent).color, // 각 이벤트의 색상 사용
           ),
           width: 7.0,
