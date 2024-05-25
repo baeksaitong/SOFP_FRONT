@@ -228,15 +228,15 @@ class _CalendarPageState extends State<CalendarPage> {
                     weekendTextStyle:
                         AppTextStyles.caption3M10, // 주말 텍스트 스타일 적용
                     selectedDecoration: BoxDecoration(
-                      color: Colors.white,
-                      borderRadius: BorderRadius.circular(5.0),
+                      color: AppColors.gr150,
+                      shape: BoxShape.rectangle, // Circular shape
                       border: Border.all(
                         color: _selectedColor,
-                        width: 1.0,
+                        width: 0.5,
                       ),
                     ),
                     selectedTextStyle:
-                        AppTextStyles.body1S16, // 선택된 날짜 텍스트 스타일 적용
+                        AppTextStyles.caption3M10, // 선택된 날짜 텍스트 스타일 적용
                     todayTextStyle: AppTextStyles.caption3M10.copyWith(
                         color: AppColors.deepTeal), // 오늘 날짜 텍스트 스타일 적용
                     todayDecoration: const BoxDecoration(),
