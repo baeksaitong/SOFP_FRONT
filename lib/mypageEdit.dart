@@ -94,7 +94,7 @@ class _MyPageEditState extends State<MyPageEdit> {
                           : AssetImage('assets/mypageEdit/user-icon.png') as ImageProvider<Object>,
                     ),
                   ),
-                  SizedBox(height: 20),
+                  Gaps.h20,
                 ],
               ),
             ),
@@ -106,21 +106,21 @@ class _MyPageEditState extends State<MyPageEdit> {
                   hintText: "예) yacsoc123@abcd.com",
                   controller: emailController,
                 ),
-                SizedBox(height: 10),
+                Gaps.h10,
                 CustomTextField(
                   label: "비밀번호",
                   hintText: "영문, 숫자, 특수문자 포함 10자 이상",
                   isPassword: true,
                   controller: passwordController,
                 ),
-                SizedBox(height: 10),
+                Gaps.h10,
                 CustomTextField(
                   label: "비밀번호 확인",
                   hintText: "비밀번호를 다시 입력해주세요",
                   isPassword: true,
                   controller: confirmPasswordController,
                 ),
-                SizedBox(height: 20),
+                Gaps.h10,
                 ElevatedButton(
                   onPressed: saveData,
                   child: Text(
