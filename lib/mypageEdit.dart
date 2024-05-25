@@ -1,7 +1,8 @@
-import 'dart:io';
-
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:http/http.dart' as http;
+import 'dart:convert';
+import 'dart:io';
 import 'package:sopf_front/appColors.dart';
 
 class MyPageEdit extends StatefulWidget {
@@ -10,14 +11,11 @@ class MyPageEdit extends StatefulWidget {
 }
 
 class _MyPageEditState extends State<MyPageEdit> {
-  int selectedYear = DateTime.now().year;
-  int selectedMonth = DateTime.now().month;
-  int selectedDay = DateTime.now().day;
   XFile? _image;
   final ImagePicker _picker = ImagePicker();
   final TextEditingController emailController = TextEditingController();
-
-  String gender = "남성"; // 예시로 "남성"을 사용했삼
+  final TextEditingController passwordController = TextEditingController();
+  final TextEditingController confirmPasswordController = TextEditingController();
 
   Future<void> getImage() async {
     final XFile? pickedFile = await _picker.pickImage(source: ImageSource.gallery);
@@ -30,25 +28,59 @@ class _MyPageEditState extends State<MyPageEdit> {
     }
   }
 
+  Future<void> saveData() async {
+    if (passwordController.text != confirmPasswordController.text) {
+      // 비밀번호와 비밀번호 확인이 일치하지 않음
+      ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+        content: Text('비밀번호가 일치하지 않습니다.'),
+      ));
+      return;
+    }
+
+    final url = Uri.parse('15.164.18.65');
+    final response = await http.post(
+      url,
+      headers: <String, String>{
+        'Content-Type': 'application/json; charset=UTF-8',
+      },
+      body: jsonEncode(<String, String>{
+        'email': emailController.text,
+        'password': passwordController.text,
+      }),
+    );
+
+    if (response.statusCode == 200) {
+      // 성공적으로 전송됨
+      ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+        content: Text('정보가 성공적으로 저장되었습니다.'),
+      ));
+    } else {
+      // 전송 실패
+      ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+        content: Text('저장 중 오류가 발생했습니다. 다시 시도해주세요.'),
+      ));
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('정보 수정',
-        style: TextStyle(
-          fontSize: 16,
-          fontWeight: FontWeight.w600,
-          fontFamily: 'pretendard',
-
-        ),),
+        title: Text(
+          '정보 수정',
+          style: TextStyle(
+            fontSize: 16,
+            fontWeight: FontWeight.w600,
+            fontFamily: 'pretendard',
+          ),
+        ),
         centerTitle: true,
-        backgroundColor: AppColors.wh,// 제목을 가운데 정렬
+        backgroundColor: AppColors.wh,
       ),
       body: SingleChildScrollView(
         padding: const EdgeInsets.all(16.0),
         child: Column(
           children: <Widget>[
-            // 가운데 정렬을 위한 Column
             Center(
               child: Column(
                 children: <Widget>[
@@ -62,87 +94,37 @@ class _MyPageEditState extends State<MyPageEdit> {
                           : AssetImage('assets/mypageEdit/user-icon.png') as ImageProvider<Object>,
                     ),
                   ),
-                  SizedBox(height: 20),
+                  Gaps.h20,
                 ],
               ),
             ),
-
             Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: <Widget>[
-                CustomTextField(
-                  label: "이름",
-                  hintText: "예) 김약속",
-                ),
-                SizedBox(height: 10),
-                Padding(
-                  padding: EdgeInsets.only(bottom: 10),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text("성별",
-                        style: TextStyle(
-                          fontFamily: 'pretendard',
-                          fontWeight: FontWeight.w600,
-                          fontSize: 14,
-                          color: AppColors.gr500,
-                        ),
-                      ),
-                      Container(
-                        width: double.infinity,
-                        decoration: BoxDecoration(
-                          color: AppColors.gr150,
-                          borderRadius: BorderRadius.circular(8),
-                        ),
-                        padding: EdgeInsets.symmetric(horizontal: 12, vertical: 14),
-                        child: Text(gender,
-                          style: TextStyle(
-                            fontSize: 14,
-                            fontWeight: FontWeight.w600,
-                            fontFamily: 'pretendard',
-                            color: AppColors.gr600,
-                          ),
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
-
-
-                CustomTextField(
-                    label: "생년월일",
-                    hintText: "예) 20240509"
-                ),
-                CustomTextField(
-                  label: "휴대폰 번호",
-                  hintText: "예) 01091664217",
-                ),
-                SizedBox(height: 10),
                 CustomTextField(
                   label: "이메일",
                   hintText: "예) yacsoc123@abcd.com",
                   controller: emailController,
                 ),
-                SizedBox(height: 10),
+                Gaps.h10,
                 CustomTextField(
                   label: "비밀번호",
                   hintText: "영문, 숫자, 특수문자 포함 10자 이상",
                   isPassword: true,
+                  controller: passwordController,
                 ),
-                SizedBox(height: 10),
+                Gaps.h10,
                 CustomTextField(
                   label: "비밀번호 확인",
                   hintText: "비밀번호를 다시 입력해주세요",
                   isPassword: true,
+                  controller: confirmPasswordController,
                 ),
-                SizedBox(height: 20),
+                Gaps.h10,
                 ElevatedButton(
-                  onPressed: () {
-                    // 저장 기능 추가 필요
-                  },
-
-
-                  child: Text('저장하기',
+                  onPressed: saveData,
+                  child: Text(
+                    '저장',
                     style: TextStyle(
                       fontWeight: FontWeight.w600,
                       fontFamily: 'pretendard',
@@ -151,8 +133,7 @@ class _MyPageEditState extends State<MyPageEdit> {
                   ),
                   style: ElevatedButton.styleFrom(
                     shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(8)
-                    ),
+                        borderRadius: BorderRadius.circular(8)),
                     backgroundColor: AppColors.vibrantTeal,
                     minimumSize: Size.fromHeight(48),
                   ),
@@ -165,8 +146,6 @@ class _MyPageEditState extends State<MyPageEdit> {
     );
   }
 }
-
-
 
 class CustomTextField extends StatelessWidget {
   final String label;
@@ -188,13 +167,14 @@ class CustomTextField extends StatelessWidget {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: <Widget>[
         Text(
-            label,
-            style: TextStyle(
-              fontWeight: FontWeight.w600,
-              fontSize: 14,
-              fontFamily: 'pretendard',
-              color: AppColors.gr500,
-        )),
+          label,
+          style: TextStyle(
+            fontWeight: FontWeight.w600,
+            fontSize: 14,
+            fontFamily: 'pretendard',
+            color: AppColors.gr500,
+          ),
+        ),
         TextFormField(
           controller: controller,
           obscureText: isPassword,
@@ -202,11 +182,10 @@ class CustomTextField extends StatelessWidget {
             border: InputBorder.none,
             hintText: hintText,
             hintStyle: TextStyle(
-              fontSize: 14,
+                fontSize: 14,
                 fontFamily: 'pretendard',
                 fontWeight: FontWeight.w600,
-                color: AppColors.gr400
-            ),
+                color: AppColors.gr400),
             filled: true,
             fillColor: AppColors.gr150,
           ),
