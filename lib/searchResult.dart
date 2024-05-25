@@ -533,60 +533,65 @@ import 'package:sopf_front/apiClient.dart';
                   itemCount: drugs.length,
                   itemBuilder: (context, index) {
                     final drug = drugs[index];
-                    return Container(
-                      width: 336,
-                      height: 96,
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          Image.network(
+                    return GestureDetector(
+                      onTap: () async{
+                        await apiClient.searchInfoPill(drug.serialNumber.toString(), context);
+                        },
+                        child: Container(
+                            width: 336,
+                            height: 96,
+                            child: Row(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                            Image.network(
                             drug.imgUrl,
                             width: 96,
                             height: 96,
-                          ),
-                          Gaps.w16,
-                          Container(
-                            width: 200,
-                            child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                Text(
-                                  drug.name,
-                                  style: AppTextStyles.body1S16,
-                                  overflow: TextOverflow.ellipsis,
-                                ),
-                                Gaps.h6,
-                                Text(
-                                  '제품명 : ${drug.name}',
-                                  style: AppTextStyles.body5M14,
-                                  overflow: TextOverflow.ellipsis,
-                                ),
-                                Text(
-                                  '제조회사 : ${drug.enterprise}',
-                                  style: AppTextStyles.body5M14,
-                                  overflow: TextOverflow.ellipsis,
-                                ),
-                                Text(
-                                  '분류 : ${drug.classification}',
-                                  style: AppTextStyles.body5M14,
-                                  overflow: TextOverflow.ellipsis,
-                                )
-                              ],
-                            ),
-                          ),
-                          Align(
-                            alignment: Alignment.topRight,
-                            child: GestureDetector(
-                              onTap: () => _toggleBookmark(index),
-                              child: Image.asset(
-                                drug.isBookmarked ? 'assets/bookmarkclicked.png' : 'assets/bookmark.png',
-                                width: 20,
-                                height: 20,
+                        ),
+                        Gaps.w16,
+                        Container(
+                          width: 200,
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                                  Text(
+                                    drug.name,
+                                    style: AppTextStyles.body1S16,
+                                    overflow: TextOverflow.ellipsis,
+                                  ),
+                                  Gaps.h6,
+                                  Text(
+                                    '제품명 : ${drug.name}',
+                                    style: AppTextStyles.body5M14,
+                                    overflow: TextOverflow.ellipsis,
+                                  ),
+                                  Text(
+                                    '제조회사 : ${drug.enterprise}',
+                                    style: AppTextStyles.body5M14,
+                                    overflow: TextOverflow.ellipsis,
+                                  ),
+                                  Text(
+                                    '분류 : ${drug.classification}',
+                                    style: AppTextStyles.body5M14,
+                                    overflow: TextOverflow.ellipsis,
+                                  )
+                                ],
                               ),
                             ),
-                          ),
-                          Gaps.h16,
-                        ],
+                            Align(
+                              alignment: Alignment.topRight,
+                              child: GestureDetector(
+                                onTap: () => _toggleBookmark(index),
+                                child: Image.asset(
+                                  drug.isBookmarked ? 'assets/bookmarkclicked.png' : 'assets/bookmark.png',
+                                  width: 20,
+                                  height: 20,
+                                ),
+                              ),
+                            ),
+                            Gaps.h16,
+                          ],
+                        ),
                       ),
                     );
                   }

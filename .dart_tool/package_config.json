@@ -2,6 +2,12 @@
   "configVersion": 2,
   "packages": [
     {
+      "name": "archive",
+      "rootUri": "file:///Users/mingmaengmung/.pub-cache/hosted/pub.dev/archive-3.6.0",
+      "packageUri": "lib/",
+      "languageVersion": "3.0"
+    },
+    {
       "name": "async",
       "rootUri": "file:///Users/mingmaengmung/.pub-cache/hosted/pub.dev/async-2.11.0",
       "packageUri": "lib/",
@@ -36,6 +42,12 @@
       "rootUri": "file:///Users/mingmaengmung/.pub-cache/hosted/pub.dev/cross_file-0.3.4+1",
       "packageUri": "lib/",
       "languageVersion": "3.3"
+    },
+    {
+      "name": "crypto",
+      "rootUri": "file:///Users/mingmaengmung/.pub-cache/hosted/pub.dev/crypto-3.0.3",
+      "packageUri": "lib/",
+      "languageVersion": "2.19"
     },
     {
       "name": "cupertino_icons",
@@ -242,6 +254,12 @@
       "languageVersion": "3.0"
     },
     {
+      "name": "lottie",
+      "rootUri": "file:///Users/mingmaengmung/.pub-cache/hosted/pub.dev/lottie-1.4.3",
+      "packageUri": "lib/",
+      "languageVersion": "2.18"
+    },
+    {
       "name": "matcher",
       "rootUri": "file:///Users/mingmaengmung/.pub-cache/hosted/pub.dev/matcher-0.12.16+1",
       "packageUri": "lib/",
@@ -266,6 +284,12 @@
       "languageVersion": "3.2"
     },
     {
+      "name": "nested",
+      "rootUri": "file:///Users/mingmaengmung/.pub-cache/hosted/pub.dev/nested-1.0.0",
+      "packageUri": "lib/",
+      "languageVersion": "2.12"
+    },
+    {
       "name": "path",
       "rootUri": "file:///Users/mingmaengmung/.pub-cache/hosted/pub.dev/path-1.9.0",
       "packageUri": "lib/",
@@ -276,6 +300,12 @@
       "rootUri": "file:///Users/mingmaengmung/.pub-cache/hosted/pub.dev/plugin_platform_interface-2.1.8",
       "packageUri": "lib/",
       "languageVersion": "3.0"
+    },
+    {
+      "name": "provider",
+      "rootUri": "file:///Users/mingmaengmung/.pub-cache/hosted/pub.dev/provider-6.1.2",
+      "packageUri": "lib/",
+      "languageVersion": "2.12"
     },
     {
       "name": "sky_engine",
@@ -350,7 +380,7 @@
       "languageVersion": "3.3"
     }
   ],
-  "generated": "2024-05-22T13:53:48.003283Z",
+  "generated": "2024-05-24T04:49:01.935301Z",
   "generator": "pub",
   "generatorVersion": "3.3.3"
 }

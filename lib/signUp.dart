@@ -108,6 +108,7 @@ class _SignUpPageState extends State<SignUpPage> {
           onPressed: () {
             // 왼쪽 버튼이 클릭되었을 때 수행될 동작
             print('왼쪽 버튼이 클릭되었습니다.');
+            Navigator.pop(context);
           },
           icon: Icon(Icons.arrow_back_ios), // 버튼에 아이콘 추가
         ),

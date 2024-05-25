@@ -1,7 +1,10 @@
+import 'package:flutter/cupertino.dart';
 import 'package:http/http.dart' as http;
+import 'package:provider/provider.dart';
 import 'package:sopf_front/home.dart';
 import 'dart:convert';
 import 'package:sopf_front/jwtManager.dart';
+import 'package:sopf_front/provider.dart';
 
 import 'globalResponseManager.dart';
 import 'navigates.dart';
@@ -25,6 +28,39 @@ class APIClient {
         "gender": gender,
         "password": pwd,
         "advertisement": advertisement
+      }),
+    );
+
+    var decodedResponse = utf8.decode(response.bodyBytes);
+    var jsonResponse = jsonDecode(decodedResponse);
+    if (response.statusCode == 200) {
+      // 회원가입 성공 처리
+
+      print('회원가입 성공: $jsonResponse');
+
+    } else {
+      // 에러 처리
+      print(response.statusCode);
+      print('회원가입 실패: $jsonResponse');
+    }
+  }
+
+  Future<void> profileAdd(String name, String birthday, String gender, String color, String? profileImg) async {
+    final String? accessToken = await _jwtManager.getAccessToken();
+    final url = Uri.parse('$baseUrl/app/profile/add');
+    final response = await http.post(
+      url,
+      headers: <String, String>{
+      'Content-Type': 'application/json; charset=UTF-8',
+      'Accept': 'application/json',
+      'Authorization': 'Bearer $accessToken',
+      },
+      body: jsonEncode(<String, dynamic>{
+        "name": name,
+        "birthday": birthday,
+        "gender": gender,
+        "color": color,
+        "profileImg": profileImg,
       }),
     );
 
@@ -120,7 +156,7 @@ class APIClient {
     }
   }
 
-  Future<void> login(String email, String pwd) async {
+  Future<void> login(BuildContext context, String email, String pwd) async {
     final url = Uri.parse('$baseUrl/app/auth/login');
     final response = await http.post(
       url,
@@ -149,6 +185,12 @@ class APIClient {
       await _jwtManager.saveTokens(accessToken, refreshToken);
       print('로그인 성공: $jsonResponse');
 
+      ProfileResponse? profileResponse = await profileAll();
+      if (profileResponse != null && profileResponse.profileList.isNotEmpty) {
+        // Ensure `context` is passed with `listen: false`
+        Provider.of<ProfileProvider>(context, listen: false).setCurrentProfile(profileResponse.profileList[0]);
+      }
+
       if(jsonResponse['isNew']==false) {
         navigateToAddAllergy();
       } else {
@@ -169,7 +211,7 @@ class APIClient {
     return await _jwtManager.getValidAccessToken();
   }
 
-  Future<void> memberDetail() async {
+  Future<void> memberInfo() async {
     final String? accessToken = await _jwtManager.getAccessToken();
     final url = Uri.parse('$baseUrl/app/member/info');
     final response = await http.post(
@@ -190,6 +232,34 @@ class APIClient {
       // 실패 처리
       print(response.statusCode);
       print('실패했습니다: ${response.body}');
+    }
+  }
+
+  Future<ProfileResponse?> profileAll() async {
+    final String? accessToken = await _jwtManager.getAccessToken();
+    final url = Uri.parse('$baseUrl/app/profile/all');
+    final response = await http.get(
+      url,
+      headers: <String, String>{
+        'Content-Type': 'application/json; charset=UTF-8',
+        'Accept': 'application/json',
+        'Authorization': 'Bearer $accessToken',
+      },
+    );
+
+    if (response.statusCode == 200) {
+      // 성공적으로 처리된 경우
+      String decodedResponse = utf8.decode(response.bodyBytes);
+      print('모든 멤버 출력: $decodedResponse');
+
+      Map<String, dynamic> jsonResponse = jsonDecode(decodedResponse);
+      return ProfileResponse.fromJson(jsonResponse);
+
+    } else {
+      // 실패 처리
+      print(response.statusCode);
+      print('실패했습니다: ${response.body}');
+      return null;
     }
   }
 
@@ -216,6 +286,7 @@ class APIClient {
   }
 
   Future<void> searchTextAndShape(
+      BuildContext context,
       String? keyword,
       String? shape,
       String? sign,
@@ -223,8 +294,10 @@ class APIClient {
       String? formulation,
       String? line
       ) async {
+    final currentProfile = Provider.of<ProfileProvider>(context, listen: false).currentProfile;
     final String? accessToken = await _jwtManager.getAccessToken();
-    final url = Uri.parse('$baseUrl/app/search/keyword');
+
+    final url = Uri.parse('$baseUrl/app/search/keyword?profileId=${currentProfile?.id}');
     print(keyword);
     print(accessToken);
     final response = await http.post(
@@ -244,6 +317,31 @@ class APIClient {
         "page": 0,
         "limit": 5,
       }),
+    );
+
+    if (response.statusCode == 200) {
+      // 성공적으로 처리된 경우
+      print('검색완료: ${utf8.decode(response.bodyBytes)}');
+      GlobalManager().updateDrugs(utf8.decode(response.bodyBytes));
+    } else {
+      // 실패 처리
+      print(response.statusCode);
+      print('실패: ${utf8.decode(response.bodyBytes)}');
+    }
+  }
+
+  Future<void> searchInfoPill(String pillSerialNumber, BuildContext context) async {
+    final currentProfile = Provider.of<ProfileProvider>(context, listen: false).currentProfile;
+    final String? accessToken = await _jwtManager.getAccessToken();
+    print('$pillSerialNumber, ${currentProfile?.id}');
+    final url = Uri.parse('$baseUrl/app/search/info?pillSerialNumber=$pillSerialNumber?profileId=${currentProfile?.id.toString()}');
+    final response = await http.get(
+      url,
+      headers: <String, String>{
+        'Content-Type': 'application/json; charset=UTF-8',
+        'Accept': 'application/json',
+        'Authorization': 'Bearer $accessToken',  // 인증 헤더 추가
+      },
     );
 
     if (response.statusCode == 200) {

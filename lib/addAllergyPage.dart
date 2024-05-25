@@ -1,8 +1,10 @@
 import 'dart:convert';
 
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import 'package:sopf_front/apiClient.dart';
 import 'package:sopf_front/navigates.dart';
+import 'package:sopf_front/provider.dart';
 
 import 'globalResponseManager.dart';
 
@@ -22,25 +24,11 @@ class AddAllergyPage extends StatefulWidget {
 }
 
 class _AddAllergyPageState extends State<AddAllergyPage> {
-  final APIClient apiClient = APIClient();
   List<String> allergies = [];
-  Map<String, dynamic>? responseJson;
 
   @override
   void initState() {
     super.initState();
-    _fetchMemberDetails();
-  }
-
-  Future<void> _fetchMemberDetails() async {
-    await apiClient.memberDetail();
-    List<String> memberResponses = GlobalResponseManager().getResponses();
-
-    if (memberResponses.isNotEmpty) {
-      setState(() {
-        responseJson = jsonDecode(memberResponses.first);
-      });
-    }
   }
 
   void _addAllergy(String input) {
@@ -57,6 +45,8 @@ class _AddAllergyPageState extends State<AddAllergyPage> {
 
   @override
   Widget build(BuildContext context) {
+    final currentProfile = Provider.of<ProfileProvider>(context).currentProfile;
+
     return Scaffold(
       appBar: AppBar(),
       body: Padding(
@@ -65,7 +55,7 @@ class _AddAllergyPageState extends State<AddAllergyPage> {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Text(
-              '${responseJson?['name']},환영합니다',
+              '${currentProfile?.name},환영합니다',
               // 'ㅋ',
               style: TextStyle(
                 fontSize: 20,
