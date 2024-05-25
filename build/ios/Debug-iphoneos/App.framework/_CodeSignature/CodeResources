@@ -10,11 +10,11 @@
 		</data>
 		<key>flutter_assets/AssetManifest.bin</key>
 		<data>
-		jqCEDI7A7gSEKA/PF99P5yKv3f4=
+		BpYQAMFUNstPVNDTHspWglrB/ic=
 		</data>
 		<key>flutter_assets/AssetManifest.json</key>
 		<data>
-		lMp19cm9ow7+izWxrxv4DY0fEkA=
+		EiCOGbHPoJKhR8m9o+Tt1AhTAgw=
 		</data>
 		<key>flutter_assets/FontManifest.json</key>
 		<data>
@@ -22,7 +22,7 @@
 		</data>
 		<key>flutter_assets/NOTICES.Z</key>
 		<data>
-		PCafHJB5RYaLT0499trblWbky10=
+		L1VIR+Mj5d6n+SaI9GoXze9Ub9I=
 		</data>
 		<key>flutter_assets/assets/IconChat.png</key>
 		<data>
@@ -148,6 +148,10 @@
 		<data>
 		X3in2E/8g6xM4hvCDJLJ3JKi9E8=
 		</data>
+		<key>flutter_assets/assets/locations.json</key>
+		<data>
+		7wFXfrbhxhhltCj7bi/CtoIwrvU=
+		</data>
 		<key>flutter_assets/assets/majesticons_camera.png</key>
 		<data>
 		vp6LLemHIClW/HyD9KECotBOZ9w=
@@ -171,6 +175,10 @@
 		<key>flutter_assets/assets/mypage_pill.png</key>
 		<data>
 		Y6xOc37wXHMKoQWXIIkhvjygLVI=
+		</data>
+		<key>flutter_assets/assets/rect.png</key>
+		<data>
+		vwPk3oDCNPWu20G4cVoGlHStPsA=
 		</data>
 		<key>flutter_assets/assets/shapes/circle.png</key>
 		<data>
@@ -238,7 +246,7 @@
 		</data>
 		<key>flutter_assets/kernel_blob.bin</key>
 		<data>
-		r/Qmc90nKtbSLEkWvU/zkIWv/IE=
+		uE5Sb3TtMeyiUz2BB3/ojF9R5O0=
 		</data>
 		<key>flutter_assets/packages/cupertino_icons/assets/CupertinoIcons.ttf</key>
 		<data>
@@ -267,14 +275,14 @@
 		<dict>
 			<key>hash2</key>
 			<data>
-			czoNRQ8qYhJQ95NtTE+nrL8XSJf2tdFwEAfo1eor7fU=
+			wKLH4U2u+QU06lJP/U5dEURjgBf4kD8mKo8VGeHPLjU=
 			</data>
 		</dict>
 		<key>flutter_assets/AssetManifest.json</key>
 		<dict>
 			<key>hash2</key>
 			<data>
-			zDcX5MFtvfdyEMi2dmz8Lh5sikxteSrCf2sZRfsmb8E=
+			teW3tekP3PC3geca/LsstXu4JZrSZ6wIrURfC6nXzxU=
 			</data>
 		</dict>
 		<key>flutter_assets/FontManifest.json</key>
@@ -288,7 +296,7 @@
 		<dict>
 			<key>hash2</key>
 			<data>
-			dVb3jWrqjALzGh/Rot2CADUK0VYQWLtp15LpCDVwu34=
+			zYGmtIbwqNbCUft65GnShUlQ3Lc3QcgnPKRf/ULUpa0=
 			</data>
 		</dict>
 		<key>flutter_assets/assets/IconChat.png</key>
@@ -508,6 +516,13 @@
 			/nvjVt/05t6vzNZr0Qqa0N4wDLQBL0BBgZRfFlSxmQY=
 			</data>
 		</dict>
+		<key>flutter_assets/assets/locations.json</key>
+		<dict>
+			<key>hash2</key>
+			<data>
+			OsT5dV14ozyAugtTHA3V+TQre9vvKwVr/vDFwHFus/c=
+			</data>
+		</dict>
 		<key>flutter_assets/assets/majesticons_camera.png</key>
 		<dict>
 			<key>hash2</key>
@@ -548,6 +563,13 @@
 			<key>hash2</key>
 			<data>
 			O038AKpNoryVeRRqjEqlGgbFQGfeIIlq/QTo6xkln0o=
+			</data>
+		</dict>
+		<key>flutter_assets/assets/rect.png</key>
+		<dict>
+			<key>hash2</key>
+			<data>
+			0lv+6AKKjTDaNsFmNyYdyCWuuMupmkddc1OVPUoT6RY=
 			</data>
 		</dict>
 		<key>flutter_assets/assets/shapes/circle.png</key>
@@ -666,7 +688,7 @@
 		<dict>
 			<key>hash2</key>
 			<data>
-			Fwe68z0EpSWLdOkoisJrXy6D1PFGCZi8ueXmEhPKcOg=
+			4wTYKvWt5swIMg4U+aVTqKas9UaS2iO9CGMdbQ4imfA=
 			</data>
 		</dict>
 		<key>flutter_assets/packages/cupertino_icons/assets/CupertinoIcons.ttf</key>
