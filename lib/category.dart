@@ -2,8 +2,8 @@ import 'package:flutter/material.dart';
 import 'appColors.dart';
 import 'appTextStyles.dart';
 import 'gaps.dart';
-import 'textSearchForcategory.dart';
 import 'shapeSearch.dart';
+import 'textSearch.dart'; // import for text search screen
 
 void main() {
   runApp(MaterialApp(
@@ -49,31 +49,64 @@ class _MedicationPageState extends State<MedicationPage> {
               children: [
                 Text('카테고리 알약 추가', style: AppTextStyles.title1B24),
                 Gaps.h20,
-                TextField(
-                  autofocus: true,
-                  keyboardType: TextInputType.text,
-                  textInputAction: TextInputAction.search,
-                  decoration: InputDecoration(
-                    hintText: '알약 이름을 검색해 보세요',
-                    hintStyle: AppTextStyles.body5M14,
-                    prefixIcon: Icon(Icons.search),
-                    suffixIcon: IconButton(
-                      icon: Icon(Icons.camera_alt),
-                      onPressed: () {
-                        // 이미지로 검색 기능 구현
-                      },
-                    ),
+                Container(
+                  decoration: BoxDecoration(
+                    color: AppColors.gr150,
+                    borderRadius: BorderRadius.circular(16.0), // 둥근 모서리를 만들기
                   ),
-                  onSubmitted: (value) {
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                        builder: (context) => TextSearchDetail(
-                          initialSearchText: value,
+                  padding:
+                      const EdgeInsets.symmetric(vertical: 12, horizontal: 16),
+                  child: Row(
+                    children: [
+                      Expanded(
+                        child: ElevatedButton(
+                          style: ElevatedButton.styleFrom(
+                            padding: EdgeInsets.symmetric(vertical: 16.0),
+                            elevation: 0,
+                            side: BorderSide.none,
+                            backgroundColor: AppColors.gr150,
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(8),
+                            ),
+                          ),
+                          onPressed: () {
+                            // 알약 이름 검색 페이지로 이동
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                builder: (context) => TextSearch(),
+                              ),
+                            );
+                          },
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.start,
+                            children: [
+                              const Icon(
+                                Icons.search,
+                                color: AppColors.gr500,
+                              ),
+                              Gaps.w10,
+                              Text(
+                                '알약 이름을 검색해 보세요',
+                                style: AppTextStyles.body5M14
+                                    .copyWith(color: AppColors.gr500),
+                              ),
+                            ],
+                          ),
                         ),
                       ),
-                    );
-                  },
+                      IconButton(
+                        onPressed: () {
+                          // 이미지로 검색 기능 구현
+                        },
+                        icon: Image.asset(
+                          'assets/majesticons_camera.png',
+                          width: 24,
+                          height: 24,
+                        ),
+                      ),
+                    ],
+                  ),
                 ),
                 Gaps.h20,
                 Row(
@@ -84,6 +117,7 @@ class _MedicationPageState extends State<MedicationPage> {
                           shape: RoundedRectangleBorder(
                             borderRadius: BorderRadius.circular(8),
                           ),
+                          side: BorderSide.none, // 테두리 색상 설정
                           backgroundColor: AppColors.gr150,
                           minimumSize: Size(120, 100), // Adjust size as needed
                         ),
@@ -105,7 +139,11 @@ class _MedicationPageState extends State<MedicationPage> {
                               height: 32,
                             ),
                             Gaps.h4,
-                            Text('모양으로 검색', style: AppTextStyles.body5M14),
+                            Text(
+                              '모양으로 검색',
+                              style: AppTextStyles.body5M14
+                                  .copyWith(color: AppColors.bk),
+                            ),
                           ],
                         ),
                       ),
@@ -117,6 +155,7 @@ class _MedicationPageState extends State<MedicationPage> {
                           shape: RoundedRectangleBorder(
                             borderRadius: BorderRadius.circular(8),
                           ),
+                          side: BorderSide.none, // 테두리 색상 설정
                           backgroundColor: AppColors.gr150,
                           minimumSize: Size(120, 100), // Adjust size as needed
                         ),
@@ -125,13 +164,17 @@ class _MedicationPageState extends State<MedicationPage> {
                         },
                         child: Column(
                           mainAxisAlignment: MainAxisAlignment.center,
-                          children: const [
-                            Icon(
+                          children: [
+                            const Icon(
                               Icons.category, // 카테고리 아이콘
                               size: 32,
                             ),
                             Gaps.h4,
-                            Text('카테고리', style: AppTextStyles.body5M14),
+                            Text(
+                              '카테고리',
+                              style: AppTextStyles.body5M14
+                                  .copyWith(color: AppColors.bk),
+                            ),
                           ],
                         ),
                       ),
@@ -267,7 +310,7 @@ class _MedicationPageState extends State<MedicationPage> {
                             Navigator.of(context).pop();
                             setState(() {
                               isEditMode = false;
-                              selectedIndexes.clear();
+                              selectedIndexes.clear(); // 선택된 인덱스 초기화
                             });
                           },
                     style: ElevatedButton.styleFrom(
