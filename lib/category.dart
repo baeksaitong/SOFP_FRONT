@@ -29,6 +29,7 @@ class _MedicationPageState extends State<MedicationPage> {
   ];
   bool isEditMode = false;
   Set<int> selectedIndexes = <int>{};
+  String? selectedCategory; // 선택된 카테고리를 저장할 변수
 
   void _showAddMedicationDialog() {
     showModalBottomSheet(
@@ -208,6 +209,93 @@ class _MedicationPageState extends State<MedicationPage> {
     });
   }
 
+  void _showMoveCategoryDialog() {
+    showModalBottomSheet(
+      context: context,
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
+      ),
+      builder: (BuildContext context) {
+        return StatefulBuilder(
+          builder: (BuildContext context, StateSetter setState) {
+            return Padding(
+              padding: const EdgeInsets.all(20.0),
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text('이동하기', style: AppTextStyles.title3S18),
+                  ListTile(
+                    leading: Icon(Icons.folder, color: AppColors.deepTeal),
+                    title: Text('카테고리1', style: AppTextStyles.body2M16),
+                    selected: selectedCategory == '카테고리1',
+                    selectedTileColor: AppColors.softTeal,
+                    onTap: () {
+                      setState(() {
+                        selectedCategory = '카테고리1';
+                      });
+                    },
+                  ),
+                  ListTile(
+                    leading: Icon(Icons.folder, color: AppColors.deepTeal),
+                    title: Text('카테고리2', style: AppTextStyles.body2M16),
+                    selected: selectedCategory == '카테고리2',
+                    selectedTileColor: AppColors.softTeal,
+                    onTap: () {
+                      setState(() {
+                        selectedCategory = '카테고리2';
+                      });
+                    },
+                  ),
+                  ListTile(
+                    leading: Icon(Icons.folder, color: AppColors.deepTeal),
+                    title: Text('카테고리3', style: AppTextStyles.body2M16),
+                    selected: selectedCategory == '카테고리3',
+                    selectedTileColor: AppColors.softTeal,
+                    onTap: () {
+                      setState(() {
+                        selectedCategory = '카테고리3';
+                      });
+                    },
+                  ),
+                  Gaps.h20,
+                  ElevatedButton(
+                    onPressed: selectedCategory == null
+                        ? null
+                        : () {
+                            // 이동 기능 최종 구현
+                            Navigator.of(context).pop();
+                            setState(() {
+                              isEditMode = false;
+                              selectedIndexes.clear();
+                            });
+                          },
+                    style: ElevatedButton.styleFrom(
+                      minimumSize: Size(double.infinity, 48),
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(8.0),
+                      ),
+                      backgroundColor: selectedCategory == null
+                          ? AppColors.gr250
+                          : AppColors.deepTeal,
+                    ),
+                    child: Text('이동',
+                        style: AppTextStyles.body1S16
+                            .copyWith(color: AppColors.wh)),
+                  ),
+                ],
+              ),
+            );
+          },
+        );
+      },
+    ).whenComplete(() {
+      setState(() {
+        isEditMode = false;
+      });
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -328,12 +416,16 @@ class _MedicationPageState extends State<MedicationPage> {
                   Gaps.w10,
                   Expanded(
                     child: ElevatedButton(
-                      onPressed: () {
-                        // 이동 기능 추가
-                      },
+                      onPressed: selectedIndexes.isEmpty
+                          ? null
+                          : () {
+                              _showMoveCategoryDialog();
+                            },
                       style: ElevatedButton.styleFrom(
                         padding: EdgeInsets.symmetric(vertical: 16.0),
-                        backgroundColor: AppColors.softTeal,
+                        backgroundColor: selectedIndexes.isEmpty
+                            ? AppColors.gr250
+                            : AppColors.softTeal,
                         shape: RoundedRectangleBorder(
                           borderRadius: BorderRadius.circular(8),
                         ),
