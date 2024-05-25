@@ -77,19 +77,32 @@ class _SearchResultPageState extends State<SearchResultPage> {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            const Text('촬영된 사진의 검색 결과', style: AppTextStyles.body2M16),
-            const SizedBox(height: 8),
             Row(
               children: [
-                Image.asset(
-                  'assets/expill.png', // 검색된 이미지 경로
-                  width: 100,
-                  height: 100,
+                Expanded(
+                  child: Row(
+                    children: [
+                      Image.asset(
+                        'assets/expill.png', // 검색된 첫 번째 이미지 경로
+                        width: 100,
+                        height: 100,
+                      ),
+                      Gaps.w8,
+                      Image.asset(
+                        'assets/expill.png', // 검색된 두 번째 이미지 경로
+                        width: 100,
+                        height: 100,
+                      ),
+                    ],
+                  ),
                 ),
-                const SizedBox(width: 16),
                 Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
+                    const Text(
+                      '촬영된 사진의 검색 결과',
+                      style: AppTextStyles.body2M16,
+                    ),
                     const Text('8건', style: AppTextStyles.body2M16),
                     ElevatedButton(
                       onPressed: () {
@@ -108,7 +121,7 @@ class _SearchResultPageState extends State<SearchResultPage> {
                 ),
               ],
             ),
-            const SizedBox(height: 16),
+            Gaps.h16,
             Expanded(
               child: ListView.builder(
                 itemCount: medications.length,
