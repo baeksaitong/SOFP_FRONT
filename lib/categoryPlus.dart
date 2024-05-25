@@ -52,14 +52,7 @@ class _MedicationSchedulePageState extends State<MedicationSchedulePage> {
             Gaps.h16,
             Text('섭취 요일', style: AppTextStyles.body2M16),
             Gaps.h8,
-            WeekdaySelector(),
-            Gaps.h16,
-            Row(
-              children: const [
-                Text('섭취 루틴', style: AppTextStyles.body2M16),
-                Spacer(),
-              ],
-            ),
+            WeekdaySelector(), // 요일 리스트
             Gaps.h8,
             RoutineSelector(
               routines: routines,
@@ -216,9 +209,9 @@ class _WeekdaySelectorState extends State<WeekdaySelector> {
       physics: NeverScrollableScrollPhysics(),
       gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
         crossAxisCount: 7, // 7개의 요일을 한 줄에 모두 배치
-        childAspectRatio: 1.5,
-        mainAxisSpacing: 8.0,
-        crossAxisSpacing: 8.0,
+        childAspectRatio: 0.8,
+        mainAxisSpacing: 0.0,
+        crossAxisSpacing: 0.0,
       ),
       itemCount: weekdays.length,
       itemBuilder: (context, index) {
@@ -261,6 +254,24 @@ class RoutineSelector extends StatelessWidget {
   Widget build(BuildContext context) {
     return Column(
       children: [
+        Row(
+          children: [
+            Text('섭취 루틴', style: AppTextStyles.body2M16),
+            Spacer(),
+            ElevatedButton.icon(
+              onPressed: onAdd,
+              icon: Icon(Icons.add),
+              label: Text('추가'),
+              style: ElevatedButton.styleFrom(
+                backgroundColor: AppColors.softTeal,
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(8.0),
+                ),
+              ),
+            ),
+          ],
+        ),
+        Gaps.h10,
         Container(
           decoration: BoxDecoration(
             color: Colors.grey[200],
@@ -288,17 +299,6 @@ class RoutineSelector extends StatelessWidget {
           ),
         ),
         SizedBox(height: 8.0),
-        ElevatedButton.icon(
-          onPressed: onAdd,
-          icon: Icon(Icons.add),
-          label: Text('추가'),
-          style: ElevatedButton.styleFrom(
-            backgroundColor: AppColors.softTeal,
-            shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(8.0),
-            ),
-          ),
-        ),
       ],
     );
   }
