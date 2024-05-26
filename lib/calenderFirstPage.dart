@@ -8,13 +8,6 @@ import 'appColors.dart'; // 색상 정의 파일을 임포트
 import 'gaps.dart';
 import 'dart:convert'; // JSON 변환을 위해 임포트
 
-// void main() {
-//   // 날짜 형식을 초기화하고 앱을 시작합니다.
-//   initializeDateFormatting().then((_) {
-//     runApp(const CalendarApp());
-//   });
-// }
-
 // CalendarApp 클래스: 앱의 루트 위젯
 class CalendarApp extends StatelessWidget {
   const CalendarApp({super.key});
@@ -84,6 +77,26 @@ class _CalendarPageState extends State<CalendarPage> {
     _loadEvents();
   }
 
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    initializeDateFormatting().then((_) {
+      setState(() {});
+    });
+  }
+
+  //다이얼로그 열었을때 하단시트 없애는 기능
+  void _showBottomSheet() {
+    showModalBottomSheet(
+      context: context,
+      isScrollControlled: true,
+      useRootNavigator: true,
+      builder: (BuildContext context) {
+        return BottomDialog(onOptionSelected: _onOptionSelected);
+      },
+    );
+  }
+
   // 날짜를 선택할 때 호출되는 함수
   void _onDaySelected(DateTime selectedDay, DateTime focusedDay) {
     setState(() {
@@ -117,15 +130,6 @@ class _CalendarPageState extends State<CalendarPage> {
           onPressed: _showBottomSheet,
         ),
       ],
-    );
-  }
-
-  void _showBottomSheet() {
-    showModalBottomSheet(
-      context: context,
-      builder: (BuildContext context) {
-        return BottomDialog(onOptionSelected: _onOptionSelected);
-      },
     );
   }
 
@@ -195,7 +199,7 @@ class _CalendarPageState extends State<CalendarPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(),
+      backgroundColor: AppColors.wh,
       body: SingleChildScrollView(
         child: Padding(
           padding: const EdgeInsets.all(16.0), // 화면 전체에 패딩 추가
@@ -215,7 +219,10 @@ class _CalendarPageState extends State<CalendarPage> {
                   onDaySelected: _onDaySelected, // 날짜를 선택할 때 호출되는 함수
                   onFormatChanged: _onFormatChanged, // 달력 형식이 변경될 때 호출되는 함수
                   onPageChanged: (focusedDay) {
-                    _focusedDay = focusedDay; // 페이지가 변경될 때 집중된 날짜를 업데이트
+                    setState(() {
+                      _focusedDay =
+                          focusedDay; // Update the focused day and call setState to update the UI
+                    });
                   },
                   eventLoader: _getEventsForDay, // 이벤트 로더 설정
                   calendarStyle: CalendarStyle(
