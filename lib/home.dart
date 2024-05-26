@@ -161,7 +161,7 @@ class CustomBottomNavigationBar extends StatelessWidget {
     final double textSize = MediaQuery.of(context).size.width * 0.03; // Adjust text size dynamically
 
     return BottomAppBar(
-      color: Colors.white,
+      color: AppColors.wh,
       child: Row(
         mainAxisSize: MainAxisSize.max,
         mainAxisAlignment: MainAxisAlignment.spaceAround,

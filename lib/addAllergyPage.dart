@@ -142,7 +142,7 @@ class _AddAllergyPageState extends State<AddAllergyPage> {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Text(
-              '${currentProfile?.name},환영합니다',
+              '${currentProfile?.name}님,환영합니다',
               // 'ㅋ',
               style: TextStyle(
                 fontSize: 20,

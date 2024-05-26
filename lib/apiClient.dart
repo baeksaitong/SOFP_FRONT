@@ -5,14 +5,14 @@ import 'package:sopf_front/home.dart';
 import 'dart:convert';
 import 'package:sopf_front/jwtManager.dart';
 import 'package:sopf_front/provider.dart';
-
+import 'package:sopf_front/jwtManager.dart';
 import 'globalResponseManager.dart';
 import 'navigates.dart';
 
 
 class APIClient {
   static const String baseUrl = 'http://15.164.18.65:8080';
-  final JWTManger _jwtManager = JWTManger();
+  final JWTmanager _jwtManager = JWTmanager();
 
   Future<void> signUp(String name, String birthday, String email, String gender, String pwd, bool advertisement) async {
     final url = Uri.parse('$baseUrl/app/auth/sign-up');

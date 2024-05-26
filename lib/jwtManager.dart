@@ -1,10 +1,9 @@
 import 'dart:convert';
-
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:http/http.dart' as http;
 import 'package:jwt_decoder/jwt_decoder.dart';
 
-class JWTManger{
+class JWTmanager{
   static const String baseUrl = 'https://15.164.18.65/app/auth';
   final FlutterSecureStorage _storage = FlutterSecureStorage();
 

@@ -10,11 +10,16 @@ import 'calenderFirstPage.dart';
 import 'home.dart';
 import 'mypage.dart';
 
-
 import 'package:camera/camera.dart';
 import 'package:sopf_front/exColorsText.dart';
 import 'package:sopf_front/imageSearch.dart';
 import 'imageSearch.dart';
+
+import 'package:lottie/lottie.dart';
+import 'package:provider/provider.dart';
+import 'package:sopf_front/login.dart';
+import 'package:sopf_front/provider.dart';
+
 /*
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -26,10 +31,6 @@ void main() async {
   );
 }
 */
-import 'package:lottie/lottie.dart';
-import 'package:provider/provider.dart';
-import 'package:sopf_front/login.dart';
-import 'package:sopf_front/provider.dart';
 
 void main() async{
   // Ensure Flutter binding is initialized
