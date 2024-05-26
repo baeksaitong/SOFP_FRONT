@@ -1,8 +1,16 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'appColors.dart';
 import 'appTextStyles.dart';
 import 'gaps.dart';
+import 'package:provider/provider.dart';
+import 'package:sopf_front/apiClient.dart';
+import 'package:sopf_front/navigates.dart';
+import 'package:sopf_front/provider.dart';
+
+import 'globalResponseManager.dart';
 
 void main() {
   runApp(MaterialApp(
@@ -124,6 +132,8 @@ class _AddAllergyPageState extends State<AddAllergyPage> {
 
   @override
   Widget build(BuildContext context) {
+    final currentProfile = Provider.of<ProfileProvider>(context).currentProfile;
+
     return Scaffold(
       appBar: AppBar(),
       body: Padding(
@@ -131,10 +141,22 @@ class _AddAllergyPageState extends State<AddAllergyPage> {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Text('ㅇㅇㅇ님 환영합니다', style: AppTextStyles.title1B24),
-            Gaps.h20,
-            Text('현재 앓고있는 알레르기가 있다면 추가 해주세요', style: AppTextStyles.body2M16),
-            Gaps.h10,
+            Text(
+              '${currentProfile?.name},환영합니다',
+              // 'ㅋ',
+              style: TextStyle(
+                fontSize: 20,
+                fontWeight: FontWeight.bold,
+              ),
+            ),
+            SizedBox(height: 20),
+            Text(
+              '현재 앓고있는 알레르기가 있다면 추가 해주세요',
+              style: TextStyle(
+                fontSize: 16,
+              ),
+            ),
+            SizedBox(height: 10),
             SizedBox(
               height: 100, // 리스트의 높이를 설정하세요
               child: Wrap(
@@ -195,6 +217,7 @@ class _AddAllergyPageState extends State<AddAllergyPage> {
                   child: ElevatedButton(
                     onPressed: () {
                       // 버튼이 눌렸을 때 실행할 동작 추가
+                      navigateToHome();
                     },
                     style: ElevatedButton.styleFrom(
                       shape: RoundedRectangleBorder(

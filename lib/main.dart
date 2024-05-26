@@ -15,7 +15,7 @@ import 'package:camera/camera.dart';
 import 'package:sopf_front/exColorsText.dart';
 import 'package:sopf_front/imageSearch.dart';
 import 'imageSearch.dart';
-
+/*
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   final cameras = await availableCameras();
@@ -25,6 +25,21 @@ void main() async {
     runApp(MyApp(camera: firstCamera))
   );
 }
+*/
+import 'package:lottie/lottie.dart';
+import 'package:provider/provider.dart';
+import 'package:sopf_front/login.dart';
+import 'package:sopf_front/provider.dart';
+
+void main() {
+  runApp(
+    MultiProvider(
+      providers: [
+        ChangeNotifierProvider(create: (_) => ProfileProvider()),
+      ],
+      child: MyApp(),
+    ),
+  );}
 
 final GlobalKey<NavigatorState> navigatorKey = GlobalKey<NavigatorState>();
 
@@ -38,7 +53,10 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       navigatorKey: navigatorKey,
-      home: HomePage(),
+      home: const LoginPage(),
+      // home: Scaffold(
+      //   body: Lottie.asset('assets/loading.json'),
+      // ),
     );
   }
 }

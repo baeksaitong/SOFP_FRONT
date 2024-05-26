@@ -1,12 +1,22 @@
+import 'dart:convert';
+
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import 'package:sopf_front/appColors.dart';
 import 'package:sopf_front/gaps.dart';
+import 'package:sopf_front/provider.dart';
 import 'package:sopf_front/shapeSearch.dart';
 import 'package:sopf_front/textSearch.dart';
 import 'package:sopf_front/mypage.dart';
 import 'package:sopf_front/calenderFirstPage.dart';
 import 'appTextStyles.dart';
+
+import 'apiClient.dart';
+import 'appTextStyles.dart';
+import 'globalResponseManager.dart';
+import 'main.dart';
+
 class HomePage extends StatefulWidget {
   const HomePage({super.key});
 
@@ -30,9 +40,14 @@ class _HomePageState extends State<HomePage> {
     });
   }
 
+  State<HomePage> createState() => _HomePageState();
+}
+
+class _HomePageState extends State<HomePage> {
   @override
   Widget build(BuildContext context) {
     final bool isKeyboardVisible = MediaQuery.of(context).viewInsets.bottom != 0; // 키보드 위치 확인
+    final currentProfile = Provider.of<ProfileProvider>(context).currentProfile;
 
     return Scaffold(
       backgroundColor: AppColors.wh,

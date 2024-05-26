@@ -5,14 +5,7 @@ import 'gaps.dart';
 import 'appcolors.dart';
 import 'appTextStyles.dart';
 import 'package:flutter/services.dart';
-
-void main() {
-  runApp(MaterialApp(
-    title: 'First App',
-    theme: ThemeData(primarySwatch: Colors.blue),
-    home: SignUpPage(),
-  ));
-}
+import 'apiClient.dart';
 
 class SignUpPage extends StatefulWidget {
   const SignUpPage({super.key});
@@ -43,6 +36,8 @@ class _SignUpPageState extends State<SignUpPage> {
     _dateOfBirthController.dispose();
     super.dispose();
   }
+
+  final APIClient apiClient = APIClient();
 
   // 인증번호 전송 버튼 클릭 시 수행되는 함수
   void onSendVerificationButtonClicked() {
@@ -129,6 +124,7 @@ class _SignUpPageState extends State<SignUpPage> {
           onPressed: () {
             // 왼쪽 버튼이 클릭되었을 때 수행될 동작
             print('왼쪽 버튼이 클릭되었습니다.');
+            Navigator.pop(context);
           },
           icon: Icon(Icons.arrow_back_ios), // 버튼에 아이콘 추가
         ),
@@ -227,7 +223,10 @@ class _SignUpPageState extends State<SignUpPage> {
                     flex: 1,
                     child: SendVerificationButton(
                       email: email,
-                      onPressed: onSendVerificationButtonClicked,
+                      onPressed: () async{
+                        onSendVerificationButtonClicked;
+                        await apiClient.idCheck(email);
+                      },
                     ), // 인증번호 전송 버튼
                   ),
                 ],
@@ -257,6 +256,7 @@ class _SignUpPageState extends State<SignUpPage> {
                         // 인증번호 확인 로직 구현
                         print('인증번호 확인 버튼이 클릭되었습니다.');
                         //await mailTokenCheck(email, code);
+                        await apiClient.mailCheck(email, emailCode!);
                       },
                     ),
                   ),
@@ -291,7 +291,16 @@ class _SignUpPageState extends State<SignUpPage> {
               ), // 이메일 수신 동의 체크박스
               Gaps.h32,
               ElevatedButton(
-                onPressed: onSignupButtonClicked, // 회원가입 버튼 클릭 시 함수 실행
+                onPressed: () async {
+                  onSignupButtonClicked();
+                  print('회원가입 버튼 클릭');
+                  if(gender=="남자") {
+                    await apiClient.signUp(name, dateOfBirth!, email, "male", _password!, true);
+                  } else {
+                    await apiClient.signUp(name, dateOfBirth!, email, "female", _password!, true);
+
+                  }
+                }, // 회원가입 버튼 클릭 시 함수 실행
                 style: ButtonStyle(
                   backgroundColor: MaterialStateProperty.all<Color>(
                       AppColors.deepTeal), // 배경색 설정
