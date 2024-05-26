@@ -40,8 +40,8 @@ class _multiProfileEditState extends State<multiProfileEdit> {
 
     var requestData = {
       "name": name,
-      "birthdate": birthdate,
-      "gender": gender,
+      "birthdate": birthdate, //birthdate=> birthday 나중에 수정
+      "gender": gender, 
     };
 
     if (_image != null) {
@@ -49,7 +49,7 @@ class _multiProfileEditState extends State<multiProfileEdit> {
       request.fields['name'] = name;
       request.fields['birthdate'] = birthdate;
       request.fields['gender'] = gender;
-      request.files.add(await http.MultipartFile.fromPath('profile_image', _image!.path));
+      request.files.add(await http.MultipartFile.fromPath('profile_image', _image!.path)); // profile_image => profileImg
 
       var response = await request.send();
       if (response.statusCode == 200) {
