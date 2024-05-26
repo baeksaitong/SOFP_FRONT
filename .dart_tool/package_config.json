@@ -227,7 +227,7 @@
       "name": "flutter",
       "rootUri": "file:///Users/mingmaengmung/flutter/packages/flutter",
       "packageUri": "lib/",
-      "languageVersion": "3.2"
+      "languageVersion": "3.3"
     },
     {
       "name": "flutter_lints",
@@ -245,7 +245,7 @@
       "name": "flutter_test",
       "rootUri": "file:///Users/mingmaengmung/flutter/packages/flutter_test",
       "packageUri": "lib/",
-      "languageVersion": "3.2"
+      "languageVersion": "3.3"
     },
     {
       "name": "flutter_web_plugins",
@@ -264,6 +264,36 @@
       "rootUri": "file:///Users/mingmaengmung/.pub-cache/hosted/pub.dev/frontend_server_client-4.0.0",
       "packageUri": "lib/",
       "languageVersion": "3.0"
+    },
+    {
+      "name": "geolocator",
+      "rootUri": "file:///Users/mingmaengmung/.pub-cache/hosted/pub.dev/geolocator-7.7.1",
+      "packageUri": "lib/",
+      "languageVersion": "2.12"
+    },
+    {
+      "name": "geolocator_android",
+      "rootUri": "file:///Users/mingmaengmung/.pub-cache/hosted/pub.dev/geolocator_android-2.1.0",
+      "packageUri": "lib/",
+      "languageVersion": "2.12"
+    },
+    {
+      "name": "geolocator_apple",
+      "rootUri": "file:///Users/mingmaengmung/.pub-cache/hosted/pub.dev/geolocator_apple-1.2.2",
+      "packageUri": "lib/",
+      "languageVersion": "2.12"
+    },
+    {
+      "name": "geolocator_platform_interface",
+      "rootUri": "file:///Users/mingmaengmung/.pub-cache/hosted/pub.dev/geolocator_platform_interface-2.3.6",
+      "packageUri": "lib/",
+      "languageVersion": "2.12"
+    },
+    {
+      "name": "geolocator_web",
+      "rootUri": "file:///Users/mingmaengmung/.pub-cache/hosted/pub.dev/geolocator_web-2.0.6",
+      "packageUri": "lib/",
+      "languageVersion": "2.12"
     },
     {
       "name": "glob",
@@ -423,21 +453,21 @@
     },
     {
       "name": "leak_tracker",
-      "rootUri": "file:///Users/mingmaengmung/.pub-cache/hosted/pub.dev/leak_tracker-10.0.0",
+      "rootUri": "file:///Users/mingmaengmung/.pub-cache/hosted/pub.dev/leak_tracker-10.0.5",
       "packageUri": "lib/",
-      "languageVersion": "3.1"
+      "languageVersion": "3.2"
     },
     {
       "name": "leak_tracker_flutter_testing",
-      "rootUri": "file:///Users/mingmaengmung/.pub-cache/hosted/pub.dev/leak_tracker_flutter_testing-2.0.1",
+      "rootUri": "file:///Users/mingmaengmung/.pub-cache/hosted/pub.dev/leak_tracker_flutter_testing-3.0.5",
       "packageUri": "lib/",
-      "languageVersion": "3.1"
+      "languageVersion": "3.2"
     },
     {
       "name": "leak_tracker_testing",
-      "rootUri": "file:///Users/mingmaengmung/.pub-cache/hosted/pub.dev/leak_tracker_testing-2.0.1",
+      "rootUri": "file:///Users/mingmaengmung/.pub-cache/hosted/pub.dev/leak_tracker_testing-3.0.1",
       "packageUri": "lib/",
-      "languageVersion": "3.1"
+      "languageVersion": "3.2"
     },
     {
       "name": "lints",
@@ -477,13 +507,13 @@
     },
     {
       "name": "material_color_utilities",
-      "rootUri": "file:///Users/mingmaengmung/.pub-cache/hosted/pub.dev/material_color_utilities-0.8.0",
+      "rootUri": "file:///Users/mingmaengmung/.pub-cache/hosted/pub.dev/material_color_utilities-0.11.1",
       "packageUri": "lib/",
       "languageVersion": "2.17"
     },
     {
       "name": "meta",
-      "rootUri": "file:///Users/mingmaengmung/.pub-cache/hosted/pub.dev/meta-1.11.0",
+      "rootUri": "file:///Users/mingmaengmung/.pub-cache/hosted/pub.dev/meta-1.14.0",
       "packageUri": "lib/",
       "languageVersion": "2.12"
     },
@@ -741,7 +771,7 @@
     },
     {
       "name": "test_api",
-      "rootUri": "file:///Users/mingmaengmung/.pub-cache/hosted/pub.dev/test_api-0.6.1",
+      "rootUri": "file:///Users/mingmaengmung/.pub-cache/hosted/pub.dev/test_api-0.7.1",
       "packageUri": "lib/",
       "languageVersion": "3.0"
     },
@@ -765,9 +795,9 @@
     },
     {
       "name": "vm_service",
-      "rootUri": "file:///Users/mingmaengmung/.pub-cache/hosted/pub.dev/vm_service-13.0.0",
+      "rootUri": "file:///Users/mingmaengmung/.pub-cache/hosted/pub.dev/vm_service-14.2.2",
       "packageUri": "lib/",
-      "languageVersion": "3.0"
+      "languageVersion": "3.3"
     },
     {
       "name": "watcher",
@@ -812,7 +842,10 @@
       "languageVersion": "3.3"
     }
   ],
-  "generated": "2024-05-25T13:12:28.518540Z",
+  "generated": "2024-05-26T03:56:21.119113Z",
   "generator": "pub",
-  "generatorVersion": "3.3.3"
+  "generatorVersion": "3.5.0-191.0.dev",
+  "flutterRoot": "file:///Users/mingmaengmung/flutter",
+  "flutterVersion": "3.23.0-8.0.pre.5",
+  "pubCache": "file:///Users/mingmaengmung/.pub-cache"
 }
