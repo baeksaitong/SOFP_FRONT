@@ -21,7 +21,7 @@ class GlobalResponseManager {
 }
 
 class DrugInfo {
-  final int serialNumber;
+  final String serialNumber;
   final String name;
   final String classification;
   final String enterprise;
@@ -60,7 +60,7 @@ class GlobalManager {
 }
 
 class Profile {
-  final int id;
+  final String id;
   final String name;
   final String? imgURL;
   final String color;

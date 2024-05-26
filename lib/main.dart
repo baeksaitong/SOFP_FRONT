@@ -31,13 +31,21 @@ import 'package:provider/provider.dart';
 import 'package:sopf_front/login.dart';
 import 'package:sopf_front/provider.dart';
 
-void main() {
+void main() async{
+  // Ensure Flutter binding is initialized
+  WidgetsFlutterBinding.ensureInitialized();
+
+  // Obtain a list of the available cameras on the device.
+  final cameras = await availableCameras();
+  // Get a specific camera from the list of available cameras.
+  final firstCamera = cameras.first;
+
   runApp(
     MultiProvider(
       providers: [
         ChangeNotifierProvider(create: (_) => ProfileProvider()),
       ],
-      child: MyApp(),
+      child: MyApp(camera: firstCamera),
     ),
   );}
 

@@ -5,6 +5,8 @@ import 'dart:convert';
 import 'dart:io';
 import 'package:sopf_front/appColors.dart';
 
+import 'gaps.dart';
+
 class MyPageEdit extends StatefulWidget {
   @override
   _MyPageEditState createState() => _MyPageEditState();

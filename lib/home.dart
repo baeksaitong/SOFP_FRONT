@@ -11,11 +11,9 @@ import 'package:sopf_front/textSearch.dart';
 import 'package:sopf_front/mypage.dart';
 import 'package:sopf_front/calenderFirstPage.dart';
 import 'appTextStyles.dart';
-
 import 'apiClient.dart';
 import 'appTextStyles.dart';
 import 'globalResponseManager.dart';
-import 'main.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({super.key});
@@ -40,10 +38,6 @@ class _HomePageState extends State<HomePage> {
     });
   }
 
-  State<HomePage> createState() => _HomePageState();
-}
-
-class _HomePageState extends State<HomePage> {
   @override
   Widget build(BuildContext context) {
     final bool isKeyboardVisible = MediaQuery.of(context).viewInsets.bottom != 0; // 키보드 위치 확인

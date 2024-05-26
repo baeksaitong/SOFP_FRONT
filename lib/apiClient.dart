@@ -237,7 +237,7 @@ class APIClient {
 
   Future<ProfileResponse?> profileAll() async {
     final String? accessToken = await _jwtManager.getAccessToken();
-    final url = Uri.parse('$baseUrl/app/profile/all');
+    final url = Uri.parse('$baseUrl/app/profile');
     final response = await http.get(
       url,
       headers: <String, String>{
@@ -355,7 +355,7 @@ class APIClient {
     }
   }
 
-  Future<void> favoriteAdd(String searchType, int serialNumber, String image) async {
+  Future<void> favoriteAdd(String searchType, String serialNumber, String image) async {
     final String? accessToken = await _jwtManager.getAccessToken();
     final url = Uri.parse('$baseUrl/app/favorite/add');
     print(accessToken);
