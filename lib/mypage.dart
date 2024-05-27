@@ -14,6 +14,7 @@ import 'gaps.dart';
 import 'provider.dart';
 import 'jwtManager.dart';
 
+
 class MyPage extends StatefulWidget {
   const MyPage({super.key});
 
@@ -22,11 +23,11 @@ class MyPage extends StatefulWidget {
 }
 
 class _MyPageState extends State<MyPage> {
-  Map<String, dynamic>? memberInfo;
   List<String> _allergiesanddisease = [];
   List<String> _medications = [];
   final List<String> _selectedAllergiesanddisease = [];
   final List<String> _selectedMedications = [];
+  Map<String, dynamic>? memberInfo;
 
   @override
   void initState() {
@@ -45,7 +46,10 @@ class _MyPageState extends State<MyPage> {
         if (memberInfo != null) {
           final profile = Profile(
             id: memberInfo!['id'],
-            name: memberInfo!['name'], color: '',
+            name: memberInfo!['name'],
+            imgURL: memberInfo!['imgURL'],
+            color: memberInfo!['color'],
+            email: '',
           );
           Provider.of<ProfileProvider>(context, listen: false).setCurrentProfile(profile);
         }
@@ -151,8 +155,8 @@ class _MyPageState extends State<MyPage> {
                 child: Column(
                   mainAxisSize: MainAxisSize.min,
                   children: [
-                    Text("내 알레르기 & 질병 수정",
-                        style: TextStyle(fontSize: 18, fontWeight: FontWeight.w600)),
+                    Text("알레르기 & 질병 수정",
+                        style: TextStyle(fontSize: 16, fontWeight: FontWeight.w600)),
                     Gaps.h10,
                     TextField(
                       controller: textEditingController,
@@ -442,7 +446,7 @@ class _MyPageState extends State<MyPage> {
     return Row(
       children: [
         Padding(
-          padding: EdgeInsets.only(left: 40),
+          padding: EdgeInsets.only(left: 20),
           child: CircleAvatar(
             radius: 50,
             backgroundColor: AppColors.gr200,
@@ -451,10 +455,10 @@ class _MyPageState extends State<MyPage> {
         ),
         Expanded(
           child: Column(
-            crossAxisAlignment: CrossAxisAlignment.end,
+            crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Padding(
-                padding: EdgeInsets.only(top: 10, right: 100),
+                padding: EdgeInsets.only(left: 20),
                 child: Text(
                   '${profile?.name ?? '이름 없음'} 님',
                   style: TextStyle(
@@ -475,9 +479,29 @@ class _MyPageState extends State<MyPage> {
                   }
                 },
                 style: TextButton.styleFrom(
-                  padding: EdgeInsets.only(top: 10, right: 125),
+                  padding: EdgeInsets.only(left: 20),
                 ),
-                child: Text('정보 수정',
+                child: Text('프로필 설정',
+                    style: TextStyle(
+                      fontSize: 16,
+                      fontFamily: 'Pretendard',
+                      fontWeight: FontWeight.w600,
+                      color: AppColors.gr550,
+                    )),
+              ),
+              TextButton(
+                onPressed: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => multiProfileEdit(),
+                    ),
+                  );
+                },
+                style: TextButton.styleFrom(
+                  padding: EdgeInsets.only(left: 20, bottom: 20),
+                ),
+                child: Text('회원정보 변경',
                     style: TextStyle(
                       fontSize: 16,
                       fontFamily: 'Pretendard',

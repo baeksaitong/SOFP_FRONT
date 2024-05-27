@@ -213,8 +213,8 @@ class APIClient {
 
   Future<void> memberInfo() async {
     final String? accessToken = await _jwtManager.getAccessToken();
-    final url = Uri.parse('$baseUrl/app/member/info');
-    final response = await http.post(
+    final url = Uri.parse('$baseUrl/app/member');
+    final response = await http.get(
       url,
       headers: <String, String>{
         'Content-Type': 'application/json; charset=UTF-8',
@@ -234,6 +234,7 @@ class APIClient {
       print('실패했습니다: ${response.body}');
     }
   }
+
 
   Future<ProfileResponse?> profileAll() async {
     final String? accessToken = await _jwtManager.getAccessToken();
