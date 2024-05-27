@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:sopf_front/appColors.dart';
 import 'package:sopf_front/appTextStyles.dart';
+import 'package:sopf_front/navigates.dart';
 import 'appColors.dart';
 import 'appTextStyles.dart';
 import 'gaps.dart';
-
 
 class MyPage extends StatefulWidget {
   const MyPage({super.key});
@@ -390,7 +390,7 @@ class _MyPageState extends State<MyPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-    /*
+      /*
     body: SingleChildScrollView(
         child: Container(
           height: MediaQuery.of(context).size.height,
@@ -475,6 +475,7 @@ class _MyPageState extends State<MyPage> {
       ],
     );
   }
+
   Widget buildPageNavigationSection(BuildContext context) {
     return Column(
       children: [
@@ -484,6 +485,7 @@ class _MyPageState extends State<MyPage> {
         Gaps.h16,
         buildNavigationItem(context, Icons.star, "즐겨찾기", () {
           // 즐겨찾기 페이지로 이동하는 기능 구현
+          navigateToFavorite();
         }),
         Gaps.h16,
         buildNavigationItem(context, Icons.history, "검색 히스토리", () {
