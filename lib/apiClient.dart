@@ -9,12 +9,12 @@ import 'package:sopf_front/provider.dart';
 import 'globalResponseManager.dart';
 import 'navigates.dart';
 
-
 class APIClient {
   static const String baseUrl = 'http://15.164.18.65:8080';
   final JWTManger _jwtManager = JWTManger();
 
-  Future<void> signUp(String name, String birthday, String email, String gender, String pwd, bool advertisement) async {
+  Future<void> signUp(String name, String birthday, String email, String gender,
+      String pwd, bool advertisement) async {
     final url = Uri.parse('$baseUrl/app/auth/sign-up');
     final response = await http.post(
       url,
@@ -37,7 +37,6 @@ class APIClient {
       // 회원가입 성공 처리
 
       print('회원가입 성공: $jsonResponse');
-
     } else {
       // 에러 처리
       print(response.statusCode);
@@ -45,15 +44,16 @@ class APIClient {
     }
   }
 
-  Future<void> profileAdd(String name, String birthday, String gender, String color, String? profileImg) async {
+  Future<void> profileAdd(String name, String birthday, String gender,
+      String color, String? profileImg) async {
     final String? accessToken = await _jwtManager.getAccessToken();
     final url = Uri.parse('$baseUrl/app/profile/add');
     final response = await http.post(
       url,
       headers: <String, String>{
-      'Content-Type': 'application/json; charset=UTF-8',
-      'Accept': 'application/json',
-      'Authorization': 'Bearer $accessToken',
+        'Content-Type': 'application/json; charset=UTF-8',
+        'Accept': 'application/json',
+        'Authorization': 'Bearer $accessToken',
       },
       body: jsonEncode(<String, dynamic>{
         "name": name,
@@ -70,7 +70,6 @@ class APIClient {
       // 회원가입 성공 처리
 
       print('회원가입 성공: $jsonResponse');
-
     } else {
       // 에러 처리
       print(response.statusCode);
@@ -188,16 +187,16 @@ class APIClient {
       ProfileResponse? profileResponse = await profileAll();
       if (profileResponse != null && profileResponse.profileList.isNotEmpty) {
         // Ensure `context` is passed with `listen: false`
-        Provider.of<ProfileProvider>(context, listen: false).setCurrentProfile(profileResponse.profileList[0]);
+        Provider.of<ProfileProvider>(context, listen: false)
+            .setCurrentProfile(profileResponse.profileList[0]);
       }
 
-      if(jsonResponse['isNew']==false) {
+      if (jsonResponse['isNew'] == false) {
         navigateToAddAllergy();
       } else {
         navigateToHome();
       }
     } else {
-
       print(response.statusCode);
       print('로그인 실패: $jsonResponse');
     }
@@ -254,7 +253,6 @@ class APIClient {
 
       Map<String, dynamic> jsonResponse = jsonDecode(decodedResponse);
       return ProfileResponse.fromJson(jsonResponse);
-
     } else {
       // 실패 처리
       print(response.statusCode);
@@ -271,7 +269,7 @@ class APIClient {
       headers: <String, String>{
         'Content-Type': 'application/json; charset=UTF-8',
         'Accept': 'application/json',
-        'Authorization': 'Bearer $accessToken',  // 인증 헤더 추가
+        'Authorization': 'Bearer $accessToken', // 인증 헤더 추가
       },
     );
 
@@ -292,12 +290,13 @@ class APIClient {
       String? sign,
       String? color,
       String? formulation,
-      String? line
-      ) async {
-    final currentProfile = Provider.of<ProfileProvider>(context, listen: false).currentProfile;
+      String? line) async {
+    final currentProfile =
+        Provider.of<ProfileProvider>(context, listen: false).currentProfile;
     final String? accessToken = await _jwtManager.getAccessToken();
 
-    final url = Uri.parse('$baseUrl/app/search/keyword?profileId=${currentProfile?.id}');
+    final url = Uri.parse(
+        '$baseUrl/app/search/keyword?profileId=${currentProfile?.id}');
     print(keyword);
     print(accessToken);
     final response = await http.post(
@@ -305,7 +304,7 @@ class APIClient {
       headers: <String, String>{
         'Content-Type': 'application/json; charset=UTF-8',
         'Accept': 'application/json',
-        'Authorization': 'Bearer $accessToken',  // 인증 헤더 추가
+        'Authorization': 'Bearer $accessToken', // 인증 헤더 추가
       },
       body: jsonEncode(<String, dynamic>{
         "keyword": keyword,
@@ -330,17 +329,20 @@ class APIClient {
     }
   }
 
-  Future<void> searchInfoPill(String pillSerialNumber, BuildContext context) async {
-    final currentProfile = Provider.of<ProfileProvider>(context, listen: false).currentProfile;
+  Future<void> searchInfoPill(
+      String pillSerialNumber, BuildContext context) async {
+    final currentProfile =
+        Provider.of<ProfileProvider>(context, listen: false).currentProfile;
     final String? accessToken = await _jwtManager.getAccessToken();
     print('$pillSerialNumber, ${currentProfile?.id}');
-    final url = Uri.parse('$baseUrl/app/search/info?pillSerialNumber=$pillSerialNumber?profileId=${currentProfile?.id.toString()}');
+    final url = Uri.parse(
+        '$baseUrl/app/search/info?pillSerialNumber=$pillSerialNumber?profileId=${currentProfile?.id.toString()}');
     final response = await http.get(
       url,
       headers: <String, String>{
         'Content-Type': 'application/json; charset=UTF-8',
         'Accept': 'application/json',
-        'Authorization': 'Bearer $accessToken',  // 인증 헤더 추가
+        'Authorization': 'Bearer $accessToken', // 인증 헤더 추가
       },
     );
 
@@ -355,7 +357,8 @@ class APIClient {
     }
   }
 
-  Future<void> favoriteAdd(String searchType, String serialNumber, String image) async {
+  Future<void> favoriteAdd(
+      String searchType, String serialNumber, String image) async {
     final String? accessToken = await _jwtManager.getAccessToken();
     final url = Uri.parse('$baseUrl/app/favorite/add');
     print(accessToken);
@@ -364,7 +367,7 @@ class APIClient {
       headers: <String, String>{
         'Content-Type': 'application/json; charset=UTF-8',
         'Accept': 'application/json',
-        'Authorization': 'Bearer $accessToken',  // 인증 헤더 추가
+        'Authorization': 'Bearer $accessToken', // 인증 헤더 추가
       },
       body: jsonEncode(<String, dynamic>{
         "searchType": searchType,
@@ -381,6 +384,23 @@ class APIClient {
       // 실패 처리
       print(response.statusCode);
       print('실패: ${utf8.decode(response.bodyBytes)}');
+    }
+  }
+
+  Future<List<String>> fetchAllergiesAndDiseases() async {
+    final url = Uri.parse('$baseUrl/path/to/endpoint');
+    final response = await http.get(
+      url,
+      headers: <String, String>{
+        'Content-Type': 'application/json; charset=UTF-8',
+      },
+    );
+
+    if (response.statusCode == 200) {
+      List<dynamic> jsonResponse = jsonDecode(response.body);
+      return List<String>.from(jsonResponse);
+    } else {
+      throw Exception('Failed to load allergies and diseases');
     }
   }
 }
