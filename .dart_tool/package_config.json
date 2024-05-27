@@ -567,9 +567,9 @@
     },
     {
       "name": "win32",
-      "rootUri": "file:///Users/mingmaengmung/.pub-cache/hosted/pub.dev/win32-5.5.1",
+      "rootUri": "file:///Users/mingmaengmung/.pub-cache/hosted/pub.dev/win32-5.5.0",
       "packageUri": "lib/",
-      "languageVersion": "3.4"
+      "languageVersion": "3.3"
     },
     {
       "name": "xdg_directories",
@@ -590,7 +590,7 @@
       "languageVersion": "3.3"
     }
   ],
-  "generated": "2024-05-27T17:32:04.964278Z",
+  "generated": "2024-05-27T19:54:54.589093Z",
   "generator": "pub",
   "generatorVersion": "3.5.0-191.0.dev",
   "flutterRoot": "file:///Users/mingmaengmung/flutter",
