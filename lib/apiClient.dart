@@ -1,9 +1,7 @@
-import 'dart:io';
-
 import 'package:flutter/cupertino.dart';
 import 'package:http/http.dart' as http;
-import 'package:path_provider/path_provider.dart';
 import 'package:provider/provider.dart';
+import 'package:sopf_front/home.dart';
 import 'dart:convert';
 import 'package:sopf_front/jwtManager.dart';
 import 'package:sopf_front/provider.dart';
@@ -11,12 +9,12 @@ import 'package:sopf_front/provider.dart';
 import 'globalResponseManager.dart';
 import 'navigates.dart';
 
-
 class APIClient {
   static const String baseUrl = 'http://15.164.18.65:8080';
   final JWTManger _jwtManager = JWTManger();
 
-  Future<void> signUp(String name, String birthday, String email, String gender, String pwd, bool advertisement) async {
+  Future<void> signUp(String name, String birthday, String email, String gender,
+      String pwd, bool advertisement) async {
     final url = Uri.parse('$baseUrl/app/auth/sign-up');
     final response = await http.post(
       url,
@@ -39,7 +37,6 @@ class APIClient {
       // 회원가입 성공 처리
 
       print('회원가입 성공: $jsonResponse');
-
     } else {
       // 에러 처리
       print(response.statusCode);
@@ -47,15 +44,16 @@ class APIClient {
     }
   }
 
-  Future<void> profileAdd(String name, String birthday, String gender, String color, String? profileImg) async {
+  Future<void> profileAdd(String name, String birthday, String gender,
+      String color, String? profileImg) async {
     final String? accessToken = await _jwtManager.getAccessToken();
     final url = Uri.parse('$baseUrl/app/profile/add');
     final response = await http.post(
       url,
       headers: <String, String>{
-      'Content-Type': 'application/json; charset=UTF-8',
-      'Accept': 'application/json',
-      'Authorization': 'Bearer $accessToken',
+        'Content-Type': 'application/json; charset=UTF-8',
+        'Accept': 'application/json',
+        'Authorization': 'Bearer $accessToken',
       },
       body: jsonEncode(<String, dynamic>{
         "name": name,
@@ -72,7 +70,6 @@ class APIClient {
       // 회원가입 성공 처리
 
       print('회원가입 성공: $jsonResponse');
-
     } else {
       // 에러 처리
       print(response.statusCode);
@@ -190,18 +187,16 @@ class APIClient {
       ProfileResponse? profileResponse = await profileAll();
       if (profileResponse != null && profileResponse.profileList.isNotEmpty) {
         // Ensure `context` is passed with `listen: false`
-        Provider.of<ProfileProvider>(context, listen: false).setCurrentProfile(profileResponse.profileList[0]);
+        Provider.of<ProfileProvider>(context, listen: false)
+            .setCurrentProfile(profileResponse.profileList[0]);
       }
-      favoriteGet(context);
-      diseaseAllergyList();
-      recentViewPill(context);
-      if(jsonResponse['isNew']==false) {
+
+      if (jsonResponse['isNew'] == false) {
         navigateToAddAllergy();
       } else {
         navigateToHome();
       }
     } else {
-
       print(response.statusCode);
       print('로그인 실패: $jsonResponse');
     }
@@ -258,35 +253,11 @@ class APIClient {
 
       Map<String, dynamic> jsonResponse = jsonDecode(decodedResponse);
       return ProfileResponse.fromJson(jsonResponse);
-
     } else {
       // 실패 처리
       print(response.statusCode);
       print('실패했습니다: ${response.body}');
       return null;
-    }
-  }
-
-  Future<void> recentViewPill(BuildContext context) async {
-    final currentProfile = Provider.of<ProfileProvider>(context, listen: false).currentProfile;
-    final String? accessToken = await _jwtManager.getAccessToken();
-    final url = Uri.parse('$baseUrl/app/disease-allergy/${currentProfile?.id}?count=10');
-    final response = await http.get(
-      url,
-      headers: <String, String>{
-        'Content-Type': 'application/json; charset=UTF-8',
-        'Accept': 'application/json',
-        'Authorization': 'Bearer $accessToken',  // 인증 헤더 추가
-      },
-    );
-
-    var decodedResponse = utf8.decode(response.bodyBytes);
-    var jsonResponse = jsonDecode(decodedResponse);
-    if (response.statusCode == 200) {
-      print('최근 조회 알약 조회 성공 : $jsonResponse');
-    } else {
-      print(response.statusCode);
-      print('최근 조회 알약 조회 실패 : $jsonResponse');
     }
   }
 
@@ -298,89 +269,17 @@ class APIClient {
       headers: <String, String>{
         'Content-Type': 'application/json; charset=UTF-8',
         'Accept': 'application/json',
-        'Authorization': 'Bearer $accessToken',  // 인증 헤더 추가
+        'Authorization': 'Bearer $accessToken', // 인증 헤더 추가
       },
     );
 
     var decodedResponse = utf8.decode(response.bodyBytes);
     var jsonResponse = jsonDecode(decodedResponse);
     if (response.statusCode == 200) {
-      print('질병 및 알레르기 불러오기 성공 : $jsonResponse');
+      print('불러오기 성공 : $jsonResponse');
     } else {
       print(response.statusCode);
-      print('질병 및 알레르기 불러오기 실패 : $jsonResponse');
-    }
-  }
-
-  Future<void> diseaseAllergySearch(String keyword) async {
-    final String? accessToken = await _jwtManager.getAccessToken();
-    final url = Uri.parse('$baseUrl/app/disease-allergy/search?keyword=$keyword');
-    final response = await http.get(
-      url,
-      headers: <String, String>{
-        'Content-Type': 'application/json; charset=UTF-8',
-        'Accept': 'application/json',
-        'Authorization': 'Bearer $accessToken',  // 인증 헤더 추가
-      },
-    );
-
-    var decodedResponse = utf8.decode(response.bodyBytes);
-    var jsonResponse = jsonDecode(decodedResponse);
-    if (response.statusCode == 200) {
-      print('추가 및 삭제 성공 : $jsonResponse');
-    } else {
-      print(response.statusCode);
-      print('추가 및 삭제 실패 : $jsonResponse');
-    }
-  }
-
-  Future<void> diseaseAllergyGet(BuildContext context, String keyword) async {
-    final currentProfile = Provider.of<ProfileProvider>(context, listen: false).currentProfile;
-    final String? accessToken = await _jwtManager.getAccessToken();
-    final url = Uri.parse('$baseUrl/app/disease-allergy/${currentProfile?.id}');
-    final response = await http.get(
-      url,
-      headers: <String, String>{
-        'Content-Type': 'application/json; charset=UTF-8',
-        'Accept': 'application/json',
-        'Authorization': 'Bearer $accessToken',  // 인증 헤더 추가
-      },
-    );
-
-    var decodedResponse = utf8.decode(response.bodyBytes);
-    var jsonResponse = jsonDecode(decodedResponse);
-    if (response.statusCode == 200) {
-      print('질병 및 알레르기 목록 조회 성공 : $jsonResponse');
-    } else {
-      print(response.statusCode);
-      print('질병 및 알레르기 목록 조회 실패 : $jsonResponse');
-    }
-  }
-
-  Future<void> diseaseAllergyAddOrDelete(BuildContext context, String? addDiseaseAllergyList, String? removeDiseaseAllergyList) async {
-    final currentProfile = Provider.of<ProfileProvider>(context, listen: false).currentProfile;
-    final String? accessToken = await _jwtManager.getAccessToken();
-    final url = Uri.parse('$baseUrl/app/disease-allergy/${currentProfile?.id}');
-    final response = await http.patch(
-      url,
-      headers: <String, String>{
-        'Content-Type': 'application/json; charset=UTF-8',
-        'Accept': 'application/json',
-        'Authorization': 'Bearer $accessToken',  // 인증 헤더 추가
-      },
-      body: jsonEncode(<String, dynamic>{
-      "addDiseaseAllergyList": [ addDiseaseAllergyList ],
-      "removeDiseaseAllergyList": [ removeDiseaseAllergyList ]
-      }),
-    );
-
-    var decodedResponse = utf8.decode(response.bodyBytes);
-    var jsonResponse = jsonDecode(decodedResponse);
-    if (response.statusCode == 200) {
-      print('추가 및 삭제 성공 : $jsonResponse');
-    } else {
-      print(response.statusCode);
-      print('추가 및 삭제 실패 : $jsonResponse');
+      print('불러오기 실패 : $jsonResponse');
     }
   }
 
@@ -391,36 +290,38 @@ class APIClient {
       String? sign,
       String? color,
       String? formulation,
-      String? line
-      ) async {
-    final currentProfile = Provider.of<ProfileProvider>(context, listen: false).currentProfile;
+      String? line) async {
+    final currentProfile =
+        Provider.of<ProfileProvider>(context, listen: false).currentProfile;
     final String? accessToken = await _jwtManager.getAccessToken();
 
-    final url = Uri.parse('$baseUrl/app/search/keyword'
-        '?profileId=${currentProfile?.id}'
-        '&limit=10'
-        '&keyword=$keyword'
-        '&shape=$shape'
-        '&sign=$sign'
-        '&color=$color'
-        '&formulation=$formulation'
-        '&line=$line'
-    );
+    final url = Uri.parse(
+        '$baseUrl/app/search/keyword?profileId=${currentProfile?.id}');
     print(keyword);
-    print(url);
-    final response = await http.get(
+    print(accessToken);
+    final response = await http.post(
       url,
       headers: <String, String>{
         'Content-Type': 'application/json; charset=UTF-8',
         'Accept': 'application/json',
-        'Authorization': 'Bearer $accessToken',  // 인증 헤더 추가
+        'Authorization': 'Bearer $accessToken', // 인증 헤더 추가
       },
+      body: jsonEncode(<String, dynamic>{
+        "keyword": keyword,
+        "shape": shape,
+        "sign": sign,
+        "color": color,
+        "formulation": formulation,
+        "line": line,
+        "page": 0,
+        "limit": 5,
+      }),
     );
 
     if (response.statusCode == 200) {
       // 성공적으로 처리된 경우
       print('검색완료: ${utf8.decode(response.bodyBytes)}');
-      DrugsManager().updateDrugs(utf8.decode(response.bodyBytes));
+      GlobalManager().updateDrugs(utf8.decode(response.bodyBytes));
     } else {
       // 실패 처리
       print(response.statusCode);
@@ -428,26 +329,27 @@ class APIClient {
     }
   }
 
-  Future<void> searchGet(BuildContext context, int pillSerialNumber) async {
-    final currentProfile = Provider.of<ProfileProvider>(context, listen: false).currentProfile;
+  Future<void> searchInfoPill(
+      String pillSerialNumber, BuildContext context) async {
+    final currentProfile =
+        Provider.of<ProfileProvider>(context, listen: false).currentProfile;
     final String? accessToken = await _jwtManager.getAccessToken();
     print('$pillSerialNumber, ${currentProfile?.id}');
-    final url = Uri.parse('$baseUrl/app/search/$pillSerialNumber?profileId=${currentProfile?.id}');
+    final url = Uri.parse(
+        '$baseUrl/app/search/info?pillSerialNumber=$pillSerialNumber?profileId=${currentProfile?.id.toString()}');
     final response = await http.get(
       url,
       headers: <String, String>{
         'Content-Type': 'application/json; charset=UTF-8',
         'Accept': 'application/json',
-        'Authorization': 'Bearer $accessToken',  // 인증 헤더 추가
+        'Authorization': 'Bearer $accessToken', // 인증 헤더 추가
       },
     );
 
     if (response.statusCode == 200) {
       // 성공적으로 처리된 경우
       print('검색완료: ${utf8.decode(response.bodyBytes)}');
-      final jsonResponse = json.decode(utf8.decode(response.bodyBytes));
-      final drugInfoDetail = DrugInfoDetail.fromJson(jsonResponse);
-      Provider.of<DrugInfoDetailProvider>(context, listen: false).setCurrentDrugInfoDetail(drugInfoDetail);
+      GlobalManager().updateDrugs(utf8.decode(response.bodyBytes));
     } else {
       // 실패 처리
       print(response.statusCode);
@@ -455,97 +357,50 @@ class APIClient {
     }
   }
 
-  Future<void> favoritePost(BuildContext context, int serialNumber, String imageUrl) async {
-    final currentProfile = Provider.of<ProfileProvider>(context, listen: false).currentProfile;
+  Future<void> favoriteAdd(
+      String searchType, String serialNumber, String image) async {
     final String? accessToken = await _jwtManager.getAccessToken();
-    final url = Uri.parse('$baseUrl/app/favorite/${currentProfile?.id}');
+    final url = Uri.parse('$baseUrl/app/favorite/add');
     print(accessToken);
-
-    // Download the image
-    var response = await http.get(Uri.parse(imageUrl));
-    if (response.statusCode != 200) {
-      throw Exception('Failed to download image');
-    }
-
-    // Save the image as a temporary file
-    final documentDirectory = await getTemporaryDirectory();
-    final file = File('${documentDirectory.path}/temp_image.jpg');
-    await file.writeAsBytes(response.bodyBytes);
-
-    // Create multipart request
-    var request = http.MultipartRequest('POST', url)
-      ..headers.addAll({
-        'Content-Type': 'multipart/form-data',
-        'Accept': 'application/json',
-        'Authorization': 'Bearer $accessToken',
-      });
-
-    // Add fields
-    request.fields['pillSeralNumber'] = serialNumber.toString();
-
-    // Add file
-    request.files.add(await http.MultipartFile.fromPath('image', file.path));
-
-    // Send the request
-    var streamedResponse = await request.send();
-    response = await http.Response.fromStream(streamedResponse);
-
-    if (response.statusCode == 200) {
-      // 성공적으로 처리된 경우
-      print('즐겨찾기 추가 완료: ${utf8.decode(response.bodyBytes)}');
-    } else {
-      // 실패 처리
-      print(response.statusCode);
-      print('즐겨찾기 추가 실패: ${utf8.decode(response.bodyBytes)}');
-    }
-
-    // Clean up the temporary file
-    await file.delete();
-  }
-
-  Future<void> favoriteDelete(BuildContext context, int serialNumber) async {
-    final currentProfile = Provider.of<ProfileProvider>(context, listen: false).currentProfile;
-    final String? accessToken = await _jwtManager.getAccessToken();
-    final url = Uri.parse('$baseUrl/app/favorite/${currentProfile?.id}?pillSerialNumber=$serialNumber');
-    final response = await http.delete(
-        url,
-        headers: <String, String>{
-          'Content-Type': 'application/json; charset=UTF-8',
-          'Accept': 'application/json',
-          'Authorization': 'Bearer $accessToken',  // 인증 헤더 추가
-        }
-    );
-
-    if (response.statusCode == 200) {
-      // 성공적으로 처리된 경우
-      print('즐겨찾기 삭제 성공: ${utf8.decode(response.bodyBytes)}');
-    } else {
-      // 실패 처리
-      print(response.statusCode);
-      print('즐겨찾기 삭제 실패: ${utf8.decode(response.bodyBytes)}');
-    }
-  }
-
-  Future<void> favoriteGet(BuildContext context) async {
-    final currentProfile = Provider.of<ProfileProvider>(context, listen: false).currentProfile;
-    final String? accessToken = await _jwtManager.getAccessToken();
-    final url = Uri.parse('$baseUrl/app/favorite/${currentProfile?.id}');
-    final response = await http.get(
+    final response = await http.post(
       url,
       headers: <String, String>{
         'Content-Type': 'application/json; charset=UTF-8',
         'Accept': 'application/json',
-        'Authorization': 'Bearer $accessToken',  // 인증 헤더 추가
-      }
+        'Authorization': 'Bearer $accessToken', // 인증 헤더 추가
+      },
+      body: jsonEncode(<String, dynamic>{
+        "searchType": searchType,
+        "pillSearchNumber": serialNumber,
+        "image": image,
+      }),
     );
 
     if (response.statusCode == 200) {
       // 성공적으로 처리된 경우
-      print('즐겨찾기 조회 성공: ${utf8.decode(response.bodyBytes)}');
+      print('검색완료: ${utf8.decode(response.bodyBytes)}');
+      GlobalManager().updateDrugs(utf8.decode(response.bodyBytes));
     } else {
       // 실패 처리
       print(response.statusCode);
-      print('즐겨찾기 조회 실패: ${utf8.decode(response.bodyBytes)}');
+      print('실패: ${utf8.decode(response.bodyBytes)}');
+    }
+  }
+
+  Future<List<String>> fetchAllergiesAndDiseases() async {
+    final url = Uri.parse('$baseUrl/path/to/endpoint');
+    final response = await http.get(
+      url,
+      headers: <String, String>{
+        'Content-Type': 'application/json; charset=UTF-8',
+      },
+    );
+
+    if (response.statusCode == 200) {
+      List<dynamic> jsonResponse = jsonDecode(response.body);
+      return List<String>.from(jsonResponse);
+    } else {
+      throw Exception('Failed to load allergies and diseases');
     }
   }
 }

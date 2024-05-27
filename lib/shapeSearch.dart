@@ -6,10 +6,14 @@ import 'appTextStyles.dart';
 import 'gaps.dart';
 
 final GlobalKey<_RgbButtonState> rgbButtonKey = GlobalKey<_RgbButtonState>();
-final GlobalKey<_ShapeButtonState> shapeButtonKey = GlobalKey<_ShapeButtonState>();
-final GlobalKey<_FormulationButtonState> formulationButtonKey = GlobalKey<_FormulationButtonState>();
-final GlobalKey<_DivideLineButtonState> divideLineButtonKey = GlobalKey<_DivideLineButtonState>();
-final GlobalKey<_KeywordFieldState> keywordKey = GlobalKey<_KeywordFieldState>();
+final GlobalKey<_ShapeButtonState> shapeButtonKey =
+    GlobalKey<_ShapeButtonState>();
+final GlobalKey<_FormulationButtonState> formulationButtonKey =
+    GlobalKey<_FormulationButtonState>();
+final GlobalKey<_DivideLineButtonState> divideLineButtonKey =
+    GlobalKey<_DivideLineButtonState>();
+final GlobalKey<_KeywordFieldState> keywordKey =
+    GlobalKey<_KeywordFieldState>();
 
 class ShapeSearch extends StatefulWidget {
   const ShapeSearch({super.key});
@@ -29,17 +33,27 @@ class _ShapeSearchState extends State<ShapeSearch> {
           style: AppTextStyles.body5M14,
         ),
         Gaps.h8,
-        KeywordField(key: keywordKey,),
+        KeywordField(
+          key: keywordKey,
+        ),
         Gaps.h8,
         Row(
           children: [
-            RgbButton(key: rgbButtonKey,),
+            RgbButton(
+              key: rgbButtonKey,
+            ),
             Gaps.w8,
-            ShapeButton(key: shapeButtonKey,),
+            ShapeButton(
+              key: shapeButtonKey,
+            ),
             Gaps.w8,
-            FormulationButton(key: formulationButtonKey,),
+            FormulationButton(
+              key: formulationButtonKey,
+            ),
             Gaps.w8,
-            DivideLineButton(key: divideLineButtonKey,),
+            DivideLineButton(
+              key: divideLineButtonKey,
+            ),
           ],
         ),
         Gaps.h14,
@@ -76,7 +90,8 @@ class _ShapeSearchState extends State<ShapeSearch> {
                               minimumSize: Size(120, 44),
                               side: BorderSide.none,
                               shape: RoundedRectangleBorder(
-                                borderRadius: BorderRadius.all(Radius.circular(8)),
+                                borderRadius:
+                                    BorderRadius.all(Radius.circular(8)),
                               ),
                             ),
                             child: Text(
@@ -89,8 +104,10 @@ class _ShapeSearchState extends State<ShapeSearch> {
                             onPressed: () {
                               rgbButtonKey.currentState?.resetSelection();
                               shapeButtonKey.currentState?.resetSelection();
-                              formulationButtonKey.currentState?.resetSelection();
-                              divideLineButtonKey.currentState?.resetSelection();
+                              formulationButtonKey.currentState
+                                  ?.resetSelection();
+                              divideLineButtonKey.currentState
+                                  ?.resetSelection();
                               keywordKey.currentState?.resetSelection();
 
                               Navigator.of(context).pop();
@@ -101,7 +118,8 @@ class _ShapeSearchState extends State<ShapeSearch> {
                               minimumSize: Size(120, 44),
                               side: BorderSide.none,
                               shape: RoundedRectangleBorder(
-                                borderRadius: BorderRadius.all(Radius.circular(8)),
+                                borderRadius:
+                                    BorderRadius.all(Radius.circular(8)),
                               ),
                             ),
                             child: Text(
@@ -115,8 +133,7 @@ class _ShapeSearchState extends State<ShapeSearch> {
                     },
                   );
                 },
-
-              style: OutlinedButton.styleFrom(
+                style: OutlinedButton.styleFrom(
                   side: BorderSide.none,
                   minimumSize: Size(78, 48),
                   backgroundColor: AppColors.gr300,
@@ -128,17 +145,18 @@ class _ShapeSearchState extends State<ShapeSearch> {
                   '초기화',
                   style: AppTextStyles.body3S15,
                   selectionColor: AppColors.gr600,
-                )
-            ),
+                )),
             Gaps.w10,
             OutlinedButton(
               onPressed: () async {
                 // 여기에서 선택된 항목들의 상태를 로그로 출력
                 final color = rgbButtonKey.currentState?.finalText;
                 final shape = shapeButtonKey.currentState?.finalText;
-                final formulation = formulationButtonKey.currentState?.finalText;
+                final formulation =
+                    formulationButtonKey.currentState?.finalText;
                 final divideLine = divideLineButtonKey.currentState?.finalText;
-                final keyword = keywordKey.currentState?._keywordController.text;
+                final keyword =
+                    keywordKey.currentState?._keywordController.text;
 
                 // 선택된 항목 로그로 출력
                 debugPrint('입력한 키워드: $keyword');
@@ -148,16 +166,20 @@ class _ShapeSearchState extends State<ShapeSearch> {
                 debugPrint('선택된 분할선: $divideLine');
 
                 for (var item in colorItems) {
-                  item.isSelected = false; // 모든 colorItems의 isSelected를 false로 설정
+                  item.isSelected =
+                      false; // 모든 colorItems의 isSelected를 false로 설정
                 }
                 for (var item in shapeItems) {
-                  item.isSelected = false; // 모든 shapeItems isSelected를 false로 설정
+                  item.isSelected =
+                      false; // 모든 shapeItems isSelected를 false로 설정
                 }
                 for (var item in formulationItems) {
-                  item.isSelected = false; // 모든 formulationItems isSelected를 false로 설정
+                  item.isSelected =
+                      false; // 모든 formulationItems isSelected를 false로 설정
                 }
                 for (var item in divideLineItems) {
-                  item.isSelected = false; // 모든 divideLineItems isSelected를 false로 설정
+                  item.isSelected =
+                      false; // 모든 divideLineItems isSelected를 false로 설정
                 }
               },
               style: OutlinedButton.styleFrom(
@@ -169,7 +191,8 @@ class _ShapeSearchState extends State<ShapeSearch> {
                   borderRadius: BorderRadius.all(Radius.circular(8)),
                 ),
               ),
-              child: Image(image: AssetImage('assets/icon_search_text_search.png')),
+              child: Image(
+                  image: AssetImage('assets/icon_search_text_search.png')),
             ),
           ],
         )
@@ -177,6 +200,7 @@ class _ShapeSearchState extends State<ShapeSearch> {
     );
   }
 }
+
 class KeywordField extends StatefulWidget {
   const KeywordField({super.key});
 
@@ -192,6 +216,7 @@ class _KeywordFieldState extends State<KeywordField> {
       _keywordController.clear();
     });
   }
+
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -209,6 +234,8 @@ class _KeywordFieldState extends State<KeywordField> {
               controller: _keywordController,
               decoration: InputDecoration(
                 border: InputBorder.none,
+                enabledBorder: InputBorder.none, // No border when enabled
+                focusedBorder: InputBorder.none, // No border when focused
                 hintText: "알약 이름을 검색해보세요",
               ),
             ),
@@ -218,7 +245,6 @@ class _KeywordFieldState extends State<KeywordField> {
     );
   }
 }
-
 
 class DivideLineButton extends StatefulWidget {
   const DivideLineButton({super.key});
@@ -248,15 +274,16 @@ class _DivideLineButtonState extends State<DivideLineButton> {
     return OutlinedButton(
       style: OutlinedButton.styleFrom(
         side: BorderSide.none,
-        padding: EdgeInsets.zero,  // 패딩 제거
+        padding: EdgeInsets.zero, // 패딩 제거
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.all(Radius.circular(10)),
         ),
         backgroundColor: AppColors.wh,
-        minimumSize: Size(75.5, 75.5),  // 버튼의 최소 크기 설정
+        minimumSize: Size(75.5, 75.5), // 버튼의 최소 크기 설정
       ),
       onPressed: () async {
-        final DivideLineItem? selected = await showModalBottomSheet<DivideLineItem>(
+        final DivideLineItem? selected =
+            await showModalBottomSheet<DivideLineItem>(
           context: context,
           builder: (BuildContext context) {
             return Container(
@@ -298,11 +325,11 @@ class _DivideLineButtonState extends State<DivideLineButton> {
                             decoration: BoxDecoration(
                               color: AppColors.gr200,
                               border: divideLineItems[index].isSelected
-                                    ? Border.all(
-                                  width: 2.0,
-                                  color: Colors.redAccent,
-                                )
-                                    : null,
+                                  ? Border.all(
+                                      width: 2.0,
+                                      color: Colors.redAccent,
+                                    )
+                                  : null,
                             ),
                             width: 76,
                             height: 68,
@@ -319,8 +346,8 @@ class _DivideLineButtonState extends State<DivideLineButton> {
                                 Text(
                                   divideLineItems[index].text,
                                   textAlign: TextAlign.center,
-                                  style: AppTextStyles.body5M14.copyWith(
-                                      color: AppColors.gr800),
+                                  style: AppTextStyles.body5M14
+                                      .copyWith(color: AppColors.gr800),
                                 )
                               ],
                             ),
@@ -341,7 +368,8 @@ class _DivideLineButtonState extends State<DivideLineButton> {
             finalImage = selected.image;
           });
         }
-      },      child: Column(
+      },
+      child: Column(
         children: [
           Image.asset(
             finalImage ?? 'assets/mdi_pill-tablet.png',
@@ -358,7 +386,6 @@ class _DivideLineButtonState extends State<DivideLineButton> {
     );
   }
 }
-
 
 class FormulationButton extends StatefulWidget {
   const FormulationButton({super.key});
@@ -382,20 +409,22 @@ class _FormulationButtonState extends State<FormulationButton> {
       }
     });
   }
+
   @override
   Widget build(BuildContext context) {
     return OutlinedButton(
       style: OutlinedButton.styleFrom(
         side: BorderSide.none,
-        padding: EdgeInsets.zero,  // 패딩 제거
+        padding: EdgeInsets.zero, // 패딩 제거
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.all(Radius.circular(10)),
         ),
         backgroundColor: AppColors.wh,
-        minimumSize: Size(75.5, 75.5),  // 버튼의 최소 크기 설정
+        minimumSize: Size(75.5, 75.5), // 버튼의 최소 크기 설정
       ),
       onPressed: () async {
-        final FormulationItem? selected = await showModalBottomSheet<FormulationItem>(
+        final FormulationItem? selected =
+            await showModalBottomSheet<FormulationItem>(
           context: context,
           builder: (BuildContext context) {
             return Container(
@@ -438,9 +467,9 @@ class _FormulationButtonState extends State<FormulationButton> {
                               color: AppColors.gr200,
                               border: formulationItems[index].isSelected
                                   ? Border.all(
-                                width: 2.0,
-                                color: Colors.redAccent,
-                              )
+                                      width: 2.0,
+                                      color: Colors.redAccent,
+                                    )
                                   : null,
                             ),
                             width: 76,
@@ -458,8 +487,8 @@ class _FormulationButtonState extends State<FormulationButton> {
                                 Text(
                                   formulationItems[index].text,
                                   textAlign: TextAlign.center,
-                                  style: AppTextStyles.body5M14.copyWith(
-                                      color: AppColors.gr800),
+                                  style: AppTextStyles.body5M14
+                                      .copyWith(color: AppColors.gr800),
                                 )
                               ],
                             ),
@@ -499,7 +528,6 @@ class _FormulationButtonState extends State<FormulationButton> {
   }
 }
 
-
 class ShapeButton extends StatefulWidget {
   const ShapeButton({super.key});
 
@@ -528,12 +556,12 @@ class _ShapeButtonState extends State<ShapeButton> {
     return OutlinedButton(
       style: OutlinedButton.styleFrom(
         side: BorderSide.none,
-        padding: EdgeInsets.zero,  // 패딩 제거
+        padding: EdgeInsets.zero, // 패딩 제거
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.all(Radius.circular(10)),
         ),
         backgroundColor: AppColors.wh,
-        minimumSize: Size(75.5, 75.5),  // 버튼의 최소 크기 설정
+        minimumSize: Size(75.5, 75.5), // 버튼의 최소 크기 설정
       ),
       onPressed: () async {
         final ShapeItem? selected = await showModalBottomSheet<ShapeItem>(
@@ -545,7 +573,8 @@ class _ShapeButtonState extends State<ShapeButton> {
               decoration: BoxDecoration(
                 borderRadius: BorderRadius.all(Radius.circular(20)),
                 color: AppColors.gr150,
-              ),              child: Column(
+              ),
+              child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Text(
@@ -578,9 +607,9 @@ class _ShapeButtonState extends State<ShapeButton> {
                               color: AppColors.gr200,
                               border: shapeItems[index].isSelected
                                   ? Border.all(
-                                width: 2.0,
-                                color: Colors.redAccent,
-                              )
+                                      width: 2.0,
+                                      color: Colors.redAccent,
+                                    )
                                   : null,
                             ),
                             width: 76,
@@ -598,8 +627,8 @@ class _ShapeButtonState extends State<ShapeButton> {
                                 Text(
                                   shapeItems[index].text,
                                   textAlign: TextAlign.center,
-                                  style: AppTextStyles.body5M14.copyWith(
-                                      color: AppColors.gr800),
+                                  style: AppTextStyles.body5M14
+                                      .copyWith(color: AppColors.gr800),
                                 )
                               ],
                             ),
@@ -616,8 +645,8 @@ class _ShapeButtonState extends State<ShapeButton> {
         );
         if (selected != null) {
           setState(() {
-            finalText=selected.text;
-            finalImage=selected.image;
+            finalText = selected.text;
+            finalImage = selected.image;
           });
         }
       },
@@ -639,9 +668,8 @@ class _ShapeButtonState extends State<ShapeButton> {
   }
 }
 
-
 class RgbButton extends StatefulWidget {
-  const RgbButton({Key? key}) : super(key: key);
+  const RgbButton({super.key});
 
   @override
   State<RgbButton> createState() => _RgbButtonState();
@@ -673,17 +701,18 @@ class _RgbButtonState extends State<RgbButton> {
       ),
     );
   }
+
   @override
   Widget build(BuildContext context) {
     return OutlinedButton(
       style: OutlinedButton.styleFrom(
         side: BorderSide.none,
-        padding: EdgeInsets.zero,  // 패딩 제거
+        padding: EdgeInsets.zero, // 패딩 제거
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.all(Radius.circular(10)),
         ),
         backgroundColor: AppColors.wh,
-        minimumSize: Size(75.5, 75.5),  // 버튼의 최소 크기 설정
+        minimumSize: Size(75.5, 75.5), // 버튼의 최소 크기 설정
       ),
       onPressed: () async {
         final ColorItem? selected = await showModalBottomSheet<ColorItem>(
@@ -694,7 +723,8 @@ class _RgbButtonState extends State<RgbButton> {
               decoration: BoxDecoration(
                 borderRadius: BorderRadius.all(Radius.circular(20)),
                 color: AppColors.gr150,
-              ),              padding: EdgeInsets.fromLTRB(24, 30, 24, 0),
+              ),
+              padding: EdgeInsets.fromLTRB(24, 30, 24, 0),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
@@ -719,7 +749,7 @@ class _RgbButtonState extends State<RgbButton> {
                               }
                               selectedColorItem = colorItems[index];
                               selectedColorItem!.isSelected = true;
-                            });// 색상 선택 로직 구현
+                            }); // 색상 선택 로직 구현
                             Navigator.of(context).pop(selectedColorItem);
                           },
                           child: Column(
@@ -731,12 +761,13 @@ class _RgbButtonState extends State<RgbButton> {
                                 width: 22,
                                 decoration: BoxDecoration(
                                   color: colorItems[index].color,
-                                  borderRadius: BorderRadius.all(Radius.circular(45)),
+                                  borderRadius:
+                                      BorderRadius.all(Radius.circular(45)),
                                   border: colorItems[index].isSelected
                                       ? Border.all(
-                                    width: 2.0,
-                                    color: Colors.redAccent,
-                                  )
+                                          width: 2.0,
+                                          color: Colors.redAccent,
+                                        )
                                       : null,
                                 ),
                               ),
@@ -744,7 +775,8 @@ class _RgbButtonState extends State<RgbButton> {
                               Text(
                                 colorItems[index].text,
                                 textAlign: TextAlign.center,
-                                style: AppTextStyles.body5M14.copyWith(color: AppColors.gr800),
+                                style: AppTextStyles.body5M14
+                                    .copyWith(color: AppColors.gr800),
                               )
                             ],
                           ),
@@ -770,11 +802,13 @@ class _RgbButtonState extends State<RgbButton> {
       },
       child: Column(
         children: [
-          finalColor != null ? customRgbCircle() : Image.asset(
-            'assets/solar_pallete-2-bold-duotone.png',
-            width: 32,
-            height: 32,
-          ),
+          finalColor != null
+              ? customRgbCircle()
+              : Image.asset(
+                  'assets/solar_pallete-2-bold-duotone.png',
+                  width: 32,
+                  height: 32,
+                ),
           Gaps.h4,
           Text(
             finalText ?? '색상',
@@ -799,7 +833,7 @@ class ShapeItem {
   final String image;
   bool isSelected;
 
-  ShapeItem({required this.text, required this.image, this.isSelected=false});
+  ShapeItem({required this.text, required this.image, this.isSelected = false});
 }
 
 class FormulationItem {
@@ -807,7 +841,8 @@ class FormulationItem {
   final String image;
   bool isSelected;
 
-  FormulationItem({required this.text, required this.image, this.isSelected=false});
+  FormulationItem(
+      {required this.text, required this.image, this.isSelected = false});
 }
 
 class DivideLineItem {
@@ -815,7 +850,8 @@ class DivideLineItem {
   final String image;
   bool isSelected;
 
-  DivideLineItem({required this.text, required this.image, this.isSelected=false});
+  DivideLineItem(
+      {required this.text, required this.image, this.isSelected = false});
 }
 
 final List<ColorItem> colorItems = [

@@ -7,6 +7,14 @@ import 'appTextStyles.dart';
 import 'package:flutter/services.dart';
 import 'apiClient.dart';
 
+void main() {
+  runApp(MaterialApp(
+    title: 'Medication Schedule',
+    theme: ThemeData(primarySwatch: Colors.blue),
+    home: SignUpPage(),
+  ));
+}
+
 class SignUpPage extends StatefulWidget {
   const SignUpPage({super.key});
 
@@ -139,7 +147,7 @@ class _SignUpPageState extends State<SignUpPage> {
       ),
       body: SingleChildScrollView(
         child: Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 30),
+          padding: const EdgeInsets.symmetric(horizontal: 20),
           child: Column(
             children: [
               Gaps.h40,
@@ -152,64 +160,138 @@ class _SignUpPageState extends State<SignUpPage> {
               ), // 이름 입력란
               Gaps.h20,
               Padding(
-                padding: const EdgeInsets.all(8.0),
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.start,
-                  children: const [
-                    Text(
-                      '생년월일',
-                      style: AppTextStyles.body5M14,
-                    ),
-                  ],
+                padding: const EdgeInsets.all(0.0),
+                child: Align(
+                  alignment: Alignment.centerLeft,
+                  child: Text(
+                    '생년월일',
+                    style: AppTextStyles.body5M14,
+                  ),
                 ),
               ),
-              TextField(
-                controller: _dateOfBirthController,
-                onChanged: _onDateOfBirthChanged,
-                keyboardType: TextInputType.number,
-                inputFormatters: [LengthLimitingTextInputFormatter(10)],
-                decoration: InputDecoration(
-                  hintText: '8자리 생년월일을 입력해주세요',
-                  border: OutlineInputBorder(),
+              SizedBox(
+                height: 55,
+                child: TextField(
+                  controller: _dateOfBirthController,
+                  onChanged: _onDateOfBirthChanged,
+                  keyboardType: TextInputType.number,
+                  inputFormatters: [LengthLimitingTextInputFormatter(10)],
+                  cursorColor: AppColors.gr600,
+                  decoration: InputDecoration(
+                    hintText: '8자리 생년월일을 입력해주세요',
+                    border: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(4.0),
+                      borderSide: BorderSide(
+                        color: AppColors.gr600, // The color of the border
+                      ),
+                    ),
+                    enabledBorder: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(4.0),
+                      borderSide: BorderSide(
+                        color: AppColors
+                            .gr600, // The color of the border when enabled
+                      ),
+                    ),
+                    focusedBorder: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(4.0),
+                      borderSide: BorderSide(
+                        color: AppColors
+                            .gr600, // The color of the border when focused
+                      ),
+                    ),
+                    hintStyle: TextStyle(color: AppColors.gr500),
+                    alignLabelWithHint: true,
+                  ),
                 ),
               ),
               Gaps.h20,
               Padding(
-                padding: const EdgeInsets.symmetric(vertical: 10.0),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.start,
+                padding: const EdgeInsets.symmetric(vertical: 0.0),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Text(
-                      '성별 선택: ',
-                      style: AppTextStyles.body5M14,
-                    ), // 성별 선택 안내 문구
-                    Radio<String>(
-                      value: '남자',
-                      groupValue: gender,
-                      onChanged: onGenderChanged,
-                    ),
-                    Text(
-                      '남자',
-                      style: AppTextStyles.body5M14,
-                    ),
-                    Radio<String>(
-                      value: '여자',
-                      groupValue: gender,
-                      onChanged: onGenderChanged,
-                    ),
-                    Text(
-                      '여자',
-                      style: AppTextStyles.body5M14,
-                    ),
+                    Text('성별', style: AppTextStyles.body5M14),
+                    SizedBox(height: 8),
+                    Row(
+                      children: [
+                        Expanded(
+                          child: SizedBox(
+                            height: 50, // Adjust the height as needed
+                            child: OutlinedButton(
+                              onPressed: () {
+                                setState(() {
+                                  gender = '남자';
+                                });
+                              },
+                              style: OutlinedButton.styleFrom(
+                                backgroundColor: gender == '남자'
+                                    ? AppColors.softTeal
+                                    : Colors.white,
+                                side: BorderSide(
+                                  color: gender == '남자'
+                                      ? AppColors.deepTeal
+                                      : Colors.grey,
+                                ),
+                                shape: RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(10.0),
+                                ),
+                              ),
+                              child: Text(
+                                '남성',
+                                style: TextStyle(
+                                  color: gender == '남자'
+                                      ? AppColors.deepTeal
+                                      : Colors.grey,
+                                ),
+                              ),
+                            ),
+                          ),
+                        ),
+                        SizedBox(width: 8),
+                        Expanded(
+                          child: SizedBox(
+                            height: 50, // Adjust the height as needed
+                            child: OutlinedButton(
+                              onPressed: () {
+                                setState(() {
+                                  gender = '여자';
+                                });
+                              },
+                              style: OutlinedButton.styleFrom(
+                                backgroundColor: gender == '여자'
+                                    ? AppColors.softTeal
+                                    : Colors.white,
+                                side: BorderSide(
+                                  color: gender == '여자'
+                                      ? AppColors.deepTeal
+                                      : Colors.grey,
+                                ),
+                                shape: RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(10.0),
+                                ),
+                              ),
+                              child: Text(
+                                '여성',
+                                style: TextStyle(
+                                  color: gender == '여자'
+                                      ? AppColors.deepTeal
+                                      : Colors.grey,
+                                ),
+                              ),
+                            ),
+                          ),
+                        ),
+                      ],
+                    )
                   ],
                 ),
               ),
+
               Gaps.h20,
               Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   Expanded(
-                    flex: 2,
+                    flex: 3,
                     child: EmailTextBox(
                       onChanged: (value) {
                         setState(() {
@@ -218,25 +300,25 @@ class _SignUpPageState extends State<SignUpPage> {
                       },
                     ), // 이메일 입력란
                   ),
-                  Gaps.w16,
+                  SizedBox(width: 8),
                   Expanded(
-                    flex: 1,
+                    flex: 2,
                     child: SendVerificationButton(
                       email: email,
-                      onPressed: () async{
-                        onSendVerificationButtonClicked;
+                      onPressed: () async {
+                        onSendVerificationButtonClicked();
                         await apiClient.idCheck(email);
                       },
                     ), // 인증번호 전송 버튼
                   ),
                 ],
               ),
+
               Gaps.h20,
               Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   Expanded(
-                    flex: 2,
+                    flex: 3,
                     child: Verification(
                       onChanged: (value) {
                         setState(() {
@@ -248,21 +330,21 @@ class _SignUpPageState extends State<SignUpPage> {
                       timerStarted: _timerStarted,
                     ),
                   ),
-                  Gaps.w16,
+                  SizedBox(width: 8),
                   Expanded(
-                    flex: 1,
+                    flex: 2,
                     child: VerificationButton(
                       onPressed: () async {
                         // 인증번호 확인 로직 구현
                         print('인증번호 확인 버튼이 클릭되었습니다.');
-                        //await mailTokenCheck(email, code);
                         await apiClient.mailCheck(email, emailCode!);
                       },
                     ),
                   ),
                 ],
-              ), // 인증번호 확인 버튼
-              Gaps.h40,
+              ),
+
+              Gaps.h20,
               PasswordFieldsContainer(
                 onPasswordChanged: (password) {
                   setState(() {
@@ -270,7 +352,7 @@ class _SignUpPageState extends State<SignUpPage> {
                   });
                 },
               ), // 비밀번호 입력란
-              Gaps.h32,
+              Gaps.h20,
               LabeledCheckboxExample(
                 label: '개인정보 처리방침에 동의합니다.',
                 value: privacyPolicyAccepted,
@@ -294,11 +376,12 @@ class _SignUpPageState extends State<SignUpPage> {
                 onPressed: () async {
                   onSignupButtonClicked();
                   print('회원가입 버튼 클릭');
-                  if(gender=="남자") {
-                    await apiClient.signUp(name, dateOfBirth!, email, "male", _password!, true);
+                  if (gender == "남자") {
+                    await apiClient.signUp(
+                        name, dateOfBirth!, email, "male", _password!, true);
                   } else {
-                    await apiClient.signUp(name, dateOfBirth!, email, "female", _password!, true);
-
+                    await apiClient.signUp(
+                        name, dateOfBirth!, email, "female", _password!, true);
                   }
                 }, // 회원가입 버튼 클릭 시 함수 실행
                 style: ButtonStyle(
@@ -386,11 +469,12 @@ class _VerificationState extends State<Verification> {
           style: AppTextStyles.body5M14,
         ),
         Padding(
-          padding: EdgeInsets.only(top: 18.0), // 위쪽에 18.0의 패딩 추가
+          padding: EdgeInsets.only(top: 0.0), // 위쪽에 0.0의 패딩 추가
           child: Stack(
             alignment: Alignment.centerRight,
             children: [
               TextField(
+                cursorColor: AppColors.gr600,
                 controller: _controller,
                 onChanged: (value) {
                   widget.onChanged(value);
@@ -399,8 +483,27 @@ class _VerificationState extends State<Verification> {
                   letterSpacing: 1.5,
                 ),
                 decoration: InputDecoration(
+                  border: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(4.0),
+                    borderSide: BorderSide(
+                      color: AppColors.gr600, // The color of the border
+                    ),
+                  ),
+                  enabledBorder: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(4.0),
+                    borderSide: BorderSide(
+                      color: AppColors
+                          .gr600, // The color of the border when enabled
+                    ),
+                  ),
+                  focusedBorder: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(4.0),
+                    borderSide: BorderSide(
+                      color: AppColors
+                          .gr600, // The color of the border when focused
+                    ),
+                  ),
                   contentPadding: EdgeInsets.fromLTRB(12, 10, 12, 10),
-                  border: OutlineInputBorder(),
                 ),
               ),
               Positioned(
@@ -500,7 +603,7 @@ class LabeledCheckboxExample extends StatelessWidget {
         onChanged(!value);
       },
       child: Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 20.0),
+        padding: const EdgeInsets.symmetric(horizontal: 4.0),
         child: Row(
           children: <Widget>[
             Expanded(
@@ -579,14 +682,32 @@ class PasswordTextBox extends StatelessWidget {
           style: AppTextStyles.body5M14,
         ),
         TextField(
+          cursorColor: AppColors.gr600,
           style: TextStyle(
             letterSpacing: 1.5, // 글자 간격 조절
           ),
           onChanged: onPasswordChanged,
           obscureText: true,
-          decoration: const InputDecoration(
+          decoration: InputDecoration(
+            border: OutlineInputBorder(
+              borderRadius: BorderRadius.circular(4.0),
+              borderSide: BorderSide(
+                color: AppColors.gr600, // The color of the border
+              ),
+            ),
+            enabledBorder: OutlineInputBorder(
+              borderRadius: BorderRadius.circular(4.0),
+              borderSide: BorderSide(
+                color: AppColors.gr600, // The color of the border when enabled
+              ),
+            ),
+            focusedBorder: OutlineInputBorder(
+              borderRadius: BorderRadius.circular(4.0),
+              borderSide: BorderSide(
+                color: AppColors.gr600, // The color of the border when focused
+              ),
+            ),
             contentPadding: EdgeInsets.fromLTRB(12, 10, 12, 10),
-            border: OutlineInputBorder(),
           ),
         ),
       ],
@@ -614,14 +735,32 @@ class PasswordCheckTextBox extends StatelessWidget {
           style: AppTextStyles.body5M14,
         ),
         TextField(
+          cursorColor: AppColors.gr600,
           onChanged: onConfirmPasswordChanged,
           style: TextStyle(
             letterSpacing: 1.5, // 글자 간격 조절
           ),
           obscureText: true,
           decoration: InputDecoration(
+            border: OutlineInputBorder(
+              borderRadius: BorderRadius.circular(4.0),
+              borderSide: BorderSide(
+                color: AppColors.gr600, // The color of the border
+              ),
+            ),
+            enabledBorder: OutlineInputBorder(
+              borderRadius: BorderRadius.circular(4.0),
+              borderSide: BorderSide(
+                color: AppColors.gr600, // The color of the border when enabled
+              ),
+            ),
+            focusedBorder: OutlineInputBorder(
+              borderRadius: BorderRadius.circular(4.0),
+              borderSide: BorderSide(
+                color: AppColors.gr600, // The color of the border when focused
+              ),
+            ),
             contentPadding: EdgeInsets.fromLTRB(12, 10, 12, 10),
-            border: OutlineInputBorder(),
             errorText: passwordsMatch ? null : '비밀번호가 일치하지 않습니다',
           ),
         ),
@@ -657,6 +796,7 @@ class _EmailTextBoxState extends State<EmailTextBox> {
           style: AppTextStyles.body5M14,
         ),
         TextField(
+          cursorColor: AppColors.gr600,
           controller: _controller,
           onChanged: (value) {
             setState(() {
@@ -674,9 +814,25 @@ class _EmailTextBoxState extends State<EmailTextBox> {
                 _isDefaultText ? Colors.grey : Colors.black, // 기본 텍스트는 회색으로 표시
           ),
           decoration: InputDecoration(
+            border: OutlineInputBorder(
+              borderRadius: BorderRadius.circular(4.0),
+              borderSide: BorderSide(
+                color: AppColors.gr600, // The color of the border
+              ),
+            ),
+            enabledBorder: OutlineInputBorder(
+              borderRadius: BorderRadius.circular(4.0),
+              borderSide: BorderSide(
+                color: AppColors.gr600, // The color of the border when enabled
+              ),
+            ),
+            focusedBorder: OutlineInputBorder(
+              borderRadius: BorderRadius.circular(4.0),
+              borderSide: BorderSide(
+                color: AppColors.gr600, // The color of the border when focused
+              ),
+            ),
             contentPadding: EdgeInsets.fromLTRB(12, 10, 12, 10),
-            border: OutlineInputBorder(),
-            labelText: _isDefaultText ? null : '이메일', // 기본 텍스트는 라벨로 표시하지 않음
             hintText:
                 _isDefaultText ? 'promise@gmail.com' : null, // 기본 텍스트는 힌트로 표시
             hintStyle: TextStyle(
@@ -721,6 +877,7 @@ class _NameTextBoxState extends State<NameTextBox> {
           style: AppTextStyles.body5M14,
         ),
         TextField(
+          cursorColor: AppColors.gr600,
           controller: _controller,
           onChanged: (value) {
             setState(() {
@@ -738,8 +895,25 @@ class _NameTextBoxState extends State<NameTextBox> {
             color: _isDefaultText ? Colors.grey : Colors.black,
           ),
           decoration: InputDecoration(
+            border: OutlineInputBorder(
+              borderRadius: BorderRadius.circular(4.0),
+              borderSide: BorderSide(
+                color: AppColors.gr600, // The color of the border
+              ),
+            ),
+            enabledBorder: OutlineInputBorder(
+              borderRadius: BorderRadius.circular(4.0),
+              borderSide: BorderSide(
+                color: AppColors.gr600, // The color of the border when enabled
+              ),
+            ),
+            focusedBorder: OutlineInputBorder(
+              borderRadius: BorderRadius.circular(4.0),
+              borderSide: BorderSide(
+                color: AppColors.gr600, // The color of the border when focused
+              ),
+            ),
             contentPadding: EdgeInsets.fromLTRB(12, 10, 12, 10),
-            border: OutlineInputBorder(),
             labelText: _isDefaultText ? null : '이름', // 기본 텍스트는 라벨로 표시하지 않음
             hintText: _isDefaultText ? '홍길동' : null, // 기본 텍스트는 힌트로 표시
           ),
@@ -800,7 +974,7 @@ class SendVerificationButton extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Row(
-      mainAxisAlignment: MainAxisAlignment.end,
+      mainAxisAlignment: MainAxisAlignment.center,
       children: [
         Padding(
           padding: EdgeInsets.only(top: 18.0), // 버튼 위쪽에 10.0의 패딩 추가

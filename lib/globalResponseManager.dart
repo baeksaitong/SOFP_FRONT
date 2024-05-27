@@ -1,8 +1,9 @@
 import 'dart:convert';
-import 'dart:ffi';
+//import 'dart:ffi';
 
 class GlobalResponseManager {
-  static final GlobalResponseManager _instance = GlobalResponseManager._internal();
+  static final GlobalResponseManager _instance =
+      GlobalResponseManager._internal();
   List<String> responses = [];
 
   factory GlobalResponseManager() {
@@ -80,7 +81,13 @@ class DrugInfo {
   final String imgUrl;
   bool isBookmarked;
 
-  DrugInfo({required this.serialNumber, required this.name, required this.classification, required this.enterprise, required this.imgUrl, required this.isBookmarked});
+  DrugInfo(
+      {required this.serialNumber,
+      required this.name,
+      required this.classification,
+      required this.enterprise,
+      required this.imgUrl,
+      required this.isBookmarked});
 
   factory DrugInfo.fromJson(Map<String, dynamic> json) {
     return DrugInfo(

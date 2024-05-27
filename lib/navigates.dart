@@ -1,9 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:sopf_front/addAllergyPage.dart';
 import 'package:sopf_front/pillDetails.dart';
+import 'package:sopf_front/addAllergy.dart';
 import 'package:sopf_front/searchResult.dart';
 import 'package:sopf_front/signUp.dart';
 import 'package:sopf_front/textSearch.dart';
+import 'package:sopf_front/preferencesPage.dart';
+import 'package:sopf_front/favoritePage.dart';
 
 import 'home.dart';
 import 'main.dart';
@@ -41,5 +44,16 @@ void navigateToSignUp() {
 void navigateToPillDetail() {
   navigatorKey.currentState?.push(
     MaterialPageRoute(builder: (context) => PillDetails()),
+  );
+}
+void navigateToPreference() {
+  navigatorKey.currentState?.push(
+    MaterialPageRoute(builder: (context) => SettingsPage()),
+  );
+}
+
+void navigateToFavorite() {
+  navigatorKey.currentState?.push(
+    MaterialPageRoute(builder: (context) => FavoritesPage()),
   );
 }
