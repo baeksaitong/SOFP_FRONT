@@ -70,8 +70,8 @@ class _AddAllergyPageState extends State<AddAllergyPage> {
                   mainAxisSize: MainAxisSize.min,
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Text('선택된 항목', style: AppTextStyles.body2M16),
-                    Gaps.h10,
+                    Text('알레르기 & 질병 추가하기', style: AppTextStyles.title1B24),
+                    Gaps.h20,
                     Wrap(
                       spacing: 8.0,
                       runSpacing: 8.0,
@@ -92,18 +92,19 @@ class _AddAllergyPageState extends State<AddAllergyPage> {
                         );
                       }).toList(),
                     ),
-                    Text('알레르기 & 질병 추가하기', style: AppTextStyles.title1B24),
-                    Gaps.h10,
+                    Gaps.h20,
                     TextField(
                       onChanged: onSearch,
                       decoration: InputDecoration(
+                        enabledBorder: InputBorder.none,
+                        focusedBorder: InputBorder.none,
+                        filled: true,
+                        fillColor: AppColors.gr250,
                         hintText: '질병 또는 알레르기를 검색해 보세요',
                         hintStyle: AppTextStyles.body5M14,
                       ),
                     ),
-                    Gaps.h10,
-                    Text('연관 검색어', style: AppTextStyles.body2M16),
-                    Gaps.h10,
+                    Gaps.h20,
                     Wrap(
                       spacing: 8.0,
                       runSpacing: 8.0,
@@ -137,17 +138,25 @@ class _AddAllergyPageState extends State<AddAllergyPage> {
                     ),
                     Gaps.h20,
                     Gaps.h20,
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.end,
-                      children: [
-                        TextButton(
-                          onPressed: saveSelections,
-                          child: Text(
-                            '저장하기',
-                            style: AppTextStyles.body5M14,
+                    SizedBox(
+                      width: double.infinity,
+                      child: ElevatedButton(
+                        onPressed: () {
+                          saveSelections();
+                        },
+                        style: ElevatedButton.styleFrom(
+                          foregroundColor: AppColors.deepTeal,
+                          backgroundColor: AppColors.softTeal,
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(10),
                           ),
                         ),
-                      ],
+                        child: Text(
+                          '저장하기',
+                          style: AppTextStyles.body1S16
+                              .copyWith(color: AppColors.deepTeal),
+                        ),
+                      ),
                     ),
                   ],
                 ),
@@ -210,7 +219,7 @@ class _AddAllergyPageState extends State<AddAllergyPage> {
               width: double.infinity,
               decoration: BoxDecoration(
                 borderRadius: BorderRadius.circular(10),
-                color: AppColors.gr150,
+                color: AppColors.gr250,
               ),
               child: TextButton(
                 onPressed: showBottomSheet,
@@ -222,12 +231,8 @@ class _AddAllergyPageState extends State<AddAllergyPage> {
               ),
             ),
             Spacer(),
-            Container(
+            SizedBox(
               width: double.infinity,
-              decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(10),
-                color: AppColors.softTeal,
-              ),
               child: ElevatedButton(
                 onPressed: () {
                   navigateToHome();
@@ -240,7 +245,7 @@ class _AddAllergyPageState extends State<AddAllergyPage> {
                   ),
                 ),
                 child: Text(
-                  '바로 시작하기',
+                  '약속 시작하기',
                   style: AppTextStyles.body1S16
                       .copyWith(color: AppColors.deepTeal),
                 ),
