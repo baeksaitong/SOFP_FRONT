@@ -4,6 +4,7 @@ import 'package:sopf_front/searchResult.dart';
 import 'package:sopf_front/signUp.dart';
 import 'package:sopf_front/textSearch.dart';
 import 'package:sopf_front/preferencesPage.dart';
+import 'package:sopf_front/favoritePage.dart';
 
 import 'home.dart';
 import 'main.dart';
@@ -41,5 +42,11 @@ void navigateToSignUp() {
 void navigateToPreference() {
   navigatorKey.currentState?.push(
     MaterialPageRoute(builder: (context) => SettingsPage()),
+  );
+}
+
+void navigateToFavorite() {
+  navigatorKey.currentState?.push(
+    MaterialPageRoute(builder: (context) => FavoritesPage()),
   );
 }

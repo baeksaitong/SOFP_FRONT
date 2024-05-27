@@ -485,6 +485,7 @@ class _MyPageState extends State<MyPage> {
         Gaps.h16,
         buildNavigationItem(context, Icons.star, "즐겨찾기", () {
           // 즐겨찾기 페이지로 이동하는 기능 구현
+          navigateToFavorite();
         }),
         Gaps.h16,
         buildNavigationItem(context, Icons.history, "검색 히스토리", () {
