@@ -2,6 +2,7 @@
   import 'package:flutter/material.dart';
   import 'package:flutter/widgets.dart';
 import 'package:sopf_front/apiClient.dart';
+import 'package:sopf_front/navigates.dart';
   import 'package:sopf_front/shapeSearch.dart';
 
   import 'appColors.dart';
@@ -37,7 +38,12 @@ import 'package:sopf_front/apiClient.dart';
     void _toggleBookmark(int index) {
       setState(() {
         drugs[index].isBookmarked = !drugs[index].isBookmarked;
-        apiClient.favoriteAdd("COMMON(common)/IMAGE(image)", drugs[index].serialNumber, drugs[index].imgUrl);
+        print('${drugs[index].serialNumber}, ${drugs[index].imgUrl}');
+        if (drugs[index].isBookmarked == true) {
+          apiClient.favoritePost(context, drugs[index].serialNumber, drugs[index].imgUrl);
+        } else {
+          apiClient.favoriteDelete(context, drugs[index].serialNumber);
+        }
       });
     }
 
@@ -54,7 +60,7 @@ import 'package:sopf_front/apiClient.dart';
     @override
     void initState() {
       super.initState();
-      drugs = GlobalManager().drugs;  // GlobalManager에서 직접 데이터를 가져옵니다.
+      drugs = DrugsManager().drugs;  // GlobalManager에서 직접 데이터를 가져옵니다.
     }
     @override
     Widget build(BuildContext context) {
@@ -535,7 +541,8 @@ import 'package:sopf_front/apiClient.dart';
                     final drug = drugs[index];
                     return GestureDetector(
                       onTap: () async{
-                        await apiClient.searchInfoPill(drug.serialNumber.toString(), context);
+                        await apiClient.searchGet(context, drug.serialNumber);
+                        navigateToPillDetail();
                         },
                         child: Container(
                             width: 336,

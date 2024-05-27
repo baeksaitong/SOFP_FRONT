@@ -44,6 +44,7 @@ void main() async{
     MultiProvider(
       providers: [
         ChangeNotifierProvider(create: (_) => ProfileProvider()),
+        ChangeNotifierProvider(create: (_) => DrugInfoDetailProvider()),
       ],
       child: MyApp(camera: firstCamera),
     ),

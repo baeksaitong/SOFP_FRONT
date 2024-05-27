@@ -20,8 +20,60 @@ class GlobalResponseManager {
   }
 }
 
+class DrugInfoDetail {
+  final String? name;
+  final String? enterpriseName;
+  final String? proOrGeneral;
+  final String? permitDate;
+  final String? chart;
+  final String? material;
+  final String? storageMethod;
+  final String? validTerm;
+  final String? efficacyEffect;
+  final String? dosageUsage;
+  final String? cautionGeneral;
+  final String? cautionProfessional;
+  final List<String>? warningInfo;
+
+  DrugInfoDetail({
+    this.name,
+    this.enterpriseName,
+    this.proOrGeneral,
+    this.permitDate,
+    this.chart,
+    this.material,
+    this.storageMethod,
+    this.validTerm,
+    this.efficacyEffect,
+    this.dosageUsage,
+    this.cautionGeneral,
+    this.cautionProfessional,
+    this.warningInfo,
+  });
+
+  factory DrugInfoDetail.fromJson(Map<String, dynamic> json) {
+    return DrugInfoDetail(
+      name: json['name'] as String?,
+      enterpriseName: json['enterpriseName'] as String?,
+      proOrGeneral: json['proOrGeneral'] as String?,
+      permitDate: json['permitDate'] as String?,
+      chart: json['chart'] as String?,
+      material: json['material'] as String?,
+      storageMethod: json['storageMethod'] as String?,
+      validTerm: json['validTerm'] as String?,
+      efficacyEffect: json['efficacyEffect'] as String?,
+      dosageUsage: json['dosageUsage'] as String?,
+      cautionGeneral: json['cautionGeneral'] as String?,
+      cautionProfessional: json['cautionProfessional'] as String?,
+      warningInfo: (json['warningInfo'] as List<dynamic>?)?.map((e) => e as String).toList(),
+    );
+  }
+}
+
+
+
 class DrugInfo {
-  final String serialNumber;
+  final int serialNumber;
   final String name;
   final String classification;
   final String enterprise;
@@ -42,16 +94,16 @@ class DrugInfo {
   }
 }
 
-class GlobalManager {
-  static final GlobalManager _instance = GlobalManager._internal();
+class DrugsManager {
+  static final DrugsManager _instance = DrugsManager._internal();
 
   List<DrugInfo> drugs = [];
 
-  factory GlobalManager() {
+  factory DrugsManager() {
     return _instance;
   }
 
-  GlobalManager._internal();
+  DrugsManager._internal();
 
   void updateDrugs(String jsonResponse) {
     final data = jsonDecode(jsonResponse)['result'] as List;

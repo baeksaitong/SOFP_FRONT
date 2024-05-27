@@ -12,3 +12,14 @@ class ProfileProvider with ChangeNotifier {
     notifyListeners();
   }
 }
+
+class DrugInfoDetailProvider with ChangeNotifier {
+  DrugInfoDetail? _currentPillInfoDetailProvider;
+
+  DrugInfoDetail? get currentDrugInfoDetail => _currentPillInfoDetailProvider;
+
+  void setCurrentDrugInfoDetail(DrugInfoDetail drugInfoDetail) {
+    _currentPillInfoDetailProvider = drugInfoDetail;
+    notifyListeners();
+  }
+}
