@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:sopf_front/addAllergyPage.dart';
+import 'package:sopf_front/addAllergy.dart';
 import 'package:sopf_front/searchResult.dart';
 import 'package:sopf_front/signUp.dart';
 import 'package:sopf_front/textSearch.dart';
