@@ -3,6 +3,7 @@ import 'package:sopf_front/addAllergyPage.dart';
 import 'package:sopf_front/searchResult.dart';
 import 'package:sopf_front/signUp.dart';
 import 'package:sopf_front/textSearch.dart';
+import 'package:sopf_front/preferencesPage.dart';
 
 import 'home.dart';
 import 'main.dart';
@@ -34,5 +35,11 @@ void navigateToSearchResult() {
 void navigateToSignUp() {
   navigatorKey.currentState?.push(
     MaterialPageRoute(builder: (context) => SignUpPage()),
+  );
+}
+
+void navigateToPreference() {
+  navigatorKey.currentState?.push(
+    MaterialPageRoute(builder: (context) => SettingsPage()),
   );
 }
