@@ -31,4 +31,5 @@ class AppColors {
   static const Color customBlue = Color(0xFFA48DE5);
   static const Color customTeal = Color(0xFF71AEBB);
   static const Color customCyan = Color(0xFF606CAC);
+  static const Color red = Color.fromARGB(245, 255, 0, 0);
 }
