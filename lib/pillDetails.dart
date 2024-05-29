@@ -4,6 +4,7 @@ import 'package:sopf_front/provider.dart';
 import 'appTextStyles.dart'; // 원하는 글꼴 스타일이 정의된 파일을 임포트
 import 'appColors.dart'; // 색상 정의 파일을 임포트
 import 'gaps.dart';
+import 'globalResponseManager.dart';
 
 class PillDetails extends StatefulWidget {
   const PillDetails({super.key});
@@ -108,32 +109,70 @@ class _PillDetailsState extends State<PillDetails> {
             style: AppTextStyles.body4S14,
           ),
           Gaps.h4,
-          Text(
-            currentDrugInfoDetail?.efficacyEffect ?? 'No efficacy information',
-            style: AppTextStyles.body5M14,
-          ),
+          buildDetailSection('효능효과', currentDrugInfoDetail?.efficacyEffect),
           Gaps.h20,
           Text(
             '용법용량',
             style: AppTextStyles.body4S14,
           ),
           Gaps.h4,
-          Text(
-            currentDrugInfoDetail?.dosageUsage ?? 'No dosage information',
-            style: AppTextStyles.body5M14,
-          ),
+          buildDetailSection('용법용량', currentDrugInfoDetail?.dosageUsage),
           Gaps.h20,
           Text(
             '주의사항',
             style: AppTextStyles.body4S14,
           ),
           Gaps.h4,
-          Text(
-            currentDrugInfoDetail?.cautionGeneral ?? 'No caution information',
-            style: AppTextStyles.body5M14,
-          ),
+          buildDetailSection('주의사항', currentDrugInfoDetail?.cautionGeneral),
         ],
       ),
+    );
+  }
+
+  Widget buildDetailSection(String title, DetailSection? section) {
+    if (section == null) {
+      return Text(
+        '$title 정보 없음',
+        style: AppTextStyles.body5M14,
+      );
+    }
+
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Text(
+          title,
+          style: AppTextStyles.body4S14,
+        ),
+        Gaps.h4,
+        if (section.title != null)
+          Text(
+            section.title!,
+            style: AppTextStyles.body5M14,
+          ),
+        ...?section.sectionList?.map((subSection) => buildDetailSection(subSection.title!, subSection)).toList(),
+        ...?section.articleList?.map((article) => buildArticle(article)).toList(),
+      ],
+    );
+  }
+
+  Widget buildArticle(Article article) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        if (article.title != null)
+          Text(
+            article.title!,
+            style: AppTextStyles.body5M14,
+          ),
+        ...?article.paragraphList?.map((paragraph) => Padding(
+          padding: const EdgeInsets.only(left: 16.0, top: 4.0),
+          child: Text(
+            paragraph.description ?? '',
+            style: AppTextStyles.body5M14,
+          ),
+        )).toList(),
+      ],
     );
   }
 }

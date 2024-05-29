@@ -64,6 +64,7 @@ class HomePageContent extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final currentProfile = Provider.of<ProfileProvider>(context, listen: false).currentProfile;
     return SingleChildScrollView(
       child: Column(
         children: [
@@ -75,7 +76,7 @@ class HomePageContent extends StatelessWidget {
                   mainAxisAlignment: MainAxisAlignment.start,
                   children: [
                     Text(
-                      '000님\n좋은 하루 보내세요!',
+                      '${currentProfile?.name}\n좋은 하루 보내세요!',
                       style: AppTextStyles.title1B24,
                     ),
                     Spacer(), // Flexible space

@@ -456,18 +456,16 @@ class APIClient {
   }
 
   Future<void> searchGet(BuildContext context, int pillSerialNumber) async {
-    final currentProfile =
-        Provider.of<ProfileProvider>(context, listen: false).currentProfile;
+    final currentProfile = Provider.of<ProfileProvider>(context, listen: false).currentProfile;
     final String? accessToken = await _jwtManager.getAccessToken();
     print('$pillSerialNumber, ${currentProfile?.id}');
-    final url = Uri.parse(
-        '$baseUrl/app/search/$pillSerialNumber?profileId=${currentProfile?.id}');
+    final url = Uri.parse('$baseUrl/app/search/$pillSerialNumber?profileId=${currentProfile?.id}');
     final response = await http.get(
       url,
       headers: <String, String>{
         'Content-Type': 'application/json; charset=UTF-8',
         'Accept': 'application/json',
-        'Authorization': 'Bearer $accessToken', // 인증 헤더 추가
+        'Authorization': 'Bearer $accessToken',
       },
     );
 
@@ -476,14 +474,14 @@ class APIClient {
       print('검색완료: ${utf8.decode(response.bodyBytes)}');
       final jsonResponse = json.decode(utf8.decode(response.bodyBytes));
       final drugInfoDetail = DrugInfoDetail.fromJson(jsonResponse);
-      Provider.of<DrugInfoDetailProvider>(context, listen: false)
-          .setCurrentDrugInfoDetail(drugInfoDetail);
+      Provider.of<DrugInfoDetailProvider>(context, listen: false).setCurrentDrugInfoDetail(drugInfoDetail);
     } else {
       // 실패 처리
       print(response.statusCode);
       print('실패: ${utf8.decode(response.bodyBytes)}');
     }
   }
+
 
   Future<void> favoritePost(
       BuildContext context, int serialNumber, String imageUrl) async {
@@ -557,9 +555,8 @@ class APIClient {
     }
   }
 
-  Future<List<String>> favoriteGet(BuildContext context) async {
-    final currentProfile =
-        Provider.of<ProfileProvider>(context, listen: false).currentProfile;
+  Future<void> favoriteGet(BuildContext context) async {
+    final currentProfile = Provider.of<ProfileProvider>(context, listen: false).currentProfile;
     final String? accessToken = await _jwtManager.getAccessToken();
     final url = Uri.parse('$baseUrl/app/favorite/${currentProfile?.id}');
     final response = await http.get(url, headers: <String, String>{
@@ -571,17 +568,12 @@ class APIClient {
     if (response.statusCode == 200) {
       // 성공적으로 처리된 경우
       print('즐겨찾기 조회 성공: ${utf8.decode(response.bodyBytes)}');
+      FavoritesManager().updateFavorites(utf8.decode(response.bodyBytes));
+
     } else {
       // 실패 처리
       print(response.statusCode);
       print('즐겨찾기 조회 실패: ${utf8.decode(response.bodyBytes)}');
-    }
-
-    if (response.statusCode == 200) {
-      List<dynamic> jsonResponse = jsonDecode(response.body);
-      return List<String>.from(jsonResponse);
-    } else {
-      throw Exception('Failed to load allergies and diseases');
     }
   }
 }

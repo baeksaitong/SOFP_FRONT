@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:sopf_front/apiClient.dart';
 import 'package:sopf_front/appColors.dart';
 import 'package:sopf_front/appTextStyles.dart';
 import 'package:sopf_front/navigates.dart';
@@ -477,6 +478,7 @@ class _MyPageState extends State<MyPage> {
   }
 
   Widget buildPageNavigationSection(BuildContext context) {
+    final APIClient apiClient = APIClient();
     return Column(
       children: [
         buildNavigationItem(context, Icons.person, "멀티 프로필", () {

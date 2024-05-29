@@ -1,20 +1,47 @@
 import 'package:flutter/material.dart';
 
-class FavoritesPage extends StatelessWidget {
+import 'apiClient.dart';
+import 'appTextStyles.dart';
+import 'gaps.dart';
+import 'globalResponseManager.dart';
+import 'navigates.dart';
+
+class FavoritesPage extends StatefulWidget {
   const FavoritesPage({super.key});
 
   @override
-  Widget build(BuildContext context) {
-    final List<Map<String, String>> favorites = [
-      {
-        'name': '가스디알정50밀리그램',
-        'manufacturer': '일동제약',
-        'category': '기타소화기관용약 | 일반 의약품',
-        'image': 'assets/image.png'
-      },
-      // 추가 항목을 여기에 추가
-    ];
+  State<FavoritesPage> createState() => _FavoritesPageState();
+}
 
+class _FavoritesPageState extends State<FavoritesPage> {
+  final APIClient apiClient = APIClient();
+  List<FavoriteInfo> favorites = [];
+
+  @override
+  void initState() {
+    super.initState();
+    _loadFavoriteDrugs();
+  }
+
+  Future<void> _loadFavoriteDrugs() async {
+    await apiClient.favoriteGet(context);
+    setState(() {
+      favorites = FavoritesManager().favorites;
+    });
+  }
+  void _toggleBookmark(int index) {
+    setState(() {
+      favorites[index].isBookmarked = !favorites[index].isBookmarked;
+      print('${favorites[index].serialNumber}, ${favorites[index].imgUrl}');
+      if (favorites[index].isBookmarked == true) {
+        apiClient.favoritePost(context, favorites[index].serialNumber, favorites[index].imgUrl);
+      } else {
+        apiClient.favoriteDelete(context, favorites[index].serialNumber);
+      }
+    });
+  }
+  @override
+  Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
         title: const Text('즐겨찾기', style: TextStyle(color: Colors.black)),
@@ -28,28 +55,77 @@ class FavoritesPage extends StatelessWidget {
         centerTitle: true,
         elevation: 0,
       ),
-      body: ListView.builder(
-        itemCount: favorites.length,
-        itemBuilder: (context, index) {
-          final favorite = favorites[index];
-          return ListTile(
-            leading: Image.asset(favorite['image']!),
-            title: Text(favorite['name']!,
-                style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold)),
-            subtitle: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text('제품명: ${favorite['name']}'),
-                Text('제조회사: ${favorite['manufacturer']}'),
-                Text('분류: ${favorite['category']}'),
-              ],
-            ),
-            trailing: Icon(Icons.star, color: Colors.teal),
-            isThreeLine: true,
-            contentPadding: EdgeInsets.all(8.0),
-          );
-        },
-      ),
+      body: Padding(
+        padding: const EdgeInsets.symmetric(vertical: 8.0),
+        child: ListView.separated(
+            itemCount: favorites.length,
+            itemBuilder: (context, index) {
+              final drug = favorites[index];
+              return GestureDetector(
+                onTap: () async{
+                  await apiClient.searchGet(context, drug.serialNumber);
+                  navigateToPillDetail();
+                },
+                child: Container(
+                  width: 336,
+                  height: 96,
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Image.network(
+                        drug.imgUrl,
+                        width: 96,
+                        height: 96,
+                      ),
+                      Gaps.w16,
+                      Container(
+                        width: 200,
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Text(
+                              drug.name,
+                              style: AppTextStyles.body1S16,
+                              overflow: TextOverflow.ellipsis,
+                            ),
+                            Gaps.h6,
+                            Text(
+                              '제품명 : ${drug.name}',
+                              style: AppTextStyles.body5M14,
+                              overflow: TextOverflow.ellipsis,
+                            ),
+                            Text(
+                              '제조회사 : ${drug.enterprise}',
+                              style: AppTextStyles.body5M14,
+                              overflow: TextOverflow.ellipsis,
+                            ),
+                            Text(
+                              '분류 : ${drug.classification}',
+                              style: AppTextStyles.body5M14,
+                              overflow: TextOverflow.ellipsis,
+                            )
+                          ],
+                        ),
+                      ),
+                      Align(
+                        alignment: Alignment.topRight,
+                        child: GestureDetector(
+                          onTap: () => _toggleBookmark(index),
+                          child: Image.asset(
+                            drug.isBookmarked ? 'assets/bookmarkclicked.png' : 'assets/bookmark.png',
+                            width: 20,
+                            height: 20,
+                          ),
+                        ),
+                      ),
+                      Gaps.h16,
+                    ],
+                  ),
+                ),
+              );
+            }, separatorBuilder: (context, index) => Gaps.h8,
+        ),
+      )
     );
   }
 }

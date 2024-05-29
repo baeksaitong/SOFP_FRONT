@@ -1,19 +1,17 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:sopf_front/apiClient.dart';
+import 'package:sopf_front/navigates.dart';
 
 import 'appColors.dart';
 import 'appTextStyles.dart';
 import 'gaps.dart';
 
 final GlobalKey<_RgbButtonState> rgbButtonKey = GlobalKey<_RgbButtonState>();
-final GlobalKey<_ShapeButtonState> shapeButtonKey =
-    GlobalKey<_ShapeButtonState>();
-final GlobalKey<_FormulationButtonState> formulationButtonKey =
-    GlobalKey<_FormulationButtonState>();
-final GlobalKey<_DivideLineButtonState> divideLineButtonKey =
-    GlobalKey<_DivideLineButtonState>();
-final GlobalKey<_KeywordFieldState> keywordKey =
-    GlobalKey<_KeywordFieldState>();
+final GlobalKey<_ShapeButtonState> shapeButtonKey = GlobalKey<_ShapeButtonState>();
+final GlobalKey<_FormulationButtonState> formulationButtonKey = GlobalKey<_FormulationButtonState>();
+final GlobalKey<_DivideLineButtonState> divideLineButtonKey = GlobalKey<_DivideLineButtonState>();
+final GlobalKey<_KeywordFieldState> keywordKey = GlobalKey<_KeywordFieldState>();
 
 class ShapeSearch extends StatefulWidget {
   const ShapeSearch({super.key});
@@ -23,6 +21,8 @@ class ShapeSearch extends StatefulWidget {
 }
 
 class _ShapeSearchState extends State<ShapeSearch> {
+  APIClient apiClient = APIClient();
+
   @override
   Widget build(BuildContext context) {
     return Column(
@@ -124,7 +124,7 @@ class _ShapeSearchState extends State<ShapeSearch> {
                             ),
                             child: Text(
                               '초기화',
-                              style: AppTextStyles.body1S16,
+                              style: AppTextStyles.body1S16.copyWith(color: AppColors.gr600),
                               selectionColor: AppColors.deepTeal,
                             ),
                           ),
@@ -152,11 +152,9 @@ class _ShapeSearchState extends State<ShapeSearch> {
                 // 여기에서 선택된 항목들의 상태를 로그로 출력
                 final color = rgbButtonKey.currentState?.finalText;
                 final shape = shapeButtonKey.currentState?.finalText;
-                final formulation =
-                    formulationButtonKey.currentState?.finalText;
+                final formulation = formulationButtonKey.currentState?.finalText;
                 final divideLine = divideLineButtonKey.currentState?.finalText;
-                final keyword =
-                    keywordKey.currentState?._keywordController.text;
+                final keyword = keywordKey.currentState?._keywordController.text;
 
                 // 선택된 항목 로그로 출력
                 debugPrint('입력한 키워드: $keyword');
@@ -166,21 +164,19 @@ class _ShapeSearchState extends State<ShapeSearch> {
                 debugPrint('선택된 분할선: $divideLine');
 
                 for (var item in colorItems) {
-                  item.isSelected =
-                      false; // 모든 colorItems의 isSelected를 false로 설정
+                  item.isSelected = false; // 모든 colorItems의 isSelected를 false로 설정
                 }
                 for (var item in shapeItems) {
-                  item.isSelected =
-                      false; // 모든 shapeItems isSelected를 false로 설정
+                  item.isSelected = false; // 모든 shapeItems isSelected를 false로 설정
                 }
                 for (var item in formulationItems) {
-                  item.isSelected =
-                      false; // 모든 formulationItems isSelected를 false로 설정
+                  item.isSelected = false; // 모든 formulationItems isSelected를 false로 설정
                 }
                 for (var item in divideLineItems) {
-                  item.isSelected =
-                      false; // 모든 divideLineItems isSelected를 false로 설정
+                  item.isSelected = false; // 모든 divideLineItems isSelected를 false로 설정
                 }
+                await apiClient.searchTextAndShape(context, null, shape, keyword, color, formulation, divideLine);
+                navigateToSearchResult();
               },
               style: OutlinedButton.styleFrom(
                 side: BorderSide.none,

@@ -30,10 +30,10 @@ class DrugInfoDetail {
   final String? material;
   final String? storageMethod;
   final String? validTerm;
-  final String? efficacyEffect;
-  final String? dosageUsage;
-  final String? cautionGeneral;
-  final String? cautionProfessional;
+  final DetailSection? efficacyEffect;
+  final DetailSection? dosageUsage;
+  final DetailSection? cautionGeneral;
+  final DetailSection? cautionProfessional;
   final List<String>? warningInfo;
 
   DrugInfoDetail({
@@ -62,14 +62,63 @@ class DrugInfoDetail {
       material: json['material'] as String?,
       storageMethod: json['storageMethod'] as String?,
       validTerm: json['validTerm'] as String?,
-      efficacyEffect: json['efficacyEffect'] as String?,
-      dosageUsage: json['dosageUsage'] as String?,
-      cautionGeneral: json['cautionGeneral'] as String?,
-      cautionProfessional: json['cautionProfessional'] as String?,
+      efficacyEffect: json['efficacyEffect'] != null ? DetailSection.fromJson(json['efficacyEffect']) : null,
+      dosageUsage: json['dosageUsage'] != null ? DetailSection.fromJson(json['dosageUsage']) : null,
+      cautionGeneral: json['cautionGeneral'] != null ? DetailSection.fromJson(json['cautionGeneral']) : null,
+      cautionProfessional: json['cautionProfessional'] != null ? DetailSection.fromJson(json['cautionProfessional']) : null,
       warningInfo: (json['warningInfo'] as List<dynamic>?)?.map((e) => e as String).toList(),
     );
   }
 }
+
+class DetailSection {
+  final String? title;
+  final List<DetailSection>? sectionList;
+  final List<Article>? articleList;
+
+  DetailSection({this.title, this.sectionList, this.articleList});
+
+  factory DetailSection.fromJson(Map<String, dynamic> json) {
+    return DetailSection(
+      title: json['title'] as String?,
+      sectionList: (json['sectionList'] as List<dynamic>?)
+          ?.map((e) => DetailSection.fromJson(e as Map<String, dynamic>))
+          .toList(),
+      articleList: (json['articleList'] as List<dynamic>?)
+          ?.map((e) => Article.fromJson(e as Map<String, dynamic>))
+          .toList(),
+    );
+  }
+}
+
+class Article {
+  final String? title;
+  final List<Paragraph>? paragraphList;
+
+  Article({this.title, this.paragraphList});
+
+  factory Article.fromJson(Map<String, dynamic> json) {
+    return Article(
+      title: json['title'] as String?,
+      paragraphList: (json['paragraphList'] as List<dynamic>?)
+          ?.map((e) => Paragraph.fromJson(e as Map<String, dynamic>))
+          .toList(),
+    );
+  }
+}
+
+class Paragraph {
+  final String? description;
+
+  Paragraph({this.description});
+
+  factory Paragraph.fromJson(Map<String, dynamic> json) {
+    return Paragraph(
+      description: json['description'] as String?,
+    );
+  }
+}
+
 
 
 
@@ -115,6 +164,51 @@ class DrugsManager {
   void updateDrugs(String jsonResponse) {
     final data = jsonDecode(jsonResponse)['result'] as List;
     drugs = data.map((json) => DrugInfo.fromJson(json)).toList();
+  }
+}
+
+class FavoriteInfo {
+  final int serialNumber;
+  final String name;
+  final String classification;
+  final String enterprise;
+  final String imgUrl;
+  bool isBookmarked;
+
+  FavoriteInfo(
+      {required this.serialNumber,
+        required this.name,
+        required this.classification,
+        required this.enterprise,
+        required this.imgUrl,
+        required this.isBookmarked});
+
+  factory FavoriteInfo.fromJson(Map<String, dynamic> json) {
+    return FavoriteInfo(
+      serialNumber: json['serialNumber'],
+      name: json['name'],
+      classification: json['classification'],
+      enterprise: json['enterprise'],
+      imgUrl: json['imgUrl'],
+      isBookmarked: true,
+    );
+  }
+}
+
+class FavoritesManager {
+  static final FavoritesManager _instance = FavoritesManager._internal();
+
+  List<FavoriteInfo> favorites = [];
+
+  factory FavoritesManager() {
+    return _instance;
+  }
+
+  FavoritesManager._internal();
+
+  void updateFavorites(String jsonResponse) {
+    final data = jsonDecode(jsonResponse)['favoriteList'] as List;
+    favorites = data.map((json) => FavoriteInfo.fromJson(json)).toList();
   }
 }
 
