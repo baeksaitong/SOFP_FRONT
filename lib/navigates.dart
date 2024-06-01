@@ -11,6 +11,7 @@ import 'package:sopf_front/favoritePage.dart';
 
 import 'category.dart';
 import 'categoryPlus.dart';
+import 'customerServiceCenter.dart';
 import 'home.dart';
 import 'main.dart';
 
@@ -70,5 +71,11 @@ void navigateToCategory() {
 void navigateToRecentHistory() {
   navigatorKey.currentState?.push(
     MaterialPageRoute(builder: (context) => RecentHistoryPill()),
+  );
+}
+
+void navigateToCustomerService() {
+  navigatorKey.currentState?.push(
+    MaterialPageRoute(builder: (context) => CustomerServicePage()),
   );
 }

@@ -34,6 +34,7 @@ class _CustomerServicePageState extends State<CustomerServicePage> {
           icon: Icon(Icons.arrow_back),
           onPressed: () {
             // 뒤로 가기 버튼 기능
+            Navigator.pop(context);
           },
         ),
         centerTitle: true,

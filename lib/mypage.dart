@@ -504,6 +504,7 @@ class _MyPageState extends State<MyPage> {
         Gaps.h16,
         buildNavigationItem(context, Icons.headset_mic, "고객센터", () {
           // 고객센터 페이지로 이동하는 기능 구현
+          navigateToCustomerService();
         }),
         Gaps.h16,
         buildNavigationItem(context, Icons.settings, "환경설정", () {
