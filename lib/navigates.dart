@@ -8,6 +8,8 @@ import 'package:sopf_front/textSearch.dart';
 import 'package:sopf_front/preferencesPage.dart';
 import 'package:sopf_front/favoritePage.dart';
 
+import 'category.dart';
+import 'categoryPlus.dart';
 import 'home.dart';
 import 'main.dart';
 
@@ -55,5 +57,11 @@ void navigateToPreference() {
 void navigateToFavorite() {
   navigatorKey.currentState?.push(
     MaterialPageRoute(builder: (context) => FavoritesPage()),
+  );
+}
+
+void navigateToCategory() {
+  navigatorKey.currentState?.push(
+    MaterialPageRoute(builder: (context) => MedicationPage()),
   );
 }

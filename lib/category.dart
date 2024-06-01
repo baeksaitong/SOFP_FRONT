@@ -415,7 +415,7 @@ class _MedicationPageState extends State<MedicationPage> {
                             },
                           ),
                         Image.asset(
-                          'assets/medication.png',
+                          'assets/exPill.png',
                           width: 50,
                           height: 50,
                         ),

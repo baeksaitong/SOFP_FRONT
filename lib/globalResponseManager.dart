@@ -1,4 +1,6 @@
 import 'dart:convert';
+import 'package:html/parser.dart' show parse;
+
 //import 'dart:ffi';
 
 class GlobalResponseManager {
@@ -69,6 +71,11 @@ class DrugInfoDetail {
       warningInfo: (json['warningInfo'] as List<dynamic>?)?.map((e) => e as String).toList(),
     );
   }
+  static String removeHtmlTags(String htmlString) {
+    final document = parse(htmlString);
+    final String parsedString = parse(document.body?.text).documentElement?.text ?? '';
+    return parsedString;
+  }
 }
 
 class DetailSection {
@@ -114,7 +121,9 @@ class Paragraph {
 
   factory Paragraph.fromJson(Map<String, dynamic> json) {
     return Paragraph(
-      description: json['description'] as String?,
+      description: json['description'] != null
+          ? DrugInfoDetail.removeHtmlTags(json['description'])
+          : null,
     );
   }
 }

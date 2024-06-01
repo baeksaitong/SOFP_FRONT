@@ -364,8 +364,15 @@ class _MyPageState extends State<MyPage> {
           ),
           SizedBox(height: 10),
           ElevatedButton(
-            onPressed: () => showEditSheet(context),
-            style: ElevatedButton.styleFrom(
+            onPressed: () {
+              if (title == '내가 복용 중인 약') {
+                // Navigate to a different screen if the title is '내가 복용 중인 약'
+                navigateToCategory();
+              } else {
+                // Show the edit sheet for other titles
+                showEditSheet(context);
+              }
+            },            style: ElevatedButton.styleFrom(
               minimumSize: Size(double.infinity, 36),
               backgroundColor: AppColors.wh,
               elevation: 0,

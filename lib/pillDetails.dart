@@ -104,25 +104,10 @@ class _PillDetailsState extends State<PillDetails> {
             style: AppTextStyles.body5M14,
           ),
           Gaps.h20,
-          Text(
-            '효능효과',
-            style: AppTextStyles.body4S14,
-          ),
-          Gaps.h4,
           buildDetailSection('효능효과', currentDrugInfoDetail?.efficacyEffect),
           Gaps.h20,
-          Text(
-            '용법용량',
-            style: AppTextStyles.body4S14,
-          ),
-          Gaps.h4,
           buildDetailSection('용법용량', currentDrugInfoDetail?.dosageUsage),
           Gaps.h20,
-          Text(
-            '주의사항',
-            style: AppTextStyles.body4S14,
-          ),
-          Gaps.h4,
           buildDetailSection('주의사항', currentDrugInfoDetail?.cautionGeneral),
         ],
       ),
@@ -144,12 +129,12 @@ class _PillDetailsState extends State<PillDetails> {
           title,
           style: AppTextStyles.body4S14,
         ),
-        Gaps.h4,
-        if (section.title != null)
-          Text(
-            section.title!,
-            style: AppTextStyles.body5M14,
-          ),
+        // Gaps.h4,
+        // if (section.title != null)
+        //   Text(
+        //     section.title!,
+        //     style: AppTextStyles.body5M14,
+        //   ),
         ...?section.sectionList?.map((subSection) => buildDetailSection(subSection.title!, subSection)).toList(),
         ...?section.articleList?.map((article) => buildArticle(article)).toList(),
       ],

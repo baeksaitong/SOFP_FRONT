@@ -20,13 +20,14 @@ import 'package:sopf_front/login.dart';
 import 'package:sopf_front/provider.dart';
 
 void main() async {
-  // Ensure Flutter binding is initialized
   WidgetsFlutterBinding.ensureInitialized();
 
-  // Obtain a list of the available cameras on the device.
   final cameras = await availableCameras();
-  // Get a specific camera from the list of available cameras.
-  final firstCamera = cameras.first;
+  CameraDescription? firstCamera;
+
+  if (cameras.isNotEmpty) {
+    firstCamera = cameras.first;
+  }
 
   runApp(
     MultiProvider(
@@ -42,9 +43,9 @@ void main() async {
 final GlobalKey<NavigatorState> navigatorKey = GlobalKey<NavigatorState>();
 
 class MyApp extends StatelessWidget {
-  final CameraDescription camera;
+  final CameraDescription? camera;
 
-  const MyApp({super.key, required this.camera});
+  const MyApp({super.key, this.camera});
 
   @override
   Widget build(BuildContext context) {
