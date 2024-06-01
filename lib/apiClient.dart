@@ -511,7 +511,6 @@ class APIClient {
     }
   }
 
-
   Future<void> favoritePost(
       BuildContext context, int serialNumber, String imageUrl) async {
     final currentProfile =
@@ -540,7 +539,7 @@ class APIClient {
       });
 
     // Add fields
-    request.fields['pillSeralNumber'] = serialNumber.toString();
+    request.fields['pillSerialNumber'] = serialNumber.toString(); // Ensure it is a string
 
     // Add file
     request.files.add(await http.MultipartFile.fromPath('image', file.path));

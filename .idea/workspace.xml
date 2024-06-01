@@ -5,8 +5,11 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="90cba86e-3fee-41a1-aff0-27c9beaf05fa" name="Changes" comment="">
-      <change beforePath="$PROJECT_DIR$/lib/mypage.dart" beforeDir="false" afterPath="$PROJECT_DIR$/lib/mypage.dart" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/lib/navigates.dart" beforeDir="false" afterPath="$PROJECT_DIR$/lib/navigates.dart" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.flutter-plugins-dependencies" beforeDir="false" afterPath="$PROJECT_DIR$/.flutter-plugins-dependencies" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/build/64761c87623279d4333451e23df19c38.cache.dill.track.dill" beforeDir="false" afterPath="$PROJECT_DIR$/build/64761c87623279d4333451e23df19c38.cache.dill.track.dill" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/lib/apiClient.dart" beforeDir="false" afterPath="$PROJECT_DIR$/lib/apiClient.dart" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/lib/searchResult.dart" beforeDir="false" afterPath="$PROJECT_DIR$/lib/searchResult.dart" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />

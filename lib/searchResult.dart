@@ -32,8 +32,8 @@ class _SearchResultState extends State<SearchResult> {
 
   APIClient apiClient = APIClient();
 
-  List<String> _resultSearches = [];
   List<DrugInfo> drugs = [];
+  List<FavoriteInfo> favorites = [];
 
   void _toggleBookmark(int index) {
     setState(() {
@@ -60,7 +60,21 @@ class _SearchResultState extends State<SearchResult> {
   @override
   void initState() {
     super.initState();
+    _initializeDrugs();
+  }
+
+  void _initializeDrugs() {
+    favorites = FavoritesManager().favorites;
     drugs = DrugsManager().drugs; // GlobalManager에서 직접 데이터를 가져옵니다.
+    for (var drug in drugs) {
+      for (var favorite in favorites) {
+        if (drug.serialNumber == favorite.serialNumber) {
+          drug.isBookmarked = true;
+          break;
+        }
+      }
+    }
+    setState(() {});
   }
 
   @override
