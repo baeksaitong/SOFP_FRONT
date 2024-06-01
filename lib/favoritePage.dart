@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:sopf_front/appcolors.dart';
 
 import 'apiClient.dart';
 import 'appTextStyles.dart';
@@ -29,6 +30,7 @@ class _FavoritesPageState extends State<FavoritesPage> {
       favorites = FavoritesManager().favorites;
     });
   }
+
   void _toggleBookmark(int index) {
     setState(() {
       favorites[index].isBookmarked = !favorites[index].isBookmarked;
@@ -40,76 +42,82 @@ class _FavoritesPageState extends State<FavoritesPage> {
       }
     });
   }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('즐겨찾기', style: TextStyle(color: Colors.black)),
-        backgroundColor: Colors.white,
+        backgroundColor: AppColors.wh,
         leading: IconButton(
           icon: const Icon(Icons.arrow_back, color: Colors.black),
           onPressed: () {
             Navigator.pop(context);
           },
         ),
-        centerTitle: true,
         elevation: 0,
       ),
-      body: Padding(
-        padding: const EdgeInsets.symmetric(vertical: 8.0),
-        child: ListView.separated(
-            itemCount: favorites.length,
-            itemBuilder: (context, index) {
-              final drug = favorites[index];
-              return GestureDetector(
-                onTap: () async{
-                  await apiClient.searchGet(context, drug.serialNumber);
-                  navigateToPillDetail();
-                },
-                child: Container(
-                  width: 336,
-                  height: 96,
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      Image.network(
-                        drug.imgUrl,
-                        width: 96,
-                        height: 96,
-                      ),
-                      Gaps.w16,
-                      Container(
-                        width: 200,
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Text(
-                              drug.name,
-                              style: AppTextStyles.body1S16,
-                              overflow: TextOverflow.ellipsis,
-                            ),
-                            Gaps.h6,
-                            Text(
-                              '제품명 : ${drug.name}',
-                              style: AppTextStyles.body5M14,
-                              overflow: TextOverflow.ellipsis,
-                            ),
-                            Text(
-                              '제조회사 : ${drug.enterprise}',
-                              style: AppTextStyles.body5M14,
-                              overflow: TextOverflow.ellipsis,
-                            ),
-                            Text(
-                              '분류 : ${drug.classification}',
-                              style: AppTextStyles.body5M14,
-                              overflow: TextOverflow.ellipsis,
-                            )
-                          ],
+      body: Container(
+        color: AppColors.wh,
+        padding: const EdgeInsets.symmetric(vertical: 8.0, horizontal: 16.0),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Container(
+              width: double.infinity,
+              padding: const EdgeInsets.all(8.0),
+              child: Text(
+                '즐겨찾기',
+                style: AppTextStyles.title1B24.copyWith(color: AppColors.gr800),
+                textAlign: TextAlign.left,
+              ),
+            ),
+            Expanded(
+              child: ListView.separated(
+                itemCount: favorites.length,
+                itemBuilder: (context, index) {
+                  final drug = favorites[index];
+                  return GestureDetector(
+                    onTap: () async {
+                      await apiClient.searchGet(context, drug.serialNumber);
+                      navigateToPillDetail();
+                    },
+                    child: Row(
+                      children: [
+                        Image.network(
+                          drug.imgUrl,
+                          width: 96,
+                          height: 96,
                         ),
-                      ),
-                      Align(
-                        alignment: Alignment.topRight,
-                        child: GestureDetector(
+                        Gaps.w16,
+                        Expanded(
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Text(
+                                drug.name,
+                                style: AppTextStyles.body1S16,
+                                overflow: TextOverflow.ellipsis,
+                              ),
+                              Gaps.h6,
+                              Text(
+                                '제품명 : ${drug.name}',
+                                style: AppTextStyles.body5M14,
+                                overflow: TextOverflow.ellipsis,
+                              ),
+                              Text(
+                                '제조회사 : ${drug.enterprise}',
+                                style: AppTextStyles.body5M14,
+                                overflow: TextOverflow.ellipsis,
+                              ),
+                              Text(
+                                '분류 : ${drug.classification}',
+                                style: AppTextStyles.body5M14,
+                                overflow: TextOverflow.ellipsis,
+                              ),
+                            ],
+                          ),
+                        ),
+                        GestureDetector(
                           onTap: () => _toggleBookmark(index),
                           child: Image.asset(
                             drug.isBookmarked ? 'assets/bookmarkclicked.png' : 'assets/bookmark.png',
@@ -117,15 +125,16 @@ class _FavoritesPageState extends State<FavoritesPage> {
                             height: 20,
                           ),
                         ),
-                      ),
-                      Gaps.h16,
-                    ],
-                  ),
-                ),
-              );
-            }, separatorBuilder: (context, index) => Gaps.h8,
+                      ],
+                    ),
+                  );
+                },
+                separatorBuilder: (context, index) => Gaps.h8,
+              ),
+            ),
+          ],
         ),
-      )
+      ),
     );
   }
 }
