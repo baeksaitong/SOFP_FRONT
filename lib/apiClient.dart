@@ -15,6 +15,22 @@ class APIClient {
   static const String baseUrl = 'http://15.164.18.65:8080';
   final JWTManger _jwtManager = JWTManger();
 
+  Future<void> naverLogin(String code) async {
+    final String url = 'http://15.164.18.65:8080/app/oauth/naver?code=$code';
+    final response = await http.get(
+      Uri.parse(url),
+      headers: {'accept': '*/*'},
+    );
+
+    if (response.statusCode == 200) {
+      // 성공적으로 응답을 받았을 때의 처리
+      print('Response data: ${response.body}');
+    } else {
+      // 요청이 실패했을 때의 처리
+      print('Request failed with status: ${response.statusCode}');
+    }
+  }
+
   Future<void> signUp(String name, String birthday, String email, String gender,
       String pwd, bool advertisement) async {
     final url = Uri.parse('$baseUrl/app/auth/sign-up');

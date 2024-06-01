@@ -200,6 +200,12 @@
       "languageVersion": "3.2"
     },
     {
+      "name": "flutter_webview_plugin",
+      "rootUri": "file:///Users/mingmaengmung/.pub-cache/hosted/pub.dev/flutter_webview_plugin-0.4.0",
+      "packageUri": "lib/",
+      "languageVersion": "2.12"
+    },
+    {
       "name": "fluttertoast",
       "rootUri": "file:///Users/mingmaengmung/.pub-cache/hosted/pub.dev/fluttertoast-8.2.5",
       "packageUri": "lib/",
@@ -602,7 +608,7 @@
       "languageVersion": "3.3"
     }
   ],
-  "generated": "2024-06-01T10:02:51.700135Z",
+  "generated": "2024-06-01T19:05:29.904389Z",
   "generator": "pub",
   "generatorVersion": "3.5.0-191.0.dev",
   "flutterRoot": "file:///Users/mingmaengmung/flutter",

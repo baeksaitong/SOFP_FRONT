@@ -3,6 +3,7 @@ import 'package:sopf_front/apiClient.dart';
 import 'package:sopf_front/gaps.dart';
 
 import 'home.dart';
+import 'loginNaver.dart';
 import 'navigates.dart';
 
 // void main() {
@@ -180,12 +181,26 @@ class KakaoButton extends StatelessWidget {
 class NaverButton extends StatelessWidget {
   const NaverButton({super.key});
 
+  final String clientId = 's_sU87qUfaHToSi_ky8R';
+  final String redirectUri = 'http://15.164.18.65:8080/app/oauth/naver';
+  final String state = 'sofp';
+
   @override
   Widget build(BuildContext context) {
     return InkWell(
       onTap: () {
         // Handle Naver login button pressed
-      },
+        final String authUrl = 'https://nid.naver.com/oauth2.0/authorize'
+            '?response_type=code'
+            '&client_id=$clientId'
+            '&redirect_uri=$redirectUri'
+            '&state=$state';
+        Navigator.push(
+          context,
+          MaterialPageRoute(
+            builder: (context) => NaverWebViewPage(authUrl),
+          ),
+        );      },
       child: Ink.image(
         image: AssetImage(
             'assets/naver_icon.png'), // Path to your Naver logo image
