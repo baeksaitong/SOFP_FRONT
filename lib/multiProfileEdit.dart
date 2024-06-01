@@ -76,7 +76,7 @@ class _multiProfileEditState extends State<multiProfileEdit> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('멀티프로필 정보',
+        title: Text('회원정보',
           style: TextStyle(
             fontSize: 16,
             fontWeight: FontWeight.w400,

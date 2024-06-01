@@ -1,5 +1,4 @@
 import 'dart:convert';
-import 'dart:ffi';
 
 class GlobalResponseManager {
   static final GlobalResponseManager _instance = GlobalResponseManager._internal();
@@ -105,6 +104,42 @@ class ProfileResponse {
   Map<String, dynamic> toJson() {
     return {
       'profileList': profileList.map((profile) => profile.toJson()).toList(),
+    };
+  }
+}
+
+class MemberInfo {
+  final String id;
+  final String name;
+  final String email;
+  final String? imgURL;
+  final String color;
+
+  MemberInfo({
+    required this.id,
+    required this.name,
+    required this.email,
+    this.imgURL,
+    required this.color,
+  });
+
+  factory MemberInfo.fromJson(Map<String, dynamic> json) {
+    return MemberInfo(
+      id: json['id'],
+      name: json['name'],
+      email: json['email'],
+      imgURL: json['imgURL'],
+      color: json['color'],
+    );
+  }
+
+  Map<String, dynamic> toJson() {
+    return {
+      'id': id,
+      'name': name,
+      'email': email,
+      'imgURL': imgURL,
+      'color': color,
     };
   }
 }

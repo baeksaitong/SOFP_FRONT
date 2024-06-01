@@ -1,19 +1,16 @@
+import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:http/http.dart' as http;
-import 'dart:convert';
 import 'dart:io';
 import 'package:sopf_front/appColors.dart';
 import 'package:sopf_front/globalResponseManager.dart';
 import 'gaps.dart';
 import 'provider.dart';
 import 'package:sopf_front/provider.dart';
+import 'jwtManager.dart';
 
 class MyPageEdit extends StatefulWidget {
-  final Profile profile;
-
-  MyPageEdit({required this.profile});
-
   @override
   _MyPageEditState createState() => _MyPageEditState();
 }
@@ -24,15 +21,46 @@ class _MyPageEditState extends State<MyPageEdit> {
   late TextEditingController emailController;
   late TextEditingController passwordController;
   late TextEditingController confirmPasswordController;
-  bool _isSubscribed = false; // 광고성 이메일 수신 동의 여부
+  bool _isSubscribed = false;
 
   @override
   void initState() {
     super.initState();
-    emailController = TextEditingController(text: widget.profile.id);
+    emailController = TextEditingController(text: '');
     passwordController = TextEditingController();
     confirmPasswordController = TextEditingController();
+    fetchMemberInfo();
   }
+
+  Future<void> fetchMemberInfo() async {
+    try {
+      final jwtManager = JWTmanager();
+      final accessToken = await jwtManager.getValidAccessToken();
+
+      final response = await http.get(
+        Uri.parse('http://15.164.18.65:8080/app/member'),
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': 'Bearer $accessToken',
+        },
+      );
+
+      if (response.statusCode == 200) {
+        final responseBody = response.body;
+        print('Response body: $responseBody'); // 응답 본문을 출력하여 확인
+        final memberInfo = MemberInfo.fromJson(json.decode(responseBody));
+        setState(() {
+          emailController.text = memberInfo.email;
+          _isSubscribed = memberInfo.advertisement;
+        });
+      } else {
+        print('Failed to load member info: ${response.statusCode}');
+      }
+    } catch (e) {
+      print('Error fetching member info: $e');
+    }
+  }
+
 
   Future<void> getImage() async {
     final XFile? pickedFile = await _picker.pickImage(source: ImageSource.gallery);
@@ -53,34 +81,50 @@ class _MyPageEditState extends State<MyPageEdit> {
       return;
     }
 
-    final url = Uri.parse('http://15.164.18.65/app/member'); // 수정된 엔드포인트
-    final response = await http.post(
-      url,
-      headers: <String, String>{
-        'Content-Type': 'application/json; charset=UTF-8',
-      },
-      body: jsonEncode(<String, dynamic>{
-        'email': emailController.text,
-        'password': passwordController.text,
-        'isSubscribed': _isSubscribed,
-      }),
-    );
+    try {
+      final jwtManager = JWTmanager();
+      final accessToken = await jwtManager.getValidAccessToken();
 
-    if (response.statusCode == 200) {
-      ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-        content: Text('정보가 성공적으로 저장되었습니다.'),
-      ));
-      Navigator.pop(context, {
-        'email': emailController.text,
-        'image': _image?.path,
-        'isSubscribed': _isSubscribed,
-      });
-    } else {
+      final url = Uri.parse('http://15.164.18.65:8080/app/member');
+      final response = await http.put(
+        url,
+        headers: <String, String>{
+          'Content-Type': 'application/json; charset=UTF-8',
+          'Authorization': 'Bearer $accessToken',
+        },
+        body: jsonEncode(<String, dynamic>{
+          'password': passwordController.text,
+          'advertisement': _isSubscribed,
+        }),
+      );
+
+      print('Response status: ${response.statusCode}');
+      print('Response body: ${response.body}');
+
+      if (response.statusCode == 200) {
+        ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+          content: Text('정보가 성공적으로 저장되었습니다.'),
+        ));
+        Navigator.pop(context, {
+          'email': emailController.text,
+          'image': _image?.path,
+          'isSubscribed': _isSubscribed,
+        });
+      } else {
+        ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+          content: Text('저장 중 오류가 발생했습니다. 다시 시도해주세요.'),
+        ));
+      }
+    } catch (e) {
       ScaffoldMessenger.of(context).showSnackBar(SnackBar(
         content: Text('저장 중 오류가 발생했습니다. 다시 시도해주세요.'),
       ));
+      print('Error: $e');
     }
   }
+
+
+
 
   @override
   Widget build(BuildContext context) {
@@ -124,9 +168,9 @@ class _MyPageEditState extends State<MyPageEdit> {
               children: <Widget>[
                 CustomTextField(
                   label: "이메일",
-                  hintText: "예) yacsoc123@abcd.com",
                   controller: emailController,
-                  isReadOnly: true, // 수정 불가능하게 설정
+                  isReadOnly: true,
+                  hintText: '',
                 ),
                 Gaps.h10,
                 CustomTextField(
@@ -228,5 +272,29 @@ class CustomTextField extends StatelessWidget {
         ),
       ],
     );
+  }
+}
+
+class MemberInfo {
+  final String email;
+  final bool advertisement;
+
+  MemberInfo({
+    required this.email,
+    required this.advertisement,
+  });
+
+  factory MemberInfo.fromJson(Map<String, dynamic> json) {
+    return MemberInfo(
+      email: json['email'] ?? '',
+      advertisement: json['advertisement'] ?? false,
+    );
+  }
+
+  Map<String, dynamic> toJson() {
+    return {
+      'email': email,
+      'advertisement': advertisement,
+    };
   }
 }
