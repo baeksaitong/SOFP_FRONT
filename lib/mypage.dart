@@ -499,6 +499,7 @@ class _MyPageState extends State<MyPage> {
         Gaps.h16,
         buildNavigationItem(context, Icons.history, "검색 히스토리", () {
           // 검색 히스토리 페이지로 이동하는 기능 구현
+          navigateToRecentHistory();
         }),
         Gaps.h16,
         buildNavigationItem(context, Icons.headset_mic, "고객센터", () {

@@ -221,6 +221,48 @@ class FavoritesManager {
   }
 }
 
+class RecentHistoryInfo {
+  final int serialNumber;
+  final String name;
+  final String classification;
+  final String enterprise;
+  final String imgUrl;
+
+  RecentHistoryInfo(
+      {required this.serialNumber,
+        required this.name,
+        required this.classification,
+        required this.enterprise,
+        required this.imgUrl});
+
+  factory RecentHistoryInfo.fromJson(Map<String, dynamic> json) {
+    return RecentHistoryInfo(
+      serialNumber: json['serialNumber'],
+      name: json['name'],
+      classification: json['classification'],
+      enterprise: json['enterprise'],
+      imgUrl: json['imgUrl'],
+    );
+  }
+}
+
+class RecentHistoriesManager {
+  static final RecentHistoriesManager _instance = RecentHistoriesManager._internal();
+
+  List<RecentHistoryInfo> recentHistories = [];
+
+  factory RecentHistoriesManager() {
+    return _instance;
+  }
+
+  RecentHistoriesManager._internal();
+
+  void updateFavorites(String jsonResponse) {
+    final data = jsonDecode(jsonResponse)['result'] as List;
+    recentHistories = data.map((json) => RecentHistoryInfo.fromJson(json)).toList();
+  }
+}
+
 class Profile {
   final String id;
   final String name;

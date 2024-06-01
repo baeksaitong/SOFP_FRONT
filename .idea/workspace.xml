@@ -5,45 +5,13 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="90cba86e-3fee-41a1-aff0-27c9beaf05fa" name="Changes" comment="">
-      <change beforePath="$PROJECT_DIR$/.dart_tool/flutter_build/8522659d066ca94789d7aed277103cb1/.filecache" beforeDir="false" afterPath="$PROJECT_DIR$/.dart_tool/flutter_build/8522659d066ca94789d7aed277103cb1/.filecache" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.dart_tool/flutter_build/8522659d066ca94789d7aed277103cb1/debug_ios_bundle_flutter_assets.stamp" beforeDir="false" afterPath="$PROJECT_DIR$/.dart_tool/flutter_build/8522659d066ca94789d7aed277103cb1/debug_ios_bundle_flutter_assets.stamp" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.dart_tool/flutter_build/8522659d066ca94789d7aed277103cb1/flutter_assets.d" beforeDir="false" afterPath="$PROJECT_DIR$/.dart_tool/flutter_build/8522659d066ca94789d7aed277103cb1/flutter_assets.d" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.dart_tool/package_config.json" beforeDir="false" afterPath="$PROJECT_DIR$/.dart_tool/package_config.json" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.dart_tool/package_config_subset" beforeDir="false" afterPath="$PROJECT_DIR$/.dart_tool/package_config_subset" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.flutter-plugins-dependencies" beforeDir="false" afterPath="$PROJECT_DIR$/.flutter-plugins-dependencies" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/build/64761c87623279d4333451e23df19c38.cache.dill.track.dill" beforeDir="false" afterPath="$PROJECT_DIR$/build/64761c87623279d4333451e23df19c38.cache.dill.track.dill" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/ios/Debug-iphoneos/App.framework/App" beforeDir="false" afterPath="$PROJECT_DIR$/build/ios/Debug-iphoneos/App.framework/App" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/ios/Debug-iphoneos/Runner.app/Frameworks/App.framework/App" beforeDir="false" afterPath="$PROJECT_DIR$/build/ios/Debug-iphoneos/Runner.app/Frameworks/App.framework/App" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/ios/Debug-iphoneos/Runner.app/Frameworks/Toast.framework/Toast" beforeDir="false" afterPath="$PROJECT_DIR$/build/ios/Debug-iphoneos/Runner.app/Frameworks/Toast.framework/Toast" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/ios/Debug-iphoneos/Runner.app/Frameworks/camera_avfoundation.framework/camera_avfoundation" beforeDir="false" afterPath="$PROJECT_DIR$/build/ios/Debug-iphoneos/Runner.app/Frameworks/camera_avfoundation.framework/camera_avfoundation" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/ios/Debug-iphoneos/Runner.app/Frameworks/flutter_secure_storage.framework/flutter_secure_storage" beforeDir="false" afterPath="$PROJECT_DIR$/build/ios/Debug-iphoneos/Runner.app/Frameworks/flutter_secure_storage.framework/flutter_secure_storage" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/ios/Debug-iphoneos/Runner.app/Frameworks/fluttertoast.framework/fluttertoast" beforeDir="false" afterPath="$PROJECT_DIR$/build/ios/Debug-iphoneos/Runner.app/Frameworks/fluttertoast.framework/fluttertoast" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/ios/Debug-iphoneos/Runner.app/Frameworks/image_picker_ios.framework/image_picker_ios" beforeDir="false" afterPath="$PROJECT_DIR$/build/ios/Debug-iphoneos/Runner.app/Frameworks/image_picker_ios.framework/image_picker_ios" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/ios/Debug-iphoneos/Runner.app/Frameworks/path_provider_foundation.framework/path_provider_foundation" beforeDir="false" afterPath="$PROJECT_DIR$/build/ios/Debug-iphoneos/Runner.app/Frameworks/path_provider_foundation.framework/path_provider_foundation" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/ios/Debug-iphoneos/Runner.app/Frameworks/shared_preferences_foundation.framework/shared_preferences_foundation" beforeDir="false" afterPath="$PROJECT_DIR$/build/ios/Debug-iphoneos/Runner.app/Frameworks/shared_preferences_foundation.framework/shared_preferences_foundation" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/ios/Debug-iphoneos/Runner.app/Runner" beforeDir="false" afterPath="$PROJECT_DIR$/build/ios/Debug-iphoneos/Runner.app/Runner" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/ios/Debug-iphoneos/Runner.app/_CodeSignature/CodeResources" beforeDir="false" afterPath="$PROJECT_DIR$/build/ios/Debug-iphoneos/Runner.app/_CodeSignature/CodeResources" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/ios/Debug-iphoneos/Runner.app/embedded.mobileprovision" beforeDir="false" afterPath="$PROJECT_DIR$/build/ios/Debug-iphoneos/Runner.app/embedded.mobileprovision" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/ios/iphoneos/Runner.app/Frameworks/App.framework/App" beforeDir="false" afterPath="$PROJECT_DIR$/build/ios/iphoneos/Runner.app/Frameworks/App.framework/App" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/ios/iphoneos/Runner.app/Frameworks/Toast.framework/Toast" beforeDir="false" afterPath="$PROJECT_DIR$/build/ios/iphoneos/Runner.app/Frameworks/Toast.framework/Toast" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/ios/iphoneos/Runner.app/Frameworks/camera_avfoundation.framework/camera_avfoundation" beforeDir="false" afterPath="$PROJECT_DIR$/build/ios/iphoneos/Runner.app/Frameworks/camera_avfoundation.framework/camera_avfoundation" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/ios/iphoneos/Runner.app/Frameworks/flutter_secure_storage.framework/flutter_secure_storage" beforeDir="false" afterPath="$PROJECT_DIR$/build/ios/iphoneos/Runner.app/Frameworks/flutter_secure_storage.framework/flutter_secure_storage" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/ios/iphoneos/Runner.app/Frameworks/fluttertoast.framework/fluttertoast" beforeDir="false" afterPath="$PROJECT_DIR$/build/ios/iphoneos/Runner.app/Frameworks/fluttertoast.framework/fluttertoast" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/ios/iphoneos/Runner.app/Frameworks/image_picker_ios.framework/image_picker_ios" beforeDir="false" afterPath="$PROJECT_DIR$/build/ios/iphoneos/Runner.app/Frameworks/image_picker_ios.framework/image_picker_ios" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/ios/iphoneos/Runner.app/Frameworks/path_provider_foundation.framework/path_provider_foundation" beforeDir="false" afterPath="$PROJECT_DIR$/build/ios/iphoneos/Runner.app/Frameworks/path_provider_foundation.framework/path_provider_foundation" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/ios/iphoneos/Runner.app/Frameworks/shared_preferences_foundation.framework/shared_preferences_foundation" beforeDir="false" afterPath="$PROJECT_DIR$/build/ios/iphoneos/Runner.app/Frameworks/shared_preferences_foundation.framework/shared_preferences_foundation" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/ios/iphoneos/Runner.app/Runner" beforeDir="false" afterPath="$PROJECT_DIR$/build/ios/iphoneos/Runner.app/Runner" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/ios/iphoneos/Runner.app/_CodeSignature/CodeResources" beforeDir="false" afterPath="$PROJECT_DIR$/build/ios/iphoneos/Runner.app/_CodeSignature/CodeResources" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/ios/iphoneos/Runner.app/embedded.mobileprovision" beforeDir="false" afterPath="$PROJECT_DIR$/build/ios/iphoneos/Runner.app/embedded.mobileprovision" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/lib/category.dart" beforeDir="false" afterPath="$PROJECT_DIR$/lib/category.dart" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/lib/apiClient.dart" beforeDir="false" afterPath="$PROJECT_DIR$/lib/apiClient.dart" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/lib/globalResponseManager.dart" beforeDir="false" afterPath="$PROJECT_DIR$/lib/globalResponseManager.dart" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/lib/main.dart" beforeDir="false" afterPath="$PROJECT_DIR$/lib/main.dart" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/lib/mypage.dart" beforeDir="false" afterPath="$PROJECT_DIR$/lib/mypage.dart" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/lib/navigates.dart" beforeDir="false" afterPath="$PROJECT_DIR$/lib/navigates.dart" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/lib/pillDetails.dart" beforeDir="false" afterPath="$PROJECT_DIR$/lib/pillDetails.dart" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/pubspec.lock" beforeDir="false" afterPath="$PROJECT_DIR$/pubspec.lock" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/pubspec.yaml" beforeDir="false" afterPath="$PROJECT_DIR$/pubspec.yaml" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />

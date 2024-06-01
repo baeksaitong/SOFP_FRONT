@@ -192,7 +192,7 @@ class APIClient {
             .setCurrentProfile(profileResponse.profileList[0]);
       }
       diseaseAllergyList();
-      recentViewPill(context);
+      recentViewPillGet(context);
       if (jsonResponse['isNew'] == false) {
         navigateToAddAllergy();
       } else {
@@ -263,12 +263,12 @@ class APIClient {
     }
   }
 
-  Future<void> recentViewPill(BuildContext context) async {
+  Future<void> recentViewPillGet(BuildContext context) async {
     final currentProfile =
         Provider.of<ProfileProvider>(context, listen: false).currentProfile;
     final String? accessToken = await _jwtManager.getAccessToken();
     final url = Uri.parse(
-        '$baseUrl/app/disease-allergy/${currentProfile?.id}?count=10');
+        '$baseUrl/app/recent-view/${currentProfile?.id}?count=10');
     final response = await http.get(
       url,
       headers: <String, String>{
@@ -282,11 +282,39 @@ class APIClient {
     var jsonResponse = jsonDecode(decodedResponse);
     if (response.statusCode == 200) {
       print('최근 조회 알약 조회 성공 : $jsonResponse');
+      RecentHistoriesManager().updateFavorites(utf8.decode(response.bodyBytes));
     } else {
       print(response.statusCode);
       print('최근 조회 알약 조회 실패 : $jsonResponse');
     }
   }
+
+  Future<bool> recentViewPillDelete(int pillSerialNumber, BuildContext context) async {
+    final currentProfile =
+        Provider.of<ProfileProvider>(context, listen: false).currentProfile;
+    final String? accessToken = await _jwtManager.getAccessToken();
+    final url = Uri.parse(
+        '$baseUrl/app/recent-view/${currentProfile?.id}?pillSerialNumber=$pillSerialNumber');
+    final response = await http.delete(
+      url,
+      headers: <String, String>{
+        'Content-Type': 'application/json; charset=UTF-8',
+        'Accept': 'application/json',
+        'Authorization': 'Bearer $accessToken', // 인증 헤더 추가
+      },
+    );
+
+    var decodedResponse = utf8.decode(response.bodyBytes); // 응답을 UTF-8로 디코딩
+    if (response.statusCode == 200) {
+      print('최근 조회 알약 삭제 성공 : $decodedResponse');
+      return true;
+    } else {
+      print(response.statusCode);
+      print('최근 조회 알약 삭제 실패 : $decodedResponse');
+      return false;
+    }
+  }
+
 
   Future<void> diseaseAllergyList() async {
     final String? accessToken = await _jwtManager.getAccessToken();
@@ -475,6 +503,7 @@ class APIClient {
       final jsonResponse = json.decode(utf8.decode(response.bodyBytes));
       final drugInfoDetail = DrugInfoDetail.fromJson(jsonResponse);
       Provider.of<DrugInfoDetailProvider>(context, listen: false).setCurrentDrugInfoDetail(drugInfoDetail);
+      recentViewPillGet(context);
     } else {
       // 실패 처리
       print(response.statusCode);

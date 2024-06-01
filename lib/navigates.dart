@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:sopf_front/addAllergyPage.dart';
 import 'package:sopf_front/pillDetails.dart';
 import 'package:sopf_front/addAllergy.dart';
+import 'package:sopf_front/recentHistoryPill.dart';
 import 'package:sopf_front/searchResult.dart';
 import 'package:sopf_front/signUp.dart';
 import 'package:sopf_front/textSearch.dart';
@@ -63,5 +64,11 @@ void navigateToFavorite() {
 void navigateToCategory() {
   navigatorKey.currentState?.push(
     MaterialPageRoute(builder: (context) => MedicationPage()),
+  );
+}
+
+void navigateToRecentHistory() {
+  navigatorKey.currentState?.push(
+    MaterialPageRoute(builder: (context) => RecentHistoryPill()),
   );
 }
