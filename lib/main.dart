@@ -3,6 +3,7 @@ import 'package:intl/date_symbol_data_local.dart';
 import 'package:sopf_front/addAllergyPage.dart';
 import 'package:sopf_front/exColorsText.dart';
 import 'package:sopf_front/login.dart';
+import 'package:sopf_front/pillDetails.dart';
 import 'package:sopf_front/searchResult.dart';
 import 'package:sopf_front/signUp.dart';
 import 'package:sopf_front/textSearch.dart';
@@ -78,7 +79,7 @@ class MyApp extends StatelessWidget {
         ),
       ),
       navigatorKey: navigatorKey,
-      home: const LoginPage(),
+      home: const PillDetails(),
     );
   }
 }

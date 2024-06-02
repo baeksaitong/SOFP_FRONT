@@ -1,8 +1,6 @@
 import 'dart:convert';
 import 'package:html/parser.dart' show parse;
 
-//import 'dart:ffi';
-
 class GlobalResponseManager {
   static final GlobalResponseManager _instance =
       GlobalResponseManager._internal();

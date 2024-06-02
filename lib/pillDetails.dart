@@ -35,6 +35,13 @@ class _PillDetailsState extends State<PillDetails> {
             style: AppTextStyles.body1S16
         ),
         centerTitle: true,
+        actions: const [
+          Icon(
+              Icons.add,
+            size: 30,
+          ),
+          Gaps.w8,
+        ],
       ),
       body: ListView(
         padding: const EdgeInsets.all(16.0),

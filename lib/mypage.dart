@@ -367,7 +367,7 @@ class _MyPageState extends State<MyPage> {
             onPressed: () {
               if (title == '내가 복용 중인 약') {
                 // Navigate to a different screen if the title is '내가 복용 중인 약'
-                navigateToCategory();
+                navigateToMedicationsTaking();
               } else {
                 // Show the edit sheet for other titles
                 showEditSheet(context);
