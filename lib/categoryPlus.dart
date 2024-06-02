@@ -4,16 +4,12 @@ import 'appColors.dart'; // 색상 정의 파일
 import 'appTextStyles.dart'; // 텍스트 스타일 정의 파일
 import 'gaps.dart';
 
-void main() {
-  runApp(MaterialApp(
-    title: 'Medication Schedule',
-    theme: ThemeData(primarySwatch: Colors.blue),
-    home: MedicationSchedulePage(),
-  ));
-}
-
 class MedicationSchedulePage extends StatefulWidget {
-  const MedicationSchedulePage({super.key});
+  final Function(Map<String, dynamic>) onSave;
+  final Map<String, dynamic>? category; // 추가: 기존 카테고리 정보
+
+  const MedicationSchedulePage(
+      {super.key, required this.onSave, this.category}); // 수정: 기존 카테고리 정보 받기
 
   @override
   _MedicationSchedulePageState createState() => _MedicationSchedulePageState();
@@ -22,6 +18,49 @@ class MedicationSchedulePage extends StatefulWidget {
 class _MedicationSchedulePageState extends State<MedicationSchedulePage> {
   bool _pushNotificationEnabled = true; // 초기 상태
   final List<String> routines = []; // 섭취 루틴 리스트
+  final TextEditingController _categoryNameController = TextEditingController();
+  final List<bool> _selectedWeekdays = [
+    false,
+    false,
+    false,
+    false,
+    false,
+    false,
+    false
+  ];
+
+  @override
+  void initState() {
+    super.initState();
+    if (widget.category != null) {
+      // 기존 카테고리 정보를 사용하여 초기화
+      _categoryNameController.text = widget.category!['name'] ?? '';
+      final List<String> days = widget.category!['days'] ?? [];
+      for (int i = 0; i < _selectedWeekdays.length; i++) {
+        _selectedWeekdays[i] =
+            days.contains(['월', '화', '수', '목', '금', '토', '일'][i]);
+      }
+      routines.addAll(widget.category!['times'] ?? []);
+    }
+  }
+
+  void _saveCategory() {
+    final newCategory = {
+      'name': _categoryNameController.text,
+      'days': _selectedWeekdays
+          .asMap()
+          .entries
+          .where((entry) => entry.value)
+          .map((entry) => ['월', '화', '수', '목', '금', '토', '일'][entry.key])
+          .toList(),
+      'times': routines,
+      'medications':
+          widget.category != null ? widget.category!['medications'] : [],
+    };
+    widget.onSave(newCategory);
+    Navigator.of(context).pop(); // 현재 화면 닫기
+    Navigator.of(context).pop(); // showModalBottomSheet 닫기
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -32,7 +71,7 @@ class _MedicationSchedulePageState extends State<MedicationSchedulePage> {
         leading: IconButton(
           icon: const Icon(Icons.arrow_back),
           onPressed: () {
-            // 뒤로 가기 동작 구현
+            Navigator.of(context).pop();
           },
         ),
       ),
@@ -44,6 +83,7 @@ class _MedicationSchedulePageState extends State<MedicationSchedulePage> {
             Text('카테고리 이름', style: AppTextStyles.body2M16),
             Gaps.h8,
             TextField(
+              controller: _categoryNameController,
               decoration: InputDecoration(
                 border: OutlineInputBorder(),
                 hintText: '감기약',
@@ -52,7 +92,14 @@ class _MedicationSchedulePageState extends State<MedicationSchedulePage> {
             Gaps.h16,
             Text('섭취 요일', style: AppTextStyles.body2M16),
             Gaps.h8,
-            WeekdaySelector(), // 요일 리스트
+            WeekdaySelector(
+              selectedWeekdays: _selectedWeekdays,
+              onChanged: (index, selected) {
+                setState(() {
+                  _selectedWeekdays[index] = selected;
+                });
+              },
+            ),
             Gaps.h8,
             RoutineSelector(
               routines: routines,
@@ -75,7 +122,6 @@ class _MedicationSchedulePageState extends State<MedicationSchedulePage> {
                   onChanged: (value) {
                     setState(() {
                       _pushNotificationEnabled = value;
-                      print(value);
                     });
                   },
                   activeColor: AppColors.deepTeal, // 활성화 상태 색상
@@ -85,9 +131,7 @@ class _MedicationSchedulePageState extends State<MedicationSchedulePage> {
             ),
             const Spacer(),
             ElevatedButton(
-              onPressed: () {
-                // 저장 버튼 동작 구현
-              },
+              onPressed: _saveCategory,
               style: ElevatedButton.styleFrom(
                 minimumSize: Size(double.infinity, 48),
                 shape: RoundedRectangleBorder(
@@ -183,27 +227,20 @@ class _MedicationSchedulePageState extends State<MedicationSchedulePage> {
   }
 }
 
-class WeekdaySelector extends StatefulWidget {
-  const WeekdaySelector({super.key});
+class WeekdaySelector extends StatelessWidget {
+  final List<bool> selectedWeekdays;
+  final Function(int, bool) onChanged;
 
-  @override
-  _WeekdaySelectorState createState() => _WeekdaySelectorState();
-}
-
-class _WeekdaySelectorState extends State<WeekdaySelector> {
-  final List<String> weekdays = ['월', '화', '수', '목', '금', '토', '일'];
-  final List<bool> selectedWeekdays = [
-    true,
-    false,
-    true,
-    false,
-    true,
-    false,
-    false
-  ];
+  const WeekdaySelector({
+    super.key,
+    required this.selectedWeekdays,
+    required this.onChanged,
+  });
 
   @override
   Widget build(BuildContext context) {
+    final List<String> weekdays = ['월', '화', '수', '목', '금', '토', '일'];
+
     return GridView.builder(
       shrinkWrap: true,
       physics: NeverScrollableScrollPhysics(),
@@ -219,9 +256,7 @@ class _WeekdaySelectorState extends State<WeekdaySelector> {
           label: Text(weekdays[index]),
           selected: selectedWeekdays[index],
           onSelected: (bool selected) {
-            setState(() {
-              selectedWeekdays[index] = selected;
-            });
+            onChanged(index, selected);
           },
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(8.0),
