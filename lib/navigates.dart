@@ -5,6 +5,7 @@ import 'package:sopf_front/addAllergy.dart';
 import 'package:sopf_front/recentHistoryPill.dart';
 import 'package:sopf_front/searchResult.dart';
 import 'package:sopf_front/signUp.dart';
+import 'package:sopf_front/loginNaver.dart';
 import 'package:sopf_front/textSearch.dart';
 import 'package:sopf_front/preferencesPage.dart';
 import 'package:sopf_front/favoritePage.dart';

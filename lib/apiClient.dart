@@ -15,6 +15,53 @@ class APIClient {
   static const String baseUrl = 'http://15.164.18.65:8080';
   final JWTManger _jwtManager = JWTManger();
 
+  Future<void> naverLogin(BuildContext context, String code) async {
+    final String url = 'http://15.164.18.65:8080/app/oauth/naver?code=$code';
+    final response = await http.get(
+      Uri.parse(url),
+      headers: {'accept': '*/*'},
+    );
+
+    var decodedResponse = utf8.decode(response.bodyBytes);
+    var jsonResponse = jsonDecode(decodedResponse);
+
+    if (response.statusCode == 200) {
+      // Check if tokens are not null
+      final tokenData = jsonResponse['token'];
+      final accessToken = tokenData['accessToken'];
+      final refreshToken = tokenData['refreshToken'];
+
+      if (tokenData == null) {
+        print('Error: Missing token data in response');
+      }
+
+      await _jwtManager.saveTokens(accessToken, refreshToken);
+      print('로그인 성공: $jsonResponse');
+
+      ProfileResponse? profileResponse = await profileAll();
+      if (profileResponse != null && profileResponse.profileList.isNotEmpty) {
+        if (context.mounted) {
+          // context가 여전히 유효한지 확인
+          Provider.of<ProfileProvider>(context, listen: false)
+              .setCurrentProfile(profileResponse.profileList[0]);
+          print('프로필 설정 완료: ${profileResponse.profileList[0].name}');
+        }
+      }
+      diseaseAllergyList();
+      if(context.mounted) {
+        recentViewPillGet(context);
+      }
+      // if (jsonResponse['isNew'] == false) {
+      //   navigateToAddAllergy();
+      // } else {
+      //   navigateToHome();
+      // }
+    } else {
+      print(response.statusCode);
+      print('로그인 실패: $jsonResponse');
+    }
+  }
+
   Future<void> signUp(String name, String birthday, String email, String gender,
       String pwd, bool advertisement) async {
     final url = Uri.parse('$baseUrl/app/auth/sign-up');
@@ -188,11 +235,15 @@ class APIClient {
       ProfileResponse? profileResponse = await profileAll();
       if (profileResponse != null && profileResponse.profileList.isNotEmpty) {
         // Ensure `context` is passed with `listen: false`
-        Provider.of<ProfileProvider>(context, listen: false)
-            .setCurrentProfile(profileResponse.profileList[0]);
+        if(context.mounted) {
+          Provider.of<ProfileProvider>(context, listen: false)
+              .setCurrentProfile(profileResponse.profileList[0]);
+        }
       }
       diseaseAllergyList();
-      recentViewPillGet(context);
+      if(context.mounted) {
+        recentViewPillGet(context);
+      }
       if (jsonResponse['isNew'] == false) {
         navigateToAddAllergy();
       } else {
