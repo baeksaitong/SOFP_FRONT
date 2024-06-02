@@ -4,6 +4,7 @@ import 'package:sopf_front/gaps.dart';
 
 import 'home.dart';
 import 'loginNaver.dart';
+import 'main.dart';
 import 'navigates.dart';
 
 // void main() {
@@ -189,27 +190,24 @@ class NaverButton extends StatelessWidget {
   Widget build(BuildContext context) {
     return InkWell(
       onTap: () {
-        // Handle Naver login button pressed
         final String authUrl = 'https://nid.naver.com/oauth2.0/authorize'
             '?response_type=code'
             '&client_id=$clientId'
             '&redirect_uri=$redirectUri'
             '&state=$state';
-        Navigator.push(
-          context,
-          MaterialPageRoute(
-            builder: (context) => NaverWebViewPage(authUrl),
-          ),
-        );      },
+        navigatorKey.currentState?.push(
+            MaterialPageRoute(builder: (context) => NaverWebViewPage(authUrl))
+        );
+      },
       child: Ink.image(
-        image: AssetImage(
-            'assets/naver_icon.png'), // Path to your Naver logo image
+        image: AssetImage('assets/naver_icon.png'), // Path to your Naver logo image
         width: 50, // Adjust the width of the image
         height: 50, // Adjust the height of the image
       ),
     );
   }
 }
+
 
 class PassTextField extends StatelessWidget {
   const PassTextField({
