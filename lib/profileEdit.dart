@@ -6,13 +6,14 @@ import 'package:sopf_front/appTextStyles.dart';
 import 'package:sopf_front/gaps.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
+import 'package:sopf_front/jwtManager.dart';
 
-class multiProfileEdit extends StatefulWidget {
+class ProfileEdit extends StatefulWidget {
   @override
-  _multiProfileEditState createState() => _multiProfileEditState();
+  _ProfileEditState createState() => _ProfileEditState();
 }
 
-class _multiProfileEditState extends State<multiProfileEdit> {
+class _ProfileEditState extends State<ProfileEdit> {
   int selectedYear = DateTime.now().year;
   int selectedMonth = DateTime.now().month;
   int selectedDay = DateTime.now().day;
@@ -20,8 +21,10 @@ class _multiProfileEditState extends State<multiProfileEdit> {
   final ImagePicker _picker = ImagePicker();
   final TextEditingController nameController = TextEditingController();
   final TextEditingController birthdateController = TextEditingController();
+  final JWTmanager jwtManager = JWTmanager();
 
-  String gender = "남성"; // 초기값 설정
+  String gender = "MALE"; // 초기값 설정을 API에 맞게 변경
+  String color = "#FFFFFF"; // color 필드 추가
 
   Future<void> getImage() async {
     final XFile? pickedFile = await _picker.pickImage(source: ImageSource.gallery);
@@ -36,39 +39,74 @@ class _multiProfileEditState extends State<multiProfileEdit> {
 
   Future<void> saveProfile() async {
     final String name = nameController.text;
-    final String birthdate = birthdateController.text;
+    final String birthdate = birthdateController.text.replaceAll('.', '-'); // yyyy.MM.dd 형식을 yyyy-MM-dd 형식으로 변경
+    final String? accessToken = await jwtManager.getValidAccessToken();
 
     var requestData = {
       "name": name,
-      "birthdate": birthdate, //birthdate=> birthday 나중에 수정
-      "gender": gender, 
+      "birthday": birthdate,
+      "gender": gender,
+      "color": color,
     };
 
     if (_image != null) {
-      var request = http.MultipartRequest('POST', Uri.parse('15.164.18.65'));
+      var request = http.MultipartRequest('POST', Uri.parse('http://15.164.18.65:8080/app/profile'));
+      request.headers['Authorization'] = 'Bearer $accessToken'; // 토큰 추가
       request.fields['name'] = name;
-      request.fields['birthdate'] = birthdate;
+      request.fields['birthday'] = birthdate;
       request.fields['gender'] = gender;
-      request.files.add(await http.MultipartFile.fromPath('profile_image', _image!.path)); // profile_image => profileImg
+      request.fields['color'] = color;
+      request.files.add(await http.MultipartFile.fromPath('profileImg', _image!.path)); // 'profile_image'를 'profileImg'로 변경
 
       var response = await request.send();
       if (response.statusCode == 200) {
         print('Profile saved successfully');
       } else {
         print('Failed to save profile');
+        print('Status code: ${response.statusCode}');
+        print('Response body: ${await response.stream.bytesToString()}');
       }
     } else {
       // 파일이 없으면 일반 POST 요청
       var response = await http.post(
-        Uri.parse('15.164.18.65'),
-        headers: {"Content-Type": "application/json"},
+        Uri.parse('http://15.164.18.65:8080/app/profile'),
+        headers: {
+          "Content-Type": "application/json",
+          "Authorization": "Bearer $accessToken", // 토큰 추가
+        },
         body: jsonEncode(requestData),
       );
       if (response.statusCode == 200) {
         print('Profile saved successfully');
       } else {
         print('Failed to save profile');
+        print('Status code: ${response.statusCode}');
+        print('Response body: ${response.body}');
       }
+    }
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    birthdateController.addListener(_updateBirthdayFormat);
+  }
+
+  @override
+  void dispose() {
+    birthdateController.removeListener(_updateBirthdayFormat);
+    birthdateController.dispose();
+    nameController.dispose();
+    super.dispose();
+  }
+
+  void _updateBirthdayFormat() {
+    String text = birthdateController.text;
+    if (text.length == 4 || text.length == 7) {
+      birthdateController.value = TextEditingValue(
+        text: '$text-',
+        selection: TextSelection.collapsed(offset: text.length + 1),
+      );
     }
   }
 
@@ -76,7 +114,8 @@ class _multiProfileEditState extends State<multiProfileEdit> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('멀티프로필 추가/수정',
+        title: Text(
+          '프로필 정보 수정',
           style: TextStyle(
             fontSize: 16,
             fontWeight: FontWeight.w400,
@@ -121,7 +160,8 @@ class _multiProfileEditState extends State<multiProfileEdit> {
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      Text("성별",
+                      Text(
+                        "성별",
                         style: TextStyle(
                           fontWeight: FontWeight.w500, // Medium
                           fontSize: 14,
@@ -150,12 +190,11 @@ class _multiProfileEditState extends State<multiProfileEdit> {
                             gender = newValue!;
                           });
                         },
-                        items: <String>['남성', '여성']
-                            .map<DropdownMenuItem<String>>((String value) {
+                        items: <String>['MALE', 'FEMALE'].map<DropdownMenuItem<String>>((String value) {
                           return DropdownMenuItem<String>(
                             value: value,
                             child: Text(
-                              value,
+                              value == 'MALE' ? '남성' : '여성',
                               style: AppTextStyles.body5M14,
                             ),
                           );
@@ -166,13 +205,15 @@ class _multiProfileEditState extends State<multiProfileEdit> {
                 ),
                 CustomTextField(
                   label: "생년월일",
-                  hintText: "예) 1999.03.05",
+                  hintText: "예) 1999-03-05", // 힌트도 변경
                   controller: birthdateController,
+                  keyboardType: TextInputType.number,
                 ),
                 Gaps.h20,
                 ElevatedButton(
                   onPressed: saveProfile,
-                  child: Text('저장',
+                  child: Text(
+                    '저장',
                     style: TextStyle(
                       fontSize: 16,
                       fontWeight: FontWeight.w400,
@@ -180,9 +221,7 @@ class _multiProfileEditState extends State<multiProfileEdit> {
                     ),
                   ),
                   style: ElevatedButton.styleFrom(
-                    shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(8)
-                    ),
+                    shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
                     backgroundColor: AppColors.vibrantTeal,
                     minimumSize: Size.fromHeight(48),
                   ),
@@ -201,6 +240,7 @@ class CustomTextField extends StatelessWidget {
   final String hintText;
   final bool isPassword;
   final TextEditingController? controller;
+  final TextInputType keyboardType;
 
   const CustomTextField({
     Key? key,
@@ -208,6 +248,7 @@ class CustomTextField extends StatelessWidget {
     required this.hintText,
     this.isPassword = false,
     this.controller,
+    this.keyboardType = TextInputType.text,
   }) : super(key: key);
 
   @override
@@ -226,13 +267,14 @@ class CustomTextField extends StatelessWidget {
         TextFormField(
           controller: controller,
           obscureText: isPassword,
+          keyboardType: keyboardType,
           decoration: InputDecoration(
             border: InputBorder.none,
             hintText: hintText,
             hintStyle: TextStyle(
-                fontSize: 14,
-                fontWeight: FontWeight.w600,
-                color: AppColors.gr400
+              fontSize: 14,
+              fontWeight: FontWeight.w600,
+              color: AppColors.gr400,
             ),
             filled: true,
             fillColor: AppColors.gr150,
