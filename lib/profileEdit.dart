@@ -23,8 +23,8 @@ class _ProfileEditState extends State<ProfileEdit> {
   final TextEditingController birthdateController = TextEditingController();
   final JWTmanager jwtManager = JWTmanager();
 
-  String gender = "MALE"; // 초기값 설정을 API에 맞게 변경
-  String color = "#FFFFFF"; // color 필드 추가
+  String gender = "MALE"; 
+  String color = "#FFFFFF"; 
 
   Future<void> getImage() async {
     final XFile? pickedFile = await _picker.pickImage(source: ImageSource.gallery);
@@ -39,7 +39,7 @@ class _ProfileEditState extends State<ProfileEdit> {
 
   Future<void> saveProfile() async {
     final String name = nameController.text;
-    final String birthdate = birthdateController.text.replaceAll('.', '-'); // yyyy.MM.dd 형식을 yyyy-MM-dd 형식으로 변경
+    final String birthdate = birthdateController.text.replaceAll('.', '-'); 
     final String? accessToken = await jwtManager.getValidAccessToken();
 
     var requestData = {
@@ -51,12 +51,12 @@ class _ProfileEditState extends State<ProfileEdit> {
 
     if (_image != null) {
       var request = http.MultipartRequest('POST', Uri.parse('http://15.164.18.65:8080/app/profile'));
-      request.headers['Authorization'] = 'Bearer $accessToken'; // 토큰 추가
+      request.headers['Authorization'] = 'Bearer $accessToken'; 
       request.fields['name'] = name;
       request.fields['birthday'] = birthdate;
       request.fields['gender'] = gender;
       request.fields['color'] = color;
-      request.files.add(await http.MultipartFile.fromPath('profileImg', _image!.path)); // 'profile_image'를 'profileImg'로 변경
+      request.files.add(await http.MultipartFile.fromPath('profileImg', _image!.path)); 
 
       var response = await request.send();
       if (response.statusCode == 200) {
@@ -72,7 +72,7 @@ class _ProfileEditState extends State<ProfileEdit> {
         Uri.parse('http://15.164.18.65:8080/app/profile'),
         headers: {
           "Content-Type": "application/json",
-          "Authorization": "Bearer $accessToken", // 토큰 추가
+          "Authorization": "Bearer $accessToken", 
         },
         body: jsonEncode(requestData),
       );
