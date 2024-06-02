@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:sopf_front/appColors.dart';
 import 'package:sopf_front/gaps.dart';
+import 'package:sopf_front/navigates.dart';
 import 'package:sopf_front/provider.dart';
 import 'package:sopf_front/shapeSearch.dart';
 import 'package:sopf_front/textSearch.dart';
@@ -40,7 +41,8 @@ class _HomePageState extends State<HomePage> {
 
   @override
   Widget build(BuildContext context) {
-    final bool isKeyboardVisible = MediaQuery.of(context).viewInsets.bottom != 0; // 키보드 위치 확인
+    final bool isKeyboardVisible =
+        MediaQuery.of(context).viewInsets.bottom != 0; // 키보드 위치 확인
     final currentProfile = Provider.of<ProfileProvider>(context).currentProfile;
 
     return Scaffold(
@@ -64,7 +66,8 @@ class HomePageContent extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final currentProfile = Provider.of<ProfileProvider>(context, listen: false).currentProfile;
+    final currentProfile =
+        Provider.of<ProfileProvider>(context, listen: false).currentProfile;
     return SingleChildScrollView(
       child: Column(
         children: [
@@ -88,20 +91,35 @@ class HomePageContent extends StatelessWidget {
                   ],
                 ),
                 Gaps.h40,
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.start,
-                  children: [
-                    Image.asset(
-                      'assets/mypage_pill.png',
-                      width: 28,
-                      height: 28,
+                ElevatedButton(
+                  style: ElevatedButton.styleFrom(
+                    padding: EdgeInsets.symmetric(vertical: 16.0),
+                    backgroundColor: Colors
+                        .transparent, // Make the button background transparent
+                    shadowColor: Colors.transparent, // Remove the button shadow
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(8),
                     ),
-                    Gaps.h8,
-                    Text(
-                      '복용 중인 약',
-                      style: AppTextStyles.body5M14,
-                    ),
-                  ],
+                  ),
+                  onPressed: () {
+                    // Define the action for the button press here
+                    navigateToMedicationsTaking();
+                  },
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.start,
+                    children: [
+                      Image.asset(
+                        'assets/mypage_pill.png',
+                        width: 28,
+                        height: 28,
+                      ),
+                      Gaps.h8,
+                      Text(
+                        '복용 중인 약',
+                        style: AppTextStyles.body5M14,
+                      ),
+                    ],
+                  ),
                 ),
                 Gaps.h8,
                 Row(
@@ -151,6 +169,7 @@ class CustomBottomNavigationBar extends StatelessWidget {
   final bool isKeyboardVisible;
 
   CustomBottomNavigationBar({
+    super.key,
     required this.onTap,
     required this.currentIndex,
     required this.isKeyboardVisible,
@@ -158,8 +177,10 @@ class CustomBottomNavigationBar extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final double iconSize = MediaQuery.of(context).size.width * 0.07; // Adjust icon size dynamically
-    final double textSize = MediaQuery.of(context).size.width * 0.03; // Adjust text size dynamically
+    final double iconSize = MediaQuery.of(context).size.width *
+        0.07; // Adjust icon size dynamically
+    final double textSize = MediaQuery.of(context).size.width *
+        0.03; // Adjust text size dynamically
 
     return BottomAppBar(
       color: Colors.white,
@@ -167,16 +188,21 @@ class CustomBottomNavigationBar extends StatelessWidget {
         mainAxisSize: MainAxisSize.max,
         mainAxisAlignment: MainAxisAlignment.spaceAround,
         children: <Widget>[
-          _buildNavItem(0, '약국', 'assets/bottombar/IconGnbHome.png', 'assets/bottombar/IconGnbHome_bk.png', iconSize, textSize),
-          _buildNavItem(1, '홈', 'assets/bottombar/IconGnbSale.png', 'assets/bottombar/IconGnbSale_bk.png', iconSize, textSize),
-          _buildNavItem(2, '캘린더', 'assets/bottombar/IconGnbBuyer.png', 'assets/bottombar/IconGnbBuyer_bk.png', iconSize, textSize),
-          _buildNavItem(3, '마이', 'assets/bottombar/IconBtnMoreActive.png', 'assets/bottombar/IconBtnMoreActive_bk.png', iconSize, textSize),
+          _buildNavItem(0, '약국', 'assets/bottombar/IconGnbHome.png',
+              'assets/bottombar/IconGnbHome_bk.png', iconSize, textSize),
+          _buildNavItem(1, '홈', 'assets/bottombar/IconGnbSale.png',
+              'assets/bottombar/IconGnbSale_bk.png', iconSize, textSize),
+          _buildNavItem(2, '캘린더', 'assets/bottombar/IconGnbBuyer.png',
+              'assets/bottombar/IconGnbBuyer_bk.png', iconSize, textSize),
+          _buildNavItem(3, '마이', 'assets/bottombar/IconBtnMoreActive.png',
+              'assets/bottombar/IconBtnMoreActive_bk.png', iconSize, textSize),
         ],
       ),
     );
   }
 
-  Widget _buildNavItem(int index, String label, String iconPath, String selectedIconPath, double iconSize, double textSize) {
+  Widget _buildNavItem(int index, String label, String iconPath,
+      String selectedIconPath, double iconSize, double textSize) {
     return Expanded(
       child: GestureDetector(
         onTap: () => onTap(index),
@@ -201,7 +227,8 @@ class CustomBottomNavigationBar extends StatelessWidget {
               style: TextStyle(
                 fontSize: 12,
                 fontWeight: FontWeight.w500,
-                color: currentIndex == index ? AppColors.gr800 : AppColors.gr400,
+                color:
+                    currentIndex == index ? AppColors.gr800 : AppColors.gr400,
               ),
             ),
           ],

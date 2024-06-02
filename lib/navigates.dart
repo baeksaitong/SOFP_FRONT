@@ -8,6 +8,9 @@ import 'package:sopf_front/signUp.dart';
 import 'package:sopf_front/textSearch.dart';
 import 'package:sopf_front/preferencesPage.dart';
 import 'package:sopf_front/favoritePage.dart';
+import 'package:sopf_front/category.dart';
+import 'package:sopf_front/categoryPlus.dart';
+import 'package:sopf_front/categoryBasic.dart';
 
 import 'category.dart';
 import 'categoryPlus.dart';
@@ -50,6 +53,7 @@ void navigateToPillDetail() {
     MaterialPageRoute(builder: (context) => PillDetails()),
   );
 }
+
 void navigateToPreference() {
   navigatorKey.currentState?.push(
     MaterialPageRoute(builder: (context) => SettingsPage()),
@@ -62,7 +66,7 @@ void navigateToFavorite() {
   );
 }
 
-void navigateToCategory() {
+void navigateToMedicationsTaking() {
   navigatorKey.currentState?.push(
     MaterialPageRoute(builder: (context) => MedicationPage()),
   );
@@ -77,5 +81,24 @@ void navigateToRecentHistory() {
 void navigateToCustomerService() {
   navigatorKey.currentState?.push(
     MaterialPageRoute(builder: (context) => CustomerServicePage()),
+  );
+}
+void navigateToMedicationsTakingPlus(
+    BuildContext context, Function(Map<String, dynamic>) onSave,
+    [Map<String, dynamic>? category]) {
+  Navigator.of(context).push(
+    MaterialPageRoute(
+      builder: (context) => MedicationSchedulePage(
+        onSave: onSave,
+      ),
+    ),
+  );
+}
+
+void navigateToMedicationCategory(
+    BuildContext context, Map<String, dynamic> category) {
+  Navigator.of(context).push(
+    MaterialPageRoute(
+        builder: (context) => MedicationCategoryPage(category: category)),
   );
 }

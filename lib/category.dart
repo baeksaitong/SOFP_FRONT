@@ -1,17 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:sopf_front/navigates.dart';
 import 'appColors.dart';
 import 'appTextStyles.dart';
 import 'gaps.dart';
 import 'shapeSearch.dart';
-import 'textSearch.dart'; // import for text search screen
-
-void main() {
-  runApp(MaterialApp(
-    title: 'First App',
-    theme: ThemeData(primarySwatch: Colors.blue),
-    home: MedicationPage(),
-  ));
-}
+import 'textSearch.dart';
 
 class MedicationPage extends StatefulWidget {
   const MedicationPage({super.key});
@@ -29,11 +22,14 @@ class _MedicationPageState extends State<MedicationPage> {
   ];
   bool isEditMode = false;
   Set<int> selectedIndexes = <int>{};
-  String? selectedCategory; // 선택된 카테고리를 저장할 변수
+  String? selectedCategoryName;
+  Map<String, dynamic>? selectedCategoryDetails;
+  List<Map<String, dynamic>> categories = [];
 
   void _showAddMedicationDialog() {
     showModalBottomSheet(
       context: context,
+      backgroundColor: AppColors.wh,
       isScrollControlled: true,
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
@@ -52,7 +48,7 @@ class _MedicationPageState extends State<MedicationPage> {
                 Container(
                   decoration: BoxDecoration(
                     color: AppColors.gr150,
-                    borderRadius: BorderRadius.circular(16.0), // 둥근 모서리를 만들기
+                    borderRadius: BorderRadius.circular(16.0),
                   ),
                   padding:
                       const EdgeInsets.symmetric(vertical: 12, horizontal: 16),
@@ -70,7 +66,6 @@ class _MedicationPageState extends State<MedicationPage> {
                             ),
                           ),
                           onPressed: () {
-                            // 알약 이름 검색 페이지로 이동
                             Navigator.push(
                               context,
                               MaterialPageRoute(
@@ -117,12 +112,11 @@ class _MedicationPageState extends State<MedicationPage> {
                           shape: RoundedRectangleBorder(
                             borderRadius: BorderRadius.circular(8),
                           ),
-                          side: BorderSide.none, // 테두리 색상 설정
+                          side: BorderSide.none,
                           backgroundColor: AppColors.gr150,
-                          minimumSize: Size(120, 100), // Adjust size as needed
+                          minimumSize: Size(120, 100),
                         ),
                         onPressed: () {
-                          // 모양으로 검색 기능 구현
                           Navigator.push(
                             context,
                             MaterialPageRoute(
@@ -134,7 +128,7 @@ class _MedicationPageState extends State<MedicationPage> {
                           mainAxisAlignment: MainAxisAlignment.center,
                           children: [
                             Image.asset(
-                              'assets/mdi_shape-plus.png', // 이미지 경로
+                              'assets/mdi_shape-plus.png',
                               width: 32,
                               height: 32,
                             ),
@@ -148,25 +142,34 @@ class _MedicationPageState extends State<MedicationPage> {
                         ),
                       ),
                     ),
-                    Gaps.w10, // 버튼 사이의 간격
+                    Gaps.w10,
                     Expanded(
                       child: OutlinedButton(
                         style: OutlinedButton.styleFrom(
                           shape: RoundedRectangleBorder(
                             borderRadius: BorderRadius.circular(8),
                           ),
-                          side: BorderSide.none, // 테두리 색상 설정
+                          side: BorderSide.none,
                           backgroundColor: AppColors.gr150,
-                          minimumSize: Size(120, 100), // Adjust size as needed
+                          minimumSize: Size(120, 100),
                         ),
                         onPressed: () {
-                          // 카테고리 검색 기능 구현
+                          navigateToMedicationsTakingPlus(context,
+                              (newCategory) {
+                            setState(() {
+                              newCategory['medications'] = <Map<String,
+                                  String>>[]; // Ensure the medications field is initialized
+                              categories.add(newCategory);
+                              selectedCategoryName = newCategory['name'];
+                              selectedCategoryDetails = newCategory;
+                            });
+                          });
                         },
                         child: Column(
                           mainAxisAlignment: MainAxisAlignment.center,
                           children: [
                             const Icon(
-                              Icons.category, // 카테고리 아이콘
+                              Icons.category,
                               size: 32,
                             ),
                             Gaps.h4,
@@ -268,49 +271,43 @@ class _MedicationPageState extends State<MedicationPage> {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Text('이동하기', style: AppTextStyles.title3S18),
+                  for (Map<String, dynamic> category in categories)
+                    ListTile(
+                      leading: Icon(Icons.folder, color: AppColors.deepTeal),
+                      title:
+                          Text(category['name'], style: AppTextStyles.body2M16),
+                      selected: selectedCategoryName == category['name'],
+                      selectedTileColor: AppColors.softTeal,
+                      onTap: () {
+                        setState(() {
+                          selectedCategoryName = category['name'];
+                          selectedCategoryDetails = category;
+                        });
+                      },
+                    ),
                   ListTile(
-                    leading: Icon(Icons.folder, color: AppColors.deepTeal),
-                    title: Text('카테고리1', style: AppTextStyles.body2M16),
-                    selected: selectedCategory == '카테고리1',
-                    selectedTileColor: AppColors.softTeal,
+                    leading: Icon(Icons.add, color: AppColors.deepTeal),
+                    title: Text('카테고리 추가하기', style: AppTextStyles.body2M16),
                     onTap: () {
-                      setState(() {
-                        selectedCategory = '카테고리1';
-                      });
-                    },
-                  ),
-                  ListTile(
-                    leading: Icon(Icons.folder, color: AppColors.deepTeal),
-                    title: Text('카테고리2', style: AppTextStyles.body2M16),
-                    selected: selectedCategory == '카테고리2',
-                    selectedTileColor: AppColors.softTeal,
-                    onTap: () {
-                      setState(() {
-                        selectedCategory = '카테고리2';
-                      });
-                    },
-                  ),
-                  ListTile(
-                    leading: Icon(Icons.folder, color: AppColors.deepTeal),
-                    title: Text('카테고리3', style: AppTextStyles.body2M16),
-                    selected: selectedCategory == '카테고리3',
-                    selectedTileColor: AppColors.softTeal,
-                    onTap: () {
-                      setState(() {
-                        selectedCategory = '카테고리3';
+                      navigateToMedicationsTakingPlus(context, (newCategory) {
+                        setState(() {
+                          categories.add(newCategory);
+                          selectedCategoryName = newCategory['name'];
+                          selectedCategoryDetails = newCategory;
+                        });
                       });
                     },
                   ),
                   Gaps.h20,
                   ElevatedButton(
-                    onPressed: selectedCategory == null
+                    onPressed: selectedCategoryName == null
                         ? null
                         : () {
-                            // 이동 기능 최종 구현
+                            _moveSelectedMedications();
                             Navigator.of(context).pop();
                             setState(() {
                               isEditMode = false;
-                              selectedIndexes.clear(); // 선택된 인덱스 초기화
+                              selectedIndexes.clear();
                             });
                           },
                     style: ElevatedButton.styleFrom(
@@ -318,7 +315,7 @@ class _MedicationPageState extends State<MedicationPage> {
                       shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(8.0),
                       ),
-                      backgroundColor: selectedCategory == null
+                      backgroundColor: selectedCategoryName == null
                           ? AppColors.gr250
                           : AppColors.deepTeal,
                     ),
@@ -339,50 +336,168 @@ class _MedicationPageState extends State<MedicationPage> {
     });
   }
 
+  void _moveSelectedMedications() {
+    if (selectedCategoryDetails != null) {
+      final selectedMedications =
+          selectedIndexes.map((index) => medications[index]).toList();
+      setState(() {
+        selectedCategoryDetails!['medications']
+            .addAll(selectedMedications.map((medication) => {
+                  'name': medication,
+                  'manufacturer': '제조사명', // 실제 제조사명으로 바꿔야 함
+                  'category': '분류명', // 실제 분류명으로 바꿔야 함
+                  'image': 'assets/exPill.png',
+                }));
+        selectedIndexes.clear();
+      });
+    }
+  }
+
+  void _editCategory(Map<String, dynamic> category) {
+    navigateToMedicationsTakingPlus(
+      context,
+      (updatedCategory) {
+        setState(() {
+          int index =
+              categories.indexWhere((cat) => cat['name'] == category['name']);
+          if (index != -1) {
+            categories[index] = updatedCategory;
+          }
+        });
+      },
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: AppColors.wh,
       appBar: AppBar(
         title: Text('복용중인 알약', style: AppTextStyles.title1B24),
+        backgroundColor: AppColors.wh,
       ),
       body: Padding(
         padding: const EdgeInsets.all(20.0),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Text('감기약', style: AppTextStyles.title1B24),
-            SizedBox(height: 10),
-            Container(
-              padding: const EdgeInsets.all(16.0),
-              decoration: BoxDecoration(
-                color: AppColors.gr150,
-                borderRadius: BorderRadius.circular(8.0),
-              ),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      Text('섭취 시간', style: AppTextStyles.body2M16),
-                      IconButton(
-                        icon: Icon(Icons.edit),
-                        onPressed: () {
-                          // 편집 기능 추가
-                        },
-                      ),
-                    ],
-                  ),
-                  Gaps.h8,
-                  Text('월, 화, 수, 목, 금', style: AppTextStyles.body5M14),
-                  SizedBox(height: 4),
-                  Text('오전 8시 30분', style: AppTextStyles.body5M14),
-                  Text('오후 1시 30분', style: AppTextStyles.body5M14),
-                  Text('오후 7시 30분', style: AppTextStyles.body5M14),
-                ],
+            Expanded(
+              child: ListView.builder(
+                itemCount: categories.length + 1,
+                itemBuilder: (context, index) {
+                  if (index == 0) {
+                    return Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text('카테고리 예시', style: AppTextStyles.title1B24),
+                        SizedBox(height: 10),
+                        Container(
+                          padding: const EdgeInsets.all(16.0),
+                          decoration: BoxDecoration(
+                            color: AppColors.gr150,
+                            borderRadius: BorderRadius.circular(8.0),
+                          ),
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Row(
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceBetween,
+                                children: [
+                                  Text(
+                                    '섭취 시간',
+                                    style: AppTextStyles.body2M16
+                                        .copyWith(color: AppColors.gr800),
+                                  ),
+                                  IconButton(
+                                    icon: Icon(Icons.edit),
+                                    onPressed: () {
+                                      // 편집 기능 추가
+                                    },
+                                  ),
+                                ],
+                              ),
+                              Gaps.h8,
+                              Text('월, 화, 수, 목, 금',
+                                  style: AppTextStyles.body5M14),
+                              SizedBox(height: 4),
+                              Text('오전 8시 30분', style: AppTextStyles.body5M14),
+                              Text('오후 1시 30분', style: AppTextStyles.body5M14),
+                              Text('오후 7시 30분', style: AppTextStyles.body5M14),
+                            ],
+                          ),
+                        ),
+                        Gaps.h20,
+                      ],
+                    );
+                  } else {
+                    final category = categories[index - 1];
+                    return Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(category['name'], style: AppTextStyles.title1B24),
+                        Gaps.h20,
+                        ElevatedButton(
+                          style: ElevatedButton.styleFrom(
+                            padding: EdgeInsets.zero, // 패딩 제거
+                            backgroundColor: Colors.transparent, // 배경색 제거
+                            shadowColor: Colors.transparent, // 그림자 제거
+                          ),
+                          onPressed: () {
+                            navigateToMedicationCategory(context, category);
+                          },
+                          child: Container(
+                            padding: const EdgeInsets.all(16.0),
+                            decoration: BoxDecoration(
+                              color: AppColors.gr150,
+                              borderRadius: BorderRadius.circular(8.0),
+                            ),
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Row(
+                                  mainAxisAlignment:
+                                      MainAxisAlignment.spaceBetween,
+                                  children: [
+                                    Text(
+                                      '섭취 시간',
+                                      style: AppTextStyles.body1S16
+                                          .copyWith(color: AppColors.gr800),
+                                    ),
+                                    IconButton(
+                                      icon: Icon(Icons.edit),
+                                      color: AppColors.gr800,
+                                      onPressed: () {
+                                        _editCategory(category);
+                                      },
+                                    ),
+                                  ],
+                                ),
+                                Gaps.h8,
+                                Text(
+                                  category['days']?.join(', ') ?? '',
+                                  style: AppTextStyles.body5M14
+                                      .copyWith(color: AppColors.gr800),
+                                ),
+                                SizedBox(height: 4),
+                                ...?category['times']?.map<Widget>(
+                                  (time) => Text(
+                                    time,
+                                    style: AppTextStyles.body5M14
+                                        .copyWith(color: AppColors.gr800),
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ),
+                        ),
+                        Gaps.h20,
+                      ],
+                    );
+                  }
+                },
               ),
             ),
-            Gaps.h20,
             Expanded(
               child: ListView.builder(
                 itemCount: medications.length,
@@ -414,10 +529,13 @@ class _MedicationPageState extends State<MedicationPage> {
                               });
                             },
                           ),
-                        Image.asset(
-                          'assets/exPill.png',
-                          width: 50,
-                          height: 50,
+                        Padding(
+                          padding: const EdgeInsets.all(8.0),
+                          child: Image.asset(
+                            'assets/exPill.png',
+                            width: 50,
+                            height: 50,
+                          ),
                         ),
                         Gaps.h16,
                         Expanded(
