@@ -13,7 +13,6 @@ import 'appColors.dart';
 import 'package:camera/camera.dart';
 import 'package:sopf_front/exColorsText.dart';
 import 'package:sopf_front/imageSearch.dart';
-import 'imageSearch.dart';
 import 'package:lottie/lottie.dart';
 import 'package:provider/provider.dart';
 import 'package:sopf_front/login.dart';
@@ -78,7 +77,47 @@ class MyApp extends StatelessWidget {
         ),
       ),
       navigatorKey: navigatorKey,
-      home: const LoginPage(),
+      home: SplashScreen(), // Show the splash screen first
+    );
+  }
+}
+
+class SplashScreen extends StatefulWidget {
+  const SplashScreen({super.key});
+
+  @override
+  _SplashScreenState createState() => _SplashScreenState();
+}
+
+class _SplashScreenState extends State<SplashScreen> {
+  @override
+  void initState() {
+    super.initState();
+    _navigateToHome();
+  }
+
+  _navigateToHome() async {
+    await Future.delayed(
+        Duration(seconds: 3), () {}); // Show splash screen for 3 seconds
+    Navigator.pushReplacement(
+      context,
+      MaterialPageRoute(builder: (context) => LoginPage()),
+    );
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      backgroundColor: AppColors.wh,
+      body: Stack(
+        fit: StackFit.expand,
+        children: [
+          Image.asset(
+            'assets/splash.png',
+            fit: BoxFit.cover,
+          ),
+        ],
+      ),
     );
   }
 }
