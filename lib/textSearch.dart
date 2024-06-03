@@ -1,10 +1,12 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import 'package:sopf_front/apiClient.dart';
 import 'package:sopf_front/searchResult.dart';
 import 'appColors.dart';
 import 'appTextStyles.dart';
 import 'gaps.dart';
 import 'navigates.dart';
+import 'loading_provider.dart';
 
 class TextSearch extends StatefulWidget {
   const TextSearch({super.key});
@@ -16,51 +18,57 @@ class TextSearch extends StatefulWidget {
 class _TextSearchState extends State<TextSearch> {
   @override
   Widget build(BuildContext context) {
-    return GestureDetector(
-      onTap: navigateToTextSearchDetail,
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Text(
-            '약을 검색해 보세요',
-            style: AppTextStyles.title3S18,
-          ),
-          Gaps.h16,
-          Container(
-            width: 335,
-            height: 48,
-            decoration: BoxDecoration(
-              color: AppColors.wh,
-              borderRadius: BorderRadius.circular(16.0), // 둥근 모서리를 만들기
-            ),
-            child: Row(
-              children: [
-                Gaps.w16,
-                Image.asset(
-                  'assets/ion_search.png',
-                  width: 20,
-                  height: 20,
+    return Stack(
+      children: [
+        GestureDetector(
+          onTap: navigateToTextSearchDetail,
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Text(
+                '약을 검색해 보세요',
+                style: AppTextStyles.title3S18,
+              ),
+              Gaps.h16,
+              Container(
+                width: 335,
+                height: 48,
+                decoration: BoxDecoration(
+                  color: AppColors.wh,
+                  borderRadius: BorderRadius.circular(16.0), // 둥근 모서리를 만들기
                 ),
-                Gaps.w6,
-                Expanded(
-                    child: Text(
-                  '알약 이름을 검색해 보세요',
-                  style:
-                      AppTextStyles.body5M14.copyWith(color: AppColors.gr500),
-                )),
-                IconButton(
-                  onPressed: () {},
-                  icon: Image.asset(
-                    'assets/majesticons_camera.png',
-                    width: 24,
-                    height: 24,
-                  ),
+                child: Row(
+                  children: [
+                    Gaps.w16,
+                    Image.asset(
+                      'assets/ion_search.png',
+                      width: 20,
+                      height: 20,
+                    ),
+                    Gaps.w6,
+                    Expanded(
+                      child: Text(
+                        '알약 이름을 검색해 보세요',
+                        style: AppTextStyles.body5M14
+                            .copyWith(color: AppColors.gr500),
+                      ),
+                    ),
+                    IconButton(
+                      onPressed: () {},
+                      icon: Image.asset(
+                        'assets/majesticons_camera.png',
+                        width: 24,
+                        height: 24,
+                      ),
+                    ),
+                  ],
                 ),
-              ],
-            ),
+              ),
+            ],
           ),
-        ],
-      ),
+        ),
+        loadingOverlay(context), // Add the loading overlay here
+      ],
     );
   }
 }
@@ -77,11 +85,14 @@ class _TextSearchDetailState extends State<TextSearchDetail> {
   final FocusNode _focusNode = FocusNode();
   final APIClient apiClient = APIClient();
 
-  List<String> _recentSearches = [];
+  final List<String> _recentSearches = [];
 
-  void _addSearchTerm(String term) async{
+  void _addSearchTerm(String term) async {
     if (term.isNotEmpty) {
-      await apiClient.searchTextAndShape(context,term, null, null, null, null, null);
+      showLoading(context, delayed: true); // Show loading spinner with delay
+
+      await apiClient.searchTextAndShape(
+          context, term, null, null, null, null, null);
 
       setState(() {
         _recentSearches.remove(term);
@@ -92,6 +103,8 @@ class _TextSearchDetailState extends State<TextSearchDetail> {
         // Request focus back to the text field
         navigateToSearchResult();
       });
+
+      hideLoading(context); // Hide loading spinner
     }
   }
 
@@ -122,79 +135,84 @@ class _TextSearchDetailState extends State<TextSearchDetail> {
           },
         ),
       ),
-      body: Container(
-        margin: EdgeInsets.symmetric(vertical: 10, horizontal: 20),
-        width: 335,
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.start,
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Container(
-              width: 335,
-              height: 48,
-              decoration: BoxDecoration(
-                color: AppColors.gr150,
-                borderRadius: BorderRadius.circular(16.0), // 둥근 모서리를 만들기
-              ),
-              child: Row(
-                children: [
-                  IconButton(
-                    onPressed: () {},
-                    icon: Image.asset(
-                      'assets/ion_search.png',
-                      width: 20,
-                      height: 20,
-                    ),
+      body: Stack(
+        children: [
+          Container(
+            margin: EdgeInsets.symmetric(vertical: 10, horizontal: 20),
+            width: 335,
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.start,
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Container(
+                  width: 335,
+                  height: 48,
+                  decoration: BoxDecoration(
+                    color: AppColors.gr150,
+                    borderRadius: BorderRadius.circular(16.0), // 둥근 모서리를 만들기
                   ),
-                  Flexible(
-                    child: TextField(
-                      controller: _controller,
-                      focusNode: _focusNode,
-                      decoration: InputDecoration(
-                        border: InputBorder.none,
-                        hintText: "알약 이름을 검색해보세요",
+                  child: Row(
+                    children: [
+                      IconButton(
+                        onPressed: () {},
+                        icon: Image.asset(
+                          'assets/ion_search.png',
+                          width: 20,
+                          height: 20,
+                        ),
                       ),
-                      onSubmitted: _addSearchTerm,
-                    ),
+                      Flexible(
+                        child: TextField(
+                          controller: _controller,
+                          focusNode: _focusNode,
+                          decoration: InputDecoration(
+                            border: InputBorder.none,
+                            hintText: "알약 이름을 검색해보세요",
+                          ),
+                          onSubmitted: _addSearchTerm,
+                        ),
+                      ),
+                    ],
                   ),
-                ],
-              ),
+                ),
+                Gaps.h24,
+                Text(
+                  '최근검색',
+                  style: AppTextStyles.caption1M12,
+                ),
+                Expanded(
+                  child: ListView.builder(
+                    itemCount: _recentSearches.length,
+                    itemBuilder: (context, index) {
+                      return ListTile(
+                        contentPadding:
+                            EdgeInsets.zero, // Remove padding inside ListTile
+                        title: GestureDetector(
+                          onTap: () {
+                            print(_recentSearches[index]);
+                          },
+                          child: Text(
+                            _recentSearches[index],
+                            style: AppTextStyles.body5M14,
+                          ),
+                        ),
+                        trailing: IconButton(
+                          icon: Image.asset(
+                            'assets/IconChat.png',
+                            width: 24,
+                            height: 24,
+                          ),
+                          onPressed: () => _removeSearchTerm(index),
+                        ),
+                      );
+                    },
+                  ),
+                ),
+              ],
             ),
-            Gaps.h24,
-            Text(
-              '최근검색',
-              style: AppTextStyles.caption1M12,
-            ),
-            Expanded(
-              child: ListView.builder(
-                itemCount: _recentSearches.length,
-                itemBuilder: (context, index) {
-                  return ListTile(
-                    contentPadding:
-                        EdgeInsets.zero, // Remove padding inside ListTile
-                    title: GestureDetector(
-                      onTap: () {
-                        print(_recentSearches[index]);
-                      },
-                      child: Text(
-                        _recentSearches[index],
-                        style: AppTextStyles.body5M14,
-                      ),
-                    ),
-                    trailing: IconButton(
-                      icon: Image.asset(
-                        'assets/IconChat.png',
-                        width: 24,
-                        height: 24,
-                      ),
-                      onPressed: () => _removeSearchTerm(index),
-                    ),
-                  );
-                },
-              ),
-            ),
-          ],
-        ),
+          ),
+          loadingOverlay(context), // Add the loading overlay here
+        ],
       ),
     );
   }

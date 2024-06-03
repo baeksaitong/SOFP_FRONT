@@ -9,7 +9,7 @@ import 'package:sopf_front/gaps.dart';
 class ImageSearch extends StatelessWidget {
   final List<CameraDescription> cameras;
 
-  const ImageSearch({Key? key, required this.cameras}) : super(key: key);
+  const ImageSearch({super.key, required this.cameras});
 
   @override
   Widget build(BuildContext context) {
@@ -36,7 +36,7 @@ class ImageSearch extends StatelessWidget {
 class CameraScreen extends StatefulWidget {
   final List<CameraDescription> cameras;
 
-  const CameraScreen({Key? key, required this.cameras}) : super(key: key);
+  const CameraScreen({super.key, required this.cameras});
 
   @override
   _CameraScreenState createState() => _CameraScreenState();
@@ -60,7 +60,8 @@ class _CameraScreenState extends State<CameraScreen> {
 
   Future<void> _initializeCamera() async {
     if (widget.cameras.isNotEmpty) {
-      _controller = CameraController(widget.cameras.first, ResolutionPreset.high);
+      _controller =
+          CameraController(widget.cameras.first, ResolutionPreset.high);
       await _controller!.initialize();
       setState(() {});
     }
@@ -71,7 +72,8 @@ class _CameraScreenState extends State<CameraScreen> {
       _isLoadingImage = true;
     });
 
-    final XFile? pickedFile = await _picker.pickImage(source: ImageSource.gallery);
+    final XFile? pickedFile =
+        await _picker.pickImage(source: ImageSource.gallery);
     setState(() {
       _latestImage = pickedFile != null ? File(pickedFile.path) : null;
       _isLoadingImage = false;
@@ -206,11 +208,7 @@ class _CameraScreenState extends State<CameraScreen> {
       setState(() {
         _isTakingPicture = true;
       });
-      final XFile? picture = await _controller!.takePicture();
-      if (picture == null) {
-        print('Error: 사진을 찍지 못했습니다.');
-        return;
-      }
+      final XFile picture = await _controller!.takePicture();
       if (_firstImageFile == null) {
         setState(() {
           _firstImageFile = picture;
@@ -236,7 +234,8 @@ class _CameraScreenState extends State<CameraScreen> {
       context: context,
       builder: (BuildContext context) {
         return AlertDialog(
-          title: Text('알림',
+          title: Text(
+            '알림',
             style: TextStyle(
               fontSize: 22,
               fontWeight: FontWeight.w600,
@@ -247,7 +246,8 @@ class _CameraScreenState extends State<CameraScreen> {
           content: Text('알약의 뒷면 촬영으로 넘어갈까요? \n다시 촬영하려면 아니오를 누르시오'),
           actions: <Widget>[
             TextButton(
-              child: Text('아니요',
+              child: Text(
+                '아니요',
                 style: TextStyle(
                   fontSize: 14,
                   fontWeight: FontWeight.w600,
@@ -263,7 +263,8 @@ class _CameraScreenState extends State<CameraScreen> {
               },
             ),
             TextButton(
-              child: Text('네',
+              child: Text(
+                '네',
                 style: TextStyle(
                   fontSize: 14,
                   fontWeight: FontWeight.w600,
@@ -286,7 +287,8 @@ class _CameraScreenState extends State<CameraScreen> {
       context: context,
       builder: (BuildContext context) {
         return AlertDialog(
-          title: Text('알림',
+          title: Text(
+            '알림',
             style: TextStyle(
               fontSize: 22,
               fontWeight: FontWeight.w600,
@@ -297,7 +299,8 @@ class _CameraScreenState extends State<CameraScreen> {
           content: Text('검색하시겠습니까? \n처음부터 다시하려면 아니요를 누르시오'),
           actions: <Widget>[
             TextButton(
-              child: Text('아니요',
+              child: Text(
+                '아니요',
                 style: TextStyle(
                   fontSize: 14,
                   fontWeight: FontWeight.w600,
@@ -314,7 +317,8 @@ class _CameraScreenState extends State<CameraScreen> {
               },
             ),
             TextButton(
-              child: Text('검색',
+              child: Text(
+                '검색',
                 style: TextStyle(
                   fontSize: 14,
                   fontWeight: FontWeight.w600,
@@ -344,7 +348,7 @@ class _CameraScreenState extends State<CameraScreen> {
     final currentDirection = _controller!.description.lensDirection;
 
     CameraDescription newCamera = widget.cameras.firstWhere(
-          (camera) => camera.lensDirection != currentDirection,
+      (camera) => camera.lensDirection != currentDirection,
       orElse: () => _controller!.description,
     );
 

@@ -17,6 +17,7 @@ import 'package:lottie/lottie.dart';
 import 'package:provider/provider.dart';
 import 'package:sopf_front/login.dart';
 import 'package:sopf_front/provider.dart';
+import 'loading_provider.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -33,6 +34,8 @@ void main() async {
       providers: [
         ChangeNotifierProvider(create: (_) => ProfileProvider()),
         ChangeNotifierProvider(create: (_) => DrugInfoDetailProvider()),
+        ChangeNotifierProvider(
+            create: (_) => LoadingProvider()), // Add LoadingProvider
       ],
       child: MyApp(camera: firstCamera),
     ),
@@ -108,7 +111,7 @@ class _SplashScreenState extends State<SplashScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: AppColors.wh,
+      backgroundColor: Colors.white,
       body: Stack(
         fit: StackFit.expand,
         children: [
