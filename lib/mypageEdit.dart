@@ -11,6 +11,10 @@ import 'package:sopf_front/provider.dart';
 import 'jwtManager.dart';
 
 class MyPageEdit extends StatefulWidget {
+  final String profileId;
+
+  MyPageEdit({required this.profileId});
+
   @override
   _MyPageEditState createState() => _MyPageEditState();
 }
@@ -22,6 +26,7 @@ class _MyPageEditState extends State<MyPageEdit> {
   late TextEditingController passwordController;
   late TextEditingController confirmPasswordController;
   bool _isSubscribed = false;
+  late MemberInfo memberInfo;
 
   @override
   void initState() {
@@ -48,7 +53,7 @@ class _MyPageEditState extends State<MyPageEdit> {
       if (response.statusCode == 200) {
         final responseBody = response.body;
         print('Response body: $responseBody'); // 응답 본문을 출력하여 확인
-        final memberInfo = MemberInfo.fromJson(json.decode(responseBody));
+        memberInfo = MemberInfo.fromJson(json.decode(responseBody));
         setState(() {
           emailController.text = memberInfo.email;
           _isSubscribed = memberInfo.advertisement;
@@ -60,7 +65,6 @@ class _MyPageEditState extends State<MyPageEdit> {
       print('Error fetching member info: $e');
     }
   }
-
 
   Future<void> getImage() async {
     final XFile? pickedFile = await _picker.pickImage(source: ImageSource.gallery);
@@ -123,16 +127,13 @@ class _MyPageEditState extends State<MyPageEdit> {
     }
   }
 
-
-
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: AppColors.wh,
       appBar: AppBar(
         title: Text(
-          '정보 수정',
+          '회원정보 변경',
           style: TextStyle(
             fontSize: 16,
             fontWeight: FontWeight.w600,

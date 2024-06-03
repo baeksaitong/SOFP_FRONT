@@ -432,7 +432,7 @@ class _MyPageState extends State<MyPage> {
         padding: const EdgeInsets.symmetric(horizontal: 20),
         children: [
           Gaps.h60,
-          buildProfileHeader(currentProfile),
+          buildProfileHeader(Provider.of<ProfileProvider>(context).currentProfile),
           Gaps.h60,
           buildInfoSection(context, '내 알레르기 및 질병', "알레르기 및 질병 정보를 입력하세요.", 'allergy'),
           buildInfoSection(context, '내가 복용 중인 약', "복용 중인 약 정보를 입력하세요.", 'medication'),
@@ -451,6 +451,8 @@ class _MyPageState extends State<MyPage> {
             radius: 50,
             backgroundColor: AppColors.gr200,
             child: Image.asset('assets/user-icon.png', width: 100, height: 100),
+                ? Image.network(profile?.imgURL ?? 'assets/mypageEdit/user-icon.png', width: 100, height: 100)
+                : Image.asset('assets/user-icon.png', width: 100, height: 100),
           ),
         ),
         Expanded(
@@ -473,7 +475,7 @@ class _MyPageState extends State<MyPage> {
                     Navigator.push(
                       context,
                       MaterialPageRoute(
-                        builder: (context) => MyPageEdit(profile: profile),
+                        builder: (context) => MyPageEdit(profileId: profile.id),
                       ),
                     );
                   }
@@ -481,7 +483,7 @@ class _MyPageState extends State<MyPage> {
                 style: TextButton.styleFrom(
                   padding: EdgeInsets.only(left: 20),
                 ),
-                child: Text('프로필 설정',
+                child: Text('회원정보 변경',
                     style: TextStyle(
                       fontSize: 16,
                       fontFamily: 'Pretendard',
@@ -494,14 +496,14 @@ class _MyPageState extends State<MyPage> {
                   Navigator.push(
                     context,
                     MaterialPageRoute(
-                      builder: (context) => multiProfileEdit(),
+                      builder: (context) => ProfileEdit(profileId: profile?.id ?? ''),
                     ),
                   );
                 },
                 style: TextButton.styleFrom(
                   padding: EdgeInsets.only(left: 20, bottom: 20),
                 ),
-                child: Text('회원정보 변경',
+                child: Text('프로필 정보 수정',
                     style: TextStyle(
                       fontSize: 16,
                       fontFamily: 'Pretendard',

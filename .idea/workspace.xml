@@ -5,11 +5,13 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="90cba86e-3fee-41a1-aff0-27c9beaf05fa" name="Changes" comment="">
-      <change beforePath="$PROJECT_DIR$/.idea/libraries/Dart_Packages.xml" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/libraries/Flutter_Plugins.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/libraries/Flutter_Plugins.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/lib/multiProfileEdit.dart" beforeDir="false" afterPath="$PROJECT_DIR$/lib/multiProfileEdit.dart" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/lib/globalResponseManager.dart" beforeDir="false" afterPath="$PROJECT_DIR$/lib/globalResponseManager.dart" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/lib/jwtManager.dart" beforeDir="false" afterPath="$PROJECT_DIR$/lib/jwtManager.dart" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/lib/mypage.dart" beforeDir="false" afterPath="$PROJECT_DIR$/lib/mypage.dart" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/lib/mypageEdit.dart" beforeDir="false" afterPath="$PROJECT_DIR$/lib/mypageEdit.dart" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/lib/profileEdit.dart" beforeDir="false" afterPath="$PROJECT_DIR$/lib/profileEdit.dart" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -55,8 +57,9 @@
     "cf.first.check.clang-format": "false",
     "cidr.known.project.marker": "true",
     "com.android.tools.idea.devicemanager.tab": "Physical",
+    "com.google.services.firebase.aqiPopupShown": "true",
     "dart.analysis.tool.window.visible": "false",
-    "git-widget-placeholder": "release",
+    "git-widget-placeholder": "feature/45-api-hanjo",
     "io.flutter.reload.alreadyRun": "true",
     "kotlin-language-version-configured": "true",
     "last_opened_file_path": "/Users/a1111/Documents/GitHub/SOFP_FRONT/lib",
