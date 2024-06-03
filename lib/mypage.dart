@@ -11,6 +11,7 @@ import 'package:sopf_front/customerServiceCenter.dart';
 import 'package:sopf_front/globalResponseManager.dart';
 import 'package:sopf_front/login.dart';
 import 'package:sopf_front/multiProfileEdit.dart';
+import 'package:sopf_front/profileEdit.dart';
 import 'mypageEdit.dart';
 import 'appColors.dart';
 import 'appTextStyles.dart';
@@ -483,9 +484,7 @@ class _MyPageState extends State<MyPage> {
           child: CircleAvatar(
             radius: 50,
             backgroundColor: AppColors.gr200,
-            child: Image.asset('assets/user-icon.png', width: 100, height: 100),
-                ? Image.network(profile?.imgURL ?? 'assets/mypageEdit/user-icon.png', width: 100, height: 100)
-                : Image.asset('assets/user-icon.png', width: 100, height: 100),
+            child: Image.network(profile?.imgURL ?? 'assets/mypageEdit/user-icon.png', width: 100, height: 100)
           ),
         ),
         Expanded(

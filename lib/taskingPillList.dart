@@ -397,7 +397,7 @@ class _MedicationPageState extends State<MedicationPage> {
         leading: IconButton(
           icon: Icon(Icons.arrow_back),
           onPressed: () {
-            navigateToHome();
+            Navigator.pop(context);
           },
         ),
         backgroundColor: AppColors.wh,
