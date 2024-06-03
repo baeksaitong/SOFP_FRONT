@@ -9,6 +9,10 @@ import 'dart:convert';
 import 'package:sopf_front/jwtManager.dart';
 
 class ProfileEdit extends StatefulWidget {
+  final String profileId;
+
+  ProfileEdit({required this.profileId});
+
   @override
   _ProfileEditState createState() => _ProfileEditState();
 }
@@ -23,8 +27,8 @@ class _ProfileEditState extends State<ProfileEdit> {
   final TextEditingController birthdateController = TextEditingController();
   final JWTmanager jwtManager = JWTmanager();
 
-  String gender = "MALE"; // 초기값 설정을 API에 맞게 변경
-  String color = "#FFFFFF"; // color 필드 추가
+  String gender = "MALE";
+  String color = "#FFFFFF";
 
   Future<void> getImage() async {
     final XFile? pickedFile = await _picker.pickImage(source: ImageSource.gallery);
@@ -39,52 +43,34 @@ class _ProfileEditState extends State<ProfileEdit> {
 
   Future<void> saveProfile() async {
     final String name = nameController.text;
-    final String birthdate = birthdateController.text.replaceAll('.', '-'); // yyyy.MM.dd 형식을 yyyy-MM-dd 형식으로 변경
+    final String birthdate = birthdateController.text.replaceAll('.', '-');
     final String? accessToken = await jwtManager.getValidAccessToken();
 
-    var requestData = {
-      "name": name,
-      "birthday": birthdate,
-      "gender": gender,
-      "color": color,
-    };
+    var url = Uri.parse('http://15.164.18.65:8080/app/profile/${widget.profileId}');
+    var request = http.MultipartRequest('PUT', url);
+    request.headers['Authorization'] = 'Bearer $accessToken';
+    request.headers['Content-Type'] = 'multipart/form-data';
+
+    request.fields['name'] = name;
+    request.fields['birthday'] = birthdate;
+    request.fields['gender'] = gender;
+    request.fields['color'] = color;
 
     if (_image != null) {
-      var request = http.MultipartRequest('POST', Uri.parse('http://15.164.18.65:8080/app/profile'));
-      request.headers['Authorization'] = 'Bearer $accessToken'; // 토큰 추가
-      request.fields['name'] = name;
-      request.fields['birthday'] = birthdate;
-      request.fields['gender'] = gender;
-      request.fields['color'] = color;
-      request.files.add(await http.MultipartFile.fromPath('profileImg', _image!.path)); // 'profile_image'를 'profileImg'로 변경
+      request.files.add(await http.MultipartFile.fromPath('profileImg', _image!.path));
+    }
 
-      var response = await request.send();
-      if (response.statusCode == 200) {
-        print('Profile saved successfully');
-      } else {
-        print('Failed to save profile');
-        print('Status code: ${response.statusCode}');
-        print('Response body: ${await response.stream.bytesToString()}');
-      }
+    var response = await request.send();
+
+    if (response.statusCode == 200) {
+      print('프로필이 성공적으로 저장되었습니다');
     } else {
-      // 파일이 없으면 일반 POST 요청
-      var response = await http.post(
-        Uri.parse('http://15.164.18.65:8080/app/profile'),
-        headers: {
-          "Content-Type": "application/json",
-          "Authorization": "Bearer $accessToken", // 토큰 추가
-        },
-        body: jsonEncode(requestData),
-      );
-      if (response.statusCode == 200) {
-        print('Profile saved successfully');
-      } else {
-        print('Failed to save profile');
-        print('Status code: ${response.statusCode}');
-        print('Response body: ${response.body}');
-      }
+      print('Failed to save profile');
+      print('Status code: ${response.statusCode}');
+      print('Response body: ${await response.stream.bytesToString()}');
     }
   }
+
 
   @override
   void initState() {
@@ -163,7 +149,7 @@ class _ProfileEditState extends State<ProfileEdit> {
                       Text(
                         "성별",
                         style: TextStyle(
-                          fontWeight: FontWeight.w500, // Medium
+                          fontWeight: FontWeight.w500,
                           fontSize: 14,
                           color: AppColors.gr550,
                         ),
@@ -205,7 +191,7 @@ class _ProfileEditState extends State<ProfileEdit> {
                 ),
                 CustomTextField(
                   label: "생년월일",
-                  hintText: "예) 1999-03-05", // 힌트도 변경
+                  hintText: "예) 1999-03-05",
                   controller: birthdateController,
                   keyboardType: TextInputType.number,
                 ),
@@ -259,7 +245,7 @@ class CustomTextField extends StatelessWidget {
         Text(
           label,
           style: TextStyle(
-            fontWeight: FontWeight.w500, // Medium
+            fontWeight: FontWeight.w500,
             fontSize: 14,
             color: AppColors.gr550,
           ),
