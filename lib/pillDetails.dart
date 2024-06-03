@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:sopf_front/apiClient.dart';
 import 'package:sopf_front/provider.dart';
 import 'appTextStyles.dart'; // 원하는 글꼴 스타일이 정의된 파일을 임포트
 import 'appColors.dart'; // 색상 정의 파일을 임포트
@@ -7,7 +8,9 @@ import 'gaps.dart';
 import 'globalResponseManager.dart';
 
 class PillDetails extends StatefulWidget {
-  const PillDetails({super.key});
+  final int serialNumber;
+
+  const PillDetails(this.serialNumber, {super.key});
 
   @override
   _PillDetailsState createState() => _PillDetailsState();
@@ -20,7 +23,7 @@ class _PillDetailsState extends State<PillDetails> {
   @override
   Widget build(BuildContext context) {
     final currentDrugInfoDetail = Provider.of<DrugInfoDetailProvider>(context, listen: false).currentDrugInfoDetail;
-
+    final APIClient apiClient = APIClient();
     return Scaffold(
       appBar: AppBar(
         leading: IconButton(
@@ -35,10 +38,75 @@ class _PillDetailsState extends State<PillDetails> {
             style: AppTextStyles.body1S16
         ),
         centerTitle: true,
-        actions: const [
-          Icon(
-              Icons.add,
-            size: 30,
+        actions: [
+          IconButton(
+            onPressed: () {
+              showDialog(
+                context: context,
+                builder: (BuildContext context) {
+                  return AlertDialog(
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(20),
+                    ),
+                    title: Text(
+                      '복용 중인 알약으로 추가할까요?',
+                      style: AppTextStyles.body2M16,
+                      selectionColor: AppColors.gr800,
+                      textAlign: TextAlign.center,
+                    ),
+                    content: Text(
+                      '홈, 마이페이지에 등록됩니다',
+                      style: AppTextStyles.body5M14,
+                      selectionColor: AppColors.gr600,
+                      textAlign: TextAlign.center,
+                    ),
+                    actions: <Widget>[
+                      OutlinedButton(
+                        onPressed: () {
+                          Navigator.of(context).pop();
+                        },
+                        style: OutlinedButton.styleFrom(
+                          backgroundColor: AppColors.gr250,
+                          minimumSize: Size(120, 44),
+                          side: BorderSide.none,
+                          shape: RoundedRectangleBorder(
+                            borderRadius:
+                            BorderRadius.all(Radius.circular(8)),
+                          ),
+                        ),
+                        child: Text(
+                          '취소',
+                          style: AppTextStyles.body1S16,
+                          selectionColor: AppColors.gr600,
+                        ),
+                      ),
+                      OutlinedButton(
+                        onPressed: () async{
+                          await apiClient.pillPost(context, widget.serialNumber);
+                          Navigator.of(context).pop();
+                          // 초기화 로직을 추가하세요.
+                        },
+                        style: OutlinedButton.styleFrom(
+                          backgroundColor: AppColors.softTeal,
+                          minimumSize: Size(120, 44),
+                          side: BorderSide.none,
+                          shape: RoundedRectangleBorder(
+                            borderRadius:
+                            BorderRadius.all(Radius.circular(8)),
+                          ),
+                        ),
+                        child: Text(
+                          '추가',
+                          style: AppTextStyles.body1S16.copyWith(color: AppColors.gr600),
+                          selectionColor: AppColors.deepTeal,
+                        ),
+                      ),
+                    ],
+                  );
+                },
+              );
+            },
+            icon: Icon(Icons.add, size: 30,),
           ),
           Gaps.w8,
         ],

@@ -81,7 +81,7 @@ class _RecentHistoryPillState extends State<RecentHistoryPill> {
                   return GestureDetector(
                     onTap: () async {
                       await apiClient.searchGet(context, drug.serialNumber);
-                      navigateToPillDetail();
+                      navigateToPillDetail(drug.serialNumber);
                     },
                     child: Row(
                       children: [

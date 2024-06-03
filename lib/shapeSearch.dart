@@ -25,174 +25,177 @@ class _ShapeSearchState extends State<ShapeSearch> {
 
   @override
   Widget build(BuildContext context) {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        Text(
-          '모양으로 찾기',
-          style: AppTextStyles.body5M14,
-        ),
-        Gaps.h8,
-        KeywordField(
-          key: keywordKey,
-        ),
-        Gaps.h8,
-        Row(
-          children: [
-            RgbButton(
-              key: rgbButtonKey,
-            ),
-            Gaps.w8,
-            ShapeButton(
-              key: shapeButtonKey,
-            ),
-            Gaps.w8,
-            FormulationButton(
-              key: formulationButtonKey,
-            ),
-            Gaps.w8,
-            DivideLineButton(
-              key: divideLineButtonKey,
-            ),
-          ],
-        ),
-        Gaps.h14,
-        Row(
-          children: [
-            OutlinedButton(
-                onPressed: () {
-                  showDialog(
-                    context: context,
-                    builder: (BuildContext context) {
-                      return AlertDialog(
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(20),
-                        ),
-                        title: Text(
-                          '다시 입력하시겠습니까?',
-                          style: AppTextStyles.body2M16,
-                          selectionColor: AppColors.gr800,
-                          textAlign: TextAlign.center,
-                        ),
-                        content: Text(
-                          '입력하신 내용이 전부 사라집니다',
-                          style: AppTextStyles.body5M14,
-                          selectionColor: AppColors.gr600,
-                          textAlign: TextAlign.center,
-                        ),
-                        actions: <Widget>[
-                          OutlinedButton(
-                            onPressed: () {
-                              Navigator.of(context).pop();
-                            },
-                            style: OutlinedButton.styleFrom(
-                              backgroundColor: AppColors.gr250,
-                              minimumSize: Size(120, 44),
-                              side: BorderSide.none,
-                              shape: RoundedRectangleBorder(
-                                borderRadius:
-                                    BorderRadius.all(Radius.circular(8)),
+    return Center(
+      child: Column(
+        mainAxisSize: MainAxisSize.min,
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Text(
+            '모양으로 찾기',
+            style: AppTextStyles.body5M14,
+          ),
+          Gaps.h8,
+          KeywordField(
+            key: keywordKey,
+          ),
+          Gaps.h8,
+          Row(
+            children: [
+              RgbButton(
+                key: rgbButtonKey,
+              ),
+              Gaps.w8,
+              ShapeButton(
+                key: shapeButtonKey,
+              ),
+              Gaps.w8,
+              FormulationButton(
+                key: formulationButtonKey,
+              ),
+              Gaps.w8,
+              DivideLineButton(
+                key: divideLineButtonKey,
+              ),
+            ],
+          ),
+          Gaps.h14,
+          Row(
+            children: [
+              OutlinedButton(
+                  onPressed: () {
+                    showDialog(
+                      context: context,
+                      builder: (BuildContext context) {
+                        return AlertDialog(
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(20),
+                          ),
+                          title: Text(
+                            '다시 입력하시겠습니까?',
+                            style: AppTextStyles.body2M16,
+                            selectionColor: AppColors.gr800,
+                            textAlign: TextAlign.center,
+                          ),
+                          content: Text(
+                            '입력하신 내용이 전부 사라집니다',
+                            style: AppTextStyles.body5M14,
+                            selectionColor: AppColors.gr600,
+                            textAlign: TextAlign.center,
+                          ),
+                          actions: <Widget>[
+                            OutlinedButton(
+                              onPressed: () {
+                                Navigator.of(context).pop();
+                              },
+                              style: OutlinedButton.styleFrom(
+                                backgroundColor: AppColors.gr250,
+                                minimumSize: Size(120, 44),
+                                side: BorderSide.none,
+                                shape: RoundedRectangleBorder(
+                                  borderRadius:
+                                      BorderRadius.all(Radius.circular(8)),
+                                ),
+                              ),
+                              child: Text(
+                                '취소',
+                                style: AppTextStyles.body1S16,
+                                selectionColor: AppColors.gr600,
                               ),
                             ),
-                            child: Text(
-                              '취소',
-                              style: AppTextStyles.body1S16,
-                              selectionColor: AppColors.gr600,
-                            ),
-                          ),
-                          OutlinedButton(
-                            onPressed: () {
-                              rgbButtonKey.currentState?.resetSelection();
-                              shapeButtonKey.currentState?.resetSelection();
-                              formulationButtonKey.currentState
-                                  ?.resetSelection();
-                              divideLineButtonKey.currentState
-                                  ?.resetSelection();
-                              keywordKey.currentState?.resetSelection();
+                            OutlinedButton(
+                              onPressed: () {
+                                rgbButtonKey.currentState?.resetSelection();
+                                shapeButtonKey.currentState?.resetSelection();
+                                formulationButtonKey.currentState
+                                    ?.resetSelection();
+                                divideLineButtonKey.currentState
+                                    ?.resetSelection();
+                                keywordKey.currentState?.resetSelection();
 
-                              Navigator.of(context).pop();
-                              // 초기화 로직을 추가하세요.
-                            },
-                            style: OutlinedButton.styleFrom(
-                              backgroundColor: AppColors.softTeal,
-                              minimumSize: Size(120, 44),
-                              side: BorderSide.none,
-                              shape: RoundedRectangleBorder(
-                                borderRadius:
-                                    BorderRadius.all(Radius.circular(8)),
+                                Navigator.of(context).pop();
+                                // 초기화 로직을 추가하세요.
+                              },
+                              style: OutlinedButton.styleFrom(
+                                backgroundColor: AppColors.softTeal,
+                                minimumSize: Size(120, 44),
+                                side: BorderSide.none,
+                                shape: RoundedRectangleBorder(
+                                  borderRadius:
+                                      BorderRadius.all(Radius.circular(8)),
+                                ),
+                              ),
+                              child: Text(
+                                '초기화',
+                                style: AppTextStyles.body1S16.copyWith(color: AppColors.gr600),
+                                selectionColor: AppColors.deepTeal,
                               ),
                             ),
-                            child: Text(
-                              '초기화',
-                              style: AppTextStyles.body1S16.copyWith(color: AppColors.gr600),
-                              selectionColor: AppColors.deepTeal,
-                            ),
-                          ),
-                        ],
-                      );
-                    },
-                  );
+                          ],
+                        );
+                      },
+                    );
+                  },
+                  style: OutlinedButton.styleFrom(
+                    side: BorderSide.none,
+                    minimumSize: Size(78, 48),
+                    backgroundColor: AppColors.gr300,
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.all(Radius.circular(8)),
+                    ),
+                  ),
+                  child: Text(
+                    '초기화',
+                    style: AppTextStyles.body3S15,
+                    selectionColor: AppColors.gr600,
+                  )),
+              Gaps.w10,
+              OutlinedButton(
+                onPressed: () async {
+                  // 여기에서 선택된 항목들의 상태를 로그로 출력
+                  final color = rgbButtonKey.currentState?.finalText;
+                  final shape = shapeButtonKey.currentState?.finalText;
+                  final formulation = formulationButtonKey.currentState?.finalText;
+                  final divideLine = divideLineButtonKey.currentState?.finalText;
+                  final keyword = keywordKey.currentState?._keywordController.text;
+
+                  // 선택된 항목 로그로 출력
+                  debugPrint('입력한 키워드: $keyword');
+                  debugPrint('선택된 색상: $color');
+                  debugPrint('선택된 모양: $shape');
+                  debugPrint('선택된 제형: $formulation');
+                  debugPrint('선택된 분할선: $divideLine');
+
+                  for (var item in colorItems) {
+                    item.isSelected = false; // 모든 colorItems의 isSelected를 false로 설정
+                  }
+                  for (var item in shapeItems) {
+                    item.isSelected = false; // 모든 shapeItems isSelected를 false로 설정
+                  }
+                  for (var item in formulationItems) {
+                    item.isSelected = false; // 모든 formulationItems isSelected를 false로 설정
+                  }
+                  for (var item in divideLineItems) {
+                    item.isSelected = false; // 모든 divideLineItems isSelected를 false로 설정
+                  }
+                  await apiClient.searchTextAndShape(context, null, shape, keyword, color, formulation, divideLine);
+                  navigateToSearchResult();
                 },
                 style: OutlinedButton.styleFrom(
                   side: BorderSide.none,
-                  minimumSize: Size(78, 48),
-                  backgroundColor: AppColors.gr300,
+                  minimumSize: Size(228, 48),
+                  maximumSize: Size(228, 48),
+                  backgroundColor: AppColors.softTeal,
                   shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.all(Radius.circular(8)),
                   ),
                 ),
-                child: Text(
-                  '초기화',
-                  style: AppTextStyles.body3S15,
-                  selectionColor: AppColors.gr600,
-                )),
-            Gaps.w10,
-            OutlinedButton(
-              onPressed: () async {
-                // 여기에서 선택된 항목들의 상태를 로그로 출력
-                final color = rgbButtonKey.currentState?.finalText;
-                final shape = shapeButtonKey.currentState?.finalText;
-                final formulation = formulationButtonKey.currentState?.finalText;
-                final divideLine = divideLineButtonKey.currentState?.finalText;
-                final keyword = keywordKey.currentState?._keywordController.text;
-
-                // 선택된 항목 로그로 출력
-                debugPrint('입력한 키워드: $keyword');
-                debugPrint('선택된 색상: $color');
-                debugPrint('선택된 모양: $shape');
-                debugPrint('선택된 제형: $formulation');
-                debugPrint('선택된 분할선: $divideLine');
-
-                for (var item in colorItems) {
-                  item.isSelected = false; // 모든 colorItems의 isSelected를 false로 설정
-                }
-                for (var item in shapeItems) {
-                  item.isSelected = false; // 모든 shapeItems isSelected를 false로 설정
-                }
-                for (var item in formulationItems) {
-                  item.isSelected = false; // 모든 formulationItems isSelected를 false로 설정
-                }
-                for (var item in divideLineItems) {
-                  item.isSelected = false; // 모든 divideLineItems isSelected를 false로 설정
-                }
-                await apiClient.searchTextAndShape(context, null, shape, keyword, color, formulation, divideLine);
-                navigateToSearchResult();
-              },
-              style: OutlinedButton.styleFrom(
-                side: BorderSide.none,
-                minimumSize: Size(228, 48),
-                maximumSize: Size(228, 48),
-                backgroundColor: AppColors.softTeal,
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.all(Radius.circular(8)),
-                ),
+                child: Image(
+                    image: AssetImage('assets/icon_search_text_search.png')),
               ),
-              child: Image(
-                  image: AssetImage('assets/icon_search_text_search.png')),
-            ),
-          ],
-        )
-      ],
+            ],
+          )
+        ],
+      ),
     );
   }
 }
@@ -896,3 +899,27 @@ final List<DivideLineItem> divideLineItems = [
   DivideLineItem(text: '(+)형', image: 'assets/divideLines/add-circular.png'),
   DivideLineItem(text: '기타', image: 'assets/divideLines/others.png'),
 ];
+
+class ShapeSearchPage extends StatelessWidget {
+  const ShapeSearchPage({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        leading: IconButton(
+          icon: Icon(Icons.arrow_back),
+          onPressed: () {
+            Navigator.pop(context);
+          },
+        ),      ),
+      body: Row(
+        crossAxisAlignment: CrossAxisAlignment.center,
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: const [
+          ShapeSearch(),
+        ],
+      ),
+    );
+  }
+}

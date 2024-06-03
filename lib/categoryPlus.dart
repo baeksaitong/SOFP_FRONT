@@ -1,65 +1,65 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart'; // 추가: 시간을 형식에 맞게 변환하기 위해 사용
+import 'package:sopf_front/apiClient.dart';
+import 'package:sopf_front/navigates.dart';
 import 'appColors.dart'; // 색상 정의 파일
 import 'appTextStyles.dart'; // 텍스트 스타일 정의 파일
 import 'gaps.dart';
 
 class MedicationSchedulePage extends StatefulWidget {
   final Function(Map<String, dynamic>) onSave;
-  final Map<String, dynamic>? category; // 추가: 기존 카테고리 정보
+  final Map<String, dynamic>? category;
 
-  const MedicationSchedulePage(
-      {super.key, required this.onSave, this.category}); // 수정: 기존 카테고리 정보 받기
+  const MedicationSchedulePage({super.key, required this.onSave, this.category});
 
   @override
   _MedicationSchedulePageState createState() => _MedicationSchedulePageState();
 }
 
 class _MedicationSchedulePageState extends State<MedicationSchedulePage> {
-  bool _pushNotificationEnabled = true; // 초기 상태
-  final List<String> routines = []; // 섭취 루틴 리스트
+  bool _pushNotificationEnabled = true;
+  final List<String> displayRoutines = []; // UI에 표시할 시간 리스트
+  final List<String> apiRoutines = []; // API에 보낼 시간 리스트
   final TextEditingController _categoryNameController = TextEditingController();
-  final List<bool> _selectedWeekdays = [
-    false,
-    false,
-    false,
-    false,
-    false,
-    false,
-    false
-  ];
-
+  final TextEditingController _periodController = TextEditingController();
+  final List<bool> _selectedWeekdays = [false, false, false, false, false, false, false];
+  final APIClient apiClient = APIClient();
   @override
   void initState() {
     super.initState();
     if (widget.category != null) {
-      // 기존 카테고리 정보를 사용하여 초기화
       _categoryNameController.text = widget.category!['name'] ?? '';
+      _periodController.text = widget.category!['period'] ?? '';
       final List<String> days = widget.category!['days'] ?? [];
       for (int i = 0; i < _selectedWeekdays.length; i++) {
-        _selectedWeekdays[i] =
-            days.contains(['월', '화', '수', '목', '금', '토', '일'][i]);
+        _selectedWeekdays[i] = days.contains(['월', '화', '수', '목', '금', '토', '일'][i]);
       }
-      routines.addAll(widget.category!['times'] ?? []);
+      displayRoutines.addAll(widget.category!['displayTimes'] ?? []);
+      apiRoutines.addAll(widget.category!['times'] ?? []);
     }
   }
 
-  void _saveCategory() {
+  void _saveCategory() async {
+    final List<String> apiDays = _selectedWeekdays
+        .asMap()
+        .entries
+        .where((entry) => entry.value)
+        .map((entry) => ['MON', 'TUE', 'WED', 'THU', 'FRI', 'SAT', 'SUN'][entry.key])
+        .toList();
+
     final newCategory = {
       'name': _categoryNameController.text,
-      'days': _selectedWeekdays
-          .asMap()
-          .entries
-          .where((entry) => entry.value)
-          .map((entry) => ['월', '화', '수', '목', '금', '토', '일'][entry.key])
-          .toList(),
-      'times': routines,
-      'medications':
-          widget.category != null ? widget.category!['medications'] : [],
+      'intakeDayList': apiDays,
+      'intakeTimeList': apiRoutines,
+      'alarm': _pushNotificationEnabled,
+      'period': _periodController.text,
     };
+
+    await apiClient.categoryPost(context, newCategory);
+
     widget.onSave(newCategory);
-    Navigator.of(context).pop(); // 현재 화면 닫기
-    Navigator.of(context).pop(); // showModalBottomSheet 닫기
+    navigateToMedicationsTaking();
   }
 
   @override
@@ -102,15 +102,26 @@ class _MedicationSchedulePageState extends State<MedicationSchedulePage> {
             ),
             Gaps.h8,
             RoutineSelector(
-              routines: routines,
+              routines: displayRoutines,
               onAdd: () {
                 _showTimePickerDialog(context);
               },
               onRemove: (index) {
                 setState(() {
-                  routines.removeAt(index);
+                  displayRoutines.removeAt(index);
+                  apiRoutines.removeAt(index);
                 });
               },
+            ),
+            Gaps.h16,
+            Text('섭취 기간', style: AppTextStyles.body2M16),
+            Gaps.h8,
+            TextField(
+              controller: _periodController,
+              decoration: InputDecoration(
+                border: OutlineInputBorder(),
+                hintText: 'YYYY-MM-DD',
+              ),
             ),
             Gaps.h16,
             Row(
@@ -124,8 +135,8 @@ class _MedicationSchedulePageState extends State<MedicationSchedulePage> {
                       _pushNotificationEnabled = value;
                     });
                   },
-                  activeColor: AppColors.deepTeal, // 활성화 상태 색상
-                  inactiveThumbColor: AppColors.gr600, // 비활성화 상태 색상
+                  activeColor: AppColors.deepTeal,
+                  inactiveThumbColor: AppColors.gr600,
                 ),
               ],
             ),
@@ -209,12 +220,20 @@ class _MedicationSchedulePageState extends State<MedicationSchedulePage> {
             TextButton(
               onPressed: () {
                 final String period = selectedPeriodIndex == 0 ? '오전' : '오후';
-                final String hour = selectedHour.toString();
+                final String hour = selectedHour.toString().padLeft(2, '0');
                 final String minute = selectedMinute.toString().padLeft(2, '0');
-                final String time = '$period $hour시 $minute분';
+                final String displayTime = '$period $hour시 $minute분';
+
+                final int apiHour = (selectedPeriodIndex == 1 && selectedHour != 12)
+                    ? selectedHour + 12
+                    : (selectedPeriodIndex == 0 && selectedHour == 12)
+                    ? 0
+                    : selectedHour;
+                final String apiTime = '${apiHour.toString().padLeft(2, '0')}:$minute';
 
                 setState(() {
-                  routines.add(time);
+                  displayRoutines.add(displayTime);
+                  apiRoutines.add(apiTime);
                 });
                 Navigator.of(context).pop();
               },
@@ -245,7 +264,7 @@ class WeekdaySelector extends StatelessWidget {
       shrinkWrap: true,
       physics: NeverScrollableScrollPhysics(),
       gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-        crossAxisCount: 7, // 7개의 요일을 한 줄에 모두 배치
+        crossAxisCount: 7,
         childAspectRatio: 0.8,
         mainAxisSpacing: 0.0,
         crossAxisSpacing: 0.0,
@@ -320,16 +339,16 @@ class RoutineSelector extends StatelessWidget {
                 .entries
                 .map(
                   (entry) => Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      Text(entry.value),
-                      IconButton(
-                        icon: Icon(Icons.close),
-                        onPressed: () => onRemove(entry.key),
-                      ),
-                    ],
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Text(entry.value),
+                  IconButton(
+                    icon: Icon(Icons.close),
+                    onPressed: () => onRemove(entry.key),
                   ),
-                )
+                ],
+              ),
+            )
                 .toList(),
           ),
         ),
