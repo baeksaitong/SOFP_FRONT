@@ -27,7 +27,8 @@ class _ProfileEditState extends State<ProfileEdit> {
   final TextEditingController birthdateController = TextEditingController();
   final JWTmanager jwtManager = JWTmanager();
 
-  String gender = "MALE";
+
+  String gender = "MALE"; 
   String color = "#FFFFFF";
 
   Future<void> getImage() async {
@@ -43,7 +44,9 @@ class _ProfileEditState extends State<ProfileEdit> {
 
   Future<void> saveProfile() async {
     final String name = nameController.text;
+
     final String birthdate = birthdateController.text.replaceAll('.', '-');
+
     final String? accessToken = await jwtManager.getValidAccessToken();
 
     var url = Uri.parse('http://15.164.18.65:8080/app/profile/${widget.profileId}');
@@ -59,15 +62,35 @@ class _ProfileEditState extends State<ProfileEdit> {
     if (_image != null) {
       request.files.add(await http.MultipartFile.fromPath('profileImg', _image!.path));
     }
+      var request = http.MultipartRequest('POST', Uri.parse('http://15.164.18.65:8080/app/profile'));
+      request.headers['Authorization'] = 'Bearer $accessToken'; 
+      request.fields['name'] = name;
+      request.fields['birthday'] = birthdate;
+      request.fields['gender'] = gender;
+      request.fields['color'] = color;
+      request.files.add(await http.MultipartFile.fromPath('profileImg', _image!.path));
 
     var response = await request.send();
 
     if (response.statusCode == 200) {
       print('프로필이 성공적으로 저장되었습니다');
     } else {
-      print('Failed to save profile');
-      print('Status code: ${response.statusCode}');
-      print('Response body: ${await response.stream.bytesToString()}');
+      // 파일이 없으면 일반 POST 요청
+      var response = await http.post(
+        Uri.parse('http://15.164.18.65:8080/app/profile'),
+        headers: {
+          "Content-Type": "application/json",
+          "Authorization": "Bearer $accessToken", 
+        },
+        body: jsonEncode(requestData),
+      );
+      if (response.statusCode == 200) {
+        print('Profile saved successfully');
+      } else {
+        print('Failed to save profile');
+        print('Status code: ${response.statusCode}');
+        print('Response body: ${response.body}');
+      }
     }
   }
 
