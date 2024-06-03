@@ -7,13 +7,13 @@ import 'package:provider/provider.dart';
 import 'dart:convert';
 import 'package:sopf_front/jwtManager.dart';
 import 'package:sopf_front/provider.dart';
-
+import 'package:sopf_front/jwtManager.dart';
 import 'globalResponseManager.dart';
 import 'navigates.dart';
 
 class APIClient {
   static const String baseUrl = 'http://15.164.18.65:8080';
-  final JWTManger _jwtManager = JWTManger();
+  final JWTmanager _jwtManager = JWTmanager();
 
   Future<void> naverLogin(BuildContext context, String code) async {
     final String url = 'http://15.164.18.65:8080/app/oauth/naver?code=$code';
@@ -274,8 +274,8 @@ class APIClient {
 
   Future<void> memberInfo() async {
     final String? accessToken = await _jwtManager.getAccessToken();
-    final url = Uri.parse('$baseUrl/app/member/info');
-    final response = await http.post(
+    final url = Uri.parse('$baseUrl/app/member');
+    final response = await http.get(
       url,
       headers: <String, String>{
         'Content-Type': 'application/json; charset=UTF-8',
@@ -295,6 +295,7 @@ class APIClient {
       print('실패했습니다: ${response.body}');
     }
   }
+
 
   Future<ProfileResponse?> profileAll() async {
     final String? accessToken = await _jwtManager.getAccessToken();

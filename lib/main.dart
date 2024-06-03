@@ -11,6 +11,7 @@ import 'calenderFirstPage.dart';
 import 'home.dart';
 import 'mypage.dart';
 import 'appColors.dart';
+
 import 'package:camera/camera.dart';
 import 'package:sopf_front/exColorsText.dart';
 import 'package:sopf_front/imageSearch.dart';
@@ -19,6 +20,18 @@ import 'package:lottie/lottie.dart';
 import 'package:provider/provider.dart';
 import 'package:sopf_front/login.dart';
 import 'package:sopf_front/provider.dart';
+
+/* hanjo
+void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  final cameras = await availableCameras();
+  final firstCamera = cameras.first;
+
+  initializeDateFormatting().then((value) =>
+    runApp(MyApp(camera: firstCamera))
+  );
+}
+*/
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();

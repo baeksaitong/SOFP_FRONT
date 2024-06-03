@@ -313,22 +313,24 @@ class RecentHistoriesManager {
 class Profile {
   final String id;
   final String name;
-  final String? imgURL;
+  final String? imgURL; // imgURL을 nullable로 변경
   final String color;
 
   Profile({
     required this.id,
     required this.name,
-    this.imgURL,
+    this.imgURL, // nullable 처리
     required this.color,
+    required String email,
   });
 
   factory Profile.fromJson(Map<String, dynamic> json) {
     return Profile(
       id: json['id'],
       name: json['name'],
-      imgURL: json['imgURL'],
+      imgURL: json['imgURL'] ?? '', // imgURL이 null일 경우 빈 문자열로 처리
       color: json['color'],
+      email: '',
     );
   }
 
@@ -341,6 +343,8 @@ class Profile {
     };
   }
 }
+
+
 
 class ProfileResponse {
   final List<Profile> profileList;
@@ -437,3 +441,39 @@ class CategoryDetailsManager {
   }
 }
 
+
+class MemberInfo {
+  final String id;
+  final String name;
+  final String email;
+  final String? imgURL;
+  final String color;
+
+  MemberInfo({
+    required this.id,
+    required this.name,
+    required this.email,
+    this.imgURL,
+    required this.color,
+  });
+
+  factory MemberInfo.fromJson(Map<String, dynamic> json) {
+    return MemberInfo(
+      id: json['id'],
+      name: json['name'],
+      email: json['email'],
+      imgURL: json['imgURL'],
+      color: json['color'],
+    );
+  }
+
+  Map<String, dynamic> toJson() {
+    return {
+      'id': id,
+      'name': name,
+      'email': email,
+      'imgURL': imgURL,
+      'color': color,
+    };
+  }
+}

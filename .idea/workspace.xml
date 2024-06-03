@@ -56,6 +56,13 @@
       <change beforePath="$PROJECT_DIR$/lib/recentHistoryPill.dart" beforeDir="false" afterPath="$PROJECT_DIR$/lib/recentHistoryPill.dart" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/lib/searchResult.dart" beforeDir="false" afterPath="$PROJECT_DIR$/lib/searchResult.dart" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/lib/shapeSearch.dart" beforeDir="false" afterPath="$PROJECT_DIR$/lib/shapeSearch.dart" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/libraries/Flutter_Plugins.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/libraries/Flutter_Plugins.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/lib/globalResponseManager.dart" beforeDir="false" afterPath="$PROJECT_DIR$/lib/globalResponseManager.dart" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/lib/jwtManager.dart" beforeDir="false" afterPath="$PROJECT_DIR$/lib/jwtManager.dart" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/lib/mypage.dart" beforeDir="false" afterPath="$PROJECT_DIR$/lib/mypage.dart" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/lib/mypageEdit.dart" beforeDir="false" afterPath="$PROJECT_DIR$/lib/mypageEdit.dart" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/lib/profileEdit.dart" beforeDir="false" afterPath="$PROJECT_DIR$/lib/profileEdit.dart" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -106,9 +113,32 @@
     &quot;last_opened_file_path&quot;: &quot;/Users/mingmaengmung/Documents/GitHub/SOFP_FRONT&quot;,
     &quot;settings.editor.selected.configurable&quot;: &quot;preferences.keymap&quot;,
     &quot;show.migrate.to.gradle.popup&quot;: &quot;false&quot;
+  <component name="PropertiesComponent"><![CDATA[{
+  "keyToString": {
+    "ASKED_ADD_EXTERNAL_FILES": "true",
+    "Flutter.main.dart.executor": "Run",
+    "RunOnceActivity.OpenProjectViewOnStart": "true",
+    "RunOnceActivity.ShowReadmeOnStart": "true",
+    "RunOnceActivity.cidr.known.project.marker": "true",
+    "RunOnceActivity.readMode.enableVisualFormatting": "true",
+    "SHARE_PROJECT_CONFIGURATION_FILES": "true",
+    "cf.first.check.clang-format": "false",
+    "cidr.known.project.marker": "true",
+    "com.android.tools.idea.devicemanager.tab": "Physical",
+    "com.google.services.firebase.aqiPopupShown": "true",
+    "dart.analysis.tool.window.visible": "false",
+    "git-widget-placeholder": "feature/45-api-hanjo",
+    "io.flutter.reload.alreadyRun": "true",
+    "kotlin-language-version-configured": "true",
+    "last_opened_file_path": "/Users/a1111/Documents/GitHub/SOFP_FRONT/lib",
+    "settings.editor.selected.configurable": "dart.settings",
+    "show.migrate.to.gradle.popup": "false"
   }
-}</component>
+}]]></component>
   <component name="RecentsManager">
+    <key name="CopyFile.RECENT_KEYS">
+      <recent name="$PROJECT_DIR$/lib" />
+    </key>
     <key name="MoveFile.RECENT_KEYS">
       <recent name="$PROJECT_DIR$/assets" />
       <recent name="$PROJECT_DIR$/assets/shapes" />
@@ -144,5 +174,15 @@
         </entry>
       </map>
     </option>
+  </component>
+  <component name="XDebuggerManager">
+    <breakpoint-manager>
+      <breakpoints>
+        <line-breakpoint enabled="true" type="Dart">
+          <url>file://$PROJECT_DIR$/lib/addAllergyPage.dart</url>
+          <option name="timeStamp" value="1" />
+        </line-breakpoint>
+      </breakpoints>
+    </breakpoint-manager>
   </component>
 </project>

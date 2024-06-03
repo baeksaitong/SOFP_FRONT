@@ -183,7 +183,7 @@ class CustomBottomNavigationBar extends StatelessWidget {
         0.03; // Adjust text size dynamically
 
     return BottomAppBar(
-      color: Colors.white,
+      color: AppColors.wh,
       child: Row(
         mainAxisSize: MainAxisSize.max,
         mainAxisAlignment: MainAxisAlignment.spaceAround,
