@@ -79,7 +79,7 @@ class MyApp extends StatelessWidget {
         ),
       ),
       navigatorKey: navigatorKey,
-      home: const PillDetails(),
+      home: const LoginPage(),
     );
   }
 }

@@ -126,9 +126,6 @@ class Paragraph {
   }
 }
 
-
-
-
 class DrugInfo {
   final int serialNumber;
   final String name;
@@ -173,6 +170,58 @@ class DrugsManager {
     drugs = data.map((json) => DrugInfo.fromJson(json)).toList();
   }
 }
+
+class TakingDrugsInfo {
+  final int serialNumber;
+  final String name;
+  final String classification;
+  final String enterprise;
+  final String imgUrl;
+  bool isBookmarked;
+
+  TakingDrugsInfo({
+    required this.serialNumber,
+    required this.name,
+    required this.classification,
+    required this.enterprise,
+    required this.imgUrl,
+    required this.isBookmarked,
+  });
+
+  factory TakingDrugsInfo.fromJson(Map<String, dynamic> json) {
+    return TakingDrugsInfo(
+      serialNumber: json['serialNumber'],
+      name: json['name'],
+      classification: json['classification'],
+      enterprise: json['enterprise'],
+      imgUrl: json['imgUrl'],
+      isBookmarked: false,
+    );
+  }
+}
+
+class TakingDrugsManager {
+  static final TakingDrugsManager _instance = TakingDrugsManager._internal();
+
+  List<TakingDrugsInfo> drugs = [];
+
+  factory TakingDrugsManager() {
+    return _instance;
+  }
+
+  TakingDrugsManager._internal();
+
+  void updateDrugs(String jsonResponse) {
+    final decoded = jsonDecode(jsonResponse);
+    if (decoded != null && decoded['pillInfoList'] != null) {
+      final data = decoded['pillInfoList'] as List;
+      drugs = data.map((json) => TakingDrugsInfo.fromJson(json)).toList();
+    } else {
+      drugs = [];
+    }
+  }
+}
+
 
 class FavoriteInfo {
   final int serialNumber;
@@ -310,3 +359,81 @@ class ProfileResponse {
     };
   }
 }
+
+class Category {
+  final String categoryId;
+  final String name;
+
+  Category({required this.categoryId, required this.name});
+
+  factory Category.fromJson(Map<String, dynamic> json) {
+    return Category(
+      categoryId: json['categoryId'],
+      name: json['name'],
+    );
+  }
+}
+
+class CategoryManager {
+  static final CategoryManager _instance = CategoryManager._internal();
+
+  List<Category> categories = [];
+
+  factory CategoryManager() {
+    return _instance;
+  }
+
+  CategoryManager._internal();
+
+  void updateCategories(String jsonResponse) {
+    final data = jsonDecode(jsonResponse)['categoryList'] as List;
+    categories = data.map((json) => Category.fromJson(json)).toList();
+  }
+}
+
+class CategoryDetails {
+  final String id;
+  final String name;
+  final bool alarm;
+  final String period;
+  final List<String> intakeDayList;
+  final List<String> intakeTimeList;
+
+  CategoryDetails({
+    required this.id,
+    required this.name,
+    required this.alarm,
+    required this.period,
+    required this.intakeDayList,
+    required this.intakeTimeList,
+  });
+
+  factory CategoryDetails.fromJson(Map<String, dynamic> json) {
+    return CategoryDetails(
+      id: json['id'],
+      name: json['name'],
+      alarm: json['alarm'],
+      period: json['period'],
+      intakeDayList: List<String>.from(json['intakeDayList']),
+      intakeTimeList: List<String>.from(json['intakeTimeList']),
+    );
+  }
+}
+
+class CategoryDetailsManager {
+  static final CategoryDetailsManager _instance = CategoryDetailsManager._internal();
+
+  CategoryDetails? currentCategory;
+
+  factory CategoryDetailsManager() {
+    return _instance;
+  }
+
+  CategoryDetailsManager._internal();
+
+  void updateCategoryDetails(String jsonResponse) {
+    final data = jsonDecode(jsonResponse);
+    currentCategory = CategoryDetails.fromJson(data);
+  }
+}
+

@@ -1,5 +1,7 @@
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:sopf_front/addAllergyPage.dart';
+import 'package:sopf_front/globalResponseManager.dart';
 import 'package:sopf_front/pillDetails.dart';
 import 'package:sopf_front/addAllergy.dart';
 import 'package:sopf_front/recentHistoryPill.dart';
@@ -9,11 +11,10 @@ import 'package:sopf_front/loginNaver.dart';
 import 'package:sopf_front/textSearch.dart';
 import 'package:sopf_front/preferencesPage.dart';
 import 'package:sopf_front/favoritePage.dart';
-import 'package:sopf_front/category.dart';
+import 'package:sopf_front/taskingPillList.dart';
 import 'package:sopf_front/categoryPlus.dart';
-import 'package:sopf_front/categoryBasic.dart';
+import 'package:sopf_front/categoryDetail.dart';
 
-import 'category.dart';
 import 'categoryPlus.dart';
 import 'customerServiceCenter.dart';
 import 'home.dart';
@@ -49,9 +50,9 @@ void navigateToSignUp() {
   );
 }
 
-void navigateToPillDetail() {
+void navigateToPillDetail(int serialNumber) {
   navigatorKey.currentState?.push(
-    MaterialPageRoute(builder: (context) => PillDetails()),
+    MaterialPageRoute(builder: (context) => PillDetails(serialNumber)),
   );
 }
 
@@ -67,11 +68,6 @@ void navigateToFavorite() {
   );
 }
 
-void navigateToMedicationsTaking() {
-  navigatorKey.currentState?.push(
-    MaterialPageRoute(builder: (context) => MedicationPage()),
-  );
-}
 
 void navigateToRecentHistory() {
   navigatorKey.currentState?.push(
@@ -84,9 +80,16 @@ void navigateToCustomerService() {
     MaterialPageRoute(builder: (context) => CustomerServicePage()),
   );
 }
+
+void navigateToMedicationsTaking() {
+  navigatorKey.currentState?.push(
+    MaterialPageRoute(builder: (context) => MedicationPage()),
+  );
+}
+
 void navigateToMedicationsTakingPlus(
     BuildContext context, Function(Map<String, dynamic>) onSave,
-    [Map<String, dynamic>? category]) {
+    [CategoryDetails? category]) {
   Navigator.of(context).push(
     MaterialPageRoute(
       builder: (context) => MedicationSchedulePage(
@@ -97,7 +100,7 @@ void navigateToMedicationsTakingPlus(
 }
 
 void navigateToMedicationCategory(
-    BuildContext context, Map<String, dynamic> category) {
+    BuildContext context, CategoryDetails category) {
   Navigator.of(context).push(
     MaterialPageRoute(
         builder: (context) => MedicationCategoryPage(category: category)),

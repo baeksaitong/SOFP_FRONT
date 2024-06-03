@@ -658,7 +658,7 @@ class _SearchResultState extends State<SearchResult> {
                     return GestureDetector(
                       onTap: () async {
                         await apiClient.searchGet(context, drug.serialNumber);
-                        navigateToPillDetail();
+                        navigateToPillDetail(drug.serialNumber);
                       },
                       child: Container(
                         width: 336,

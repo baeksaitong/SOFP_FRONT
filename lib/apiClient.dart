@@ -241,8 +241,17 @@ class APIClient {
         }
       }
       diseaseAllergyList();
-      if(context.mounted) {
-        recentViewPillGet(context);
+      if (context.mounted) {
+        await recentViewPillGet(context); // await 추가
+        await pillGet(context, null); // await 추가
+        await categoryGetAll(context); // await 추가
+        final categories = CategoryManager().categories;
+        if (categories.isNotEmpty) {
+          print(categories[0].categoryId);
+          await categoryGet(context, categories[0].categoryId); // Wait for the category details to be fetched
+        } else {
+          print('No categories found.');
+        }
       }
       if (jsonResponse['isNew'] == false) {
         navigateToAddAllergy();
@@ -655,4 +664,214 @@ class APIClient {
       print('즐겨찾기 조회 실패: ${utf8.decode(response.bodyBytes)}');
     }
   }
+
+  Future<void> pillPost(BuildContext context, int serialNumber) async {
+    final currentProfile =
+        Provider.of<ProfileProvider>(context, listen: false).currentProfile;
+    final String? accessToken = await _jwtManager.getAccessToken();
+    final url = Uri.parse(
+        '$baseUrl/app/pill/${currentProfile?.id}');
+    final response = await http.post(url, headers: <String, String>{
+      'Content-Type': 'application/json; charset=UTF-8',
+      'Accept': 'application/json',
+      'Authorization': 'Bearer $accessToken', // 인증 헤더 추가
+      },
+      body: jsonEncode(<String, dynamic>{
+        "pillSeriallNumberList": [serialNumber],
+      }),
+    );
+
+    if (response.statusCode == 200) {
+      // 성공적으로 처리된 경우
+      print('복용 중인 알약 추가 성공: ${utf8.decode(response.bodyBytes)}');
+    } else {
+      // 실패 처리
+      print(response.statusCode);
+      print('복용 중인 알약 추가 실패: ${utf8.decode(response.bodyBytes)}');
+    }
+  }
+
+  Future<void> pillDelete(BuildContext context, int serialNumber) async {
+    final currentProfile =
+        Provider.of<ProfileProvider>(context, listen: false).currentProfile;
+    final String? accessToken = await _jwtManager.getAccessToken();
+    final url = Uri.parse(
+        '$baseUrl/app/pill/${currentProfile?.id}?pillSerialNumber=$serialNumber');
+    final response = await http.delete(url, headers: <String, String>{
+      'Content-Type': 'application/json; charset=UTF-8',
+      'Accept': 'application/json',
+      'Authorization': 'Bearer $accessToken', // 인증 헤더 추가
+    });
+
+    if (response.statusCode == 200) {
+      // 성공적으로 처리된 경우
+      print('복용 중인 알약 삭제 성공: ${utf8.decode(response.bodyBytes)}');
+    } else {
+      // 실패 처리
+      print(response.statusCode);
+      print('복용 중인 알약 삭제 실패: ${utf8.decode(response.bodyBytes)}');
+    }
+  }
+
+  Future<void> pillPatch(BuildContext context, int serialNumber, String categoryId) async {
+    final currentProfile =
+        Provider.of<ProfileProvider>(context, listen: false).currentProfile;
+    final String? accessToken = await _jwtManager.getAccessToken();
+    final url = Uri.parse(
+        '$baseUrl/app/pill/${currentProfile?.id}');
+    final response = await http.patch(url, headers: <String, String>{
+      'Content-Type': 'application/json; charset=UTF-8',
+      'Accept': 'application/json',
+      'Authorization': 'Bearer $accessToken', // 인증 헤더 추가
+    },
+      body: jsonEncode(<String, dynamic>{
+        "pillSerialNumber": serialNumber,
+        "categoryId": categoryId
+      }),
+    );
+
+    if (response.statusCode == 200) {
+      // 성공적으로 처리된 경우
+      print('복용 중인 알약 이동 성공: ${utf8.decode(response.bodyBytes)}');
+    } else {
+      // 실패 처리
+      print(response.statusCode);
+      print('복용 중인 알약 이동 실패: ${utf8.decode(response.bodyBytes)}');
+    }
+  }
+
+  Future<void> pillGet(BuildContext context, String? categoryId) async {
+    final currentProfile =
+        Provider.of<ProfileProvider>(context, listen: false).currentProfile;
+    final String? accessToken = await _jwtManager.getAccessToken();
+    final Uri url;
+
+    if (categoryId != null) {
+      url = Uri.parse('$baseUrl/app/pill?categoryId=$categoryId');
+    } else {
+      url = Uri.parse(
+          '$baseUrl/app/pill?profileId=${currentProfile?.id}&categoryId=$categoryId');
+    }
+    final response = await http.get(url, headers: <String, String>{
+      'Content-Type': 'application/json; charset=UTF-8',
+      'Accept': 'application/json',
+      'Authorization': 'Bearer $accessToken', // 인증 헤더 추가
+    });
+
+    if (response.statusCode == 200) {
+      // 성공적으로 처리된 경우
+      final jsonResponse = utf8.decode(response.bodyBytes);
+
+      print('복용 중인 알약 조회 성공: ${utf8.decode(response.bodyBytes)}');
+      TakingDrugsManager().updateDrugs(jsonResponse);
+      print(TakingDrugsManager().drugs);
+    } else {
+      // 실패 처리
+      print(response.statusCode);
+      print('복용 중인 알약 조회 실패: ${utf8.decode(response.bodyBytes)}');
+    }
+  }
+
+  Future<void> categoryGet(BuildContext context, String categoryId) async {
+    final currentProfile =
+        Provider.of<ProfileProvider>(context, listen: false).currentProfile;
+    final String? accessToken = await _jwtManager.getAccessToken();
+    final url = Uri.parse(
+        '$baseUrl/app/category/$categoryId');
+    final response = await http.get(url, headers: <String, String>{
+      'Content-Type': 'application/json; charset=UTF-8',
+      'Accept': 'application/json',
+      'Authorization': 'Bearer $accessToken', // 인증 헤더 추가
+    });
+
+    if (response.statusCode == 200) {
+      // 성공적으로 처리된 경우
+      final jsonResponse = utf8.decode(response.bodyBytes);
+      print('카테고리 조회 성공: ${utf8.decode(response.bodyBytes)}');
+      CategoryDetailsManager().updateCategoryDetails(jsonResponse);
+    } else {
+      // 실패 처리
+      print(response.statusCode);
+      print('카테고리 조회 실패: ${utf8.decode(response.bodyBytes)}');
+    }
+  }
+
+  Future<void> categoryGetAll(BuildContext context) async {
+    final currentProfile =
+        Provider.of<ProfileProvider>(context, listen: false).currentProfile;
+    final String? accessToken = await _jwtManager.getAccessToken();
+    final url = Uri.parse(
+        '$baseUrl/app/category?profileId=${currentProfile?.id}');
+    final response = await http.get(url, headers: <String, String>{
+      'Content-Type': 'application/json; charset=UTF-8',
+      'Accept': 'application/json',
+      'Authorization': 'Bearer $accessToken', // 인증 헤더 추가
+    });
+
+    if (response.statusCode == 200) {
+      // 성공적으로 처리된 경우
+      final jsonResponse = utf8.decode(response.bodyBytes);
+      print('모든 카테고리 조회 성공: ${utf8.decode(response.bodyBytes)}');
+      CategoryManager().updateCategories(jsonResponse);
+    } else {
+      // 실패 처리
+      print(response.statusCode);
+      print('모든 카테고리 조회 실패: ${utf8.decode(response.bodyBytes)}');
+    }
+  }
+
+  Future<void> categoryPost(BuildContext context, Map<String, dynamic>? category) async {
+    final currentProfile =
+        Provider.of<ProfileProvider>(context, listen: false).currentProfile;
+    final String? accessToken = await _jwtManager.getAccessToken();
+    final url = Uri.parse(
+        '$baseUrl/app/category/${currentProfile?.id}');
+    final response = await http.post(url, headers: <String, String>{
+      'Content-Type': 'application/json; charset=UTF-8',
+      'Accept': 'application/json',
+      'Authorization': 'Bearer $accessToken', // 인증 헤더 추가
+    },
+      body: jsonEncode(<String, dynamic>{
+        "name": category?['name'],
+        "intakeDayList": category?['intakeDayList'],
+        "intakeTimeList": category?['intakeTimeList'],
+        "period": category?['period'],
+        "alarm": category?['alarm'],
+      }),
+    );
+
+    if (response.statusCode == 200) {
+      // 성공적으로 처리된 경우
+      print('카테고리 추가 성공: ${utf8.decode(response.bodyBytes)}');
+    } else {
+      // 실패 처리
+      print(response.statusCode);
+      print('카테고리 추가 실패: ${utf8.decode(response.bodyBytes)}');
+    }
+  }
+
+  Future<void> categoryDelete(BuildContext context, String categoryId, bool isAllDelete) async {
+    final currentProfile =
+        Provider.of<ProfileProvider>(context, listen: false).currentProfile;
+    final String? accessToken = await _jwtManager.getAccessToken();
+    final url = Uri.parse(
+        '$baseUrl/app/category/$categoryId?isAllDelete=$isAllDelete');
+    final response = await http.delete(url, headers: <String, String>{
+      'Content-Type': 'application/json; charset=UTF-8',
+      'Accept': 'application/json',
+      'Authorization': 'Bearer $accessToken', // 인증 헤더 추가
+    });
+
+    if (response.statusCode == 200) {
+      // 성공적으로 처리된 경우
+      final jsonResponse = utf8.decode(response.bodyBytes);
+      print('카테고리 삭제 성공: ${utf8.decode(response.bodyBytes)}');
+    } else {
+      // 실패 처리
+      print(response.statusCode);
+      print('카테고리 삭제 실패: ${utf8.decode(response.bodyBytes)}');
+    }
+  }
 }
+
+
