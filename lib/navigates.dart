@@ -2,6 +2,9 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:sopf_front/addAllergyPage.dart';
 import 'package:sopf_front/globalResponseManager.dart';
+import 'package:sopf_front/appColors.dart';
+import 'package:sopf_front/appTextStyles.dart';
+import 'package:sopf_front/gaps.dart';
 import 'package:sopf_front/pillDetails.dart';
 import 'package:sopf_front/addAllergy.dart';
 import 'package:sopf_front/recentHistoryPill.dart';
@@ -19,6 +22,47 @@ import 'categoryPlus.dart';
 import 'customerServiceCenter.dart';
 import 'home.dart';
 import 'main.dart';
+
+import 'package:flutter_spinkit/flutter_spinkit.dart';
+import 'package:provider/provider.dart';
+import 'loading_provider.dart';
+
+void showLoading(BuildContext context, {bool delayed = false}) {
+  final loadingProvider = Provider.of<LoadingProvider>(context, listen: false);
+  loadingProvider.showLoading(delayed: delayed);
+}
+
+void hideLoading(BuildContext context) {
+  final loadingProvider = Provider.of<LoadingProvider>(context, listen: false);
+  loadingProvider.hideLoading();
+}
+
+Widget loadingOverlay(BuildContext context) {
+  final loadingProvider = Provider.of<LoadingProvider>(context);
+
+  return loadingProvider.isLoading
+      ? Container(
+          color: AppColors.wh,
+          child: Center(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.center,
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                SpinKitWaveSpinner(
+                  color: AppColors.vibrantTeal,
+                  size: 55.0,
+                ),
+                Gaps.h16,
+                Text(
+                  '정보를 가져오는 중 입니다.',
+                  style: AppTextStyles.body5M14.copyWith(color: AppColors.gr600),
+                ),
+              ],
+            ),
+          ),
+        )
+      : SizedBox.shrink();
+}
 
 void navigateToAddAllergy() {
   navigatorKey.currentState?.push(

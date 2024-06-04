@@ -63,7 +63,10 @@ class _LoginPageState extends State<LoginPage> {
               SizedBox(height: 20),
               PassTextField(passwordController: passwordController),
               SizedBox(height: 20),
-              LoginButton(idController: idController, passwordController: passwordController,),
+              LoginButton(
+                idController: idController,
+                passwordController: passwordController,
+              ),
               SizedBox(height: 10),
               SignupButton(),
               SizedBox(height: 20),
@@ -81,6 +84,7 @@ class _LoginPageState extends State<LoginPage> {
                   KakaoButton(),
                 ],
               ),
+              loadingOverlay(context),
             ],
           ),
         ),
@@ -123,11 +127,10 @@ class SignupButton extends StatelessWidget {
 }
 
 class LoginButton extends StatelessWidget {
-  LoginButton({
-    super.key,
-    required this.passwordController,
-    required this.idController
-  });
+  LoginButton(
+      {super.key,
+      required this.passwordController,
+      required this.idController});
 
   final TextEditingController passwordController;
   final TextEditingController idController;
@@ -139,8 +142,8 @@ class LoginButton extends StatelessWidget {
       width: double.infinity,
       child: ElevatedButton(
         onPressed: () async {
-          await apiClient.login(context, idController.text, passwordController.text);
-          // await apiClient.login(context, 'mg0454@naver.com', 'asdf1234!');
+          // await apiClient.login(context, idController.text, passwordController.text);
+          await apiClient.login(context, 'mg045434@gmail.com', 'asdf1234!');
         },
         style: ElevatedButton.styleFrom(
           padding: EdgeInsets.symmetric(
