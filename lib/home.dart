@@ -42,7 +42,6 @@ class _HomePageState extends State<HomePage> {
   Widget build(BuildContext context) {
     final bool isKeyboardVisible =
         MediaQuery.of(context).viewInsets.bottom != 0; // 키보드 위치 확인
-    final currentProfile = Provider.of<ProfileProvider>(context).currentProfile;
 
     return Scaffold(
       backgroundColor: AppColors.wh,

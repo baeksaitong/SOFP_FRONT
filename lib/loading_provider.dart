@@ -1,4 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:lottie/lottie.dart';
+import 'package:provider/provider.dart';
+
+import 'appColors.dart';
 
 class LoadingProvider with ChangeNotifier {
   bool _isLoading = false;
@@ -27,3 +31,30 @@ class LoadingProvider with ChangeNotifier {
     notifyListeners();
   }
 }
+
+// class LoadingScreen extends StatelessWidget {
+//   @override
+//   Widget build(BuildContext context) {
+//     return Consumer<LoadingProvider>(
+//       builder: (context, loadingProvider, child) {
+//         if (!loadingProvider.isLoading) return SizedBox.shrink();
+//
+//         return Container(
+//           color: AppColors.wh,
+//           child: Center(
+//             child: Lottie.asset(
+//               'assets/loading.json', // Ensure this file is placed in the assets folder
+//               width: 100,
+//               height: 100,
+//               fit: BoxFit.fill,
+//             ),
+//           ),
+//         );
+//       },
+//     );
+//   }
+// }
+//
+// Widget loadingOverlay(BuildContext context) {
+//   return LoadingScreen();
+// }

@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:sopf_front/addAllergyPage.dart';
 import 'package:sopf_front/appColors.dart';
+import 'package:sopf_front/appTextStyles.dart';
+import 'package:sopf_front/gaps.dart';
 import 'package:sopf_front/pillDetails.dart';
 import 'package:sopf_front/addAllergy.dart';
 import 'package:sopf_front/recentHistoryPill.dart';
@@ -35,11 +37,22 @@ Widget loadingOverlay(BuildContext context) {
 
   return loadingProvider.isLoading
       ? Container(
-          color: AppColors.gr700,
+          color: AppColors.wh,
           child: Center(
-            child: SpinKitRing(
-              color: Colors.white,
-              size: 55.0,
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.center,
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                SpinKitWaveSpinner(
+                  color: AppColors.vibrantTeal,
+                  size: 55.0,
+                ),
+                Gaps.h16,
+                Text(
+                  '정보를 가져오는 중 입니다.',
+                  style: AppTextStyles.body5M14.copyWith(color: AppColors.gr600),
+                ),
+              ],
             ),
           ),
         )
