@@ -2,6 +2,7 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:sopf_front/addAllergyPage.dart';
 import 'package:sopf_front/globalResponseManager.dart';
+import 'package:sopf_front/mypage.dart';
 import 'package:sopf_front/pillDetails.dart';
 import 'package:sopf_front/addAllergy.dart';
 import 'package:sopf_front/recentHistoryPill.dart';
@@ -78,6 +79,12 @@ void navigateToRecentHistory() {
 void navigateToCustomerService() {
   navigatorKey.currentState?.push(
     MaterialPageRoute(builder: (context) => CustomerServicePage()),
+  );
+}
+
+void navigateToMyPage() {
+  navigatorKey.currentState?.push(
+    MaterialPageRoute(builder: (context) => MyPage()),
   );
 }
 

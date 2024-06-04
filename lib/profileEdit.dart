@@ -43,12 +43,7 @@ class _ProfileEditState extends State<ProfileEdit> {
   Future<void> saveProfile() async {
     final String name = nameController.text;
     final String birthdate = birthdateController.text.replaceAll('.', '-');
-    final String? accessToken = await jwtManager.getValidAccessToken();
-
-    if (accessToken == null) {
-      print('No valid access token found');
-      return;
-    }
+    final String accessToken = await jwtManager.getValidAccessToken();
 
     var url = Uri.parse('http://15.164.18.65:8080/app/profile/${widget.profileId}');
     var request = http.MultipartRequest('PUT', url);

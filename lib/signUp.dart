@@ -376,12 +376,14 @@ class _SignUpPageState extends State<SignUpPage> {
                 onPressed: () async {
                   onSignupButtonClicked();
                   print('회원가입 버튼 클릭');
+                  final String? Birth = dateOfBirth?.replaceAll('.', '-');
+                  print(Birth);
                   if (gender == "남자") {
                     await apiClient.signUp(
-                        name, dateOfBirth!, email, "male", _password!, true);
+                        name, Birth!, email, "male", _password!, true);
                   } else {
                     await apiClient.signUp(
-                        name, dateOfBirth!, email, "female", _password!, true);
+                        name, Birth!, email, "female", _password!, true);
                   }
                 }, // 회원가입 버튼 클릭 시 함수 실행
                 style: ButtonStyle(

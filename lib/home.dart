@@ -15,6 +15,7 @@ import 'appTextStyles.dart';
 import 'apiClient.dart';
 import 'appTextStyles.dart';
 import 'globalResponseManager.dart';
+import 'package:flutter/services.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({super.key});
@@ -39,6 +40,108 @@ class _HomePageState extends State<HomePage> {
     });
   }
 
+
+  void _showBottomSheet(BuildContext context) {
+    HapticFeedback.vibrate(); // 진동 추가
+    final profileProvider = Provider.of<ProfileProvider>(context, listen: false);
+
+    showModalBottomSheet(
+      context: context,
+      builder: (BuildContext context) {
+        return Container(
+          decoration: BoxDecoration(
+            borderRadius: BorderRadius.all(Radius.circular(20)),
+            color: AppColors.wh,
+          ),
+          child: Padding(
+            padding: EdgeInsets.symmetric(horizontal: 24, vertical: 16),
+            child: SingleChildScrollView(
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Gaps.h20,
+                  Text(
+                    '멀티 프로필',
+                    style: AppTextStyles.title3S18.copyWith(color: AppColors.gr800),
+                  ),
+                  Gaps.h16,
+                  ListView.builder(
+                    shrinkWrap: true,
+                    physics: NeverScrollableScrollPhysics(), // 스크롤을 비활성화하여 부모 스크롤과 충돌 방지
+                    itemCount: profileProvider.profileList.length,
+                    itemBuilder: (context, index) {
+                      final profile = profileProvider.profileList[index];
+                      return Column(
+                        children: [
+                          InkWell(
+                            onTap: () {
+                              profileProvider.setCurrentProfile(profile);
+                              Navigator.pop(context); // Close the bottom sheet
+                              setState(() {
+                                _selectedIndex=3;
+                              });
+                            },
+                            child: Container(
+                              height: 48,
+                              color: AppColors.gr150,
+                              child: Row(
+                                children: [
+                                  Container(
+                                    width: 2,
+                                    color: getColorFromText(profile.color),
+                                  ),
+                                  Gaps.w12,
+                                  CircleAvatar(
+                                    backgroundColor: getColorFromText(profile.color),
+                                    radius: 10,
+                                    // backgroundImage: NetworkImage(profile.imgURL), // assuming profile.imgURL is a URL
+                                  ),
+                                  Gaps.w12,
+                                  Text(
+                                    profile.name,
+                                    style: AppTextStyles.body2M16.copyWith(color: AppColors.gr900),
+                                  ),
+                                ],
+                              ),
+                            ),
+                          ),
+                          if (index != profileProvider.profileList.length - 1) Gaps.h10,
+                        ],
+                      );
+                    },
+                  ),
+                  Center(
+                    child: Container(
+                      width: 335,
+                      height: 52,
+                      child: ElevatedButton(
+                        onPressed: () {
+                          // 프로필 추가하기 버튼 클릭 시 동작
+                        },
+                        style: ElevatedButton.styleFrom(
+                          backgroundColor: AppColors.softTeal,
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(8),
+                          ),
+                        ),
+                        child: Text(
+                          '프로필 추가하기',
+                          style: AppTextStyles.body1S16.copyWith(color: AppColors.vibrantTeal),
+                        ),
+                      ),
+                    ),
+                  ),
+                  Gaps.h24,
+                ],
+              ),
+            ),
+          ),
+        );
+      },
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     final bool isKeyboardVisible =
@@ -55,6 +158,7 @@ class _HomePageState extends State<HomePage> {
         onTap: _onItemTapped,
         currentIndex: _selectedIndex,
         isKeyboardVisible: isKeyboardVisible,
+        onLongPress: () => _showBottomSheet(context),
       ),
       floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
     );
@@ -165,12 +269,14 @@ class HomePageContent extends StatelessWidget {
 
 class CustomBottomNavigationBar extends StatelessWidget {
   final Function(int) onTap;
+  final void Function() onLongPress; // onLongPress 콜백 변경
   final int currentIndex;
   final bool isKeyboardVisible;
 
   CustomBottomNavigationBar({
     super.key,
     required this.onTap,
+    required this.onLongPress, // onLongPress 콜백 추가
     required this.currentIndex,
     required this.isKeyboardVisible,
   });
@@ -195,17 +301,19 @@ class CustomBottomNavigationBar extends StatelessWidget {
           _buildNavItem(2, '캘린더', 'assets/bottombar/IconGnbBuyer.png',
               'assets/bottombar/IconGnbBuyer_bk.png', iconSize, textSize),
           _buildNavItem(3, '마이', 'assets/bottombar/IconBtnMoreActive.png',
-              'assets/bottombar/IconBtnMoreActive_bk.png', iconSize, textSize),
+              'assets/bottombar/IconBtnMoreActive_bk.png', iconSize, textSize, isMyIcon: true),
         ],
       ),
     );
   }
 
   Widget _buildNavItem(int index, String label, String iconPath,
-      String selectedIconPath, double iconSize, double textSize) {
+      String selectedIconPath, double iconSize, double textSize,
+      {bool isMyIcon = false}) {
     return Expanded(
       child: GestureDetector(
         onTap: () => onTap(index),
+        onLongPress: isMyIcon ? onLongPress : null, // "마이" 아이콘에만 onLongPress 추가
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [

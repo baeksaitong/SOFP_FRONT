@@ -139,8 +139,8 @@ class LoginButton extends StatelessWidget {
       width: double.infinity,
       child: ElevatedButton(
         onPressed: () async {
-          await apiClient.login(context, idController.text, passwordController.text);
-          // await apiClient.login(context, 'mg0454@naver.com', 'asdf1234!');
+          // await apiClient.login(context, idController.text, passwordController.text);
+          await apiClient.login(context, 'mg045434@gmail.com', 'asdf1234!');
         },
         style: ElevatedButton.styleFrom(
           padding: EdgeInsets.symmetric(
