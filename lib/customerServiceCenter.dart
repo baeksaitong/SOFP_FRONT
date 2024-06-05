@@ -25,6 +25,7 @@ class _CustomerServicePageState extends State<CustomerServicePage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: AppColors.wh,
       appBar: AppBar(
         title: Text(
           '고객센터',
@@ -58,7 +59,7 @@ class _CustomerServicePageState extends State<CustomerServicePage> {
                 decoration: InputDecoration(
                   hintText: '내용을 입력해 주세요',
                   hintStyle:
-                      AppTextStyles.body5M14.copyWith(color: AppColors.gr500),
+                  AppTextStyles.body5M14.copyWith(color: AppColors.gr500),
                   border: OutlineInputBorder(
                     borderRadius: BorderRadius.circular(8.0),
                   ),
@@ -74,7 +75,7 @@ class _CustomerServicePageState extends State<CustomerServicePage> {
                   child: Text(
                     '파일 첨부',
                     style:
-                        AppTextStyles.body5M14.copyWith(color: AppColors.gr700),
+                    AppTextStyles.body5M14.copyWith(color: AppColors.gr700),
                   ),
                   onPressed: () {
                     // 파일 첨부 기능
