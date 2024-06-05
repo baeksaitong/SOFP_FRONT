@@ -1,10 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:dio/dio.dart';
 import 'appColors.dart';
 import 'appTextStyles.dart';
 import 'gaps.dart';
 import 'provider.dart';
 import 'navigates.dart';
+import 'jwtManager.dart'; // JWTmanager 클래스가 정의된 파일을 import
 
 class AddAllergyPage extends StatefulWidget {
   const AddAllergyPage({super.key});
@@ -14,19 +16,46 @@ class AddAllergyPage extends StatefulWidget {
 }
 
 class _AddAllergyPageState extends State<AddAllergyPage> {
-  List<String> searchResults = ['알러지1', '알러지2', '알러지3', '새우', '장구'];
+  List<String> searchResults = [];
   List<String> selectedItems = [];
-  List<String> allergies = []; // Initialize the allergies list
+  List<String> allergies = [];
   String query = '';
+  final Dio _dio = Dio(); // Dio 인스턴스 생성
+  final JWTmanager _jwtManager = JWTmanager(); // JWTmanager 인스턴스 생성
 
-  void onSearch(String value) {
+  @override
+  void initState() {
+    super.initState();
+    _loadAllergies();
+  }
+
+  Future<void> _loadAllergies() async {
+    // 여기에서 초기 알레르기 리스트를 불러오는 로직을 추가할 수 있습니다.
+  }
+
+  Future<void> onSearch(String value) async {
     setState(() {
       query = value;
-      // Simulate search results based on the query
-      searchResults = ['알러지1', '알러지2', '알러지3', '새우', '장구']
-          .where((item) => item.contains(query))
-          .toList();
     });
+
+    try {
+      final accessToken = await _jwtManager.getValidAccessToken();
+      final response = await _dio.get(
+        'http://15.164.18.65:8080/app/disease-allergy/search',
+        queryParameters: {'keyword': query},
+        options: Options(headers: {
+          'Authorization': 'Bearer $accessToken'
+        }),
+      );
+
+      if (response.statusCode == 200) {
+        setState(() {
+          searchResults = List<String>.from(response.data['DiseaseAllergyList']);
+        });
+      }
+    } catch (e) {
+      print('Error searching allergies: $e');
+    }
   }
 
   void toggleSelection(String item) {
@@ -39,16 +68,30 @@ class _AddAllergyPageState extends State<AddAllergyPage> {
     });
   }
 
-  void saveSelections() {
-    setState(() {
-      // Add the selected items to the list of allergies
-      for (var item in selectedItems) {
-        if (!allergies.contains(item)) {
-          allergies.add(item);
-        }
+  Future<void> saveSelections() async {
+    try {
+      final accessToken = await _jwtManager.getValidAccessToken();
+      final response = await _dio.patch(
+        'http://15.164.18.65:8080/app/disease-allergy/${Provider.of<ProfileProvider>(context, listen: false).currentProfile?.id}',
+        data: {
+          'addDiseaseAllergyList': selectedItems,
+          'removeDiseaseAllergyList': []
+        },
+        options: Options(headers: {
+          'Authorization': 'Bearer $accessToken'
+        }),
+      );
+
+      if (response.statusCode == 200) {
+        setState(() {
+          allergies.addAll(selectedItems);
+          selectedItems.clear();
+        });
+        Navigator.of(context).pop();
       }
-    });
-    Navigator.of(context).pop();
+    } catch (e) {
+      print('Error saving allergies: $e');
+    }
   }
 
   void showBottomSheet() {
@@ -70,7 +113,7 @@ class _AddAllergyPageState extends State<AddAllergyPage> {
                   mainAxisSize: MainAxisSize.min,
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Text('알레르기 & 질병 추가하기', style: AppTextStyles.title1B24),
+                    Text('알레르기 & 질병 추가', style: AppTextStyles.title1B24),
                     Gaps.h20,
                     Wrap(
                       spacing: 8.0,
@@ -94,7 +137,12 @@ class _AddAllergyPageState extends State<AddAllergyPage> {
                     ),
                     Gaps.h20,
                     TextField(
-                      onChanged: onSearch,
+                      onChanged: (value) {
+                        setState(() {
+                          query = value;
+                        });
+                        onSearch(value); // 자동완성 검색
+                      },
                       decoration: InputDecoration(
                         enabledBorder: InputBorder.none,
                         focusedBorder: InputBorder.none,
@@ -105,7 +153,9 @@ class _AddAllergyPageState extends State<AddAllergyPage> {
                       ),
                     ),
                     Gaps.h20,
-                    Wrap(
+                    // 검색 결과를 보여주는 부분
+                    searchResults.isNotEmpty
+                        ? Wrap(
                       spacing: 8.0,
                       runSpacing: 8.0,
                       children: searchResults.map((item) {
@@ -122,8 +172,9 @@ class _AddAllergyPageState extends State<AddAllergyPage> {
                           selectedColor: AppColors.wh,
                           checkmarkColor: AppColors.deepTeal,
                           labelStyle: TextStyle(
-                            color:
-                                isSelected ? AppColors.gr800 : AppColors.gr800,
+                            color: isSelected
+                                ? AppColors.gr800
+                                : AppColors.gr800,
                           ),
                           shape: RoundedRectangleBorder(
                             borderRadius: BorderRadius.circular(12.0),
@@ -135,15 +186,14 @@ class _AddAllergyPageState extends State<AddAllergyPage> {
                           ),
                         );
                       }).toList(),
-                    ),
+                    )
+                        : Container(),
                     Gaps.h20,
                     Gaps.h20,
                     SizedBox(
                       width: double.infinity,
                       child: ElevatedButton(
-                        onPressed: () {
-                          saveSelections();
-                        },
+                        onPressed: saveSelections,
                         style: ElevatedButton.styleFrom(
                           foregroundColor: AppColors.deepTeal,
                           backgroundColor: AppColors.softTeal,
@@ -153,8 +203,7 @@ class _AddAllergyPageState extends State<AddAllergyPage> {
                         ),
                         child: Text(
                           '저장하기',
-                          style: AppTextStyles.body1S16
-                              .copyWith(color: AppColors.deepTeal),
+                          style: AppTextStyles.body1S16.copyWith(color: AppColors.deepTeal),
                         ),
                       ),
                     ),
@@ -171,8 +220,8 @@ class _AddAllergyPageState extends State<AddAllergyPage> {
   @override
   Widget build(BuildContext context) {
     final currentProfile = Provider.of<ProfileProvider>(context).currentProfile;
-
     return Scaffold(
+      backgroundColor: AppColors.wh,
       appBar: AppBar(),
       body: Padding(
         padding: const EdgeInsets.all(20.0),
@@ -225,8 +274,7 @@ class _AddAllergyPageState extends State<AddAllergyPage> {
                 onPressed: showBottomSheet,
                 child: Text(
                   '+ 추가하기',
-                  style:
-                      AppTextStyles.body2M16.copyWith(color: AppColors.gr600),
+                  style: AppTextStyles.body2M16.copyWith(color: AppColors.gr600),
                 ),
               ),
             ),
@@ -246,8 +294,7 @@ class _AddAllergyPageState extends State<AddAllergyPage> {
                 ),
                 child: Text(
                   '약속 시작하기',
-                  style: AppTextStyles.body1S16
-                      .copyWith(color: AppColors.deepTeal),
+                  style: AppTextStyles.body1S16.copyWith(color: AppColors.deepTeal),
                 ),
               ),
             ),

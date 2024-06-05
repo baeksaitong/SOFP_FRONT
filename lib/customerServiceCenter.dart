@@ -25,6 +25,7 @@ class _CustomerServicePageState extends State<CustomerServicePage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: AppColors.wh,
       appBar: AppBar(
         title: Text(
           '고객센터',
