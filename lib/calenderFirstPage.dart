@@ -1,4 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+import 'package:sopf_front/apiClient.dart';
+import 'package:sopf_front/provider.dart';
+import 'package:sopf_front/shapeSearch.dart';
 import 'package:table_calendar/table_calendar.dart';
 import 'package:intl/intl.dart'; // DateFormat 사용을 위해 intl 패키지 임포트
 import 'package:intl/date_symbol_data_local.dart';
@@ -8,21 +12,21 @@ import 'appColors.dart'; // 색상 정의 파일을 임포트
 import 'gaps.dart';
 import 'dart:convert'; // JSON 변환을 위해 임포트
 
-// CalendarApp 클래스: 앱의 루트 위젯
-class CalendarApp extends StatelessWidget {
-  const CalendarApp({super.key});
-
-  @override
-  Widget build(BuildContext context) {
-    return MaterialApp(
-      title: '달력 앱',
-      theme: ThemeData(
-        primarySwatch: Colors.blue,
-      ),
-      home: const CalendarPage(),
-    );
-  }
-}
+// // CalendarApp 클래스: 앱의 루트 위젯
+// class CalendarApp extends StatelessWidget {
+//   const CalendarApp({super.key});
+//
+//   @override
+//   Widget build(BuildContext context) {
+//     return MaterialApp(
+//       title: '달력 앱',
+//       theme: ThemeData(
+//         primarySwatch: Colors.blue,
+//       ),
+//       home: const CalendarPage(),
+//     );
+//   }
+// }
 
 // MedicineEvent 클래스 수정
 class MedicineEvent {
@@ -126,7 +130,11 @@ class _CalendarPageState extends State<CalendarPage> {
           style: AppTextStyles.title2B20,
         ),
         IconButton(
-          icon: const Icon(Icons.add),
+          icon: Image.asset(
+              'assets/calendar.png',
+            width: 30,
+            height: 30,
+          ),
           onPressed: _showBottomSheet,
         ),
       ],
@@ -412,39 +420,39 @@ class BottomDialog extends StatefulWidget {
 }
 
 class _BottomDialogState extends State<BottomDialog> {
-  bool isChecked1 = false;
-  bool isChecked2 = false;
-  bool isChecked3 = false;
+  late Map<String, bool> selectedProfiles;
+  final APIClient apiClient = APIClient();
 
-  void toggleCheck(int index) {
+  @override
+  void initState() {
+    super.initState();
+    selectedProfiles = {};
+  }
+
+  void toggleCheck(String profileId) {
     setState(() {
-      if (index == 1) {
-        isChecked1 = !isChecked1;
-      } else if (index == 2) {
-        isChecked2 = !isChecked2;
-      } else if (index == 3) {
-        isChecked3 = !isChecked3;
-      }
+      selectedProfiles[profileId] = !(selectedProfiles[profileId] ?? false);
     });
   }
 
   void showSelectedOption() {
+    final profileProvider = Provider.of<ProfileProvider>(context, listen: false);
+    final profiles = profileProvider.profileList;
     Map<String, Color> selectedOptions = {};
-    if (isChecked1) {
-      selectedOptions['계정 1'] = AppColors.customBlue;
-    }
-    if (isChecked2) {
-      selectedOptions['계정 2'] = AppColors.customTeal;
-    }
-    if (isChecked3) {
-      selectedOptions['계정 3'] = AppColors.customCyan;
+
+    for (var profile in profiles) {
+      if (selectedProfiles[profile.id] == true) {
+        selectedOptions[profile.name] = getColorFromText(profile.color)!;
+        apiClient.calendarGet(context,profile.id);
+        apiClient.categoryGetAll(context,profile.id);
+      }
     }
 
     String selectedOptionText = selectedOptions.isNotEmpty
         ? '선택된 계정: ${selectedOptions.keys.join(', ')}'
         : '선택된 계정이 없습니다';
 
-    print(selectedOptionText);
+    print(selectedOptionText); // 선택된 텍스트들 출력
 
     widget.onOptionSelected(selectedOptions);
 
@@ -453,29 +461,38 @@ class _BottomDialogState extends State<BottomDialog> {
 
   @override
   Widget build(BuildContext context) {
+    final profileProvider = Provider.of<ProfileProvider>(context);
+    final profiles = profileProvider.profileList;
+
     return Container(
       width: double.infinity, // 가로를 꽉 채우기
       padding: const EdgeInsets.all(16.0),
       child: Column(
         mainAxisSize: MainAxisSize.min,
         children: [
-          buildOptionButton(context, '옵션 1', isChecked1, () => toggleCheck(1),
-              AppColors.customBlue),
-          Gaps.h10,
-          buildOptionButton(context, '옵션 2', isChecked2, () => toggleCheck(2),
-              AppColors.customTeal),
-          Gaps.h10,
-          buildOptionButton(context, '옵션 3', isChecked3, () => toggleCheck(3),
-              AppColors.customCyan),
+          ...profiles.map((profile) {
+            bool isChecked = selectedProfiles[profile.id] ?? false;
+            return Column(
+              children: [
+                buildOptionButton(
+                  context,
+                  profile.name,
+                  isChecked,
+                      () => toggleCheck(profile.id),
+                  getColorFromText(profile.color) ?? Colors.grey,
+                ),
+                Gaps.h10,
+              ],
+            );
+          }).toList(),
           Gaps.h20,
-          buildTextButton(context, '텍스트 버튼 1', showSelectedOption),
+          buildTextButton(context, '선택 완료', showSelectedOption),
         ],
       ),
     );
   }
 
-  Widget buildOptionButton(BuildContext context, String text, bool isChecked,
-      VoidCallback onPressed, Color color) {
+  Widget buildOptionButton(BuildContext context, String text, bool isChecked, VoidCallback onPressed, Color color) {
     return SizedBox(
       width: double.infinity,
       child: ElevatedButton(
@@ -523,8 +540,7 @@ class _BottomDialogState extends State<BottomDialog> {
     );
   }
 
-  Widget buildTextButton(
-      BuildContext context, String text, VoidCallback onPressed) {
+  Widget buildTextButton(BuildContext context, String text, VoidCallback onPressed) {
     return SizedBox(
       width: double.infinity,
       child: ElevatedButton(

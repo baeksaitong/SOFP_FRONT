@@ -428,6 +428,7 @@ class CategoryDetailsManager {
   static final CategoryDetailsManager _instance = CategoryDetailsManager._internal();
 
   CategoryDetails? currentCategory;
+  Map<String, CategoryDetails> categoryDetailsMap = {};
 
   factory CategoryDetailsManager() {
     return _instance;
@@ -438,6 +439,10 @@ class CategoryDetailsManager {
   void updateCategoryDetails(String jsonResponse) {
     final data = jsonDecode(jsonResponse);
     currentCategory = CategoryDetails.fromJson(data);
+  }
+
+  CategoryDetails? getCategoryDetails(String categoryId) {
+    return categoryDetailsMap[categoryId];
   }
 }
 

@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import 'package:sopf_front/globalResponseManager.dart';
+import 'package:sopf_front/provider.dart';
 import 'apiClient.dart';
 import 'appTextStyles.dart'; // 원하는 글꼴 스타일이 정의된 파일을 임포트
 import 'appColors.dart';
@@ -45,7 +47,9 @@ class _MedicationCategoryPageState extends State<MedicationCategoryPage> {
   }
 
   void _initializeCatories() async{
-    await apiClient.categoryGetAll(context);
+    final currentProfile =
+        Provider.of<ProfileProvider>(context, listen: false).currentProfile;
+    await apiClient.categoryGetAll(context, currentProfile!.id);
     setState(() {
       categories = CategoryManager().categories;
       print(categories);

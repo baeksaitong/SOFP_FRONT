@@ -247,16 +247,6 @@ class APIClient {
       if (context.mounted) {
         await recentViewPillGet(context); // await 추가
         await pillGet(context, null); // await 추가
-        await categoryGetAll(context); // await 추가
-        final categories = CategoryManager().categories;
-        await calendarGet(context);
-        await calendarPut(context);
-        if (categories.isNotEmpty) {
-          print(categories[0].categoryId);
-          await categoryGet(context, categories[0].categoryId); // Wait for the category details to be fetched
-        } else {
-          print('No categories found.');
-        }
       }
       if (jsonResponse['isNew'] == false) {
         navigateToAddAllergy();
@@ -838,12 +828,12 @@ class APIClient {
     }
   }
 
-  Future<void> categoryGetAll(BuildContext context) async {
+  Future<void> categoryGetAll(BuildContext context, String id) async {
     final currentProfile =
         Provider.of<ProfileProvider>(context, listen: false).currentProfile;
     final String? accessToken = await _jwtManager.getAccessToken();
     final url = Uri.parse(
-        '$baseUrl/app/category?profileId=${currentProfile?.id}');
+        '$baseUrl/app/category?profileId=$id');
     final response = await http.get(url, headers: <String, String>{
       'Content-Type': 'application/json; charset=UTF-8',
       'Accept': 'application/json',
@@ -915,12 +905,12 @@ class APIClient {
     }
   }
 
-  Future<void> calendarGet(BuildContext context) async {
+  Future<void> calendarGet(BuildContext context, String id) async {
     final currentProfile =
         Provider.of<ProfileProvider>(context, listen: false).currentProfile;
     final String? accessToken = await _jwtManager.getAccessToken();
     final url = Uri.parse(
-        '$baseUrl/app/calendar/${currentProfile?.id}');
+        '$baseUrl/app/calendar/$id');
     final response = await http.get(url, headers: <String, String>{
       'Content-Type': 'application/json; charset=UTF-8',
       'Accept': 'application/json',
@@ -930,11 +920,11 @@ class APIClient {
     if (response.statusCode == 200) {
       // 성공적으로 처리된 경우
       final jsonResponse = utf8.decode(response.bodyBytes);
-      print('캘린더 조회 성공: ${utf8.decode(response.bodyBytes)}');
+      print('프로필 캘린더 조회 성공: ${utf8.decode(response.bodyBytes)}');
     } else {
       // 실패 처리
       print(response.statusCode);
-      print('캘린더 조회 실패: ${utf8.decode(response.bodyBytes)}');
+      print('프로필 캘린더 조회 실패: ${utf8.decode(response.bodyBytes)}');
     }
   }
 
@@ -964,7 +954,6 @@ class APIClient {
       // 성공적으로 처리된 경우
       final jsonResponse = utf8.decode(response.bodyBytes);
       print('일부 캘린더 조회 성공: ${utf8.decode(response.bodyBytes)}');
-      await calendarGet(context);
     } else {
       // 실패 처리
       print(response.statusCode);

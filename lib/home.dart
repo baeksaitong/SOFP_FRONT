@@ -30,7 +30,7 @@ class _HomePageState extends State<HomePage> {
   static const List<Widget> _widgetOptions = <Widget>[
     Placeholder(), // PharmacyMap 구현되면 교체
     HomePageContent(),
-    CalendarApp(),
+    CalendarPage(),
     MyPage(),
   ];
 
