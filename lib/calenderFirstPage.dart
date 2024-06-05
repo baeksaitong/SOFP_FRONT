@@ -1,62 +1,88 @@
+import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:sopf_front/apiClient.dart';
 import 'package:sopf_front/provider.dart';
 import 'package:sopf_front/shapeSearch.dart';
 import 'package:table_calendar/table_calendar.dart';
-import 'package:intl/intl.dart'; // DateFormat 사용을 위해 intl 패키지 임포트
+import 'package:intl/intl.dart';
 import 'package:intl/date_symbol_data_local.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'appTextStyles.dart'; // 원하는 글꼴 스타일이 정의된 파일을 임포트
-import 'appColors.dart'; // 색상 정의 파일을 임포트
+import 'appTextStyles.dart';
+import 'appColors.dart';
 import 'gaps.dart';
-import 'dart:convert'; // JSON 변환을 위해 임포트
 
-// // CalendarApp 클래스: 앱의 루트 위젯
-// class CalendarApp extends StatelessWidget {
-//   const CalendarApp({super.key});
-//
-//   @override
-//   Widget build(BuildContext context) {
-//     return MaterialApp(
-//       title: '달력 앱',
-//       theme: ThemeData(
-//         primarySwatch: Colors.blue,
-//       ),
-//       home: const CalendarPage(),
-//     );
-//   }
-// }
-
-// MedicineEvent 클래스 수정
-class MedicineEvent {
+class CalendarDetails {
+  final String id;
   final String name;
-  final Color color; // 색상 추가
-  bool isTaken12;
-  bool isTaken15;
-  bool isTaken18;
+  final bool alarm;
+  final String period;
+  final List<String> intakeTimeList;
+  final Color color; // 색상 필드 추가
 
-  MedicineEvent(this.name, this.color,
-      {this.isTaken12 = false, this.isTaken15 = false, this.isTaken18 = false});
+  CalendarDetails({
+    required this.id,
+    required this.name,
+    required this.alarm,
+    required this.period,
+    required this.intakeTimeList,
+    required this.color, // 색상 필드 추가
+  });
+
+  factory CalendarDetails.fromJson(Map<String, dynamic> json, Color color) {
+    return CalendarDetails(
+      id: json['categoryId'] ?? '',
+      name: json['name'] ?? '',
+      alarm: json['alarm'] ?? true,
+      period: json['period'] ?? '',
+      intakeTimeList: List<String>.from(json['intakeTime'] ?? []),
+      color: color, // 색상 필드 추가
+    );
+  }
+
+  factory CalendarDetails.fromJsonWithColor(Map<String, dynamic> json) {
+    return CalendarDetails(
+      id: json['id'],
+      name: json['name'],
+      alarm: json['alarm'],
+      period: json['period'],
+      intakeTimeList: List<String>.from(json['intakeTimeList']),
+      color: Color(int.parse(json['color'])),
+    );
+  }
 
   Map<String, dynamic> toJson() => {
-        'name': name,
-        'color': color.value, // 색상을 int로 저장
-        'isTaken12': isTaken12,
-        'isTaken15': isTaken15,
-        'isTaken18': isTaken18,
-      };
-
-  static MedicineEvent fromJson(Map<String, dynamic> json) => MedicineEvent(
-        json['name'],
-        Color(json['color']), // int에서 Color로 변환
-        isTaken12: json['isTaken12'],
-        isTaken15: json['isTaken15'],
-        isTaken18: json['isTaken18'],
-      );
+    'id': id,
+    'name': name,
+    'alarm': alarm,
+    'period': period,
+    'intakeTimeList': intakeTimeList,
+    'color': color.value.toString(), // 색상 필드 추가
+  };
 }
 
-// CalendarPage 클래스: 달력 페이지의 상태를 관리
+class CalendarDetailsManager {
+  static final CalendarDetailsManager _instance = CalendarDetailsManager._internal();
+
+  CalendarDetails? currentCalendar;
+  Map<String, CalendarDetails> calendarDetailsMap = {};
+
+  factory CalendarDetailsManager() {
+    return _instance;
+  }
+
+  CalendarDetailsManager._internal();
+
+  void updateCalendarDetails(String jsonResponse, Color color) {
+    final data = jsonDecode(jsonResponse);
+    currentCalendar = CalendarDetails.fromJson(data, color);
+  }
+
+  CalendarDetails? getCategoryDetails(String categoryId) {
+    return calendarDetailsMap[categoryId];
+  }
+}
+
 class CalendarPage extends StatefulWidget {
   const CalendarPage({super.key});
 
@@ -64,14 +90,15 @@ class CalendarPage extends StatefulWidget {
   _CalendarPageState createState() => _CalendarPageState();
 }
 
-// _CalendarPageState 클래스: CalendarPage의 상태를 정의
 class _CalendarPageState extends State<CalendarPage> {
   late DateTime _focusedDay; // 현재 집중된 날짜
   late DateTime _selectedDay; // 선택된 날짜
   CalendarFormat _calendarFormat = CalendarFormat.month; // 달력 형식 (월간)
-  Map<DateTime, List<MedicineEvent>> _events = {}; // 약 이벤트 데이터
+  Map<DateTime, List<CalendarDetails>> _events = {}; // 약 이벤트 데이터
   String _selectedAccount = ''; // 선택된 계정
   Color _selectedColor = AppColors.customBlue; // 선택된 계정 색상
+  List<String> _selectedProfileIds = []; // 선택된 프로필 ID 리스트
+  final APIClient apiClient = APIClient();
 
   @override
   void initState() {
@@ -89,14 +116,18 @@ class _CalendarPageState extends State<CalendarPage> {
     });
   }
 
-  //다이얼로그 열었을때 하단시트 없애는 기능
+  // 다이얼로그 열었을때 하단시트 없애는 기능
   void _showBottomSheet() {
     showModalBottomSheet(
       context: context,
       isScrollControlled: true,
       useRootNavigator: true,
       builder: (BuildContext context) {
-        return BottomDialog(onOptionSelected: _onOptionSelected);
+        return BottomDialog(
+          onOptionSelected: (selectedAccounts, selectedProfileIds) {
+            _onOptionSelected(selectedAccounts, selectedProfileIds);
+          },
+        );
       },
     );
   }
@@ -117,8 +148,11 @@ class _CalendarPageState extends State<CalendarPage> {
   }
 
   // 선택된 날짜에 해당하는 약 이벤트 목록 반환
-  List<MedicineEvent> _getEventsForDay(DateTime day) {
-    return _events[day] ?? [];
+  List<CalendarDetails> _getEventsForDay(DateTime day) {
+    final dayWithoutTime = DateTime(day.year, day.month, day.day);
+    print("Getting events for day: $dayWithoutTime"); // 디버깅용 출력
+    print("Events: ${_events[dayWithoutTime]}"); // 디버깅용 출력
+    return _events[dayWithoutTime] ?? [];
   }
 
   Widget _buildCalendarHeader() {
@@ -131,7 +165,7 @@ class _CalendarPageState extends State<CalendarPage> {
         ),
         IconButton(
           icon: Image.asset(
-              'assets/calendar.png',
+            'assets/calendar.png',
             width: 30,
             height: 30,
           ),
@@ -141,43 +175,74 @@ class _CalendarPageState extends State<CalendarPage> {
     );
   }
 
-  Future<void> _onOptionSelected(Map<String, Color> selectedAccounts) async {
+  Future<void> _onOptionSelected(Map<String, Color> selectedAccounts, List<String> selectedProfileIds) async {
     setState(() {
       _selectedAccount = selectedAccounts.keys.join(', ');
       _selectedColor = selectedAccounts.values.first;
+      _selectedProfileIds = selectedProfileIds;
     });
 
-    // 예시 데이터
-    Map<DateTime, List<MedicineEvent>> exampleEvents = {
-      DateTime.utc(2024, 5, 20): [
-        if (selectedAccounts.containsKey('계정 1'))
-          MedicineEvent('감기약', selectedAccounts['계정 1']!,
-              isTaken12: false, isTaken15: false),
-        if (selectedAccounts.containsKey('계정 2'))
-          MedicineEvent('배탈약', selectedAccounts['계정 2']!,
-              isTaken12: false, isTaken15: false, isTaken18: false),
-      ],
-      DateTime.utc(2024, 5, 21): [
-        if (selectedAccounts.containsKey('계정 1'))
-          MedicineEvent('감기약', selectedAccounts['계정 1']!,
-              isTaken12: false, isTaken15: false),
-      ],
-      DateTime.utc(2024, 5, 22): [
-        if (selectedAccounts.containsKey('계정 2'))
-          MedicineEvent('배탈약', selectedAccounts['계정 2']!,
-              isTaken12: false, isTaken15: false, isTaken18: false),
-        if (selectedAccounts.containsKey('계정 3'))
-          MedicineEvent('계정 3 약', selectedAccounts['계정 3']!,
-              isTaken12: false, isTaken15: false),
-      ],
-    };
-
-    setState(() {
-      _events = exampleEvents;
-    });
+    await _loadProfileEvents(selectedProfileIds);
 
     // 로컬에 저장
     await _saveEvents();
+  }
+
+  Future<void> _loadProfileEvents(List<String> profileIds) async {
+    Map<DateTime, List<CalendarDetails>> loadedEvents = {};
+    final profileProvider = Provider.of<ProfileProvider>(context, listen: false);
+    final profiles = profileProvider.profileList;
+
+    for (String profileId in profileIds) {
+      final profile = profiles.firstWhere((p) => p.id == profileId);
+      Color profileColor = getColorFromText(profile.color) ?? Colors.grey; // 프로필 색상 가져오기
+
+      for (String day in ['MON', 'TUE', 'WED', 'THU', 'FRI', 'SAT', 'SUN']) {
+        String response = await apiClient.categoryDayGet(context, profileId, day);
+        if (response.isNotEmpty) {
+          Map<String, dynamic> jsonMap = jsonDecode(response);
+          Map<String, dynamic> categoryList = jsonMap['categoryList'];
+          categoryList.forEach((key, value) {
+            List<dynamic> jsonList = value;
+            List<CalendarDetails> events = jsonList.map((json) => CalendarDetails.fromJson(json, profileColor)).toList();
+            for (CalendarDetails event in events) {
+              DateTime eventDate = _getNextDateForDay(DateTime.now(), day);
+              final eventDateWithoutTime = DateTime(eventDate.year, eventDate.month, eventDate.day);
+              if (loadedEvents.containsKey(eventDateWithoutTime)) {
+                loadedEvents[eventDateWithoutTime]!.add(event);
+              } else {
+                loadedEvents[eventDateWithoutTime] = [event];
+              }
+            }
+          });
+        }
+      }
+    }
+
+    setState(() {
+      _events = loadedEvents;
+    });
+    print("Loaded Events: $_events"); // loadedEvents가 올바르게 로드되었는지 확인
+  }
+
+  // 요일 약어를 DateTime의 weekday 값으로 매핑하는 함수
+  final Map<String, int> _dayMapping = {
+    'MON': DateTime.monday,
+    'TUE': DateTime.tuesday,
+    'WED': DateTime.wednesday,
+    'THU': DateTime.thursday,
+    'FRI': DateTime.friday,
+    'SAT': DateTime.saturday,
+    'SUN': DateTime.sunday,
+  };
+
+  DateTime _getNextDateForDay(DateTime fromDate, String day) {
+    int dayOfWeek = _dayMapping[day]!;
+    int daysUntilNextDay = (dayOfWeek - fromDate.weekday + 7) % 7;
+    if (daysUntilNextDay == 0) {
+      daysUntilNextDay = 7; // 현재 날짜를 포함하지 않도록 설정
+    }
+    return fromDate.add(Duration(days: daysUntilNextDay));
   }
 
   // 이벤트 데이터를 로컬 저장소에 저장하는 함수
@@ -198,7 +263,7 @@ class _CalendarPageState extends State<CalendarPage> {
         _events = decodedEvents.map((key, value) => MapEntry(
             DateTime.parse(key),
             (value as List<dynamic>)
-                .map((e) => MedicineEvent.fromJson(e))
+                .map((e) => CalendarDetails.fromJsonWithColor(e))
                 .toList()));
       });
     }
@@ -228,20 +293,17 @@ class _CalendarPageState extends State<CalendarPage> {
                   onFormatChanged: _onFormatChanged, // 달력 형식이 변경될 때 호출되는 함수
                   onPageChanged: (focusedDay) {
                     setState(() {
-                      _focusedDay =
-                          focusedDay; // Update the focused day and call setState to update the UI
+                      _focusedDay = focusedDay; // Update the focused day and call setState to update the UI
                     });
                   },
                   eventLoader: _getEventsForDay, // 이벤트 로더 설정
                   calendarStyle: CalendarStyle(
                     outsideDaysVisible: false, // 달력 외부의 날짜를 숨김
-                    cellMargin: const EdgeInsets.all(2.0), // 날짜 셀의 마진을 키움
+                    cellMargin: const EdgeInsets.all(2.0), // 날짜 셀의 마
                     cellPadding: const EdgeInsets.only(
                         top: 1.0, bottom: 5.0), // 날짜 셀의 패딩을 위쪽으로 설정
-                    defaultTextStyle:
-                        AppTextStyles.caption3M10, // 기본 텍스트 스타일 적용
-                    weekendTextStyle:
-                        AppTextStyles.caption3M10, // 주말 텍스트 스타일 적용
+                    defaultTextStyle: AppTextStyles.caption3M10, // 기본 텍스트 스타일 적용
+                    weekendTextStyle: AppTextStyles.caption3M10, // 주말 텍스트 스타일 적용
                     selectedDecoration: BoxDecoration(
                       color: AppColors.gr150,
                       shape: BoxShape.rectangle, // Circular shape
@@ -250,21 +312,18 @@ class _CalendarPageState extends State<CalendarPage> {
                         width: 0.5,
                       ),
                     ),
-                    selectedTextStyle:
-                        AppTextStyles.caption3M10, // 선택된 날짜 텍스트 스타일 적용
+                    selectedTextStyle: AppTextStyles.caption3M10, // 선택된 날짜 텍스트 스타일 적용
                     todayTextStyle: AppTextStyles.caption3M10.copyWith(
                         color: AppColors.deepTeal), // 오늘 날짜 텍스트 스타일 적용
                     todayDecoration: const BoxDecoration(),
-                    holidayTextStyle:
-                        AppTextStyles.caption3M10, // 공휴일 텍스트 스타일 적용
+                    holidayTextStyle: AppTextStyles.caption3M10, // 공휴일 텍스트 스타일 적용
                     cellAlignment: Alignment.topCenter, // 셀의 정렬을 위쪽 가운데로 설정
                   ),
                   daysOfWeekHeight: 50, // 요일 행의 높이 설정
                   daysOfWeekStyle: DaysOfWeekStyle(
                     weekdayStyle: AppTextStyles.body2M16, // 평일 텍스트 스타일 적용
                     weekendStyle: AppTextStyles.body2M16, // 주말 텍스트 스타일 적용
-                    dowTextFormatter: (date, locale) =>
-                        DateFormat.E(locale).format(date), // 요일 텍스트 형식 설정
+                    dowTextFormatter: (date, locale) => DateFormat.E(locale).format(date), // 요일 텍스트 형식 설정
                   ),
                   headerStyle: HeaderStyle(
                     formatButtonVisible: false, // 형식 변경 버튼을 숨김
@@ -278,9 +337,23 @@ class _CalendarPageState extends State<CalendarPage> {
                     markerBuilder: (context, date, events) {
                       if (events.isNotEmpty) {
                         return Positioned(
-                          right: 1,
-                          bottom: 1,
-                          child: _buildEventsMarker(date, events),
+                          bottom: 10, // Adjust the bottom position to center it below the number
+                          left: 0, // Align markers centrally
+                          right: 0,
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.center, // Center the markers
+                            children: events.map((event) {
+                              return Container(
+                                margin: const EdgeInsets.symmetric(horizontal: 1.75), // Marker spacing
+                                decoration: BoxDecoration(
+                                  shape: BoxShape.circle,
+                                  color: (event as CalendarDetails).color, // Use the event's color
+                                ),
+                                width: 8.0,
+                                height: 8.0,
+                              );
+                            }).toList(),
+                          ),
                         );
                       }
                       return null;
@@ -305,7 +378,7 @@ class _CalendarPageState extends State<CalendarPage> {
           margin: const EdgeInsets.symmetric(horizontal: 1.0), // 마커 간 간격 설정
           decoration: BoxDecoration(
             shape: BoxShape.circle,
-            color: (event as MedicineEvent).color, // 각 이벤트의 색상 사용
+            color: (event as CalendarDetails).color, // 각 이벤트의 색상 사용
           ),
           width: 7.0,
           height: 7.0,
@@ -330,7 +403,7 @@ class _CalendarPageState extends State<CalendarPage> {
             color: Colors.white,
             border: Border(
               left: BorderSide(
-                color: event.color,
+                color: event.color, // 이벤트 색상 사용
                 width: 5.0, // 원하는 두께로 설정
               ),
             ),
@@ -354,54 +427,24 @@ class _CalendarPageState extends State<CalendarPage> {
                 ],
               ),
               const Divider(),
-              Row(
-                children: [
-                  Checkbox(
-                    value: event.isTaken12,
-                    onChanged: (bool? value) {
-                      setState(() {
-                        event.isTaken12 = value ?? false;
-                      });
-                      _saveEvents();
-                    },
-                    activeColor: event.color, // 체크박스 색상 설정
-                  ),
-                  const SizedBox(width: 8.0),
-                  const Text('12:00'),
-                ],
-              ),
-              Row(
-                children: [
-                  Checkbox(
-                    value: event.isTaken15,
-                    onChanged: (bool? value) {
-                      setState(() {
-                        event.isTaken15 = value ?? false;
-                      });
-                      _saveEvents();
-                    },
-                    activeColor: event.color, // 체크박스 색상 설정
-                  ),
-                  const SizedBox(width: 8.0),
-                  const Text('15:00'),
-                ],
-              ),
-              Row(
-                children: [
-                  Checkbox(
-                    value: event.isTaken18,
-                    onChanged: (bool? value) {
-                      setState(() {
-                        event.isTaken18 = value ?? false;
-                      });
-                      _saveEvents();
-                    },
-                    activeColor: event.color, // 체크박스 색상 설정
-                  ),
-                  const SizedBox(width: 8.0),
-                  const Text('18:00'),
-                ],
-              ),
+              ...event.intakeTimeList.map((time) {
+                return Row(
+                  children: [
+                    Checkbox(
+                      value: false,
+                      onChanged: (bool? value) {
+                        setState(() {
+                          // Check if any of the intake times have been taken
+                        });
+                        _saveEvents();
+                      },
+                      activeColor: Colors.blue, // 체크박스 색상 설정
+                    ),
+                    const SizedBox(width: 8.0),
+                    Text(time),
+                  ],
+                );
+              }).toList(),
             ],
           ),
         );
@@ -411,7 +454,7 @@ class _CalendarPageState extends State<CalendarPage> {
 }
 
 class BottomDialog extends StatefulWidget {
-  final void Function(Map<String, Color>) onOptionSelected;
+  final void Function(Map<String, Color>, List<String>) onOptionSelected;
 
   const BottomDialog({required this.onOptionSelected, super.key});
 
@@ -439,12 +482,12 @@ class _BottomDialogState extends State<BottomDialog> {
     final profileProvider = Provider.of<ProfileProvider>(context, listen: false);
     final profiles = profileProvider.profileList;
     Map<String, Color> selectedOptions = {};
+    List<String> selectedProfileIds = [];
 
     for (var profile in profiles) {
       if (selectedProfiles[profile.id] == true) {
         selectedOptions[profile.name] = getColorFromText(profile.color)!;
-        apiClient.calendarGet(context,profile.id);
-        apiClient.categoryGetAll(context,profile.id);
+        selectedProfileIds.add(profile.id);
       }
     }
 
@@ -454,7 +497,7 @@ class _BottomDialogState extends State<BottomDialog> {
 
     print(selectedOptionText); // 선택된 텍스트들 출력
 
-    widget.onOptionSelected(selectedOptions);
+    widget.onOptionSelected(selectedOptions, selectedProfileIds);
 
     Navigator.pop(context); // 다이얼로그 닫기
   }
@@ -561,3 +604,4 @@ class _BottomDialogState extends State<BottomDialog> {
     );
   }
 }
+

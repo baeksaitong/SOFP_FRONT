@@ -339,7 +339,7 @@
     },
     {
       "name": "meta",
-      "rootUri": "file:///Users/mingmaengmung/.pub-cache/hosted/pub.dev/meta-1.14.0",
+      "rootUri": "file:///Users/mingmaengmung/.pub-cache/hosted/pub.dev/meta-1.15.0",
       "packageUri": "lib/",
       "languageVersion": "2.12"
     },
@@ -555,9 +555,9 @@
     },
     {
       "name": "test_api",
-      "rootUri": "file:///Users/mingmaengmung/.pub-cache/hosted/pub.dev/test_api-0.7.1",
+      "rootUri": "file:///Users/mingmaengmung/.pub-cache/hosted/pub.dev/test_api-0.7.2",
       "packageUri": "lib/",
-      "languageVersion": "3.0"
+      "languageVersion": "3.2"
     },
     {
       "name": "typed_data",
@@ -573,7 +573,7 @@
     },
     {
       "name": "vm_service",
-      "rootUri": "file:///Users/mingmaengmung/.pub-cache/hosted/pub.dev/vm_service-14.2.2",
+      "rootUri": "file:///Users/mingmaengmung/.pub-cache/hosted/pub.dev/vm_service-14.2.3",
       "packageUri": "lib/",
       "languageVersion": "3.3"
     },
@@ -608,10 +608,10 @@
       "languageVersion": "3.3"
     }
   ],
-  "generated": "2024-06-05T07:03:37.098083Z",
+  "generated": "2024-06-05T14:27:25.955904Z",
   "generator": "pub",
-  "generatorVersion": "3.5.0-191.0.dev",
+  "generatorVersion": "3.5.0-222.0.dev",
   "flutterRoot": "file:///Users/mingmaengmung/flutter",
-  "flutterVersion": "3.23.0-8.0.pre.5",
+  "flutterVersion": "3.23.0-13.0.pre.100",
   "pubCache": "file:///Users/mingmaengmung/.pub-cache"
 }

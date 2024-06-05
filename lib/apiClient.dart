@@ -828,7 +828,7 @@ class APIClient {
     }
   }
 
-  Future<void> categoryGetAll(BuildContext context, String id) async {
+  Future<String> categoryGetAll(BuildContext context, String id) async {
     final currentProfile =
         Provider.of<ProfileProvider>(context, listen: false).currentProfile;
     final String? accessToken = await _jwtManager.getAccessToken();
@@ -844,11 +844,35 @@ class APIClient {
       // 성공적으로 처리된 경우
       final jsonResponse = utf8.decode(response.bodyBytes);
       print('모든 카테고리 조회 성공: ${utf8.decode(response.bodyBytes)}');
-      CategoryManager().updateCategories(jsonResponse);
+      return jsonResponse;
     } else {
       // 실패 처리
       print(response.statusCode);
       print('모든 카테고리 조회 실패: ${utf8.decode(response.bodyBytes)}');
+      return '';
+    }
+  }
+
+  Future<String> categoryDayGet(BuildContext context, String id, String day) async {
+    final String? accessToken = await _jwtManager.getAccessToken();
+    final url = Uri.parse(
+        '$baseUrl/app/category/$id/$day');
+    final response = await http.get(url, headers: <String, String>{
+      'Content-Type': 'application/json; charset=UTF-8',
+      'Accept': 'application/json',
+      'Authorization': 'Bearer $accessToken', // 인증 헤더 추가
+    });
+
+    if (response.statusCode == 200) {
+      // 성공적으로 처리된 경우
+      final jsonResponse = utf8.decode(response.bodyBytes);
+      print('요일 카테고리 조회 성공: ${utf8.decode(response.bodyBytes)}');
+      return jsonResponse;
+    } else {
+      // 실패 처리
+      print(response.statusCode);
+      print('요일 카테고리 조회 실패: ${utf8.decode(response.bodyBytes)}');
+      return '';
     }
   }
 
