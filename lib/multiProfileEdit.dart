@@ -75,6 +75,7 @@ class _multiProfileEditState extends State<multiProfileEdit> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: AppColors.wh,
       appBar: AppBar(
         title: Text('멀티프로필 추가/수정',
           style: TextStyle(
