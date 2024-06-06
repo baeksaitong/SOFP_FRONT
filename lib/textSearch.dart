@@ -1,12 +1,12 @@
+import 'package:camera/camera.dart';
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
-import 'package:sopf_front/apiClient.dart';
-import 'package:sopf_front/searchResult.dart';
-import 'appColors.dart';
-import 'appTextStyles.dart';
+import 'package:permission_handler/permission_handler.dart';
+import 'package:sopf_front/imageSearch.dart';
+import 'package:sopf_front/appColors.dart';
+import 'package:sopf_front/navigates.dart';
+import 'apiClient.dart';
 import 'gaps.dart';
-import 'navigates.dart';
-import 'loading_provider.dart';
+import 'appTextStyles.dart';
 
 class TextSearch extends StatefulWidget {
   const TextSearch({super.key});
@@ -54,7 +54,9 @@ class _TextSearchState extends State<TextSearch> {
                       ),
                     ),
                     IconButton(
-                      onPressed: () {},
+                      onPressed: () {
+                        _requestCameraPermissionAndNavigate(context);
+                      },
                       icon: Image.asset(
                         'assets/majesticons_camera.png',
                         width: 24,
@@ -71,7 +73,48 @@ class _TextSearchState extends State<TextSearch> {
       ],
     );
   }
+
+  void _requestCameraPermissionAndNavigate(BuildContext context) async {
+    // 카메라 권한 요청
+    final status = await Permission.camera.request();
+
+    if (status.isGranted) {
+      try {
+        // 약간의 지연 후 카메라 초기화
+        await Future.delayed(Duration(milliseconds: 300));
+
+        // 권한이 허용된 경우 사용 가능한 카메라 목록을 가져옴
+        final cameras = await availableCameras();
+        if (cameras.isNotEmpty) {
+          // 카메라가 있는 경우 ImageSearch 화면으로 이동
+          Navigator.push(
+            context,
+            MaterialPageRoute(
+              builder: (context) => ImageSearch(cameras: cameras),
+            ),
+          );
+        } else {
+          // 카메라가 없는 경우 사용자에게 알림
+          ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(content: Text('사용 가능한 카메라가 없습니다.')),
+          );
+        }
+      } catch (e) {
+        // 카메라 초기화 중에 발생한 예외 처리
+        print('카메라 초기화 오류: $e');
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text('카메라를 초기화하는 동안 오류가 발생했습니다.')),
+        );
+      }
+    } else {
+      // 권한이 거부된 경우 메시지 표시
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text('카메라 권한이 필요합니다. 설정에서 허용해주세요.')),
+      );
+    }
+  }
 }
+
 
 class TextSearchDetail extends StatefulWidget {
   const TextSearchDetail({super.key});

@@ -38,7 +38,17 @@ target 'Runner' do
 end
 
 post_install do |installer|
-  installer.pods_project.targets.each do |target|
-    flutter_additional_ios_build_settings(target)
+    installer.pods_project.targets.each do |target|
+      flutter_additional_ios_build_settings(target)
+
+      # iOS 10 이상에서 권한을 사용하는 모든 타겟에 대해 구성을 추가합니다.
+      target.build_configurations.each do |config|
+        config.build_settings['GCC_PREPROCESSOR_DEFINITIONS'] ||= [
+          '$(inherited)',
+
+          ## 'PERMISSION_CAMERA=1' 옵션을 추가합니다.
+          'PERMISSION_CAMERA=1',
+        ]
+    end
   end
 end
