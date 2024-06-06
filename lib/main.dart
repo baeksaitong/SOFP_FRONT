@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:intl/date_symbol_data_local.dart';
+import 'package:permission_handler/permission_handler.dart';
 import 'package:sopf_front/addAllergyPage.dart';
 import 'package:sopf_front/exColorsText.dart';
 import 'package:sopf_front/googleMap.dart';
@@ -13,7 +14,6 @@ import 'calenderFirstPage.dart';
 import 'home.dart';
 import 'mypage.dart';
 import 'appColors.dart';
-
 import 'package:camera/camera.dart';
 import 'package:sopf_front/exColorsText.dart';
 import 'package:sopf_front/imageSearch.dart';
@@ -36,8 +36,10 @@ void main() async {
 }
 */
 
+
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
+
 
   final cameras = await availableCameras();
   CameraDescription? firstCamera;

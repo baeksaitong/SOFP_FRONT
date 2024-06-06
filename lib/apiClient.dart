@@ -1,5 +1,4 @@
 import 'dart:io';
-
 import 'package:camera/camera.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:http/http.dart' as http;
@@ -9,7 +8,6 @@ import 'package:provider/provider.dart';
 import 'dart:convert';
 import 'package:sopf_front/jwtManager.dart';
 import 'package:sopf_front/provider.dart';
-import 'package:sopf_front/jwtManager.dart';
 import 'globalResponseManager.dart';
 import 'navigates.dart';
 
