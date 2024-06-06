@@ -844,6 +844,7 @@ class APIClient {
       // 성공적으로 처리된 경우
       final jsonResponse = utf8.decode(response.bodyBytes);
       print('모든 카테고리 조회 성공: ${utf8.decode(response.bodyBytes)}');
+      CategoryManager().updateCategories(jsonResponse);  // CategoryManager 업데이트
       return jsonResponse;
     } else {
       // 실패 처리

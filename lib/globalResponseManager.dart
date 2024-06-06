@@ -447,13 +447,16 @@ class CategoryDetailsManager {
 
   void updateCategoryDetails(String jsonResponse) {
     final data = jsonDecode(jsonResponse);
-    currentCategory = CategoryDetails.fromJson(data);
+    final categoryDetails = CategoryDetails.fromJson(data);
+    currentCategory = categoryDetails;
+    categoryDetailsMap[categoryDetails.id] = categoryDetails; // Map 업데이트
   }
 
   CategoryDetails? getCategoryDetails(String categoryId) {
     return categoryDetailsMap[categoryId];
   }
 }
+
 
 
 class MemberInfo {
@@ -489,65 +492,5 @@ class MemberInfo {
       'imgURL': imgURL,
       'color': color,
     };
-  }
-}
-
-class CalendarDetails {
-  final String id;
-  final String name;
-  final bool alarm;
-  final String period;
-  final List<String> intakeDayList;
-  final List<String> intakeTimeList;
-
-  CalendarDetails({
-    required this.id,
-    required this.name,
-    required this.alarm,
-    required this.period,
-    required this.intakeDayList,
-    required this.intakeTimeList,
-  });
-
-  factory CalendarDetails.fromJson(Map<String, dynamic> json) {
-    return CalendarDetails(
-      id: json['id'],
-      name: json['name'],
-      alarm: json['alarm'],
-      period: json['period'],
-      intakeDayList: List<String>.from(json['intakeDayList']),
-      intakeTimeList: List<String>.from(json['intakeTimeList']),
-    );
-  }
-
-  Map<String, dynamic> toJson() => {
-    'id': id,
-    'name': name,
-    'alarm': alarm,
-    'period': period,
-    'intakeDayList': intakeDayList,
-    'intakeTimeList': intakeTimeList,
-  };
-}
-
-class CalendarDetailsManager {
-  static final CalendarDetailsManager _instance = CalendarDetailsManager._internal();
-
-  CalendarDetails? currentCalendar;
-  Map<String, CalendarDetails> calendarDetailsMap = {};
-
-  factory CalendarDetailsManager() {
-    return _instance;
-  }
-
-  CalendarDetailsManager._internal();
-
-  void updateCategoryDetails(String jsonResponse) {
-    final data = jsonDecode(jsonResponse);
-    currentCalendar = CalendarDetails.fromJson(data);
-  }
-
-  CalendarDetails? getCategoryDetails(String categoryId) {
-    return calendarDetailsMap[categoryId];
   }
 }

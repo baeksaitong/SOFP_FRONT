@@ -106,6 +106,7 @@ class _CalendarPageState extends State<CalendarPage> {
     _focusedDay = DateTime.now(); // 현재 날짜로 초기화
     _selectedDay = _focusedDay; // 선택된 날짜도 현재 날짜로 초기화
     _loadEvents();
+    _loadSelectedProfiles(); // 선택된 프로필 로드
   }
 
   @override
@@ -182,13 +183,14 @@ class _CalendarPageState extends State<CalendarPage> {
       _selectedProfileIds = selectedProfileIds;
     });
 
-    await _loadProfileEvents(selectedProfileIds);
+    await _saveSelectedProfiles(); // 선택된 프로필 저장
+    await _loadProfileEvents(selectedProfileIds, _focusedDay);
 
     // 로컬에 저장
     await _saveEvents();
   }
 
-  Future<void> _loadProfileEvents(List<String> profileIds) async {
+  Future<void> _loadProfileEvents(List<String> profileIds, DateTime month) async {
     Map<DateTime, List<CalendarDetails>> loadedEvents = {};
     final profileProvider = Provider.of<ProfileProvider>(context, listen: false);
     final profiles = profileProvider.profileList;
@@ -199,30 +201,55 @@ class _CalendarPageState extends State<CalendarPage> {
 
       for (String day in ['MON', 'TUE', 'WED', 'THU', 'FRI', 'SAT', 'SUN']) {
         String response = await apiClient.categoryDayGet(context, profileId, day);
+        print("요일 카테고리 조회 성공: $response"); // 디버깅용 출력
         if (response.isNotEmpty) {
           Map<String, dynamic> jsonMap = jsonDecode(response);
-          Map<String, dynamic> categoryList = jsonMap['categoryList'];
-          categoryList.forEach((key, value) {
-            List<dynamic> jsonList = value;
-            List<CalendarDetails> events = jsonList.map((json) => CalendarDetails.fromJson(json, profileColor)).toList();
-            for (CalendarDetails event in events) {
-              DateTime eventDate = _getNextDateForDay(DateTime.now(), day);
-              final eventDateWithoutTime = DateTime(eventDate.year, eventDate.month, eventDate.day);
-              if (loadedEvents.containsKey(eventDateWithoutTime)) {
-                loadedEvents[eventDateWithoutTime]!.add(event);
-              } else {
-                loadedEvents[eventDateWithoutTime] = [event];
+          if (jsonMap['categoryList'] != null) {
+            Map<String, dynamic> categoryList = jsonMap['categoryList'];
+            categoryList.forEach((key, value) {
+              List<dynamic> jsonList = value;
+              List<CalendarDetails> events = jsonList.map((json) {
+                try {
+                  return CalendarDetails.fromJson(json, profileColor);
+                } catch (e) {
+                  print("Error parsing event: $e"); // 디버깅용 출력
+                  return null;
+                }
+              }).where((event) => event != null).toList().cast<CalendarDetails>();
+
+              for (CalendarDetails event in events) {
+                DateTime startDate = DateTime(month.year, month.month, 1);
+                DateTime endDate = _getEndOfMonth(startDate);
+                DateTime currentDate = startDate;
+
+                while (currentDate.isBefore(endDate) || currentDate.isAtSameMomentAs(endDate)) {
+                  if (currentDate.weekday == _dayMapping[day]) {
+                    final eventDateWithoutTime = DateTime(currentDate.year, currentDate.month, currentDate.day);
+                    print("Adding event on date: $eventDateWithoutTime"); // 디버깅용 출력
+                    if (loadedEvents.containsKey(eventDateWithoutTime)) {
+                      loadedEvents[eventDateWithoutTime]!.add(event);
+                    } else {
+                      loadedEvents[eventDateWithoutTime] = [event];
+                    }
+                  }
+                  currentDate = currentDate.add(Duration(days: 1)); // 하루씩 더함
+                }
               }
-            }
-          });
+            });
+          }
         }
       }
     }
 
     setState(() {
-      _events = loadedEvents;
+      _events.addAll(loadedEvents);
     });
-    print("Loaded Events: $_events"); // loadedEvents가 올바르게 로드되었는지 확인
+    print("Loaded Events: $_events"); // 디버깅용 출력
+  }
+
+  DateTime _getEndOfMonth(DateTime date) {
+    final lastDay = DateTime(date.year, date.month + 1, 0);
+    return lastDay;
   }
 
   // 요일 약어를 DateTime의 weekday 값으로 매핑하는 함수
@@ -269,6 +296,25 @@ class _CalendarPageState extends State<CalendarPage> {
     }
   }
 
+  // 선택된 프로필을 로컬 저장소에 저장하는 함수
+  Future<void> _saveSelectedProfiles() async {
+    final prefs = await SharedPreferences.getInstance();
+    await prefs.setStringList('selectedProfiles', _selectedProfileIds);
+  }
+
+  // 선택된 프로필을 로컬 저장소에서 불러오는 함수
+  Future<void> _loadSelectedProfiles() async {
+    final prefs = await SharedPreferences.getInstance();
+    final selectedProfilesList = prefs.getStringList('selectedProfiles') ?? [];
+    setState(() {
+      _selectedProfileIds = selectedProfilesList;
+      // 불러온 프로필로 이벤트 다시 로드
+      if (_selectedProfileIds.isNotEmpty) {
+        _onOptionSelected({for (var id in _selectedProfileIds) id: _selectedColor}, _selectedProfileIds);
+      }
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -294,6 +340,7 @@ class _CalendarPageState extends State<CalendarPage> {
                   onPageChanged: (focusedDay) {
                     setState(() {
                       _focusedDay = focusedDay; // Update the focused day and call setState to update the UI
+                      _loadProfileEvents(_selectedProfileIds, _focusedDay);
                     });
                   },
                   eventLoader: _getEventsForDay, // 이벤트 로더 설정
@@ -470,11 +517,25 @@ class _BottomDialogState extends State<BottomDialog> {
   void initState() {
     super.initState();
     selectedProfiles = {};
+    _loadSelectedProfiles(); // 선택된 프로필 로드
+  }
+
+  // 선택된 프로필을 로컬 저장소에서 불러오는 함수
+  Future<void> _loadSelectedProfiles() async {
+    final prefs = await SharedPreferences.getInstance();
+    final selectedProfilesList = prefs.getStringList('selectedProfiles') ?? [];
+    setState(() {
+      selectedProfiles = {for (var id in selectedProfilesList) id: true};
+    });
   }
 
   void toggleCheck(String profileId) {
     setState(() {
       selectedProfiles[profileId] = !(selectedProfiles[profileId] ?? false);
+      if (!selectedProfiles.containsValue(true)) {
+        // 모든 프로필이 선택 해제되었을 때 선택 완료
+        showSelectedOption();
+      }
     });
   }
 
@@ -604,4 +665,3 @@ class _BottomDialogState extends State<BottomDialog> {
     );
   }
 }
-

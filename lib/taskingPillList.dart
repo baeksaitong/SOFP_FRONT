@@ -45,6 +45,7 @@ class _MedicationPageState extends State<MedicationPage> {
   void _initializeCatories() async{
     final currentProfile =
         Provider.of<ProfileProvider>(context, listen: false).currentProfile;
+    print('현재 프로필 : ${currentProfile?.id}');
     await apiClient.categoryGetAll(context,currentProfile!.id);
     setState(() {
       categories = CategoryManager().categories;
