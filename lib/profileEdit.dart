@@ -108,6 +108,7 @@ class _ProfileEditState extends State<ProfileEdit> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: AppColors.wh,
       appBar: AppBar(
         title: Text(
           '프로필 정보 수정',
