@@ -1,18 +1,17 @@
 import 'package:flutter/material.dart';
-import 'appColors.dart';
-import 'appTextStyles.dart';
-import 'gaps.dart';
+import 'package:sopf_front/appColors.dart';
+import 'package:sopf_front/appTextStyles.dart';
+import 'package:sopf_front/gaps.dart';
+import 'package:image_picker/image_picker.dart';
+import 'dart:io';
 
-void main() {
-  runApp(MaterialApp(
-    title: 'First App',
-    theme: ThemeData(primarySwatch: Colors.blue),
-    home: SearchResultPage(),
-  ));
-}
+import 'home.dart';
 
 class SearchResultPage extends StatefulWidget {
-  const SearchResultPage({super.key});
+  final XFile? firstImageFile;
+  final XFile? secondImageFile;
+
+  const SearchResultPage({super.key, this.firstImageFile, this.secondImageFile});
 
   @override
   _SearchResultPageState createState() => _SearchResultPageState();
@@ -25,28 +24,28 @@ class _SearchResultPageState extends State<SearchResultPage> {
       'name': '가스디알정50밀리그람',
       'manufacturer': '일동제약',
       'category': '기타의소화기관용약 | 일반 의약품',
-      'image': 'assets/expill.png',
+      'image': 'assets/exPill.png',
       'isWarning': true,
     },
     {
       'name': '가스디알정50밀리그람',
       'manufacturer': '일동제약',
       'category': '기타의소화기관용약 | 일반 의약품',
-      'image': 'assets/expill.png',
+      'image': 'assets/exPill.png',
       'isWarning': false,
     },
     {
       'name': '가스디알정50밀리그람',
       'manufacturer': '일동제약',
       'category': '기타의소화기관용약 | 일반 의약품',
-      'image': 'assets/expill.png',
+      'image': 'assets/exPill.png',
       'isWarning': true,
     },
     {
       'name': '가스디알정50밀리그람',
       'manufacturer': '일동제약',
       'category': '기타의소화기관용약 | 일반 의약품',
-      'image': 'assets/expill.png',
+      'image': 'assets/exPill.png',
       'isWarning': false,
     },
   ];
@@ -68,7 +67,11 @@ class _SearchResultPageState extends State<SearchResultPage> {
         leading: IconButton(
           icon: const Icon(Icons.arrow_back),
           onPressed: () {
-            // 뒤로 가기 동작 구현
+            Navigator.pushAndRemoveUntil(
+                context,
+                MaterialPageRoute(builder: (context) => HomePage()),
+            (Route<dynamic> route) => false
+            );// **뒤로 가기 동작**
           },
         ),
       ),
@@ -82,17 +85,21 @@ class _SearchResultPageState extends State<SearchResultPage> {
                 Expanded(
                   child: Row(
                     children: [
-                      Image.asset(
-                        'assets/expill.png', // 검색된 첫 번째 이미지 경로
+                      widget.firstImageFile != null
+                          ? Image.file(
+                        File(widget.firstImageFile!.path), // **첫 번째 이미지**
                         width: 100,
                         height: 100,
-                      ),
+                      )
+                          : Container(),
                       Gaps.w8,
-                      Image.asset(
-                        'assets/expill.png', // 검색된 두 번째 이미지 경로
+                      widget.secondImageFile != null
+                          ? Image.file(
+                        File(widget.secondImageFile!.path), // **두 번째 이미지**
                         width: 100,
                         height: 100,
-                      ),
+                      )
+                          : Container(),
                     ],
                   ),
                 ),
@@ -103,7 +110,7 @@ class _SearchResultPageState extends State<SearchResultPage> {
                       '촬영된 사진의 검색 결과',
                       style: AppTextStyles.body2M16,
                     ),
-                    const Text('8건', style: AppTextStyles.body2M16),
+                    const Text('4건', style: AppTextStyles.body2M16),
                     ElevatedButton(
                       onPressed: () {
                         // 재촬영하기 버튼 동작 구현
@@ -134,7 +141,7 @@ class _SearchResultPageState extends State<SearchResultPage> {
                         Card(
                           child: ListTile(
                             leading: Image.asset(
-                              medication['image'], // 약 이미지 경로
+                              medication['image'], // **약 이미지 경로**
                               width: 50,
                               height: 50,
                             ),
@@ -183,7 +190,7 @@ class _SearchResultPageState extends State<SearchResultPage> {
                                   const Icon(Icons.warning,
                                       color: Colors.orange),
                                   const SizedBox(width: 8.0),
-                                  Text('000님의 질병에서 주의해야하는 약이에요',
+                                  Text('성명근님의 질병에서 주의 해야 하는 약이에요',
                                       style: AppTextStyles.body5M14
                                           .copyWith(color: AppColors.gr800)),
                                 ],

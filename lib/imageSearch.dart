@@ -5,11 +5,14 @@ import 'package:image_picker/image_picker.dart';
 import 'package:sopf_front/appColors.dart';
 import 'package:sopf_front/appTextStyles.dart';
 import 'package:sopf_front/gaps.dart';
+import 'package:sopf_front/navigates.dart';
+
+import 'imageSearchResultScreen.dart';
 
 class ImageSearch extends StatelessWidget {
   final List<CameraDescription> cameras;
 
-  const ImageSearch({super.key, required this.cameras});
+  const ImageSearch({Key? key, required this.cameras}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -36,7 +39,7 @@ class ImageSearch extends StatelessWidget {
 class CameraScreen extends StatefulWidget {
   final List<CameraDescription> cameras;
 
-  const CameraScreen({super.key, required this.cameras});
+  const CameraScreen({Key? key, required this.cameras}) : super(key: key);
 
   @override
   _CameraScreenState createState() => _CameraScreenState();
@@ -55,13 +58,12 @@ class _CameraScreenState extends State<CameraScreen> {
   void initState() {
     super.initState();
     _initializeCamera();
-    _loadLatestImage();
+    // _loadLatestImage(); // 이 줄을 제거했습니다.
   }
 
   Future<void> _initializeCamera() async {
     if (widget.cameras.isNotEmpty) {
-      _controller =
-          CameraController(widget.cameras.first, ResolutionPreset.high);
+      _controller = CameraController(widget.cameras.first, ResolutionPreset.high);
       await _controller!.initialize();
       setState(() {});
     }
@@ -72,8 +74,7 @@ class _CameraScreenState extends State<CameraScreen> {
       _isLoadingImage = true;
     });
 
-    final XFile? pickedFile =
-        await _picker.pickImage(source: ImageSource.gallery);
+    final XFile? pickedFile = await _picker.pickImage(source: ImageSource.gallery);
     setState(() {
       _latestImage = pickedFile != null ? File(pickedFile.path) : null;
       _isLoadingImage = false;
@@ -140,7 +141,7 @@ class _CameraScreenState extends State<CameraScreen> {
 
   Widget _galleryButton() {
     return GestureDetector(
-      onTap: _loadLatestImage,
+      onTap: _loadLatestImage, // **갤러리 버튼을 눌렀을 때만 이미지를 로드합니다.**
       child: CircleAvatar(
         radius: 22,
         backgroundColor: AppColors.wh,
@@ -175,26 +176,6 @@ class _CameraScreenState extends State<CameraScreen> {
     );
   }
 
-  /* Widget _toggleCameraButton() {
-    return GestureDetector(
-      onTap: _switchCamera,
-      child: CircleAvatar(
-        radius: 22,
-        backgroundColor: AppColors.gr600,
-        child: Container(
-          width: 44,
-          height: 44,
-          decoration: BoxDecoration(
-            shape: BoxShape.circle,
-            image: DecorationImage(
-              image: AssetImage('assets/imagesearch/switchcamera.png'),
-            ),
-          ),
-        ),
-      ),
-    );
-  } */
-
   Future<void> _takePicture() async {
     if (_controller == null || !_controller!.value.isInitialized) {
       print('Error: 카메라를 선택해주세요.');
@@ -208,7 +189,11 @@ class _CameraScreenState extends State<CameraScreen> {
       setState(() {
         _isTakingPicture = true;
       });
-      final XFile picture = await _controller!.takePicture();
+      final XFile? picture = await _controller!.takePicture();
+      if (picture == null) {
+        print('Error: 사진을 찍지 못했습니다.');
+        return;
+      }
       if (_firstImageFile == null) {
         setState(() {
           _firstImageFile = picture;
@@ -234,8 +219,7 @@ class _CameraScreenState extends State<CameraScreen> {
       context: context,
       builder: (BuildContext context) {
         return AlertDialog(
-          title: Text(
-            '알림',
+          title: Text('알림',
             style: TextStyle(
               fontSize: 22,
               fontWeight: FontWeight.w600,
@@ -246,8 +230,7 @@ class _CameraScreenState extends State<CameraScreen> {
           content: Text('알약의 뒷면 촬영으로 넘어갈까요? \n다시 촬영하려면 아니오를 누르시오'),
           actions: <Widget>[
             TextButton(
-              child: Text(
-                '아니요',
+              child: Text('아니요',
                 style: TextStyle(
                   fontSize: 14,
                   fontWeight: FontWeight.w600,
@@ -263,8 +246,7 @@ class _CameraScreenState extends State<CameraScreen> {
               },
             ),
             TextButton(
-              child: Text(
-                '네',
+              child: Text('네',
                 style: TextStyle(
                   fontSize: 14,
                   fontWeight: FontWeight.w600,
@@ -296,7 +278,15 @@ class _CameraScreenState extends State<CameraScreen> {
               color: AppColors.bk,
             ),
           ),
-          content: Text('검색하시겠습니까? \n처음부터 다시하려면 아니요를 누르시오'),
+          content: Text(
+            '검색하시겠습니까? \n처음부터 다시하려면 아니요를 누르시오',
+            style: TextStyle(
+              fontSize: 14,
+              fontWeight: FontWeight.w500,
+              fontFamily: 'pretendard',
+              color: AppColors.bk,
+            ),
+          ),
           actions: <Widget>[
             TextButton(
               child: Text(
@@ -328,12 +318,24 @@ class _CameraScreenState extends State<CameraScreen> {
               ),
               onPressed: () {
                 Navigator.of(context).pop();
-                _performSearch();
+                _navigateToSearchResultPage(); // **검색 버튼 클릭 시 호출**
               },
             ),
           ],
         );
       },
+    );
+  }
+
+  void _navigateToSearchResultPage() {
+    Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (context) => SearchResultPage(
+          firstImageFile: _firstImageFile, // **첫 번째 이미지 파일 전달**
+          secondImageFile: _secondImageFile, // **두 번째 이미지 파일 전달**
+        ),
+      ),
     );
   }
 
@@ -348,7 +350,7 @@ class _CameraScreenState extends State<CameraScreen> {
     final currentDirection = _controller!.description.lensDirection;
 
     CameraDescription newCamera = widget.cameras.firstWhere(
-      (camera) => camera.lensDirection != currentDirection,
+          (camera) => camera.lensDirection != currentDirection,
       orElse: () => _controller!.description,
     );
 

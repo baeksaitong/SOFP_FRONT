@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:intl/date_symbol_data_local.dart';
+import 'package:permission_handler/permission_handler.dart';
 import 'package:sopf_front/addAllergyPage.dart';
 import 'package:sopf_front/exColorsText.dart';
 import 'package:sopf_front/login.dart';
@@ -11,7 +12,6 @@ import 'calenderFirstPage.dart';
 import 'home.dart';
 import 'mypage.dart';
 import 'appColors.dart';
-
 import 'package:camera/camera.dart';
 import 'package:sopf_front/exColorsText.dart';
 import 'package:sopf_front/imageSearch.dart';
@@ -21,20 +21,11 @@ import 'package:sopf_front/login.dart';
 import 'package:sopf_front/provider.dart';
 import 'loading_provider.dart';
 
-/* hanjo
-void main() async {
-  WidgetsFlutterBinding.ensureInitialized();
-  final cameras = await availableCameras();
-  final firstCamera = cameras.first;
 
-  initializeDateFormatting().then((value) =>
-    runApp(MyApp(camera: firstCamera))
-  );
-}
-*/
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
+
 
   final cameras = await availableCameras();
   CameraDescription? firstCamera;
