@@ -6,6 +6,7 @@ import 'package:provider/provider.dart';
 import 'package:sopf_front/appColors.dart';
 import 'package:sopf_front/gaps.dart';
 import 'package:sopf_front/navigates.dart';
+import 'package:sopf_front/pharmacyMap.dart';
 import 'package:sopf_front/provider.dart';
 import 'package:sopf_front/shapeSearch.dart';
 import 'package:sopf_front/textSearch.dart';
@@ -27,8 +28,8 @@ class HomePage extends StatefulWidget {
 class _HomePageState extends State<HomePage> {
   int _selectedIndex = 1;
 
-  static const List<Widget> _widgetOptions = <Widget>[
-    Placeholder(), // PharmacyMap 구현되면 교체
+  static List<Widget> _widgetOptions = <Widget>[
+    PharmacyMap(), // PharmacyMap 구현되면 교체
     HomePageContent(),
     CalendarPage(),
     MyPage(),
@@ -150,6 +151,7 @@ class _HomePageState extends State<HomePage> {
     return Scaffold(
       backgroundColor: AppColors.wh,
       appBar: AppBar(
+        automaticallyImplyLeading: false,
         backgroundColor: AppColors.wh,
       ),
       body: _widgetOptions.elementAt(_selectedIndex),

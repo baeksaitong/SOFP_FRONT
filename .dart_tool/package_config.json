@@ -2,16 +2,26 @@
   "configVersion": 2,
   "packages": [
     {
-      "name": "archive",
-      "rootUri": "file:///Users/mingmaengmung/.pub-cache/hosted/pub.dev/archive-3.6.1",
       "name": "_fe_analyzer_shared",
-      "rootUri": "file:///Users/mingmaengmung/.pub-cache/hosted/pub.dev/_fe_analyzer_shared-67.0.0",
+      "rootUri": "file:///Users/mingmaengmung/.pub-cache/hosted/pub.dev/_fe_analyzer_shared-70.0.0",
       "packageUri": "lib/",
-      "languageVersion": "3.0"
+      "languageVersion": "3.3"
+    },
+    {
+      "name": "_macros",
+      "rootUri": "file:///Users/mingmaengmung/flutter/bin/cache/dart-sdk/pkg/_macros",
+      "packageUri": "lib/",
+      "languageVersion": "3.4"
     },
     {
       "name": "analyzer",
-      "rootUri": "file:///Users/mingmaengmung/.pub-cache/hosted/pub.dev/analyzer-6.4.1",
+      "rootUri": "file:///Users/mingmaengmung/.pub-cache/hosted/pub.dev/analyzer-6.5.2",
+      "packageUri": "lib/",
+      "languageVersion": "3.3"
+    },
+    {
+      "name": "archive",
+      "rootUri": "file:///Users/mingmaengmung/.pub-cache/hosted/pub.dev/archive-3.6.1",
       "packageUri": "lib/",
       "languageVersion": "3.0"
     },
@@ -47,9 +57,9 @@
     },
     {
       "name": "build_daemon",
-      "rootUri": "file:///Users/mingmaengmung/.pub-cache/hosted/pub.dev/build_daemon-4.0.1",
+      "rootUri": "file:///Users/mingmaengmung/.pub-cache/hosted/pub.dev/build_daemon-4.0.2",
       "packageUri": "lib/",
-      "languageVersion": "3.0"
+      "languageVersion": "3.4"
     },
     {
       "name": "build_resolvers",
@@ -59,15 +69,15 @@
     },
     {
       "name": "build_runner",
-      "rootUri": "file:///Users/mingmaengmung/.pub-cache/hosted/pub.dev/build_runner-2.4.9",
+      "rootUri": "file:///Users/mingmaengmung/.pub-cache/hosted/pub.dev/build_runner-2.4.11",
       "packageUri": "lib/",
-      "languageVersion": "3.0"
+      "languageVersion": "3.4"
     },
     {
       "name": "build_runner_core",
-      "rootUri": "file:///Users/mingmaengmung/.pub-cache/hosted/pub.dev/build_runner_core-7.3.0",
+      "rootUri": "file:///Users/mingmaengmung/.pub-cache/hosted/pub.dev/build_runner_core-7.3.1",
       "packageUri": "lib/",
-      "languageVersion": "3.0"
+      "languageVersion": "3.4"
     },
     {
       "name": "built_collection",
@@ -172,14 +182,16 @@
       "languageVersion": "3.1"
     },
     {
-      "name": "dio",
-      "rootUri": "file:///Users/mingmaengmung/.pub-cache/hosted/pub.dev/dio-5.4.3+1",
-      "packageUri": "lib/",
-      "languageVersion": "2.15"
       "name": "dart_style",
       "rootUri": "file:///Users/mingmaengmung/.pub-cache/hosted/pub.dev/dart_style-2.3.6",
       "packageUri": "lib/",
       "languageVersion": "3.0"
+    },
+    {
+      "name": "dio",
+      "rootUri": "file:///Users/mingmaengmung/.pub-cache/hosted/pub.dev/dio-5.4.3+1",
+      "packageUri": "lib/",
+      "languageVersion": "2.15"
     },
     {
       "name": "fake_async",
@@ -309,7 +321,7 @@
     },
     {
       "name": "fluttertoast",
-      "rootUri": "file:///Users/mingmaengmung/.pub-cache/hosted/pub.dev/fluttertoast-8.2.5",
+      "rootUri": "file:///Users/mingmaengmung/.pub-cache/hosted/pub.dev/fluttertoast-8.2.6",
       "packageUri": "lib/",
       "languageVersion": "2.12"
     },
@@ -363,31 +375,31 @@
     },
     {
       "name": "google_maps_flutter",
-      "rootUri": "file:///Users/mingmaengmung/.pub-cache/hosted/pub.dev/google_maps_flutter-2.6.1",
+      "rootUri": "file:///Users/mingmaengmung/.pub-cache/hosted/pub.dev/google_maps_flutter-2.7.0",
       "packageUri": "lib/",
-      "languageVersion": "3.3"
+      "languageVersion": "3.4"
     },
     {
       "name": "google_maps_flutter_android",
-      "rootUri": "file:///Users/mingmaengmung/.pub-cache/hosted/pub.dev/google_maps_flutter_android-2.8.0",
+      "rootUri": "file:///Users/mingmaengmung/.pub-cache/hosted/pub.dev/google_maps_flutter_android-2.9.0",
       "packageUri": "lib/",
-      "languageVersion": "3.1"
+      "languageVersion": "3.4"
     },
     {
       "name": "google_maps_flutter_ios",
-      "rootUri": "file:///Users/mingmaengmung/.pub-cache/hosted/pub.dev/google_maps_flutter_ios-2.6.0",
+      "rootUri": "file:///Users/mingmaengmung/.pub-cache/hosted/pub.dev/google_maps_flutter_ios-2.7.0",
       "packageUri": "lib/",
       "languageVersion": "3.2"
     },
     {
       "name": "google_maps_flutter_platform_interface",
-      "rootUri": "file:///Users/mingmaengmung/.pub-cache/hosted/pub.dev/google_maps_flutter_platform_interface-2.7.0",
+      "rootUri": "file:///Users/mingmaengmung/.pub-cache/hosted/pub.dev/google_maps_flutter_platform_interface-2.7.1",
       "packageUri": "lib/",
       "languageVersion": "3.2"
     },
     {
       "name": "google_maps_flutter_web",
-      "rootUri": "file:///Users/mingmaengmung/.pub-cache/hosted/pub.dev/google_maps_flutter_web-0.5.7",
+      "rootUri": "file:///Users/mingmaengmung/.pub-cache/hosted/pub.dev/google_maps_flutter_web-0.5.8",
       "packageUri": "lib/",
       "languageVersion": "3.3"
     },
@@ -476,12 +488,6 @@
       "languageVersion": "2.12"
     },
     {
-      "name": "js",
-      "rootUri": "file:///Users/mingmaengmung/.pub-cache/hosted/pub.dev/js-0.6.7",
-      "packageUri": "lib/",
-      "languageVersion": "2.19"
-    },
-    {
       "name": "io",
       "rootUri": "file:///Users/mingmaengmung/.pub-cache/hosted/pub.dev/io-1.0.4",
       "packageUri": "lib/",
@@ -512,6 +518,12 @@
       "languageVersion": "3.0"
     },
     {
+      "name": "jwt_decoder",
+      "rootUri": "file:///Users/mingmaengmung/.pub-cache/hosted/pub.dev/jwt_decoder-2.0.1",
+      "packageUri": "lib/",
+      "languageVersion": "2.12"
+    },
+    {
       "name": "leak_tracker",
       "rootUri": "file:///Users/mingmaengmung/.pub-cache/hosted/pub.dev/leak_tracker-10.0.5",
       "packageUri": "lib/",
@@ -536,12 +548,6 @@
       "languageVersion": "3.0"
     },
     {
-      "name": "lottie",
-      "rootUri": "file:///Users/mingmaengmung/.pub-cache/hosted/pub.dev/lottie-1.4.3",
-      "packageUri": "lib/",
-      "languageVersion": "2.18"
-    },
-    {
       "name": "location",
       "rootUri": "file:///Users/mingmaengmung/.pub-cache/hosted/pub.dev/location-6.0.2",
       "packageUri": "lib/",
@@ -564,6 +570,18 @@
       "rootUri": "file:///Users/mingmaengmung/.pub-cache/hosted/pub.dev/logging-1.2.0",
       "packageUri": "lib/",
       "languageVersion": "2.19"
+    },
+    {
+      "name": "lottie",
+      "rootUri": "file:///Users/mingmaengmung/.pub-cache/hosted/pub.dev/lottie-1.4.3",
+      "packageUri": "lib/",
+      "languageVersion": "2.18"
+    },
+    {
+      "name": "macros",
+      "rootUri": "file:///Users/mingmaengmung/.pub-cache/hosted/pub.dev/macros-0.1.2-main.0",
+      "packageUri": "lib/",
+      "languageVersion": "3.4"
     },
     {
       "name": "matcher",
@@ -657,7 +675,7 @@
     },
     {
       "name": "permission_handler_apple",
-      "rootUri": "file:///Users/mingmaengmung/.pub-cache/hosted/pub.dev/permission_handler_apple-9.4.4",
+      "rootUri": "file:///Users/mingmaengmung/.pub-cache/hosted/pub.dev/permission_handler_apple-9.4.5",
       "packageUri": "lib/",
       "languageVersion": "2.15"
     },
@@ -717,9 +735,9 @@
     },
     {
       "name": "pubspec_parse",
-      "rootUri": "file:///Users/mingmaengmung/.pub-cache/hosted/pub.dev/pubspec_parse-1.2.3",
+      "rootUri": "file:///Users/mingmaengmung/.pub-cache/hosted/pub.dev/pubspec_parse-1.3.0",
       "packageUri": "lib/",
-      "languageVersion": "2.18"
+      "languageVersion": "3.0"
     },
     {
       "name": "sanitize_html",
@@ -777,9 +795,9 @@
     },
     {
       "name": "shelf_web_socket",
-      "rootUri": "file:///Users/mingmaengmung/.pub-cache/hosted/pub.dev/shelf_web_socket-1.0.4",
+      "rootUri": "file:///Users/mingmaengmung/.pub-cache/hosted/pub.dev/shelf_web_socket-2.0.0",
       "packageUri": "lib/",
-      "languageVersion": "2.17"
+      "languageVersion": "3.0"
     },
     {
       "name": "simple_gesture_detector",
@@ -837,13 +855,13 @@
     },
     {
       "name": "syncfusion_flutter_core",
-      "rootUri": "file:///Users/mingmaengmung/.pub-cache/hosted/pub.dev/syncfusion_flutter_core-25.2.5",
+      "rootUri": "file:///Users/mingmaengmung/.pub-cache/hosted/pub.dev/syncfusion_flutter_core-25.2.7",
       "packageUri": "lib/",
       "languageVersion": "2.17"
     },
     {
       "name": "syncfusion_flutter_maps",
-      "rootUri": "file:///Users/mingmaengmung/.pub-cache/hosted/pub.dev/syncfusion_flutter_maps-25.2.5",
+      "rootUri": "file:///Users/mingmaengmung/.pub-cache/hosted/pub.dev/syncfusion_flutter_maps-25.2.7",
       "packageUri": "lib/",
       "languageVersion": "2.17"
     },
@@ -893,7 +911,7 @@
       "name": "watcher",
       "rootUri": "file:///Users/mingmaengmung/.pub-cache/hosted/pub.dev/watcher-1.1.0",
       "packageUri": "lib/",
-      "languageVersion": "3.3"
+      "languageVersion": "3.0"
     },
     {
       "name": "web",
@@ -902,16 +920,22 @@
       "languageVersion": "3.3"
     },
     {
+      "name": "web_socket",
+      "rootUri": "file:///Users/mingmaengmung/.pub-cache/hosted/pub.dev/web_socket-0.1.5",
+      "packageUri": "lib/",
+      "languageVersion": "3.3"
+    },
+    {
       "name": "web_socket_channel",
-      "rootUri": "file:///Users/mingmaengmung/.pub-cache/hosted/pub.dev/web_socket_channel-2.4.5",
+      "rootUri": "file:///Users/mingmaengmung/.pub-cache/hosted/pub.dev/web_socket_channel-3.0.0",
       "packageUri": "lib/",
       "languageVersion": "3.3"
     },
     {
       "name": "win32",
-      "rootUri": "file:///Users/mingmaengmung/.pub-cache/hosted/pub.dev/win32-5.5.0",
+      "rootUri": "file:///Users/mingmaengmung/.pub-cache/hosted/pub.dev/win32-5.5.1",
       "packageUri": "lib/",
-      "languageVersion": "3.3"
+      "languageVersion": "3.4"
     },
     {
       "name": "xdg_directories",
@@ -938,7 +962,7 @@
       "languageVersion": "3.3"
     }
   ],
-  "generated": "2024-06-06T09:36:50.000694Z",
+  "generated": "2024-06-06T16:22:22.342559Z",
   "generator": "pub",
   "generatorVersion": "3.5.0-222.0.dev",
   "flutterRoot": "file:///Users/mingmaengmung/flutter",

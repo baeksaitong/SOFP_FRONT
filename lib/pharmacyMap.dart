@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
-
+import 'package:sopf_front/appColors.dart';
 
 class PharmacyMap extends StatefulWidget {
   @override
@@ -38,20 +38,19 @@ class _PharmacyMapState extends State<PharmacyMap> {
     if (permission == LocationPermission.denied) {
       permission = await Geolocator.requestPermission();
       if (permission == LocationPermission.denied) {
-        // 권한이 거부됨, 다음에 다시 요청할 수 있습니다.
         return;
       }
     }
 
     if (permission == LocationPermission.deniedForever) {
-      // 권한이 영구적으로 거부됨, 적절하게 처리하세요.
       return;
     }
 
-    Position position = await Geolocator.getCurrentPosition(desiredAccuracy: LocationAccuracy.high);
+    Position position = await Geolocator.getCurrentPosition(
+        desiredAccuracy: LocationAccuracy.high);
     setState(() {
       _currentPosition = position;
-      _addMarker(position);
+      _addMarker(position, 'current_location', 'Current Location');
     });
 
     if (mapController != null) {
@@ -61,11 +60,11 @@ class _PharmacyMapState extends State<PharmacyMap> {
     }
   }
 
-  void _addMarker(Position position) async {
+  void _addMarker(Position position, String markerId, String info) async {
     final marker = Marker(
-      markerId: MarkerId('current_location'),
+      markerId: MarkerId(markerId),
       position: LatLng(position.latitude, position.longitude),
-      infoWindow: InfoWindow(title: 'Current Location'),
+      infoWindow: InfoWindow(title: info),
       icon: BitmapDescriptor.defaultMarker,
     );
 
@@ -74,24 +73,44 @@ class _PharmacyMapState extends State<PharmacyMap> {
     });
   }
 
-  List<Map<String, String>> pharmacyList = [
+  List<Map<String, dynamic>> pharmacyList = [
     {
-      'name': '기억약국',
+      'name': '광운약국',
       'status': '영업중',
-      'distance': '500m | 서울 강남구',
-      'hours': '월-금: 09:00-21:00',
+      'distance': '300m | 서울 노원구',
+      'hours': '월-금: 09:00-18:00',
+      'position': LatLng(37.619418, 127.059704),
     },
     {
-      'name': '온누리약국',
-      'status': '곧 영업 시작',
-      'distance': '1km | 서울 성북구',
-      'hours': '월-토: 10:00-20:00',
+      'name': '참조은약국',
+      'status': '영업중',
+      'distance': '500m | 서울 노원구',
+      'hours': '월-토: 09:00-20:00',
+      'position': LatLng(37.619758, 127.060372),
     },
     {
-      'name': '창윤약국',
+      'name': '미소약국',
       'status': '영업 종료',
-      'distance': '2km | 서울 종로구',
+      'distance': '700m | 서울 노원구',
       'hours': '월-일: 09:00-22:00',
+      'position': LatLng(37.619267, 127.058674),
+    },
+  ];
+
+  List<Map<String, dynamic>> nightPharmacyList = [
+    {
+      'name': '24시약국',
+      'status': '영업중',
+      'distance': '1km | 서울 노원구',
+      'hours': '24시간 운영',
+      'position': LatLng(37.620950, 127.060312),
+    },
+    {
+      'name': '야간약국',
+      'status': '영업중',
+      'distance': '1.2km | 서울 노원구',
+      'hours': '월-일: 22:00-06:00',
+      'position': LatLng(37.621541, 127.061073),
     },
   ];
 
@@ -100,7 +119,15 @@ class _PharmacyMapState extends State<PharmacyMap> {
       isNearbySelected = !isNearbySelected;
       isNightSelected = false;
     });
-    _showPharmacyList();
+
+    if (_currentPosition != null) {
+      print('Current Position: Latitude: ${_currentPosition!.latitude}, Longitude: ${_currentPosition!.longitude}');
+    } else {
+      print('Current Position is not available.');
+    }
+
+    _addPharmacyMarkers(pharmacyList);
+    _showPharmacyList(pharmacyList);
   }
 
   void _onNightButtonPressed() {
@@ -108,14 +135,28 @@ class _PharmacyMapState extends State<PharmacyMap> {
       isNightSelected = !isNightSelected;
       isNearbySelected = false;
     });
-    _showPharmacyList();
+
+    _addPharmacyMarkers(nightPharmacyList);
+    _showPharmacyList(nightPharmacyList);
   }
 
-  void _moveToCurrentLocation() async {
+  void _addPharmacyMarkers(List<Map<String, dynamic>> list) {
+    _markers.clear();
+    for (var pharmacy in list) {
+      final marker = Marker(
+        markerId: MarkerId(pharmacy['name']),
+        position: pharmacy['position'],
+        infoWindow: InfoWindow(title: pharmacy['name']),
+        icon: BitmapDescriptor.defaultMarkerWithHue(BitmapDescriptor.hueBlue),
+      );
 
+      setState(() {
+        _markers.add(marker);
+      });
+    }
   }
 
-  void _showPharmacyList() {
+  void _showPharmacyList(List<Map<String, dynamic>> list) {
     showModalBottomSheet(
       context: context,
       builder: (context) {
@@ -124,9 +165,9 @@ class _PharmacyMapState extends State<PharmacyMap> {
           builder: (context, scrollController) {
             return ListView.builder(
               controller: scrollController,
-              itemCount: pharmacyList.length,
+              itemCount: list.length,
               itemBuilder: (context, index) {
-                final pharmacy = pharmacyList[index];
+                final pharmacy = list[index];
                 final status = pharmacy['status']!;
                 return GestureDetector(
                   onTap: () => _showPharmacyDetail(pharmacy['name']),
@@ -294,7 +335,7 @@ class _PharmacyMapState extends State<PharmacyMap> {
                           ),
                           SizedBox(width: 6),
                           Text(
-                            '서울특별시 강남구 역삼동',
+                            '서울특별시 노원구 광운로',
                             style: TextStyle(
                               fontSize: 14,
                               fontWeight: FontWeight.w500,
@@ -318,7 +359,7 @@ class _PharmacyMapState extends State<PharmacyMap> {
                         SizedBox(width: 8),
                         Flexible(
                           child: Text(
-                            '서울 강남구 테헤란로 123 1층 빌딩 B1-9',
+                            '서울 노원구 광운로 20',
                             style: TextStyle(
                               fontWeight: FontWeight.w500,
                               color: Colors.grey.shade700,
@@ -415,10 +456,16 @@ class _PharmacyMapState extends State<PharmacyMap> {
     );
   }
 
+  void _onCameraMove(CameraPosition position) {
+    print('Current Position: Latitude: ${position.target.latitude}, Longitude: ${position.target.longitude}');
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
+        automaticallyImplyLeading: false,
+        backgroundColor: AppColors.wh,
         title: Align(
           alignment: Alignment.centerLeft,
           child: Text(
@@ -467,7 +514,6 @@ class _PharmacyMapState extends State<PharmacyMap> {
       ),
       body: Stack(
         children: [
-          // 지도 기능을 제거했으므로 이 부분을 비워둡니다.
           Container(
             color: Colors.grey.shade200,
             child: Center(
@@ -479,10 +525,11 @@ class _PharmacyMapState extends State<PharmacyMap> {
                   target: LatLng(_currentPosition!.latitude, _currentPosition!.longitude),
                   zoom: 17.0,
                 ),
-                myLocationEnabled: true, // 현위치 표시 비활성화
-                myLocationButtonEnabled: true, // 기본 제공 현위치 버튼 비활성화
-                mapType: _currentMapType, // 현재 지도 타입 설정
+                myLocationEnabled: true,
+                myLocationButtonEnabled: true,
+                mapType: _currentMapType,
                 markers: _markers,
+                onCameraMove: _onCameraMove,
               ),
             ),
           ),

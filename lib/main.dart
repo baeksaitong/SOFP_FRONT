@@ -138,7 +138,7 @@ class _SplashScreenState extends State<SplashScreen> {
           ),
         ],
       ),
-      home: PharmacyMap(),
+      // home: PharmacyMap(),
       // home: ImageSearch(cameras: [camera],), // `CameraScreen`에 카메라 객체를 전달합니다.
     );
   }

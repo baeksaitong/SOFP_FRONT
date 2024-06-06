@@ -275,6 +275,7 @@ class _AddAllergyPageState extends State<AddAllergyPage> {
     return Scaffold(
       backgroundColor: AppColors.wh,
       appBar: AppBar(
+        automaticallyImplyLeading: false,
         backgroundColor: AppColors.wh,
       ),
       body: Padding(
