@@ -422,12 +422,22 @@ class CategoryDetails {
       intakeTimeList: List<String>.from(json['intakeTimeList']),
     );
   }
+
+  Map<String, dynamic> toJson() => {
+    'id': id,
+    'name': name,
+    'alarm': alarm,
+    'period': period,
+    'intakeDayList': intakeDayList,
+    'intakeTimeList': intakeTimeList,
+  };
 }
 
 class CategoryDetailsManager {
   static final CategoryDetailsManager _instance = CategoryDetailsManager._internal();
 
   CategoryDetails? currentCategory;
+  Map<String, CategoryDetails> categoryDetailsMap = {};
 
   factory CategoryDetailsManager() {
     return _instance;
@@ -437,9 +447,16 @@ class CategoryDetailsManager {
 
   void updateCategoryDetails(String jsonResponse) {
     final data = jsonDecode(jsonResponse);
-    currentCategory = CategoryDetails.fromJson(data);
+    final categoryDetails = CategoryDetails.fromJson(data);
+    currentCategory = categoryDetails;
+    categoryDetailsMap[categoryDetails.id] = categoryDetails; // Map 업데이트
+  }
+
+  CategoryDetails? getCategoryDetails(String categoryId) {
+    return categoryDetailsMap[categoryId];
   }
 }
+
 
 
 class MemberInfo {

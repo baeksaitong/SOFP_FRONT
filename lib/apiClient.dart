@@ -1,7 +1,9 @@
 import 'dart:io';
 
+import 'package:camera/camera.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:http/http.dart' as http;
+import 'package:image_picker/image_picker.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:provider/provider.dart';
 import 'dart:convert';
@@ -236,6 +238,7 @@ class APIClient {
       if (profileResponse != null && profileResponse.profileList.isNotEmpty) {
         // Ensure `context` is passed with `listen: false`
         if(context.mounted) {
+          Provider.of<ProfileProvider>(context, listen: false).setProfileList(profileResponse.profileList);
           Provider.of<ProfileProvider>(context, listen: false)
               .setCurrentProfile(profileResponse.profileList[0]);
         }
@@ -314,6 +317,42 @@ class APIClient {
       print(response.statusCode);
       print('실패했습니다: ${response.body}');
       return null;
+    }
+  }
+
+  Future<void> profilePost() async {
+    final String? accessToken = await _jwtManager.getAccessToken();
+    XFile? _image = null;
+
+    var url = Uri.parse('$baseUrl/app/profile');
+    var headers = {
+      'Content-Type': 'application/json',
+      'Authorization': 'Bearer $accessToken',
+    };
+
+    // 이미지 파일을 base64로 인코딩
+    String? base64Image;
+    if (_image != null) {
+      List<int> imageBytes = await _image.readAsBytes();
+      base64Image = base64Encode(imageBytes);
+    }
+
+    var body = jsonEncode({
+      'name': '김',
+      'birthday': '2024-05-04',
+      'gender': 'MALE',
+      'color': '노랑',
+      'profileImg': base64Image, // 이미지 파일이 있을 경우 추가
+    });
+
+    var response = await http.post(url, headers: headers, body: body);
+
+    if (response.statusCode == 200) {
+      print('프로필이 성공적으로 저장되었습니다');
+    } else {
+      print('Failed to save profile');
+      print('Status code: ${response.statusCode}');
+      print('Response body: ${response.body}');
     }
   }
 
@@ -790,12 +829,12 @@ class APIClient {
     }
   }
 
-  Future<void> categoryGetAll(BuildContext context) async {
+  Future<String> categoryGetAll(BuildContext context, String id) async {
     final currentProfile =
         Provider.of<ProfileProvider>(context, listen: false).currentProfile;
     final String? accessToken = await _jwtManager.getAccessToken();
     final url = Uri.parse(
-        '$baseUrl/app/category?profileId=${currentProfile?.id}');
+        '$baseUrl/app/category?profileId=$id');
     final response = await http.get(url, headers: <String, String>{
       'Content-Type': 'application/json; charset=UTF-8',
       'Accept': 'application/json',
@@ -806,11 +845,36 @@ class APIClient {
       // 성공적으로 처리된 경우
       final jsonResponse = utf8.decode(response.bodyBytes);
       print('모든 카테고리 조회 성공: ${utf8.decode(response.bodyBytes)}');
-      CategoryManager().updateCategories(jsonResponse);
+      CategoryManager().updateCategories(jsonResponse);  // CategoryManager 업데이트
+      return jsonResponse;
     } else {
       // 실패 처리
       print(response.statusCode);
       print('모든 카테고리 조회 실패: ${utf8.decode(response.bodyBytes)}');
+      return '';
+    }
+  }
+
+  Future<String> categoryDayGet(BuildContext context, String id, String day) async {
+    final String? accessToken = await _jwtManager.getAccessToken();
+    final url = Uri.parse(
+        '$baseUrl/app/category/$id/$day');
+    final response = await http.get(url, headers: <String, String>{
+      'Content-Type': 'application/json; charset=UTF-8',
+      'Accept': 'application/json',
+      'Authorization': 'Bearer $accessToken', // 인증 헤더 추가
+    });
+
+    if (response.statusCode == 200) {
+      // 성공적으로 처리된 경우
+      final jsonResponse = utf8.decode(response.bodyBytes);
+      print('요일 카테고리 조회 성공: ${utf8.decode(response.bodyBytes)}');
+      return jsonResponse;
+    } else {
+      // 실패 처리
+      print(response.statusCode);
+      print('요일 카테고리 조회 실패: ${utf8.decode(response.bodyBytes)}');
+      return '';
     }
   }
 
@@ -864,6 +928,62 @@ class APIClient {
       // 실패 처리
       print(response.statusCode);
       print('카테고리 삭제 실패: ${utf8.decode(response.bodyBytes)}');
+    }
+  }
+
+  Future<void> calendarGet(BuildContext context, String id) async {
+    final currentProfile =
+        Provider.of<ProfileProvider>(context, listen: false).currentProfile;
+    final String? accessToken = await _jwtManager.getAccessToken();
+    final url = Uri.parse(
+        '$baseUrl/app/calendar/$id');
+    final response = await http.get(url, headers: <String, String>{
+      'Content-Type': 'application/json; charset=UTF-8',
+      'Accept': 'application/json',
+      'Authorization': 'Bearer $accessToken', // 인증 헤더 추가
+    });
+
+    if (response.statusCode == 200) {
+      // 성공적으로 처리된 경우
+      final jsonResponse = utf8.decode(response.bodyBytes);
+      print('프로필 캘린더 조회 성공: ${utf8.decode(response.bodyBytes)}');
+    } else {
+      // 실패 처리
+      print(response.statusCode);
+      print('프로필 캘린더 조회 실패: ${utf8.decode(response.bodyBytes)}');
+    }
+  }
+
+  Future<void> calendarPut(BuildContext context) async {
+    final currentProfile =
+        Provider.of<ProfileProvider>(context, listen: false).currentProfile;
+    final profileList = Provider.of<ProfileProvider>(context, listen: false).profileList;
+    final String? accessToken = await _jwtManager.getAccessToken();
+    final url = Uri.parse(
+        '$baseUrl/app/calendar/${currentProfile?.id}');
+    final response = await http.put(url, headers: <String, String>{
+      'Content-Type': 'application/json; charset=UTF-8',
+      'Accept': 'application/json',
+      'Authorization': 'Bearer $accessToken', // 인증 헤더 추가
+    },
+      body: jsonEncode(<String, dynamic>{
+        "addTargetProfileIdList": [
+          profileList[0].id,profileList[1].id,
+        ],
+        "deleteTargetProfileIdList": [
+          profileList[2].id,
+        ]
+      }),
+    );
+
+    if (response.statusCode == 200) {
+      // 성공적으로 처리된 경우
+      final jsonResponse = utf8.decode(response.bodyBytes);
+      print('일부 캘린더 조회 성공: ${utf8.decode(response.bodyBytes)}');
+    } else {
+      // 실패 처리
+      print(response.statusCode);
+      print('일부 캘린더 조회 실패: ${utf8.decode(response.bodyBytes)}');
     }
   }
 }

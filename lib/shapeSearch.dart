@@ -819,6 +819,14 @@ class _RgbButtonState extends State<RgbButton> {
   }
 }
 
+Color? getColorFromText(String colorText) {
+  final colorItem = colorItems.firstWhere(
+        (item) => item.text == colorText,
+    orElse: () => ColorItem(color: Colors.transparent, text: 'Unknown'),
+  );
+  return colorItem.color;
+}
+
 class ColorItem {
   final Color color;
   final String text;

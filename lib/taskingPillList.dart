@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import 'package:sopf_front/apiClient.dart';
 import 'package:sopf_front/globalResponseManager.dart';
 import 'package:sopf_front/navigates.dart';
+import 'package:sopf_front/provider.dart';
 import 'appColors.dart';
 import 'appTextStyles.dart';
 import 'gaps.dart';
@@ -41,7 +43,10 @@ class _MedicationPageState extends State<MedicationPage> {
   }
 
   void _initializeCatories() async{
-    await apiClient.categoryGetAll(context);
+    final currentProfile =
+        Provider.of<ProfileProvider>(context, listen: false).currentProfile;
+    print('현재 프로필 : ${currentProfile?.id}');
+    await apiClient.categoryGetAll(context,currentProfile!.id);
     setState(() {
       categories = CategoryManager().categories;
       print(categories);
