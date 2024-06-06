@@ -35,62 +35,92 @@ class _MyPageState extends State<MyPage> {
   }
 
   Future<void> fetchProfile() async {
-    final profileProvider = Provider.of<ProfileProvider>(
-        context, listen: false);
-    final currentProfile = profileProvider.currentProfile;
-    setState(() {
-      profile = currentProfile?.toJson();
-    });
-
-    await fetchAllergiesAndDiseases();
-    await fetchMedications();
+    print('Fetching profile...');
+    try {
+      final profileProvider = Provider.of<ProfileProvider>(context, listen: false);
+      final currentProfile = profileProvider.currentProfile;
+      if (currentProfile != null) {
+        setState(() {
+          profile = currentProfile.toJson();
+        });
+        print('Profile fetched successfully: $profile');
+        await fetchAllergiesAndDiseases();
+        await fetchMedications();
+      } else {
+        print('No current profile found.');
+      }
+    } catch (e) {
+      print('Error fetching profile: $e');
+    }
   }
 
   Future<void> fetchAllergiesAndDiseases() async {
     if (profile != null && profile!['id'] != null) {
+      print('Fetching allergies and diseases...');
       try {
-        final response = await http.get(Uri.parse(
-            'http://15.164.18.65:8080/app/disease-allergy/${profile!['id']}'));
+        final accessToken = await JWTmanager().getValidAccessToken();
+        final response = await http.get(
+          Uri.parse('http://15.164.18.65:8080/app/disease-allergy/${profile!['id']}'),
+          headers: {
+            'Authorization': 'Bearer $accessToken',
+            'Content-Type': 'application/json; charset=UTF-8',
+          },
+        );
         if (response.statusCode == 200) {
           setState(() {
             _allergiesanddisease =
-            List<String>.from(json.decode(response.body)['DiseaseAllergyList']);
+            List<String>.from(json.decode(utf8.decode(response.bodyBytes))['DiseaseAllergyList']);
           });
+          print('Allergies and diseases fetched successfully: $_allergiesanddisease');
         } else {
-          print('Failed to load allergies and diseases');
+          print('Failed to load allergies and diseases. Status code: ${response.statusCode}');
         }
       } catch (e) {
         print('Error fetching allergies and diseases: $e');
       }
+    } else {
+      print('Profile ID is null, cannot fetch allergies and diseases.');
     }
   }
 
   Future<void> fetchMedications() async {
     if (profile != null && profile!['id'] != null) {
+      print('Fetching medications...');
       try {
-        final response = await http.get(Uri.parse(
-            'http://15.164.18.65:8080/app/pill?profileId=${profile!['id']}'));
+        final accessToken = await JWTmanager().getValidAccessToken();
+        final response = await http.get(
+          Uri.parse('http://15.164.18.65:8080/app/pill?profileId=${profile!['id']}'),
+          headers: {
+            'Authorization': 'Bearer $accessToken',
+            'Content-Type': 'application/json; charset=UTF-8',
+          },
+        );
         if (response.statusCode == 200) {
           setState(() {
             _medications = List<String>.from(
-                json.decode(response.body)['pillInfoList'].map((
-                    pill) => pill['name']));
+                json.decode(utf8.decode(response.bodyBytes))['pillInfoList'].map((pill) => pill['name']));
           });
+          print('Medications fetched successfully: $_medications');
         } else {
-          print('Failed to load medications');
+          print('Failed to load medications. Status code: ${response.statusCode}');
         }
       } catch (e) {
         print('Error fetching medications: $e');
       }
+    } else {
+      print('Profile ID is null, cannot fetch medications.');
     }
   }
 
   Future<void> updateAllergiesAndDiseases() async {
     try {
+      final accessToken = await JWTmanager().getValidAccessToken();
       final response = await http.patch(
-        Uri.parse(
-            'http://15.164.18.65:8080/app/disease-allergy/${profile!['id']}'),
-        headers: {'Content-Type': 'application/json'},
+        Uri.parse('http://15.164.18.65:8080/app/disease-allergy/${profile!['id']}'),
+        headers: {
+          'Authorization': 'Bearer $accessToken',
+          'Content-Type': 'application/json; charset=UTF-8',
+        },
         body: json.encode({
           'addDiseaseAllergyList': _selectedAllergiesanddisease,
           'removeDiseaseAllergyList': _allergiesanddisease
@@ -99,9 +129,10 @@ class _MyPageState extends State<MyPage> {
         }),
       );
       if (response.statusCode == 200) {
+        print('Allergies and diseases updated successfully.');
         fetchAllergiesAndDiseases(); // 업데이트 후 다시 불러오기
       } else {
-        print('Failed to update allergies and diseases');
+        print('Failed to update allergies and diseases. Status code: ${response.statusCode}');
       }
     } catch (e) {
       print('Error updating allergies and diseases: $e');
@@ -110,17 +141,22 @@ class _MyPageState extends State<MyPage> {
 
   Future<void> updateMedications() async {
     try {
+      final accessToken = await JWTmanager().getValidAccessToken();
       final response = await http.post(
         Uri.parse('http://15.164.18.65:8080/app/pill/${profile!['id']}'),
-        headers: {'Content-Type': 'application/json'},
+        headers: {
+          'Authorization': 'Bearer $accessToken',
+          'Content-Type': 'application/json; charset=UTF-8',
+        },
         body: json.encode({
           'pillSerialNumberList': _selectedMedications,
         }),
       );
       if (response.statusCode == 200) {
+        print('Medications updated successfully.');
         fetchMedications(); // 업데이트 후 다시 불러오기
       } else {
-        print('Failed to update medications');
+        print('Failed to update medications. Status code: ${response.statusCode}');
       }
     } catch (e) {
       print('Error updating medications: $e');
@@ -130,13 +166,14 @@ class _MyPageState extends State<MyPage> {
   void showEditAllergiesBottomSheet(BuildContext context) {
     TextEditingController textEditingController = TextEditingController();
     List<String> searchResults = [];
+    _selectedAllergiesanddisease.clear();
+    _selectedAllergiesanddisease.addAll(_allergiesanddisease);
 
     Future<void> onSearch(String value) async {
       try {
-        final accessToken = await JWTmanager().getAccessToken();
+        final accessToken = await JWTmanager().getValidAccessToken();
         final response = await http.get(
-          Uri.parse(
-              'http://15.164.18.65:8080/app/disease-allergy/search?keyword=$value'),
+          Uri.parse('http://15.164.18.65:8080/app/disease-allergy/search?keyword=$value'),
           headers: {
             'Content-Type': 'application/json; charset=UTF-8',
             'Authorization': 'Bearer $accessToken',
@@ -148,6 +185,8 @@ class _MyPageState extends State<MyPage> {
             searchResults = List<String>.from(
                 json.decode(utf8.decode(response.bodyBytes))['DiseaseAllergyList']);
           });
+        } else {
+          print('Failed to search allergies. Status code: ${response.statusCode}');
         }
       } catch (e) {
         print('Error searching allergies: $e');
@@ -202,8 +241,7 @@ class _MyPageState extends State<MyPage> {
                       height: 150,
                       child: ListView(
                         children: searchResults.map((item) {
-                          bool isSelected =
-                          _selectedAllergiesanddisease.contains(item);
+                          bool isSelected = _selectedAllergiesanddisease.contains(item);
                           return ListTile(
                             title: Text(item),
                             trailing: isSelected
@@ -253,14 +291,15 @@ class _MyPageState extends State<MyPage> {
     );
   }
 
-
   void showEditMedicationsBottomSheet(BuildContext context) {
     TextEditingController textEditingController = TextEditingController();
     List<String> searchResults = [];
+    _selectedMedications.clear();
+    _selectedMedications.addAll(_medications);
 
     Future<void> onSearch(String value) async {
       try {
-        final accessToken = await JWTmanager().getAccessToken();
+        final accessToken = await JWTmanager().getValidAccessToken();
         final response = await http.get(
           Uri.parse('http://15.164.18.65:8080/app/pill/search?keyword=$value'),
           headers: {
@@ -272,9 +311,10 @@ class _MyPageState extends State<MyPage> {
         if (response.statusCode == 200) {
           setState(() {
             searchResults = List<String>.from(
-                json.decode(response.body)['pillInfoList'].map((
-                    pill) => pill['name']));
+                json.decode(utf8.decode(response.bodyBytes))['pillInfoList'].map((pill) => pill['name']));
           });
+        } else {
+          print('Failed to search medications. Status code: ${response.statusCode}');
         }
       } catch (e) {
         print('Error searching medications: $e');
@@ -294,8 +334,7 @@ class _MyPageState extends State<MyPage> {
                   mainAxisSize: MainAxisSize.min,
                   children: [
                     Text("내가 복용 중인 약 수정",
-                        style: TextStyle(
-                            fontSize: 18, fontWeight: FontWeight.w600)),
+                        style: TextStyle(fontSize: 18, fontWeight: FontWeight.w600)),
                     Gaps.h10,
                     TextField(
                       controller: textEditingController,
@@ -501,8 +540,8 @@ class _MyPageState extends State<MyPage> {
   Widget buildInfoSection(BuildContext context, String title, String prompt,
       String type) {
     List<String> selectedItems = type == 'allergy'
-        ? _selectedAllergiesanddisease
-        : _selectedMedications;
+        ? _allergiesanddisease
+        : _medications;
     Function showEditSheet = type == 'allergy'
         ? showEditAllergiesBottomSheet
         : showEditMedicationsBottomSheet;

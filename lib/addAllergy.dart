@@ -30,7 +30,26 @@ class _AddAllergyPageState extends State<AddAllergyPage> {
   }
 
   Future<void> _loadAllergies() async {
-    // 여기에서 초기 알레르기 리스트를 불러오는 로직을 추가할 수 있습니다.
+    final currentProfile = Provider.of<ProfileProvider>(context, listen: false).currentProfile;
+    if (currentProfile == null) return;
+
+    try {
+      final accessToken = await _jwtManager.getValidAccessToken();
+      final response = await _dio.get(
+        'http://15.164.18.65:8080/app/disease-allergy/${currentProfile.id}',
+        options: Options(headers: {
+          'Authorization': 'Bearer $accessToken'
+        }),
+      );
+
+      if (response.statusCode == 200) {
+        setState(() {
+          allergies = List<String>.from(response.data['DiseaseAllergyList']);
+        });
+      }
+    } catch (e) {
+      print('Error loading allergies: $e');
+    }
   }
 
   Future<void> onSearch(String value) async {
@@ -87,7 +106,40 @@ class _AddAllergyPageState extends State<AddAllergyPage> {
           allergies.addAll(selectedItems);
           selectedItems.clear();
         });
-        Navigator.of(context).pop();
+        print('Allergies saved successfully');
+        Navigator.of(context).pop(true); // 데이터를 새로고침하도록 true 반환
+      } else {
+        print('Failed to save allergies. Status code: ${response.statusCode}');
+      }
+    } catch (e) {
+      print('Error saving allergies: $e');
+    }
+  }
+
+  Future<void> saveSelectionsAndNavigate() async {
+    print('saveSelectionsAndNavigate called');
+    try {
+      final accessToken = await _jwtManager.getValidAccessToken();
+      final response = await _dio.patch(
+        'http://15.164.18.65:8080/app/disease-allergy/${Provider.of<ProfileProvider>(context, listen: false).currentProfile?.id}',
+        data: {
+          'addDiseaseAllergyList': selectedItems,
+          'removeDiseaseAllergyList': []
+        },
+        options: Options(headers: {
+          'Authorization': 'Bearer $accessToken'
+        }),
+      );
+
+      if (response.statusCode == 200) {
+        print('Successfully saved allergies');
+        setState(() {
+          allergies.addAll(selectedItems);
+          selectedItems.clear();
+        });
+        navigateToHome();
+      } else {
+        print('Failed to save allergies: ${response.statusCode}');
       }
     } catch (e) {
       print('Error saving allergies: $e');
@@ -246,20 +298,20 @@ class _AddAllergyPageState extends State<AddAllergyPage> {
             Wrap(
               spacing: 8.0,
               runSpacing: 8.0,
-              children: allergies.map((item) {
+              children: allergies.map((allergy) {
                 return Chip(
-                  backgroundColor: AppColors.softTeal,
-                  labelStyle: TextStyle(color: AppColors.deepTeal),
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(12.0),
-                    side: BorderSide(color: AppColors.softTeal),
-                  ),
-                  label: Text(item),
+                  label: Text(allergy),
                   onDeleted: () {
                     setState(() {
-                      allergies.remove(item);
+                      allergies.remove(allergy);
                     });
                   },
+                  backgroundColor: AppColors.wh,
+                  elevation: 0,
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(8),
+                    side: BorderSide(color: AppColors.vibrantTeal),
+                  ),
                 );
               }).toList(),
             ),
@@ -283,7 +335,8 @@ class _AddAllergyPageState extends State<AddAllergyPage> {
               width: double.infinity,
               child: ElevatedButton(
                 onPressed: () {
-                  navigateToHome();
+                  print('약속 시작하기 버튼 클릭됨');
+                  saveSelectionsAndNavigate();
                 },
                 style: ElevatedButton.styleFrom(
                   foregroundColor: AppColors.deepTeal,

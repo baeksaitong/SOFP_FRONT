@@ -1,12 +1,11 @@
 import 'dart:convert';
+import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:http/http.dart' as http;
-import 'dart:io';
 import 'package:sopf_front/appColors.dart';
 import 'package:sopf_front/globalResponseManager.dart';
 import 'gaps.dart';
-import 'provider.dart';
 import 'package:sopf_front/provider.dart';
 import 'jwtManager.dart';
 
@@ -176,7 +175,7 @@ class _MyPageEditState extends State<MyPageEdit> {
                 Gaps.h10,
                 CustomTextField(
                   label: "비밀번호",
-                  hintText: "영문, 숫자, 특수문자 포함 10자 이상",
+                  hintText: "영문, 숫자 포함 10자 이상",
                   isPassword: true,
                   controller: passwordController,
                 ),
@@ -260,13 +259,17 @@ class CustomTextField extends StatelessWidget {
           obscureText: isPassword,
           readOnly: isReadOnly,
           decoration: InputDecoration(
-            border: InputBorder.none,
+            border: OutlineInputBorder(
+              borderSide: BorderSide(color: AppColors.wh), // 테두리 색상을 흰색으로 설정
+              borderRadius: BorderRadius.circular(8.0),
+            ),
             hintText: hintText,
             hintStyle: TextStyle(
-                fontSize: 14,
-                fontFamily: 'pretendard',
-                fontWeight: FontWeight.w600,
-                color: AppColors.gr400),
+              fontSize: 14,
+              fontFamily: 'pretendard',
+              fontWeight: FontWeight.w600,
+              color: AppColors.gr400,
+            ),
             filled: true,
             fillColor: AppColors.gr150,
           ),
