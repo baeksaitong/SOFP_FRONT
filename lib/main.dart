@@ -2,8 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:intl/date_symbol_data_local.dart';
 import 'package:sopf_front/addAllergyPage.dart';
 import 'package:sopf_front/exColorsText.dart';
+import 'package:sopf_front/googleMap.dart';
 import 'package:sopf_front/login.dart';
 import 'package:sopf_front/pillDetails.dart';
+import 'package:sopf_front/pharmacyMap.dart';
 import 'package:sopf_front/searchResult.dart';
 import 'package:sopf_front/signUp.dart';
 import 'package:sopf_front/textSearch.dart';
@@ -25,11 +27,12 @@ import 'loading_provider.dart';
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   final cameras = await availableCameras();
-  final firstCamera = cameras.first;
+  CameraDescription? firstCamera;
 
-  initializeDateFormatting().then((value) =>
-    runApp(MyApp(camera: firstCamera))
-  );
+  if (cameras.isNotEmpty) {
+    firstCamera = cameras.first;
+  }
+  runApp(MyApp(camera: firstCamera));
 }
 */
 
@@ -135,6 +138,8 @@ class _SplashScreenState extends State<SplashScreen> {
           ),
         ],
       ),
+      home: PharmacyMap(),
+      // home: ImageSearch(cameras: [camera],), // `CameraScreen`에 카메라 객체를 전달합니다.
     );
   }
 }
