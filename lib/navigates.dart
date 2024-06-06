@@ -1,5 +1,6 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:sopf_front/addAllergyPage.dart';
 import 'package:sopf_front/globalResponseManager.dart';
 import 'package:sopf_front/appColors.dart';
@@ -23,7 +24,6 @@ import 'customerServiceCenter.dart';
 import 'home.dart';
 import 'main.dart';
 
-import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:provider/provider.dart';
 import 'loading_provider.dart';
 

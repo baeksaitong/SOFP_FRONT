@@ -245,13 +245,6 @@ class APIClient {
         await recentViewPillGet(context); // await 추가
         await pillGet(context, null); // await 추가
         await categoryGetAll(context); // await 추가
-        final categories = CategoryManager().categories;
-        if (categories.isNotEmpty) {
-          print(categories[0].categoryId);
-          await categoryGet(context, categories[0].categoryId); // Wait for the category details to be fetched
-        } else {
-          print('No categories found.');
-        }
       }
       if (jsonResponse['isNew'] == false) {
         navigateToAddAllergy();
