@@ -4,6 +4,7 @@ import 'package:sopf_front/addAllergyPage.dart';
 import 'package:sopf_front/exColorsText.dart';
 import 'package:sopf_front/googleMap.dart';
 import 'package:sopf_front/login.dart';
+import 'package:sopf_front/pharmacyMap.dart';
 import 'package:sopf_front/searchResult.dart';
 import 'package:sopf_front/signUp.dart';
 import 'package:sopf_front/textSearch.dart';
@@ -21,17 +22,18 @@ void main() async {
   // 앱을 시작하기 전에 카메라 목록을 불러옵니다.
   WidgetsFlutterBinding.ensureInitialized();
   final cameras = await availableCameras();
-  final firstCamera = cameras.first; // 첫 번째 카메라를 사용합니다.
+  CameraDescription? firstCamera;
 
-  initializeDateFormatting().then((value) =>
-    runApp(MyApp(camera: firstCamera))
-  );
+  if (cameras.isNotEmpty) {
+    firstCamera = cameras.first;
+  }
+  runApp(MyApp(camera: firstCamera));
 }
 
 final GlobalKey<NavigatorState> navigatorKey = GlobalKey<NavigatorState>();
 
 class MyApp extends StatelessWidget {
-  final CameraDescription camera;
+  final CameraDescription? camera;
 
   const MyApp({super.key, required this.camera}); // 생성자에서 카메라 객체를 받습니다.
 
@@ -40,7 +42,7 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       navigatorKey: navigatorKey,
-      home: const GoogleMapShow(),
+      home: PharmacyMap(),
       // home: ImageSearch(cameras: [camera],), // `CameraScreen`에 카메라 객체를 전달합니다.
     );
   }
