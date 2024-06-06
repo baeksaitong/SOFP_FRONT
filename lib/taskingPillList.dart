@@ -31,10 +31,10 @@ class _MedicationPageState extends State<MedicationPage> {
   void initState() {
     super.initState();
     _initializeMedications();
-    _initializeCatories();
+    _initializeCategories();
   }
 
-  void _initializeMedications() async{
+  void _initializeMedications() async {
     await apiClient.pillGet(context, null);
     setState(() {
       medications = TakingDrugsManager().drugs;
@@ -42,11 +42,11 @@ class _MedicationPageState extends State<MedicationPage> {
     });
   }
 
-  void _initializeCatories() async{
+  void _initializeCategories() async {
     final currentProfile =
         Provider.of<ProfileProvider>(context, listen: false).currentProfile;
     print('현재 프로필 : ${currentProfile?.id}');
-    await apiClient.categoryGetAll(context,currentProfile!.id);
+    await apiClient.categoryGetAll(context, currentProfile!.id);
     setState(() {
       categories = CategoryManager().categories;
       print(categories);
@@ -77,7 +77,8 @@ class _MedicationPageState extends State<MedicationPage> {
                     color: AppColors.gr150,
                     borderRadius: BorderRadius.circular(16.0),
                   ),
-                  padding: const EdgeInsets.symmetric(vertical: 12, horizontal: 16),
+                  padding:
+                  const EdgeInsets.symmetric(vertical: 12, horizontal: 16),
                   child: Row(
                     children: [
                       Expanded(
@@ -104,7 +105,8 @@ class _MedicationPageState extends State<MedicationPage> {
                               Gaps.w10,
                               Text(
                                 '알약 이름을 검색해 보세요',
-                                style: AppTextStyles.body5M14.copyWith(color: AppColors.gr500),
+                                style: AppTextStyles.body5M14
+                                    .copyWith(color: AppColors.gr500),
                               ),
                             ],
                           ),
@@ -155,7 +157,8 @@ class _MedicationPageState extends State<MedicationPage> {
                             Gaps.h4,
                             Text(
                               '모양으로 검색',
-                              style: AppTextStyles.body5M14.copyWith(color: AppColors.bk),
+                              style: AppTextStyles.body5M14
+                                  .copyWith(color: AppColors.bk),
                             ),
                           ],
                         ),
@@ -173,14 +176,15 @@ class _MedicationPageState extends State<MedicationPage> {
                           minimumSize: Size(120, 100),
                         ),
                         onPressed: () {
-                          navigateToMedicationsTakingPlus(context, (newCategory) {
-                            setState(() {
-                              // newCategory['medications'] = <Map<String, String>>[]; // Ensure the medications field is initialized
-                              // categories.add(newCategory);
-                              // selectedCategoryName = newCategory['name'];
-                              // selectedCategoryDetails = newCategory;
-                            });
-                          });
+                          navigateToMedicationsTakingPlus(context,
+                                  (newCategory) {
+                                setState(() {
+                                  // newCategory['medications'] = <Map<String, String>>[]; // Ensure the medications field is initialized
+                                  // categories.add(newCategory);
+                                  // selectedCategoryName = newCategory['name'];
+                                  // selectedCategoryDetails = newCategory;
+                                });
+                              });
                         },
                         child: Column(
                           mainAxisAlignment: MainAxisAlignment.center,
@@ -192,7 +196,8 @@ class _MedicationPageState extends State<MedicationPage> {
                             Gaps.h4,
                             Text(
                               '카테고리',
-                              style: AppTextStyles.body5M14.copyWith(color: AppColors.bk),
+                              style: AppTextStyles.body5M14
+                                  .copyWith(color: AppColors.bk),
                             ),
                           ],
                         ),
@@ -261,7 +266,7 @@ class _MedicationPageState extends State<MedicationPage> {
     );
   }
 
-  void _removeSelectedMedications() async{
+  void _removeSelectedMedications() async {
     for (int index in selectedIndexes) {
       await apiClient.pillDelete(context, medications[index].serialNumber);
     }
@@ -298,7 +303,6 @@ class _MedicationPageState extends State<MedicationPage> {
                       selected: selectedCategoryName == category.name,
                       selectedTileColor: AppColors.softTeal,
                       onTap: () async {
-
                         setState(() {
                           selectedCategoryName = category.name;
                           selectedCategoryDetails = category;
@@ -322,11 +326,15 @@ class _MedicationPageState extends State<MedicationPage> {
                   ElevatedButton(
                     onPressed: selectedCategoryName == null
                         ? null
-                        : () async{
-                      print('이동하기 클릭 : ${selectedCategoryDetails!.categoryId}');
+                        : () async {
+                      print(
+                          '이동하기 클릭 : ${selectedCategoryDetails!.categoryId}');
                       for (int index in selectedIndexes) {
                         print(index);
-                        await apiClient.pillPatch(context, medications[index].serialNumber, selectedCategoryDetails!.categoryId);
+                        await apiClient.pillPatch(
+                            context,
+                            medications[index].serialNumber,
+                            selectedCategoryDetails!.categoryId);
                       }
                       _moveSelectedMedications();
                       Navigator.of(context).pop();
@@ -413,131 +421,125 @@ class _MedicationPageState extends State<MedicationPage> {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Expanded(
-              child: ListView.builder(
-                itemCount: categories.length,
-                itemBuilder: (context, index) {
-                  final category = categories[index];
-                  return Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      ElevatedButton(
-                        style: ElevatedButton.styleFrom(
-                          padding: EdgeInsets.zero, // 패딩 제거
-                          backgroundColor: Colors.transparent, // 배경색 제거
-                          shadowColor: Colors.transparent, // 그림자 제거
-                        ),
-                        onPressed: () async{
-                          await apiClient.categoryGet(context, category.categoryId);
-                          final CategoryDetails? categoryDetail = CategoryDetailsManager().currentCategory;
-                          navigateToMedicationCategory(context, categoryDetail!);
-                        },
-                        child: Container(
-                          padding: const EdgeInsets.all(16.0),
-                          decoration: BoxDecoration(
-                            color: AppColors.gr150,
-                            borderRadius: BorderRadius.circular(8.0),
-                          ),
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              Row(
+              child: SingleChildScrollView(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    ...categories.map((category) {
+                      return Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          ElevatedButton(
+                            style: ElevatedButton.styleFrom(
+                              padding: EdgeInsets.zero, // 패딩 제거
+                              backgroundColor: Colors.transparent, // 배경색 제거
+                              shadowColor: Colors.transparent, // 그림자 제거
+                            ),
+                            onPressed: () async {
+                              await apiClient.categoryGet(
+                                  context, category.categoryId);
+                              final CategoryDetails? categoryDetail =
+                                  CategoryDetailsManager().currentCategory;
+                              navigateToMedicationCategory(
+                                  context, categoryDetail!);
+                            },
+                            child: Container(
+                              padding: const EdgeInsets.all(16.0),
+                              decoration: BoxDecoration(
+                                color: AppColors.gr150,
+                                borderRadius: BorderRadius.circular(8.0),
+                              ),
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
-                                  Image.asset(
-                                    'assets/folder-filled.png',
-                                    width: 50,
-                                    height: 50,
+                                  Row(
+                                    children: [
+                                      Image.asset(
+                                        'assets/folder-filled.png',
+                                        width: 50,
+                                        height: 50,
+                                      ),
+                                      Gaps.w16,
+                                      Text(category.name,
+                                          style: AppTextStyles.title1B24
+                                              .copyWith(color: AppColors.bk)),
+                                    ],
                                   ),
-                                  Gaps.w8,
-                                  Text(category.name, style: AppTextStyles.title1B24.copyWith(color: AppColors.bk)),
+                                  Gaps.h8,
                                 ],
                               ),
-                              Gaps.h8,
-                              // Text(
-                              //   category['days']?.join(', ') ?? '',
-                              //   style: AppTextStyles.body5M14
-                              //       .copyWith(color: AppColors.gr800),
-                              // ),
-                              // SizedBox(height: 4),
-                              // ...?category['times']?.map<Widget>(
-                              //       (time) => Text(
-                              //     time,
-                              //     style: AppTextStyles.body5M14
-                              //         .copyWith(color: AppColors.gr800),
-                              //   ),
-                              // ),
-                            ],
+                            ),
+                          ),
+                          Gaps.h20,
+                        ],
+                      );
+                    }).toList(),
+                    ...medications.map((medication) {
+                      int index = medications.indexOf(medication);
+                      return Container(
+                        decoration: BoxDecoration(
+                          color: AppColors.wh,
+                          border: Border(
+                            left: BorderSide(
+                              color: AppColors.softTeal,
+                              width: 5,
+                            ),
                           ),
                         ),
-                      ),
-                      Gaps.h20,
-                    ],
-                  );
-                }
-              ),
-            ),
-            Expanded(
-              child: ListView.builder(
-                itemCount: medications.length,
-                itemBuilder: (context, index) {
-                  return Container(
-                    decoration: BoxDecoration(
-                      color: AppColors.wh,
-                      border: Border(
-                        left: BorderSide(
-                          color: AppColors.softTeal,
-                          width: 5,
-                        ),
-                      ),
-                    ),
-                    margin: EdgeInsets.symmetric(vertical: 8.0),
-                    padding: const EdgeInsets.all(16.0),
-                    child: Row(
-                      children: [
-                        if (isEditMode)
-                          Checkbox(
-                            value: selectedIndexes.contains(index),
-                            onChanged: (bool? value) {
-                              setState(() {
-                                if (value == true) {
-                                  selectedIndexes.add(index);
-                                } else {
-                                  selectedIndexes.remove(index);
-                                }
-                              });
-                            },
-                          ),
-                        Padding(
-                          padding: const EdgeInsets.all(8.0),
-                          child: Image.network(
-                            medications[index].imgUrl,
-                            width: 50,
-                            height: 50,
-                          ),
-                        ),
-                        Gaps.h16,
-                        Expanded(
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              Text(medications[index].name,
-                                  style: AppTextStyles.body1S16,
-                                overflow: TextOverflow.ellipsis,
+                        margin: EdgeInsets.symmetric(vertical: 8.0),
+                        padding: const EdgeInsets.all(16.0),
+                        child: Row(
+                          children: [
+                            if (isEditMode)
+                              Checkbox(
+                                value: selectedIndexes.contains(index),
+                                onChanged: (bool? value) {
+                                  setState(() {
+                                    if (value == true) {
+                                      selectedIndexes.add(index);
+                                    } else {
+                                      selectedIndexes.remove(index);
+                                    }
+                                  });
+                                },
                               ),
-                              Text('제조사: ${medications[index].enterprise}',
-                                style: AppTextStyles.body5M14,
-                                overflow: TextOverflow.ellipsis,
+                            Padding(
+                              padding: const EdgeInsets.all(8.0),
+                              child: Image.network(
+                                medication.imgUrl,
+                                width: 50,
+                                height: 50,
                               ),
-                              Text('분류: ${medications[index].classification}',
-                                  style: AppTextStyles.body5M14,
-                                overflow: TextOverflow.ellipsis,
+                            ),
+                            Gaps.h16,
+                            Expanded(
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Text(
+                                    medication.name,
+                                    style: AppTextStyles.body1S16,
+                                    overflow: TextOverflow.ellipsis,
+                                  ),
+                                  Text(
+                                    '제조사: ${medication.enterprise}',
+                                    style: AppTextStyles.body5M14,
+                                    overflow: TextOverflow.ellipsis,
+                                  ),
+                                  Text(
+                                    '분류: ${medication.classification}',
+                                    style: AppTextStyles.body5M14,
+                                    overflow: TextOverflow.ellipsis,
+                                  ),
+                                ],
                               ),
-                            ],
-                          ),
+                            ),
+                          ],
                         ),
-                      ],
-                    ),
-                  );
-                },
+                      );
+                    }).toList(),
+                  ],
+                ),
               ),
             ),
             if (isEditMode)

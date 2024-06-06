@@ -37,7 +37,7 @@ class _MedicationCategoryPageState extends State<MedicationCategoryPage> {
     _initializeCatories();
   }
 
-  void _initializeMedications() async{
+  void _initializeMedications() async {
     print('categoryId:${widget.category.id}');
     await apiClient.pillGet(context, widget.category.id);
     setState(() {
@@ -46,7 +46,7 @@ class _MedicationCategoryPageState extends State<MedicationCategoryPage> {
     });
   }
 
-  void _initializeCatories() async{
+  void _initializeCatories() async {
     final currentProfile =
         Provider.of<ProfileProvider>(context, listen: false).currentProfile;
     await apiClient.categoryGetAll(context, currentProfile!.id);
@@ -264,7 +264,7 @@ class _MedicationCategoryPageState extends State<MedicationCategoryPage> {
     );
   }
 
-  void _removeSelectedMedications() async{
+  void _removeSelectedMedications() async {
     for (int index in selectedIndexes) {
       await apiClient.pillDelete(context, medications[index].serialNumber);
     }
@@ -325,7 +325,7 @@ class _MedicationCategoryPageState extends State<MedicationCategoryPage> {
                   ElevatedButton(
                     onPressed: selectedCategoryName == null
                         ? null
-                        : () async{
+                        : () async {
                       print('이동하기 클릭 : ${selectedCategoryDetails!.categoryId}');
                       for (int index in selectedIndexes) {
                         print(index);
@@ -381,12 +381,36 @@ class _MedicationCategoryPageState extends State<MedicationCategoryPage> {
     }
   }
 
+  String formatTime(String time) {
+    final timeParts = time.split(':');
+    final hour = int.parse(timeParts[0]);
+    final minute = timeParts[1];
+    return '$hour시 $minute분';
+  }
+
+  String getKoreanDay(String day) {
+    switch (day) {
+      case 'MON':
+        return '월';
+      case 'TUE':
+        return '화';
+      case 'WED':
+        return '수';
+      case 'THU':
+        return '목';
+      case 'FRI':
+        return '금';
+      case 'SAT':
+        return '토';
+      case 'SUN':
+        return '일';
+      default:
+        return day;
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
-    // Ensure medications is of the correct type
-    // final List<Map<String, String>> medications =
-    //     List<Map<String, String>>.from(category. ?? []);
-
     return Scaffold(
       appBar: AppBar(
         title: const Text('복용중인 알약', style: AppTextStyles.body1S16),
@@ -416,7 +440,7 @@ class _MedicationCategoryPageState extends State<MedicationCategoryPage> {
                     children: [
                       Text(widget.category.name, style: AppTextStyles.title1B24),
                       ElevatedButton(
-                        onPressed: () async{
+                        onPressed: () async {
                           showDialog(
                             context: context,
                             builder: (BuildContext context) {
@@ -430,15 +454,9 @@ class _MedicationCategoryPageState extends State<MedicationCategoryPage> {
                                   selectionColor: AppColors.gr800,
                                   textAlign: TextAlign.center,
                                 ),
-                                // content: Text(
-                                //   '입력하신 내용이 전부 사라집니다',
-                                //   style: AppTextStyles.body5M14,
-                                //   selectionColor: AppColors.gr600,
-                                //   textAlign: TextAlign.center,
-                                // ),
                                 actions: <Widget>[
                                   OutlinedButton(
-                                    onPressed: () async{
+                                    onPressed: () async {
                                       await apiClient.categoryDelete(context, widget.category.id, false);
                                       navigateToMedicationsTaking();
                                     },
@@ -458,7 +476,7 @@ class _MedicationCategoryPageState extends State<MedicationCategoryPage> {
                                     ),
                                   ),
                                   OutlinedButton(
-                                    onPressed: () async{
+                                    onPressed: () async {
                                       await apiClient.categoryDelete(context, widget.category.id, false);
                                       navigateToMedicationsTaking();
                                     },
@@ -481,7 +499,6 @@ class _MedicationCategoryPageState extends State<MedicationCategoryPage> {
                               );
                             },
                           );
-                          // await apiClient.categoryDelete()
                         },
                         style: ElevatedButton.styleFrom(
                           backgroundColor: AppColors.gr150,
@@ -503,39 +520,32 @@ class _MedicationCategoryPageState extends State<MedicationCategoryPage> {
                       color: AppColors.gr150,
                       borderRadius: BorderRadius.circular(8.0),
                     ),
-                    child: Column(
+                    child: Row(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        Row(
-                          mainAxisAlignment:
-                          MainAxisAlignment.spaceBetween,
+                        Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
-                            Column(
-                              children: const [
-                                Text('월, 화, 수, 목, 금',
-                                    style: AppTextStyles.body5M14),
-                                SizedBox(height: 4),
-                                Text('오전 8시 30분', style: AppTextStyles.body5M14),
-                                Text('오후 1시 30분', style: AppTextStyles.body5M14),
-                                Text('오후 7시 30분', style: AppTextStyles.body5M14),
-                              ],
+                            Text('섭취 시간', style: AppTextStyles.body1S16),
+                            SizedBox(height: 8),
+                            Text(
+                              widget.category.intakeDayList.map((day) => getKoreanDay(day)).join(', '),
+                              style: AppTextStyles.body5M14,
                             ),
-                            IconButton(
-                              icon: Icon(Icons.edit),
-                              onPressed: () {
-                                // 편집 기능 추가
-                              },
+                            Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: widget.category.intakeTimeList
+                                  .map((time) => Text(formatTime(time), style: AppTextStyles.body5M14))
+                                  .toList(),
                             ),
                           ],
                         ),
                       ],
                     ),
                   ),
-                  Gaps.h20,
                 ],
               ),
             ),
-            Gaps.h16,
             Expanded(
               child: ListView.builder(
                 itemCount: medications.length,
@@ -581,15 +591,18 @@ class _MedicationCategoryPageState extends State<MedicationCategoryPage> {
                           child: Column(
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
-                              Text(medications[index].name,
+                              Text(
+                                medications[index].name,
                                 style: AppTextStyles.body1S16,
                                 overflow: TextOverflow.ellipsis,
                               ),
-                              Text('제조사: ${medications[index].enterprise}',
+                              Text(
+                                '제조사: ${medications[index].enterprise}',
                                 style: AppTextStyles.body5M14,
                                 overflow: TextOverflow.ellipsis,
                               ),
-                              Text('분류: ${medications[index].classification}',
+                              Text(
+                                '분류: ${medications[index].classification}',
                                 style: AppTextStyles.body5M14,
                                 overflow: TextOverflow.ellipsis,
                               ),
@@ -688,34 +701,6 @@ class _MedicationCategoryPageState extends State<MedicationCategoryPage> {
                   ),
                 ],
               ),
-            // Row(
-            //   mainAxisAlignment: MainAxisAlignment.end,
-            //   children: [
-            //     TextButton(
-            //       onPressed: () {
-            //         _showAddMedicationDialog(context);
-            //       },
-            //       child: Text(
-            //         '추가',
-            //         style:
-            //             AppTextStyles.body3S15.copyWith(color: AppColors.gr800),
-            //       ),
-            //     ),
-            //     const SizedBox(width: 8.0),
-            //     TextButton(
-            //       onPressed: () {
-            //         navigateToMedicationsTakingPlus(context, (updatedCategory) {
-            //           // Update the category with new data
-            //         }, category);
-            //       },
-            //       child: Text(
-            //         '수정',
-            //         style:
-            //             AppTextStyles.body3S15.copyWith(color: AppColors.gr800),
-            //       ),
-            //     ),
-            //   ],
-            // ),
           ],
         ),
       ),

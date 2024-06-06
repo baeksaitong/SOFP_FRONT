@@ -3,7 +3,7 @@ import 'package:sopf_front/apiClient.dart';
 import 'package:sopf_front/appColors.dart';
 import 'package:sopf_front/appTextStyles.dart';
 import 'package:sopf_front/login.dart';
-import 'package:sopf_front/multiProfileEdit.dart';
+import 'package:sopf_front/multiProfileAdd.dart';
 import 'package:sopf_front/navigates.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
@@ -592,7 +592,11 @@ class _MyPageState extends State<MyPage> {
           Gaps.h10,
           ElevatedButton(
             onPressed: () {
-              showEditSheet(context);
+              if (title == '내가 복용 중인 약') {
+                navigateToMedicationsTaking();
+              } else {
+                showEditSheet(context);
+              }
             },
             style: ElevatedButton.styleFrom(
               minimumSize: Size(double.infinity, 36),
@@ -621,10 +625,6 @@ class _MyPageState extends State<MyPage> {
     return Column(
       children: [
         buildNavigationItem(context, Icons.person, "멀티 프로필", () {
-          Navigator.push(
-            context,
-            MaterialPageRoute(builder: (context) => multiProfileEdit()),
-          );
         }),
         Gaps.h16,
         buildNavigationItem(context, Icons.star, "즐겨찾기", () {

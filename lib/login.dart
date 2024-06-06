@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:sopf_front/apiClient.dart';
+import 'package:sopf_front/appColors.dart';
 import 'package:sopf_front/gaps.dart';
 
 import 'home.dart';
@@ -48,7 +49,10 @@ class _LoginPageState extends State<LoginPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(),
+      backgroundColor: AppColors.wh,
+      appBar: AppBar(
+        backgroundColor: AppColors.wh,
+      ),
       resizeToAvoidBottomInset: true,
       body: SingleChildScrollView(
         child: Container(

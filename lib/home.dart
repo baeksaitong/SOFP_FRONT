@@ -78,9 +78,7 @@ class _HomePageState extends State<HomePage> {
                             onTap: () {
                               profileProvider.setCurrentProfile(profile);
                               Navigator.pop(context); // Close the bottom sheet
-                              setState(() {
-                                _selectedIndex=3;
-                              });
+                              navigateToHome();
                             },
                             child: Container(
                               height: 48,
@@ -118,6 +116,7 @@ class _HomePageState extends State<HomePage> {
                       child: ElevatedButton(
                         onPressed: () {
                           // 프로필 추가하기 버튼 클릭 시 동작
+                          navigateToMultiProfileAdd();
                         },
                         style: ElevatedButton.styleFrom(
                           backgroundColor: AppColors.softTeal,
@@ -217,10 +216,10 @@ class HomePageContent extends StatelessWidget {
                         width: 28,
                         height: 28,
                       ),
-                      Gaps.h8,
+                      Gaps.w8,
                       Text(
                         '복용 중인 약',
-                        style: AppTextStyles.body5M14,
+                        style: AppTextStyles.body5M14.copyWith(color: AppColors.gr600),
                       ),
                     ],
                   ),
@@ -234,10 +233,10 @@ class HomePageContent extends StatelessWidget {
                       width: 28,
                       height: 28,
                     ),
-                    Gaps.h8,
+                    Gaps.w8,
                     Text(
                       '알레르기 현황',
-                      style: AppTextStyles.body5M14,
+                      style: AppTextStyles.body5M14.copyWith(color: AppColors.gr600),
                     ),
                   ],
                 )
@@ -344,4 +343,104 @@ class CustomBottomNavigationBar extends StatelessWidget {
       ),
     );
   }
+}
+
+void showBottomSheet(BuildContext context, Function(int) setSelectedIndex) {
+  HapticFeedback.vibrate(); // 진동 추가
+  final profileProvider = Provider.of<ProfileProvider>(context, listen: false);
+
+  showModalBottomSheet(
+    context: context,
+    builder: (BuildContext context) {
+      return Container(
+        decoration: BoxDecoration(
+          borderRadius: BorderRadius.all(Radius.circular(20)),
+          color: AppColors.wh,
+        ),
+        child: Padding(
+          padding: EdgeInsets.symmetric(horizontal: 24, vertical: 16),
+          child: SingleChildScrollView(
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Gaps.h20,
+                Text(
+                  '멀티 프로필',
+                  style: AppTextStyles.title3S18.copyWith(color: AppColors.gr800),
+                ),
+                Gaps.h16,
+                ListView.builder(
+                  shrinkWrap: true,
+                  physics: NeverScrollableScrollPhysics(), // 스크롤을 비활성화하여 부모 스크롤과 충돌 방지
+                  itemCount: profileProvider.profileList.length,
+                  itemBuilder: (context, index) {
+                    final profile = profileProvider.profileList[index];
+                    return Column(
+                      children: [
+                        InkWell(
+                          onTap: () {
+                            profileProvider.setCurrentProfile(profile);
+                            Navigator.pop(context); // Close the bottom sheet
+                            setSelectedIndex(3); // Update the selected index
+                          },
+                          child: Container(
+                            height: 48,
+                            color: AppColors.gr150,
+                            child: Row(
+                              children: [
+                                Container(
+                                  width: 2,
+                                  color: getColorFromText(profile.color),
+                                ),
+                                Gaps.w12,
+                                CircleAvatar(
+                                  backgroundColor: getColorFromText(profile.color),
+                                  radius: 10,
+                                  // backgroundImage: NetworkImage(profile.imgURL), // assuming profile.imgURL is a URL
+                                ),
+                                Gaps.w12,
+                                Text(
+                                  profile.name,
+                                  style: AppTextStyles.body2M16.copyWith(color: AppColors.gr900),
+                                ),
+                              ],
+                            ),
+                          ),
+                        ),
+                        if (index != profileProvider.profileList.length - 1) Gaps.h10,
+                      ],
+                    );
+                  },
+                ),
+                Center(
+                  child: Container(
+                    width: 335,
+                    height: 52,
+                    child: ElevatedButton(
+                      onPressed: () {
+                        // 프로필 추가하기 버튼 클릭 시 동작
+                        navigateToMultiProfileAdd();
+                      },
+                      style: ElevatedButton.styleFrom(
+                        backgroundColor: AppColors.softTeal,
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(8),
+                        ),
+                      ),
+                      child: Text(
+                        '프로필 추가하기',
+                        style: AppTextStyles.body1S16.copyWith(color: AppColors.vibrantTeal),
+                      ),
+                    ),
+                  ),
+                ),
+                Gaps.h24,
+              ],
+            ),
+          ),
+        ),
+      );
+    },
+  );
 }

@@ -27,6 +27,7 @@ import 'main.dart';
 
 import 'package:provider/provider.dart';
 import 'loading_provider.dart';
+import 'multiProfileAdd.dart';
 
 void showLoading(BuildContext context, {bool delayed = false}) {
   final loadingProvider = Provider.of<LoadingProvider>(context, listen: false);
@@ -135,6 +136,12 @@ void navigateToMyPage() {
 void navigateToMedicationsTaking() {
   navigatorKey.currentState?.push(
     MaterialPageRoute(builder: (context) => MedicationPage()),
+  );
+}
+
+void navigateToMultiProfileAdd() {
+  navigatorKey.currentState?.push(
+    MaterialPageRoute(builder: (context) => MultiProfileAdd()),
   );
 }
 

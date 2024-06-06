@@ -127,7 +127,6 @@ class _ShapeSearchState extends State<ShapeSearch> {
                               child: Text(
                                 '초기화',
                                 style: AppTextStyles.body1S16.copyWith(color: AppColors.gr600),
-                                selectionColor: AppColors.deepTeal,
                               ),
                             ),
                           ],
@@ -145,8 +144,7 @@ class _ShapeSearchState extends State<ShapeSearch> {
                   ),
                   child: Text(
                     '초기화',
-                    style: AppTextStyles.body3S15,
-                    selectionColor: AppColors.gr600,
+                    style: AppTextStyles.body3S15.copyWith(color: AppColors.gr600),
                   )),
               Gaps.w10,
               OutlinedButton(

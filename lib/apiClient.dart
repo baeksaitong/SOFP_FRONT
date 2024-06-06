@@ -247,7 +247,6 @@ class APIClient {
       if (context.mounted) {
         await recentViewPillGet(context); // await 추가
         await pillGet(context, null); // await 추가
-        await categoryGetAll(context); // await 추가
       }
       if (jsonResponse['isNew'] == false) {
         navigateToAddAllergy();
@@ -320,9 +319,10 @@ class APIClient {
     }
   }
 
-  Future<void> profilePost() async {
+  Future<void> profilePost(
+      String name, String birthday, String gender, String color, XFile? _image
+      ) async {
     final String? accessToken = await _jwtManager.getAccessToken();
-    XFile? _image = null;
 
     var url = Uri.parse('$baseUrl/app/profile');
     var headers = {
@@ -338,10 +338,10 @@ class APIClient {
     }
 
     var body = jsonEncode({
-      'name': '김',
-      'birthday': '2024-05-04',
-      'gender': 'MALE',
-      'color': '노랑',
+      'name': name,
+      'birthday': birthday,
+      'gender': gender,
+      'color': color,
       'profileImg': base64Image, // 이미지 파일이 있을 경우 추가
     });
 

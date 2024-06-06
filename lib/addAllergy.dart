@@ -274,7 +274,9 @@ class _AddAllergyPageState extends State<AddAllergyPage> {
     final currentProfile = Provider.of<ProfileProvider>(context).currentProfile;
     return Scaffold(
       backgroundColor: AppColors.wh,
-      appBar: AppBar(),
+      appBar: AppBar(
+        backgroundColor: AppColors.wh,
+      ),
       body: Padding(
         padding: const EdgeInsets.all(20.0),
         child: Column(

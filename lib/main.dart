@@ -66,33 +66,33 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'Flutter Demo',
-      theme: ThemeData(
-        primarySwatch: Colors.blue,
-        textSelectionTheme: TextSelectionThemeData(
-          cursorColor: Colors.grey, // Set the global cursor color here
-        ),
-        inputDecorationTheme: InputDecorationTheme(
-          border: OutlineInputBorder(
-            borderRadius: BorderRadius.circular(4.0),
-            borderSide: BorderSide(
-              color: AppColors.gr600, // The color of the border
-            ),
-          ),
-          enabledBorder: OutlineInputBorder(
-            borderRadius: BorderRadius.circular(4.0),
-            borderSide: BorderSide(
-              color: AppColors.gr600, // The color of the border when enabled
-            ),
-          ),
-          focusedBorder: OutlineInputBorder(
-            borderRadius: BorderRadius.circular(4.0),
-            borderSide: BorderSide(
-              color: AppColors.gr600, // The color of the border when focused
-            ),
-          ),
-        ),
-      ),
+      // title: 'Flutter Demo',
+      // theme: ThemeData(
+      //   primarySwatch: Colors.blue,
+      //   textSelectionTheme: TextSelectionThemeData(
+      //     cursorColor: Colors.grey, // Set the global cursor color here
+      //   ),
+      //   inputDecorationTheme: InputDecorationTheme(
+      //     border: OutlineInputBorder(
+      //       borderRadius: BorderRadius.circular(4.0),
+      //       borderSide: BorderSide(
+      //         color: AppColors.gr600, // The color of the border
+      //       ),
+      //     ),
+      //     enabledBorder: OutlineInputBorder(
+      //       borderRadius: BorderRadius.circular(4.0),
+      //       borderSide: BorderSide(
+      //         color: AppColors.gr600, // The color of the border when enabled
+      //       ),
+      //     ),
+      //     focusedBorder: OutlineInputBorder(
+      //       borderRadius: BorderRadius.circular(4.0),
+      //       borderSide: BorderSide(
+      //         color: AppColors.gr600, // The color of the border when focused
+      //       ),
+      //     ),
+      //   ),
+      // ),
       navigatorKey: navigatorKey,
       home: SplashScreen(), // Show the splash screen first
     );

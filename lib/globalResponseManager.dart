@@ -396,12 +396,12 @@ class CategoryManager {
 }
 
 class CategoryDetails {
-  final String id;
-  final String name;
-  final bool alarm;
-  final String period;
-  final List<String> intakeDayList;
-  final List<String> intakeTimeList;
+  String id;
+  String name;
+  bool alarm;
+  DateTime period;
+  List<String> intakeDayList;
+  List<String> intakeTimeList;
 
   CategoryDetails({
     required this.id,
@@ -414,23 +414,14 @@ class CategoryDetails {
 
   factory CategoryDetails.fromJson(Map<String, dynamic> json) {
     return CategoryDetails(
-      id: json['id'],
-      name: json['name'],
-      alarm: json['alarm'],
-      period: json['period'],
+      id: json['id'] as String,
+      name: json['name'] as String,
+      alarm: json['alarm'] as bool,
+      period: DateTime(json['period'][0], json['period'][1], json['period'][2]),
       intakeDayList: List<String>.from(json['intakeDayList']),
       intakeTimeList: List<String>.from(json['intakeTimeList']),
     );
   }
-
-  Map<String, dynamic> toJson() => {
-    'id': id,
-    'name': name,
-    'alarm': alarm,
-    'period': period,
-    'intakeDayList': intakeDayList,
-    'intakeTimeList': intakeTimeList,
-  };
 }
 
 class CategoryDetailsManager {
