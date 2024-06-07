@@ -59,6 +59,7 @@ class _MedicationSchedulePageState extends State<MedicationSchedulePage> {
     await apiClient.categoryPost(context, newCategory);
 
     widget.onSave(newCategory);
+    Navigator.pop(context);
     navigateToMedicationsTaking();
   }
 

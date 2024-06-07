@@ -5,7 +5,10 @@ import 'package:sopf_front/gaps.dart';
 import 'package:image_picker/image_picker.dart';
 import 'dart:io';
 
+import 'apiClient.dart';
+import 'globalResponseManager.dart';
 import 'home.dart';
+import 'navigates.dart';
 
 class SearchResultPage extends StatefulWidget {
   final XFile? firstImageFile;
@@ -18,44 +21,47 @@ class SearchResultPage extends StatefulWidget {
 }
 
 class _SearchResultPageState extends State<SearchResultPage> {
-  // 데이터 예시
-  final List<Map<String, dynamic>> medications = [
-    {
-      'name': '가스디알정50밀리그람',
-      'manufacturer': '일동제약',
-      'category': '기타의소화기관용약 | 일반 의약품',
-      'image': 'assets/exPill.png',
-      'isWarning': true,
-    },
-    {
-      'name': '가스디알정50밀리그람',
-      'manufacturer': '일동제약',
-      'category': '기타의소화기관용약 | 일반 의약품',
-      'image': 'assets/exPill.png',
-      'isWarning': false,
-    },
-    {
-      'name': '가스디알정50밀리그람',
-      'manufacturer': '일동제약',
-      'category': '기타의소화기관용약 | 일반 의약품',
-      'image': 'assets/exPill.png',
-      'isWarning': true,
-    },
-    {
-      'name': '가스디알정50밀리그람',
-      'manufacturer': '일동제약',
-      'category': '기타의소화기관용약 | 일반 의약품',
-      'image': 'assets/exPill.png',
-      'isWarning': false,
-    },
-  ];
+  List<DrugInfo> drugs = [];
+  List<FavoriteInfo> favorites = [];
+  APIClient apiClient = APIClient();
 
-  final List<bool> _favoriteStatus = [false, false, false, false];
-
-  void _toggleFavorite(int index) {
+  void _toggleBookmark(int index) {
     setState(() {
-      _favoriteStatus[index] = !_favoriteStatus[index];
+      drugs[index].isBookmarked = !drugs[index].isBookmarked;
+      print('${drugs[index].serialNumber}, ${drugs[index].imgUrl}');
+      if (drugs[index].isBookmarked == true) {
+        apiClient.favoritePost(
+            context, drugs[index].serialNumber, drugs[index].imgUrl);
+      } else {
+        apiClient.favoriteDelete(context, drugs[index].serialNumber);
+      }
     });
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    _initializeDrugs();
+  }
+
+  void _initializeDrugs() async{
+    showLoading(context, delayed: true); // Show loading spinner with delay
+
+    await apiClient.searchTextAndShape(context, '타이레놀', null, null, null, null, null);
+
+    hideLoading(context); // Hide loading spinner
+
+    favorites = FavoritesManager().favorites;
+    drugs = DrugsManager().drugs; // GlobalManager에서 직접 데이터를 가져옵니다.
+    for (var drug in drugs) {
+      for (var favorite in favorites) {
+        if (drug.serialNumber == favorite.serialNumber) {
+          drug.isBookmarked = true;
+          break;
+        }
+      }
+    }
+    setState(() {});
   }
 
   @override
@@ -68,143 +74,127 @@ class _SearchResultPageState extends State<SearchResultPage> {
           icon: const Icon(Icons.arrow_back),
           onPressed: () {
             Navigator.pushAndRemoveUntil(
-                context,
-                MaterialPageRoute(builder: (context) => HomePage()),
-            (Route<dynamic> route) => false
-            );// **뒤로 가기 동작**
+              context,
+              MaterialPageRoute(builder: (context) => HomePage()),
+                  (Route<dynamic> route) => false,
+            ); // **뒤로 가기 동작**
           },
         ),
       ),
-      body: Padding(
-        padding: const EdgeInsets.all(16.0),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Row(
+      body: Stack(
+        children: [
+          Padding(
+            padding: const EdgeInsets.all(16.0),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Expanded(
-                  child: Row(
-                    children: [
-                      widget.firstImageFile != null
-                          ? Image.file(
-                        File(widget.firstImageFile!.path), // **첫 번째 이미지**
-                        width: 100,
-                        height: 100,
-                      )
-                          : Container(),
-                      Gaps.w8,
-                      widget.secondImageFile != null
-                          ? Image.file(
-                        File(widget.secondImageFile!.path), // **두 번째 이미지**
-                        width: 100,
-                        height: 100,
-                      )
-                          : Container(),
-                    ],
-                  ),
-                ),
-                Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
+                Row(
                   children: [
-                    const Text(
-                      '촬영된 사진의 검색 결과',
-                      style: AppTextStyles.body2M16,
-                    ),
-                    const Text('4건', style: AppTextStyles.body2M16),
-                    ElevatedButton(
-                      onPressed: () {
-                        // 재촬영하기 버튼 동작 구현
-                      },
-                      style: ElevatedButton.styleFrom(
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(8.0),
-                        ),
+                    Expanded(
+                      child: Row(
+                        children: [
+                          widget.firstImageFile != null
+                              ? Image.file(
+                            File(widget.firstImageFile!.path), // **첫 번째 이미지**
+                            width: 100,
+                            height: 100,
+                          )
+                              : Container(),
+                          Gaps.w8,
+                          widget.secondImageFile != null
+                              ? Image.file(
+                            File(widget.secondImageFile!.path), // **두 번째 이미지**
+                            width: 100,
+                            height: 100,
+                          )
+                              : Container(),
+                        ],
                       ),
-                      child: Text('재촬영하기',
-                          style: AppTextStyles.body5M14
-                              .copyWith(color: AppColors.deepTeal)),
                     ),
                   ],
                 ),
-              ],
-            ),
-            Gaps.h16,
-            Expanded(
-              child: ListView.builder(
-                itemCount: medications.length,
-                itemBuilder: (context, index) {
-                  final medication = medications[index];
-                  return Padding(
-                    padding: const EdgeInsets.symmetric(vertical: 8.0),
-                    child: Column(
-                      children: [
-                        Card(
-                          child: ListTile(
-                            leading: Image.asset(
-                              medication['image'], // **약 이미지 경로**
-                              width: 50,
-                              height: 50,
-                            ),
-                            title: Text(
-                              medication['name'],
-                              style: AppTextStyles.body1S16
-                                  .copyWith(color: AppColors.gr900),
-                            ),
-                            subtitle: Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                Text(
-                                  '제조사: ${medication['manufacturer']}',
-                                  style: AppTextStyles.body5M14
-                                      .copyWith(color: AppColors.gr600),
-                                ),
-                                Text(
-                                  '분류: ${medication['category']}',
-                                  style: AppTextStyles.body5M14
-                                      .copyWith(color: AppColors.gr600),
-                                ),
-                              ],
-                            ),
-                            trailing: IconButton(
-                              icon: Icon(
-                                _favoriteStatus[index]
-                                    ? Icons.star
-                                    : Icons.star_border,
-                                color: _favoriteStatus[index]
-                                    ? AppColors.vibrantTeal
-                                    : AppColors.gr500,
+                Gaps.h8,
+                Text(
+                  '촬영된 사진의 검색 결과 4건',
+                  style: AppTextStyles.body2M16,
+                ),
+                Gaps.h8,
+                Expanded(
+                  child: ListView.separated(
+                    itemCount: drugs.length,
+                    itemBuilder: (context, index) {
+                      final drug = drugs[index];
+                      return GestureDetector(
+                        onTap: () async {
+                          await apiClient.searchGet(context, drug.serialNumber);
+                          navigateToPillDetail(drug.serialNumber);
+                        },
+                        child: Container(
+                          width: 336,
+                          height: 96,
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              Image.network(
+                                drug.imgUrl,
+                                width: 96,
+                                height: 96,
                               ),
-                              onPressed: () {
-                                _toggleFavorite(index);
-                              },
-                            ),
+                              Gaps.w16,
+                              Container(
+                                width: 200,
+                                child: Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    Text(
+                                      drug.name,
+                                      style: AppTextStyles.body1S16,
+                                      overflow: TextOverflow.ellipsis,
+                                    ),
+                                    Gaps.h6,
+                                    Text(
+                                      '제품명 : ${drug.name}',
+                                      style: AppTextStyles.body5M14,
+                                      overflow: TextOverflow.ellipsis,
+                                    ),
+                                    Text(
+                                      '제조회사 : ${drug.enterprise}',
+                                      style: AppTextStyles.body5M14,
+                                      overflow: TextOverflow.ellipsis,
+                                    ),
+                                    Text(
+                                      '분류 : ${drug.classification}',
+                                      style: AppTextStyles.body5M14,
+                                      overflow: TextOverflow.ellipsis,
+                                    ),
+                                  ],
+                                ),
+                              ),
+                              Align(
+                                alignment: Alignment.topRight,
+                                child: GestureDetector(
+                                  onTap: () => _toggleBookmark(index),
+                                  child: Image.asset(
+                                    drug.isBookmarked
+                                        ? 'assets/bookmarkclicked.png'
+                                        : 'assets/bookmark.png',
+                                    width: 20,
+                                    height: 20,
+                                  ),
+                                ),
+                              ),
+                              Gaps.h16,
+                            ],
                           ),
                         ),
-                        if (medication['isWarning'])
-                          Card(
-                            color: AppColors.gr200,
-                            child: Padding(
-                              padding: const EdgeInsets.all(8.0),
-                              child: Row(
-                                children: [
-                                  const Icon(Icons.warning,
-                                      color: Colors.orange),
-                                  const SizedBox(width: 8.0),
-                                  Text('성명근님의 질병에서 주의 해야 하는 약이에요',
-                                      style: AppTextStyles.body5M14
-                                          .copyWith(color: AppColors.gr800)),
-                                ],
-                              ),
-                            ),
-                          ),
-                      ],
-                    ),
-                  );
-                },
-              ),
+                      );
+                    }, separatorBuilder: (context, index) => Gaps.h8,),
+                ),
+              ],
             ),
-          ],
-        ),
+          ),
+          loadingOverlay(context), // Add the loading overlay here
+        ],
       ),
     );
   }

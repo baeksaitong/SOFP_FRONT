@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:sopf_front/apiClient.dart';
 import 'package:sopf_front/navigates.dart';
+import 'package:sopf_front/pillDetails.dart';
 import 'package:sopf_front/shapeSearch.dart';
 
 import 'appColors.dart';
@@ -63,7 +64,8 @@ class _SearchResultState extends State<SearchResult> {
     _initializeDrugs();
   }
 
-  void _initializeDrugs() {
+  void _initializeDrugs() async{
+    await apiClient.favoriteGet(context);
     favorites = FavoritesManager().favorites;
     drugs = DrugsManager().drugs; // GlobalManager에서 직접 데이터를 가져옵니다.
     for (var drug in drugs) {
@@ -75,6 +77,15 @@ class _SearchResultState extends State<SearchResult> {
       }
     }
     setState(() {});
+  }
+
+  void navigateToPillDetail(int serialNumber, String imgUrl) {
+    Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (context) => PillDetails(serialNumber: serialNumber, imgUrl: imgUrl),
+      ),
+    );
   }
 
   @override
@@ -166,7 +177,7 @@ class _SearchResultState extends State<SearchResult> {
                                     child: SingleChildScrollView(
                                       child: Column(
                                         crossAxisAlignment:
-                                            CrossAxisAlignment.start,
+                                        CrossAxisAlignment.start,
                                         mainAxisSize: MainAxisSize.min,
                                         children: [
                                           Text(
@@ -182,7 +193,7 @@ class _SearchResultState extends State<SearchResult> {
                                               mainAxisSpacing: 10,
                                               childAspectRatio: (76 / 68),
                                               physics:
-                                                  NeverScrollableScrollPhysics(),
+                                              NeverScrollableScrollPhysics(),
                                               children: List.generate(
                                                   shapeItems.length, (index) {
                                                 return GestureDetector(
@@ -194,7 +205,7 @@ class _SearchResultState extends State<SearchResult> {
                                                             .isSelected = false;
                                                       }
                                                       selectedShapeItem =
-                                                          shapeItems[index];
+                                                      shapeItems[index];
                                                       selectedShapeItem!
                                                           .isSelected = true;
                                                       shapeText =
@@ -206,23 +217,23 @@ class _SearchResultState extends State<SearchResult> {
                                                     decoration: BoxDecoration(
                                                       color: AppColors.gr200,
                                                       border: shapeItems[index]
-                                                              .isSelected
+                                                          .isSelected
                                                           ? Border.all(
-                                                              width: 2.0,
-                                                              color: Colors
-                                                                  .redAccent,
-                                                            )
+                                                        width: 2.0,
+                                                        color: Colors
+                                                            .redAccent,
+                                                      )
                                                           : null,
                                                     ),
                                                     width: 76,
                                                     height: 68,
                                                     child: Column(
                                                       crossAxisAlignment:
-                                                          CrossAxisAlignment
-                                                              .center,
+                                                      CrossAxisAlignment
+                                                          .center,
                                                       mainAxisAlignment:
-                                                          MainAxisAlignment
-                                                              .center,
+                                                      MainAxisAlignment
+                                                          .center,
                                                       children: [
                                                         Image.asset(
                                                           shapeItems[index]
@@ -235,12 +246,12 @@ class _SearchResultState extends State<SearchResult> {
                                                           shapeItems[index]
                                                               .text,
                                                           textAlign:
-                                                              TextAlign.center,
+                                                          TextAlign.center,
                                                           style: AppTextStyles
                                                               .body5M14
                                                               .copyWith(
-                                                                  color: AppColors
-                                                                      .gr800),
+                                                              color: AppColors
+                                                                  .gr800),
                                                         )
                                                       ],
                                                     ),
@@ -263,74 +274,74 @@ class _SearchResultState extends State<SearchResult> {
                                               mainAxisSpacing: 10,
                                               childAspectRatio: (76 / 68),
                                               physics:
-                                                  NeverScrollableScrollPhysics(),
+                                              NeverScrollableScrollPhysics(),
                                               children: List.generate(
                                                   divideLineItems.length,
-                                                  (index) {
-                                                return GestureDetector(
-                                                  onTap: () {
-                                                    setStateModal(() {
-                                                      if (selectedDivideLineItem !=
-                                                          null) {
-                                                        selectedDivideLineItem!
-                                                            .isSelected = false;
-                                                      }
-                                                      selectedDivideLineItem =
+                                                      (index) {
+                                                    return GestureDetector(
+                                                      onTap: () {
+                                                        setStateModal(() {
+                                                          if (selectedDivideLineItem !=
+                                                              null) {
+                                                            selectedDivideLineItem!
+                                                                .isSelected = false;
+                                                          }
+                                                          selectedDivideLineItem =
                                                           divideLineItems[
-                                                              index];
-                                                      selectedDivideLineItem!
-                                                          .isSelected = true;
-                                                      divideLineText =
+                                                          index];
+                                                          selectedDivideLineItem!
+                                                              .isSelected = true;
+                                                          divideLineText =
+                                                              divideLineItems[index]
+                                                                  .text;
+                                                        });
+                                                      },
+                                                      child: Container(
+                                                        decoration: BoxDecoration(
+                                                          color: AppColors.gr200,
+                                                          border:
                                                           divideLineItems[index]
-                                                              .text;
-                                                    });
-                                                  },
-                                                  child: Container(
-                                                    decoration: BoxDecoration(
-                                                      color: AppColors.gr200,
-                                                      border:
-                                                          divideLineItems[index]
-                                                                  .isSelected
+                                                              .isSelected
                                                               ? Border.all(
-                                                                  width: 2.0,
-                                                                  color: Colors
-                                                                      .redAccent,
-                                                                )
+                                                            width: 2.0,
+                                                            color: Colors
+                                                                .redAccent,
+                                                          )
                                                               : null,
-                                                    ),
-                                                    width: 76,
-                                                    height: 68,
-                                                    child: Column(
-                                                      crossAxisAlignment:
+                                                        ),
+                                                        width: 76,
+                                                        height: 68,
+                                                        child: Column(
+                                                          crossAxisAlignment:
                                                           CrossAxisAlignment
                                                               .center,
-                                                      mainAxisAlignment:
+                                                          mainAxisAlignment:
                                                           MainAxisAlignment
                                                               .center,
-                                                      children: [
-                                                        Image.asset(
-                                                          divideLineItems[index]
-                                                              .image,
-                                                          width: 36,
-                                                          height: 36,
-                                                        ),
-                                                        Gaps.h10,
-                                                        Text(
-                                                          divideLineItems[index]
-                                                              .text,
-                                                          textAlign:
+                                                          children: [
+                                                            Image.asset(
+                                                              divideLineItems[index]
+                                                                  .image,
+                                                              width: 36,
+                                                              height: 36,
+                                                            ),
+                                                            Gaps.h10,
+                                                            Text(
+                                                              divideLineItems[index]
+                                                                  .text,
+                                                              textAlign:
                                                               TextAlign.center,
-                                                          style: AppTextStyles
-                                                              .body5M14
-                                                              .copyWith(
+                                                              style: AppTextStyles
+                                                                  .body5M14
+                                                                  .copyWith(
                                                                   color: AppColors
                                                                       .gr800),
-                                                        )
-                                                      ],
-                                                    ),
-                                                  ),
-                                                );
-                                              }),
+                                                            )
+                                                          ],
+                                                        ),
+                                                      ),
+                                                    );
+                                                  }),
                                             ),
                                           ),
                                           Text(
@@ -347,7 +358,7 @@ class _SearchResultState extends State<SearchResult> {
                                               childAspectRatio: (36 / 62),
                                               // 아이템 폭 대 높이 비율 조정
                                               physics:
-                                                  NeverScrollableScrollPhysics(),
+                                              NeverScrollableScrollPhysics(),
 
                                               children: List.generate(
                                                   colorItems.length, (index) {
@@ -360,7 +371,7 @@ class _SearchResultState extends State<SearchResult> {
                                                             .isSelected = false;
                                                       }
                                                       selectedColorItem =
-                                                          colorItems[index];
+                                                      colorItems[index];
                                                       selectedColorItem!
                                                           .isSelected = true;
                                                       colorText =
@@ -370,33 +381,33 @@ class _SearchResultState extends State<SearchResult> {
                                                   },
                                                   child: Column(
                                                     crossAxisAlignment:
-                                                        CrossAxisAlignment
-                                                            .center,
+                                                    CrossAxisAlignment
+                                                        .center,
                                                     mainAxisAlignment:
-                                                        MainAxisAlignment
-                                                            .center,
+                                                    MainAxisAlignment
+                                                        .center,
                                                     children: [
                                                       Container(
                                                         height: 22,
                                                         width: 22,
                                                         decoration:
-                                                            BoxDecoration(
+                                                        BoxDecoration(
                                                           color:
-                                                              colorItems[index]
-                                                                  .color,
+                                                          colorItems[index]
+                                                              .color,
                                                           borderRadius:
-                                                              BorderRadius.all(
-                                                                  Radius
-                                                                      .circular(
-                                                                          45)),
+                                                          BorderRadius.all(
+                                                              Radius
+                                                                  .circular(
+                                                                  45)),
                                                           border: colorItems[
-                                                                      index]
-                                                                  .isSelected
+                                                          index]
+                                                              .isSelected
                                                               ? Border.all(
-                                                                  width: 2.0,
-                                                                  color: Colors
-                                                                      .redAccent,
-                                                                )
+                                                            width: 2.0,
+                                                            color: Colors
+                                                                .redAccent,
+                                                          )
                                                               : null,
                                                         ),
                                                       ),
@@ -404,12 +415,12 @@ class _SearchResultState extends State<SearchResult> {
                                                       Text(
                                                         colorItems[index].text,
                                                         textAlign:
-                                                            TextAlign.center,
+                                                        TextAlign.center,
                                                         style: AppTextStyles
                                                             .body5M14
                                                             .copyWith(
-                                                                color: AppColors
-                                                                    .gr800),
+                                                            color: AppColors
+                                                                .gr800),
                                                       )
                                                     ],
                                                   ),
@@ -430,79 +441,79 @@ class _SearchResultState extends State<SearchResult> {
                                               mainAxisSpacing: 10,
                                               childAspectRatio: (76 / 68),
                                               physics:
-                                                  NeverScrollableScrollPhysics(),
+                                              NeverScrollableScrollPhysics(),
                                               // 스크롤 내부에서만 작동
 
                                               children: List.generate(
                                                   formulationItems.length,
-                                                  (index) {
-                                                return GestureDetector(
-                                                  onTap: () {
-                                                    setStateModal(() {
-                                                      if (selectedFormulationItem !=
-                                                          null) {
-                                                        selectedFormulationItem!
-                                                            .isSelected = false;
-                                                      }
-                                                      selectedFormulationItem =
+                                                      (index) {
+                                                    return GestureDetector(
+                                                      onTap: () {
+                                                        setStateModal(() {
+                                                          if (selectedFormulationItem !=
+                                                              null) {
+                                                            selectedFormulationItem!
+                                                                .isSelected = false;
+                                                          }
+                                                          selectedFormulationItem =
                                                           formulationItems[
-                                                              index];
-                                                      selectedFormulationItem!
-                                                          .isSelected = true;
-                                                      formulationText =
-                                                          formulationItems[
-                                                                  index]
-                                                              .text;
-                                                    });
-                                                  },
-                                                  child: Container(
-                                                    decoration: BoxDecoration(
-                                                      color: AppColors.gr200,
-                                                      border: formulationItems[
-                                                                  index]
+                                                          index];
+                                                          selectedFormulationItem!
+                                                              .isSelected = true;
+                                                          formulationText =
+                                                              formulationItems[
+                                                              index]
+                                                                  .text;
+                                                        });
+                                                      },
+                                                      child: Container(
+                                                        decoration: BoxDecoration(
+                                                          color: AppColors.gr200,
+                                                          border: formulationItems[
+                                                          index]
                                                               .isSelected
-                                                          ? Border.all(
-                                                              width: 2.0,
-                                                              color: Colors
-                                                                  .redAccent,
-                                                            )
-                                                          : null,
-                                                    ),
-                                                    width: 76,
-                                                    height: 68,
-                                                    child: Column(
-                                                      crossAxisAlignment:
+                                                              ? Border.all(
+                                                            width: 2.0,
+                                                            color: Colors
+                                                                .redAccent,
+                                                          )
+                                                              : null,
+                                                        ),
+                                                        width: 76,
+                                                        height: 68,
+                                                        child: Column(
+                                                          crossAxisAlignment:
                                                           CrossAxisAlignment
                                                               .center,
-                                                      mainAxisAlignment:
+                                                          mainAxisAlignment:
                                                           MainAxisAlignment
                                                               .center,
-                                                      children: [
-                                                        Image.asset(
-                                                          formulationItems[
-                                                                  index]
-                                                              .image,
-                                                          width: 36,
-                                                          height: 36,
-                                                        ),
-                                                        Gaps.h10,
-                                                        Text(
-                                                          formulationItems[
-                                                                  index]
-                                                              .text,
-                                                          textAlign:
+                                                          children: [
+                                                            Image.asset(
+                                                              formulationItems[
+                                                              index]
+                                                                  .image,
+                                                              width: 36,
+                                                              height: 36,
+                                                            ),
+                                                            Gaps.h10,
+                                                            Text(
+                                                              formulationItems[
+                                                              index]
+                                                                  .text,
+                                                              textAlign:
                                                               TextAlign.center,
-                                                          style: AppTextStyles
-                                                              .body5M14
-                                                              .copyWith(
+                                                              style: AppTextStyles
+                                                                  .body5M14
+                                                                  .copyWith(
                                                                   color: AppColors
                                                                       .gr800),
-                                                        )
-                                                      ],
-                                                    ),
-                                                  ),
-                                                );
-                                              }),
+                                                            )
+                                                          ],
+                                                        ),
+                                                      ),
+                                                    );
+                                                  }),
                                             ),
                                           ),
                                         ],
@@ -515,7 +526,7 @@ class _SearchResultState extends State<SearchResult> {
                                     margin: EdgeInsets.all(20),
                                     decoration: BoxDecoration(
                                       borderRadius:
-                                          BorderRadius.all(Radius.circular(8)),
+                                      BorderRadius.all(Radius.circular(8)),
                                       color: AppColors.softTeal,
                                     ),
                                     child: OutlinedButton(
@@ -646,80 +657,80 @@ class _SearchResultState extends State<SearchResult> {
             ),
             Gaps.h16,
             Text(
-              '검색 결과 0건',
+              '검색 결과 10건',
               style: AppTextStyles.body5M14,
             ),
             Gaps.h12,
             Expanded(
               child: ListView.separated(
-                  itemCount: drugs.length,
-                  itemBuilder: (context, index) {
-                    final drug = drugs[index];
-                    return GestureDetector(
-                      onTap: () async {
-                        await apiClient.searchGet(context, drug.serialNumber);
-                        navigateToPillDetail(drug.serialNumber);
-                      },
-                      child: Container(
-                        width: 336,
-                        height: 96,
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            Image.network(
-                              drug.imgUrl,
-                              width: 96,
-                              height: 96,
-                            ),
-                            Gaps.w16,
-                            Container(
-                              width: 200,
-                              child: Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                                  Text(
-                                    drug.name,
-                                    style: AppTextStyles.body1S16,
-                                    overflow: TextOverflow.ellipsis,
-                                  ),
-                                  Gaps.h6,
-                                  Text(
-                                    '제품명 : ${drug.name}',
-                                    style: AppTextStyles.body5M14,
-                                    overflow: TextOverflow.ellipsis,
-                                  ),
-                                  Text(
-                                    '제조회사 : ${drug.enterprise}',
-                                    style: AppTextStyles.body5M14,
-                                    overflow: TextOverflow.ellipsis,
-                                  ),
-                                  Text(
-                                    '분류 : ${drug.classification}',
-                                    style: AppTextStyles.body5M14,
-                                    overflow: TextOverflow.ellipsis,
-                                  ),
-                                ],
-                              ),
-                            ),
-                            Align(
-                              alignment: Alignment.topRight,
-                              child: GestureDetector(
-                                onTap: () => _toggleBookmark(index),
-                                child: Image.asset(
-                                  drug.isBookmarked
-                                      ? 'assets/bookmarkclicked.png'
-                                      : 'assets/bookmark.png',
-                                  width: 20,
-                                  height: 20,
+                itemCount: drugs.length,
+                itemBuilder: (context, index) {
+                  final drug = drugs[index];
+                  return GestureDetector(
+                    onTap: () async {
+                      await apiClient.searchGet(context, drug.serialNumber);
+                      navigateToPillDetail(drug.serialNumber, drug.imgUrl);
+                    },
+                    child: Container(
+                      width: 336,
+                      height: 96,
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Image.network(
+                            drug.imgUrl,
+                            width: 96,
+                            height: 96,
+                          ),
+                          Gaps.w16,
+                          Container(
+                            width: 200,
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Text(
+                                  drug.name,
+                                  style: AppTextStyles.body1S16,
+                                  overflow: TextOverflow.ellipsis,
                                 ),
+                                Gaps.h6,
+                                Text(
+                                  '제품명 : ${drug.name}',
+                                  style: AppTextStyles.body5M14,
+                                  overflow: TextOverflow.ellipsis,
+                                ),
+                                Text(
+                                  '제조회사 : ${drug.enterprise}',
+                                  style: AppTextStyles.body5M14,
+                                  overflow: TextOverflow.ellipsis,
+                                ),
+                                Text(
+                                  '분류 : ${drug.classification}',
+                                  style: AppTextStyles.body5M14,
+                                  overflow: TextOverflow.ellipsis,
+                                ),
+                              ],
+                            ),
+                          ),
+                          Align(
+                            alignment: Alignment.topRight,
+                            child: GestureDetector(
+                              onTap: () => _toggleBookmark(index),
+                              child: Image.asset(
+                                drug.isBookmarked
+                                    ? 'assets/bookmarkclicked.png'
+                                    : 'assets/bookmark.png',
+                                width: 20,
+                                height: 20,
                               ),
                             ),
-                            Gaps.h16,
-                          ],
-                        ),
+                          ),
+                          Gaps.h16,
+                        ],
                       ),
-                    );
-                  }, separatorBuilder: (context, index) => Gaps.h8,),
+                    ),
+                  );
+                }, separatorBuilder: (context, index) => Gaps.h8,),
             ),
           ],
         ),

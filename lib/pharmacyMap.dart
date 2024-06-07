@@ -75,42 +75,55 @@ class _PharmacyMapState extends State<PharmacyMap> {
 
   List<Map<String, dynamic>> pharmacyList = [
     {
-      'name': '광운약국',
+      'name': '신태평 약국',
+      'status': '영업중',
+      'distance': '200m | 서울 노원구',
+      'hours': '월-금: 09:00-19:30',
+      'position': LatLng(37.62145647928562, 127.05910319834672),
+    },
+    {
+      'name': '수암약국',
       'status': '영업중',
       'distance': '300m | 서울 노원구',
-      'hours': '월-금: 09:00-18:00',
-      'position': LatLng(37.619418, 127.059704),
+      'hours': '월-금: 09:00-18:30',
+      'position': LatLng(37.62258922114194, 127.05959967347209),
     },
     {
-      'name': '참조은약국',
+      'name': '다나약국',
       'status': '영업중',
-      'distance': '500m | 서울 노원구',
-      'hours': '월-토: 09:00-20:00',
-      'position': LatLng(37.619758, 127.060372),
+      'distance': '445m | 서울 노원구',
+      'hours': '월-금: 09:00-19:00',
+      'position': LatLng(37.622924015347145, 127.06120845368457),
     },
     {
-      'name': '미소약국',
-      'status': '영업 종료',
-      'distance': '700m | 서울 노원구',
-      'hours': '월-일: 09:00-22:00',
-      'position': LatLng(37.619267, 127.058674),
+      'name': '월계 365 약국',
+      'status': '영업중',
+      'distance': '430m | 서울 노원구',
+      'hours': '월-금: 10:00-23:00',
+      'position': LatLng(37.6231562725574, 127.0607187258027),
     },
   ];
-
   List<Map<String, dynamic>> nightPharmacyList = [
     {
-      'name': '24시약국',
+      'name': '월계 365 약국',
       'status': '영업중',
-      'distance': '1km | 서울 노원구',
-      'hours': '24시간 운영',
-      'position': LatLng(37.620950, 127.060312),
+      'distance': '430m | 서울 노원구',
+      'hours': '월-금: 10:00-23:00',
+      'position': LatLng(37.6231562725574, 127.0607187258027),
     },
     {
-      'name': '야간약국',
+      'name': '팜프라자약국',
       'status': '영업중',
-      'distance': '1.2km | 서울 노원구',
-      'hours': '월-일: 22:00-06:00',
-      'position': LatLng(37.621541, 127.061073),
+      'distance': '1.1km',
+      'hours': '월-일: 10:00-22:00',
+      'position': LatLng(37.62515144987384, 127.07349538050501),
+    },
+    {
+      'name': '청년약국',
+      'status': '영업중',
+      'distance': '2.7km',
+      'hours': '매일: 11:00-22:00',
+      'position': LatLng(37.628133794622116, 127.07690531699147),
     },
   ];
 
@@ -121,7 +134,8 @@ class _PharmacyMapState extends State<PharmacyMap> {
     });
 
     if (_currentPosition != null) {
-      print('Current Position: Latitude: ${_currentPosition!.latitude}, Longitude: ${_currentPosition!.longitude}');
+      print(
+          'Current Position: Latitude: ${_currentPosition!.latitude}, Longitude: ${_currentPosition!.longitude}');
     } else {
       print('Current Position is not available.');
     }
@@ -203,7 +217,8 @@ class _PharmacyMapState extends State<PharmacyMap> {
                                   ),
                                   SizedBox(width: 8),
                                   Container(
-                                    padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+                                    padding: const EdgeInsets.symmetric(
+                                        horizontal: 8, vertical: 4),
                                     decoration: BoxDecoration(
                                       color: _getStatusBackgroundColor(status),
                                       borderRadius: BorderRadius.circular(4),
@@ -299,7 +314,8 @@ class _PharmacyMapState extends State<PharmacyMap> {
                         ),
                         SizedBox(width: 8),
                         Container(
-                          padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+                          padding: const EdgeInsets.symmetric(
+                              horizontal: 8, vertical: 4),
                           decoration: BoxDecoration(
                             color: _getStatusBackgroundColor('영업중'),
                             borderRadius: BorderRadius.circular(4),
@@ -457,7 +473,8 @@ class _PharmacyMapState extends State<PharmacyMap> {
   }
 
   void _onCameraMove(CameraPosition position) {
-    print('Current Position: Latitude: ${position.target.latitude}, Longitude: ${position.target.longitude}');
+    print(
+        'Current Position: Latitude: ${position.target.latitude}, Longitude: ${position.target.longitude}');
   }
 
   @override
@@ -520,17 +537,18 @@ class _PharmacyMapState extends State<PharmacyMap> {
               child: _currentPosition == null
                   ? Center(child: CircularProgressIndicator())
                   : GoogleMap(
-                onMapCreated: _onMapCreated,
-                initialCameraPosition: CameraPosition(
-                  target: LatLng(_currentPosition!.latitude, _currentPosition!.longitude),
-                  zoom: 17.0,
-                ),
-                myLocationEnabled: true,
-                myLocationButtonEnabled: true,
-                mapType: _currentMapType,
-                markers: _markers,
-                onCameraMove: _onCameraMove,
-              ),
+                      onMapCreated: _onMapCreated,
+                      initialCameraPosition: CameraPosition(
+                        target: LatLng(_currentPosition!.latitude,
+                            _currentPosition!.longitude),
+                        zoom: 17.0,
+                      ),
+                      myLocationEnabled: true,
+                      myLocationButtonEnabled: true,
+                      mapType: _currentMapType,
+                      markers: _markers,
+                      onCameraMove: _onCameraMove,
+                    ),
             ),
           ),
         ],

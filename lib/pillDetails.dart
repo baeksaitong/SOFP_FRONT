@@ -9,8 +9,9 @@ import 'globalResponseManager.dart';
 
 class PillDetails extends StatefulWidget {
   final int serialNumber;
+  final String imgUrl; // Add this line
 
-  const PillDetails(this.serialNumber, {super.key});
+  const PillDetails({required this.serialNumber, required this.imgUrl, Key? key}) : super(key: key); // Modify this line
 
   @override
   _PillDetailsState createState() => _PillDetailsState();
@@ -116,8 +117,8 @@ class _PillDetailsState extends State<PillDetails> {
         children: [
           Stack(
             children: [
-              Image.asset(
-                'assets/rect.png', // 약 이미지 파일 경로
+              Image.network(
+                widget.imgUrl, // 약 이미지 파일 경로
                 fit: BoxFit.cover,
               ),
               Positioned(
@@ -148,26 +149,26 @@ class _PillDetailsState extends State<PillDetails> {
             style: AppTextStyles.title2B20,
           ),
           const SizedBox(height: 8.0),
-          Visibility(
-            visible: showWarning,
-            child: Container(
-              padding: const EdgeInsets.all(8.0),
-              decoration: BoxDecoration(
-                color: AppColors.gr100,
-                borderRadius: BorderRadius.circular(8.0),
-              ),
-              child: Row(
-                children: [
-                  Icon(Icons.warning, color: Colors.yellow),
-                  const SizedBox(width: 8.0),
-                  Text(
-                    '000님의 질병에서 주의해야하는 약이에요',
-                    style: AppTextStyles.body5M14.copyWith(color: AppColors.bk),
-                  ),
-                ],
-              ),
-            ),
-          ),
+          // Visibility(
+          //   visible: showWarning,
+          //   child: Container(
+          //     padding: const EdgeInsets.all(8.0),
+          //     decoration: BoxDecoration(
+          //       color: AppColors.gr100,
+          //       borderRadius: BorderRadius.circular(8.0),
+          //     ),
+          //     child: Row(
+          //       children: [
+          //         Icon(Icons.warning, color: Colors.yellow),
+          //         const SizedBox(width: 8.0),
+          //         Text(
+          //           '000님의 질병에서 주의해야하는 약이에요',
+          //           style: AppTextStyles.body5M14.copyWith(color: AppColors.bk),
+          //         ),
+          //       ],
+          //     ),
+          //   ),
+          // ),
           const SizedBox(height: 16.0),
           Text(
             '성분',

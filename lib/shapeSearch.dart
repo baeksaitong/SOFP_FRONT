@@ -175,7 +175,12 @@ class _ShapeSearchState extends State<ShapeSearch> {
                   for (var item in divideLineItems) {
                     item.isSelected = false; // 모든 divideLineItems isSelected를 false로 설정
                   }
+                  showLoading(context, delayed: true); // Show loading spinner with delay
+
                   await apiClient.searchTextAndShape(context, null, shape, keyword, color, formulation, divideLine);
+
+                  hideLoading(context); // Hide loading spinner
+
                   navigateToSearchResult();
                 },
                 style: OutlinedButton.styleFrom(
@@ -919,11 +924,16 @@ class ShapeSearchPage extends StatelessWidget {
             Navigator.pop(context);
           },
         ),      ),
-      body: Row(
-        crossAxisAlignment: CrossAxisAlignment.center,
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: const [
-          ShapeSearch(),
+      body: Stack(
+        children: [
+          Row(
+            crossAxisAlignment: CrossAxisAlignment.center,
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: const [
+              ShapeSearch(),
+            ],
+          ),
+          loadingOverlay(context), // Add the loading overlay here
         ],
       ),
     );

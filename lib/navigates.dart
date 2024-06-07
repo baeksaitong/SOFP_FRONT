@@ -98,7 +98,7 @@ void navigateToSignUp() {
 
 void navigateToPillDetail(int serialNumber) {
   navigatorKey.currentState?.push(
-    MaterialPageRoute(builder: (context) => PillDetails(serialNumber)),
+    MaterialPageRoute(builder: (context) => PillDetails(serialNumber: serialNumber, imgUrl: '')),
   );
 }
 
