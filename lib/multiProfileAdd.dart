@@ -1,13 +1,19 @@
+// Dart imports:
+import 'dart:convert';
 import 'dart:io';
+
+// Flutter imports:
 import 'package:flutter/material.dart';
+
+// Package imports:
+import 'package:http/http.dart' as http;
 import 'package:image_picker/image_picker.dart';
+
+// Project imports:
 import 'package:sopf_front/apiClient.dart';
 import 'package:sopf_front/appColors.dart';
 import 'package:sopf_front/appTextStyles.dart';
 import 'package:sopf_front/gaps.dart';
-import 'package:http/http.dart' as http;
-import 'dart:convert';
-
 import 'package:sopf_front/navigates.dart';
 import 'package:sopf_front/shapeSearch.dart';
 

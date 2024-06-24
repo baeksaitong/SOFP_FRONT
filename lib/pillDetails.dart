@@ -1,11 +1,17 @@
+// Flutter imports:
 import 'package:flutter/material.dart';
+
+// Package imports:
 import 'package:provider/provider.dart';
+
+// Project imports:
 import 'package:sopf_front/apiClient.dart';
 import 'package:sopf_front/provider.dart';
-import 'appTextStyles.dart'; // 원하는 글꼴 스타일이 정의된 파일을 임포트
-import 'appColors.dart'; // 색상 정의 파일을 임포트
 import 'gaps.dart';
 import 'globalResponseManager.dart';
+
+import 'appTextStyles.dart'; // 원하는 글꼴 스타일이 정의된 파일을 임포트
+import 'appColors.dart'; // 색상 정의 파일을 임포트
 
 class PillDetails extends StatefulWidget {
   final int serialNumber;

@@ -1,7 +1,11 @@
+// Flutter imports:
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
-import 'package:sopf_front/appcolors.dart';
 
+// Package imports:
+import 'package:provider/provider.dart';
+
+// Project imports:
+import 'package:sopf_front/appcolors.dart';
 import 'apiClient.dart';
 import 'appTextStyles.dart';
 import 'gaps.dart';

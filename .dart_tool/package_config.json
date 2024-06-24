@@ -482,6 +482,12 @@
       "languageVersion": "2.19"
     },
     {
+      "name": "import_sorter",
+      "rootUri": "file:///Users/mingmaengmung/.pub-cache/hosted/pub.dev/import_sorter-4.6.0",
+      "packageUri": "lib/",
+      "languageVersion": "2.12"
+    },
+    {
       "name": "intl",
       "rootUri": "file:///Users/mingmaengmung/.pub-cache/hosted/pub.dev/intl-0.17.0",
       "packageUri": "lib/",
@@ -890,6 +896,12 @@
       "languageVersion": "2.14"
     },
     {
+      "name": "tint",
+      "rootUri": "file:///Users/mingmaengmung/.pub-cache/hosted/pub.dev/tint-2.0.1",
+      "packageUri": "lib/",
+      "languageVersion": "2.18"
+    },
+    {
       "name": "typed_data",
       "rootUri": "file:///Users/mingmaengmung/.pub-cache/hosted/pub.dev/typed_data-1.3.2",
       "packageUri": "lib/",
@@ -962,7 +974,7 @@
       "languageVersion": "3.3"
     }
   ],
-  "generated": "2024-06-06T22:06:34.773195Z",
+  "generated": "2024-06-24T09:38:31.585381Z",
   "generator": "pub",
   "generatorVersion": "3.5.0-222.0.dev",
   "flutterRoot": "file:///Users/mingmaengmung/flutter",

@@ -1,11 +1,18 @@
+// Dart imports:
+import 'dart:convert';
 import 'dart:io';
-import 'package:camera/camera.dart';
+
+// Flutter imports:
 import 'package:flutter/cupertino.dart';
+
+// Package imports:
+import 'package:camera/camera.dart';
 import 'package:http/http.dart' as http;
 import 'package:image_picker/image_picker.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:provider/provider.dart';
-import 'dart:convert';
+
+// Project imports:
 import 'package:sopf_front/jwtManager.dart';
 import 'package:sopf_front/provider.dart';
 import 'globalResponseManager.dart';
@@ -16,7 +23,7 @@ class APIClient {
   final JWTmanager _jwtManager = JWTmanager();
 
   Future<void> naverLogin(BuildContext context, String code) async {
-    final String url = 'http://15.164.18.65:8080/app/oauth/naver?code=$code';
+    final String url = '$baseUrl/app/oauth/naver?code=$code';
     final response = await http.get(
       Uri.parse(url),
       headers: {'accept': '*/*'},
@@ -51,11 +58,6 @@ class APIClient {
       if(context.mounted) {
         recentViewPillGet(context);
       }
-      // if (jsonResponse['isNew'] == false) {
-      //   navigateToAddAllergy();
-      // } else {
-      //   navigateToHome();
-      // }
     } else {
       print(response.statusCode);
       print('로그인 실패: $jsonResponse');

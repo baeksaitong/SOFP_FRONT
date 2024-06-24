@@ -1,6 +1,11 @@
+// Flutter imports:
 import 'package:flutter/material.dart';
+
+// Package imports:
 import 'package:geolocator/geolocator.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
+
+// Project imports:
 import 'package:sopf_front/appColors.dart';
 
 class PharmacyMap extends StatefulWidget {

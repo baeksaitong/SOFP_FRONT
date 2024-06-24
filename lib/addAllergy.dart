@@ -1,11 +1,17 @@
+// Flutter imports:
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
+
+// Package imports:
 import 'package:dio/dio.dart';
+import 'package:provider/provider.dart';
+
+// Project imports:
 import 'appColors.dart';
 import 'appTextStyles.dart';
 import 'gaps.dart';
-import 'provider.dart';
 import 'navigates.dart';
+import 'provider.dart';
+
 import 'jwtManager.dart'; // JWTmanager 클래스가 정의된 파일을 import
 
 class AddAllergyPage extends StatefulWidget {

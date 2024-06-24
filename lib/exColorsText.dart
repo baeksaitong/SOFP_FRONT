@@ -1,8 +1,9 @@
+// Flutter imports:
 import 'package:flutter/material.dart';
 
+// Project imports:
 import 'appColors.dart';
 import 'appTextStyles.dart';
-
 
 class AppColorsText extends StatelessWidget {
   const AppColorsText({super.key});

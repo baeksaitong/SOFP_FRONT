@@ -1,18 +1,25 @@
+// Dart imports:
+import 'dart:convert';
+
+// Flutter imports:
 import 'package:flutter/material.dart';
+
+// Package imports:
+import 'package:http/http.dart' as http;
+import 'package:provider/provider.dart';
+
+// Project imports:
 import 'package:sopf_front/apiClient.dart';
 import 'package:sopf_front/appColors.dart';
 import 'package:sopf_front/appTextStyles.dart';
 import 'package:sopf_front/login.dart';
 import 'package:sopf_front/multiProfileAdd.dart';
 import 'package:sopf_front/navigates.dart';
-import 'package:http/http.dart' as http;
-import 'dart:convert';
-import 'mypageEdit.dart';
 import 'gaps.dart';
 import 'jwtManager.dart';
+import 'mypageEdit.dart';
 import 'profileEdit.dart';
 import 'provider.dart';
-import 'package:provider/provider.dart';
 
 class MyPage extends StatefulWidget {
   const MyPage({super.key});

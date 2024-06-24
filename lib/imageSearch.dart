@@ -1,12 +1,18 @@
+// Dart imports:
 import 'dart:io';
+
+// Flutter imports:
 import 'package:flutter/material.dart';
+
+// Package imports:
 import 'package:camera/camera.dart';
 import 'package:image_picker/image_picker.dart';
+
+// Project imports:
 import 'package:sopf_front/appColors.dart';
 import 'package:sopf_front/appTextStyles.dart';
 import 'package:sopf_front/gaps.dart';
 import 'package:sopf_front/navigates.dart';
-
 import 'imageSearchResultScreen.dart';
 
 class ImageSearch extends StatelessWidget {

@@ -1,32 +1,35 @@
+// Flutter imports:
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+
+// Package imports:
 import 'package:flutter_spinkit/flutter_spinkit.dart';
+import 'package:provider/provider.dart';
+
+// Project imports:
+import 'package:sopf_front/addAllergy.dart';
 import 'package:sopf_front/addAllergyPage.dart';
-import 'package:sopf_front/globalResponseManager.dart';
 import 'package:sopf_front/appColors.dart';
 import 'package:sopf_front/appTextStyles.dart';
+import 'package:sopf_front/categoryDetail.dart';
+import 'package:sopf_front/categoryPlus.dart';
+import 'package:sopf_front/favoritePage.dart';
 import 'package:sopf_front/gaps.dart';
+import 'package:sopf_front/globalResponseManager.dart';
+import 'package:sopf_front/loginNaver.dart';
 import 'package:sopf_front/mypage.dart';
 import 'package:sopf_front/pillDetails.dart';
-import 'package:sopf_front/addAllergy.dart';
+import 'package:sopf_front/preferencesPage.dart';
 import 'package:sopf_front/recentHistoryPill.dart';
 import 'package:sopf_front/searchResult.dart';
 import 'package:sopf_front/signUp.dart';
-import 'package:sopf_front/loginNaver.dart';
-import 'package:sopf_front/textSearch.dart';
-import 'package:sopf_front/preferencesPage.dart';
-import 'package:sopf_front/favoritePage.dart';
 import 'package:sopf_front/taskingPillList.dart';
-import 'package:sopf_front/categoryPlus.dart';
-import 'package:sopf_front/categoryDetail.dart';
-
+import 'package:sopf_front/textSearch.dart';
 import 'categoryPlus.dart';
 import 'customerServiceCenter.dart';
 import 'home.dart';
-import 'main.dart';
-
-import 'package:provider/provider.dart';
 import 'loading_provider.dart';
+import 'main.dart';
 import 'multiProfileAdd.dart';
 
 void showLoading(BuildContext context, {bool delayed = false}) {

@@ -1,12 +1,19 @@
+// Dart imports:
 import 'dart:convert';
 import 'dart:io';
+
+// Flutter imports:
 import 'package:flutter/material.dart';
-import 'package:image_picker/image_picker.dart';
+
+// Package imports:
 import 'package:http/http.dart' as http;
+import 'package:image_picker/image_picker.dart';
+
+// Project imports:
 import 'package:sopf_front/appColors.dart';
 import 'package:sopf_front/globalResponseManager.dart';
-import 'gaps.dart';
 import 'package:sopf_front/provider.dart';
+import 'gaps.dart';
 import 'jwtManager.dart';
 
 class MyPageEdit extends StatefulWidget {

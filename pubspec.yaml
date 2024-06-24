@@ -57,6 +57,7 @@ dependencies:
   location: ^6.0.2
   syncfusion_flutter_maps: ^25.2.5
   geolocator: ^7.6.2
+  import_sorter: ^4.6.0
 
 dev_dependencies:
   flutter_test:

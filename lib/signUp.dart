@@ -1,11 +1,18 @@
-import 'package:flutter/material.dart';
-import 'package:fluttertoast/fluttertoast.dart';
+// Dart imports:
 import 'dart:async';
-import 'gaps.dart';
-import 'appcolors.dart';
-import 'appTextStyles.dart';
+
+// Flutter imports:
+import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+
+// Package imports:
+import 'package:fluttertoast/fluttertoast.dart';
+
+// Project imports:
 import 'apiClient.dart';
+import 'appTextStyles.dart';
+import 'appcolors.dart';
+import 'gaps.dart';
 
 void main() {
   runApp(MaterialApp(

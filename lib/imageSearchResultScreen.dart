@@ -1,10 +1,16 @@
+// Dart imports:
+import 'dart:io';
+
+// Flutter imports:
 import 'package:flutter/material.dart';
+
+// Package imports:
+import 'package:image_picker/image_picker.dart';
+
+// Project imports:
 import 'package:sopf_front/appColors.dart';
 import 'package:sopf_front/appTextStyles.dart';
 import 'package:sopf_front/gaps.dart';
-import 'package:image_picker/image_picker.dart';
-import 'dart:io';
-
 import 'apiClient.dart';
 import 'globalResponseManager.dart';
 import 'home.dart';

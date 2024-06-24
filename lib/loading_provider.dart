@@ -1,7 +1,11 @@
+// Flutter imports:
 import 'package:flutter/material.dart';
+
+// Package imports:
 import 'package:lottie/lottie.dart';
 import 'package:provider/provider.dart';
 
+// Project imports:
 import 'appColors.dart';
 
 class LoadingProvider with ChangeNotifier {

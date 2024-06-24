@@ -1,15 +1,22 @@
+// Dart imports:
 import 'dart:convert';
+
+// Flutter imports:
 import 'package:flutter/material.dart';
+
+// Package imports:
+import 'package:intl/date_symbol_data_local.dart';
+import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+import 'package:table_calendar/table_calendar.dart';
+
+// Project imports:
 import 'package:sopf_front/apiClient.dart';
 import 'package:sopf_front/provider.dart';
 import 'package:sopf_front/shapeSearch.dart';
-import 'package:table_calendar/table_calendar.dart';
-import 'package:intl/intl.dart';
-import 'package:intl/date_symbol_data_local.dart';
-import 'package:shared_preferences/shared_preferences.dart';
-import 'appTextStyles.dart';
 import 'appColors.dart';
+import 'appTextStyles.dart';
 import 'gaps.dart';
 
 class CalendarDetails {

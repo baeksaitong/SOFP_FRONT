@@ -1,6 +1,12 @@
+// Flutter imports:
 import 'package:flutter/material.dart';
+
+// Package imports:
 import 'package:flutter_webview_plugin/flutter_webview_plugin.dart';
+
+// Project imports:
 import 'package:sopf_front/apiClient.dart';
+
 import 'package:sopf_front/navigates.dart'; // navigateToAddAllergy 함수가 정의된 파일을 import 합니다.
 
 class NaverWebViewPage extends StatefulWidget {

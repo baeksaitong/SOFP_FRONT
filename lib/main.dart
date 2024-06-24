@@ -1,27 +1,32 @@
+// Flutter imports:
 import 'package:flutter/material.dart';
+
+// Package imports:
+import 'package:camera/camera.dart';
 import 'package:intl/date_symbol_data_local.dart';
+import 'package:lottie/lottie.dart';
 import 'package:permission_handler/permission_handler.dart';
+import 'package:provider/provider.dart';
+
+// Project imports:
 import 'package:sopf_front/addAllergyPage.dart';
 import 'package:sopf_front/exColorsText.dart';
+import 'package:sopf_front/exColorsText.dart';
 import 'package:sopf_front/googleMap.dart';
+import 'package:sopf_front/imageSearch.dart';
 import 'package:sopf_front/login.dart';
-import 'package:sopf_front/pillDetails.dart';
+import 'package:sopf_front/login.dart';
 import 'package:sopf_front/pharmacyMap.dart';
+import 'package:sopf_front/pillDetails.dart';
+import 'package:sopf_front/provider.dart';
 import 'package:sopf_front/searchResult.dart';
 import 'package:sopf_front/signUp.dart';
 import 'package:sopf_front/textSearch.dart';
+import 'appColors.dart';
 import 'calenderFirstPage.dart';
 import 'home.dart';
-import 'mypage.dart';
-import 'appColors.dart';
-import 'package:camera/camera.dart';
-import 'package:sopf_front/exColorsText.dart';
-import 'package:sopf_front/imageSearch.dart';
-import 'package:lottie/lottie.dart';
-import 'package:provider/provider.dart';
-import 'package:sopf_front/login.dart';
-import 'package:sopf_front/provider.dart';
 import 'loading_provider.dart';
+import 'mypage.dart';
 
 /* hanjo
 void main() async {

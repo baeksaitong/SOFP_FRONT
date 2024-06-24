@@ -1,0 +1,1 @@
+ /Users/mingmaengmung/Documents/GitHub/SOFP_FRONT/.dart_tool/flutter_build/a28dbeb66d426021a5e7a4becca692e5/native_assets.yaml: 

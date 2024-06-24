@@ -1,11 +1,13 @@
+// Flutter imports:
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
+
+// Project imports:
 import 'package:sopf_front/apiClient.dart';
 import 'package:sopf_front/navigates.dart';
 import 'package:sopf_front/pillDetails.dart';
 import 'package:sopf_front/shapeSearch.dart';
-
 import 'appColors.dart';
 import 'appTextStyles.dart';
 import 'gaps.dart';

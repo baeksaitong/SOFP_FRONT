@@ -1,22 +1,28 @@
+// Dart imports:
 import 'dart:convert';
 
+// Flutter imports:
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
+
+// Package imports:
 import 'package:provider/provider.dart';
+
+// Project imports:
 import 'package:sopf_front/appColors.dart';
+import 'package:sopf_front/calenderFirstPage.dart';
 import 'package:sopf_front/gaps.dart';
+import 'package:sopf_front/mypage.dart';
 import 'package:sopf_front/navigates.dart';
 import 'package:sopf_front/pharmacyMap.dart';
 import 'package:sopf_front/provider.dart';
 import 'package:sopf_front/shapeSearch.dart';
 import 'package:sopf_front/textSearch.dart';
-import 'package:sopf_front/mypage.dart';
-import 'package:sopf_front/calenderFirstPage.dart';
-import 'appTextStyles.dart';
 import 'apiClient.dart';
 import 'appTextStyles.dart';
+import 'appTextStyles.dart';
 import 'globalResponseManager.dart';
-import 'package:flutter/services.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({super.key});

@@ -1,12 +1,17 @@
-import 'package:camera/camera.dart';
+// Flutter imports:
 import 'package:flutter/material.dart';
+
+// Package imports:
+import 'package:camera/camera.dart';
 import 'package:permission_handler/permission_handler.dart';
-import 'package:sopf_front/imageSearch.dart';
+
+// Project imports:
 import 'package:sopf_front/appColors.dart';
+import 'package:sopf_front/imageSearch.dart';
 import 'package:sopf_front/navigates.dart';
 import 'apiClient.dart';
-import 'gaps.dart';
 import 'appTextStyles.dart';
+import 'gaps.dart';
 
 class TextSearch extends StatefulWidget {
   const TextSearch({super.key});
