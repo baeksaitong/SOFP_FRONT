@@ -8,7 +8,6 @@ import 'package:provider/provider.dart';
 
 // Project imports:
 import 'package:sopf_front/addAllergy.dart';
-import 'package:sopf_front/addAllergyPage.dart';
 import 'package:sopf_front/appColors.dart';
 import 'package:sopf_front/appTextStyles.dart';
 import 'package:sopf_front/categoryDetail.dart';

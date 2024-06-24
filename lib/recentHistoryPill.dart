@@ -1,9 +1,6 @@
 // Flutter imports:
 import 'package:flutter/material.dart';
 
-// Package imports:
-import 'package:provider/provider.dart';
-
 // Project imports:
 import 'package:sopf_front/appcolors.dart';
 import 'apiClient.dart';

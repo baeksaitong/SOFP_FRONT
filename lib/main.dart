@@ -9,7 +9,6 @@ import 'package:permission_handler/permission_handler.dart';
 import 'package:provider/provider.dart';
 
 // Project imports:
-import 'package:sopf_front/addAllergyPage.dart';
 import 'package:sopf_front/exColorsText.dart';
 import 'package:sopf_front/exColorsText.dart';
 import 'package:sopf_front/googleMap.dart';
