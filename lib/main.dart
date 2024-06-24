@@ -9,23 +9,18 @@ import 'package:permission_handler/permission_handler.dart';
 import 'package:provider/provider.dart';
 
 // Project imports:
-import 'package:sopf_front/exColorsText.dart';
-import 'package:sopf_front/exColorsText.dart';
-import 'package:sopf_front/googleMap.dart';
-import 'package:sopf_front/imageSearch.dart';
-import 'package:sopf_front/login.dart';
-import 'package:sopf_front/login.dart';
-import 'package:sopf_front/pharmacyMap.dart';
-import 'package:sopf_front/pillDetails.dart';
-import 'package:sopf_front/provider.dart';
-import 'package:sopf_front/searchResult.dart';
-import 'package:sopf_front/signUp.dart';
-import 'package:sopf_front/textSearch.dart';
-import 'appColors.dart';
-import 'calenderFirstPage.dart';
+import 'package:sopf_front/screens/search/search_image.dart';
+import 'package:sopf_front/screens/map/map_pharmacy.dart';
+import 'package:sopf_front/screens/search/result/serach_result_pill_detail.dart';
+import 'package:sopf_front/providers/provider.dart';
+import 'package:sopf_front/screens/search/result/search_result.dart';
+import 'package:sopf_front/screens/search/search_text.dart';
+import 'package:sopf_front/screens/sign/sign_in.dart';
+import 'constans/colors.dart';
+import 'screens/calendar/calenderPage.dart';
 import 'home.dart';
-import 'loading_provider.dart';
-import 'mypage.dart';
+import 'providers/provider_loading.dart';
+import 'screens/mypage/mypage.dart';
 
 /* hanjo
 void main() async {

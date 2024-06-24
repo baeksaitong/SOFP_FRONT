@@ -10,19 +10,19 @@ import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
 
 // Project imports:
-import 'package:sopf_front/appColors.dart';
-import 'package:sopf_front/calenderFirstPage.dart';
-import 'package:sopf_front/gaps.dart';
-import 'package:sopf_front/mypage.dart';
+import 'package:sopf_front/constans/colors.dart';
+import 'package:sopf_front/screens/calendar/calenderPage.dart';
+import 'package:sopf_front/constans/gaps.dart';
+import 'package:sopf_front/screens/mypage/mypage.dart';
 import 'package:sopf_front/navigates.dart';
-import 'package:sopf_front/pharmacyMap.dart';
-import 'package:sopf_front/provider.dart';
-import 'package:sopf_front/shapeSearch.dart';
-import 'package:sopf_front/textSearch.dart';
-import 'apiClient.dart';
-import 'appTextStyles.dart';
-import 'appTextStyles.dart';
-import 'globalResponseManager.dart';
+import 'package:sopf_front/screens/map/map_pharmacy.dart';
+import 'package:sopf_front/providers/provider.dart';
+import 'package:sopf_front/screens/search/search_shape.dart';
+import 'package:sopf_front/screens/search/search_text.dart';
+import 'managers/apiClient.dart';
+import 'constans/text_styles.dart';
+import 'constans/text_styles.dart';
+import 'managers/globalResponseManager.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({super.key});
