@@ -1,0 +1,8 @@
+#!/bin/sh
+# post-checkout git hook
+# 브랜치가 변경될 때마다 .env 파일을 복사
+
+# .env.backup 파일이 존재하면 .env 파일로 복사
+if [ -f .env.backup ]; then
+    cp .env.backup .env
+fi
