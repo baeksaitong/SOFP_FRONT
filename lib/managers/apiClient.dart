@@ -7,6 +7,7 @@ import 'package:flutter/cupertino.dart';
 
 // Package imports:
 import 'package:camera/camera.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:http/http.dart' as http;
 import 'package:image_picker/image_picker.dart';
 import 'package:path_provider/path_provider.dart';
@@ -19,7 +20,7 @@ import 'globalResponseManager.dart';
 import '../navigates.dart';
 
 class APIClient {
-  static const String baseUrl = 'http://15.164.18.65:8080';
+  static String? baseUrl = dotenv.env['API_URL'];
   final JWTmanager _jwtManager = JWTmanager();
 
   Future<void> naverLogin(BuildContext context, String code) async {

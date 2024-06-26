@@ -17,3 +17,6 @@ ios/Pods/
 # Generated files
 *.log
 pubspec.lock
+
+# Environment variables
+.env
