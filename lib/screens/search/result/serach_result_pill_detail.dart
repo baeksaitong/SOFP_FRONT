@@ -5,25 +5,25 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 // Project imports:
-import 'package:sopf_front/managers/apiClient.dart';
+import 'package:sopf_front/managers/managers_api_client.dart';
 import 'package:sopf_front/providers/provider.dart';
 import '../../../constans/gaps.dart';
-import '../../../managers/globalResponseManager.dart';
+import '../../../managers/managers_global_response.dart';
 
 import '../../../constans/text_styles.dart'; // 원하는 글꼴 스타일이 정의된 파일을 임포트
 import '../../../constans/colors.dart'; // 색상 정의 파일을 임포트
 
-class PillDetails extends StatefulWidget {
+class SearchResultPillDetail extends StatefulWidget {
   final int serialNumber;
   final String imgUrl; // Add this line
 
-  const PillDetails({required this.serialNumber, required this.imgUrl, Key? key}) : super(key: key); // Modify this line
+  const SearchResultPillDetail({required this.serialNumber, required this.imgUrl, Key? key}) : super(key: key); // Modify this line
 
   @override
-  _PillDetailsState createState() => _PillDetailsState();
+  _SearchResultPillDetailState createState() => _SearchResultPillDetailState();
 }
 
-class _PillDetailsState extends State<PillDetails> {
+class _SearchResultPillDetailState extends State<SearchResultPillDetail> {
   bool showWarning = true; // 초기에는 주의사항을 보이게 설정
   bool isFavorite = false; // 즐겨찾기 상태
 

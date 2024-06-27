@@ -14,12 +14,12 @@ import 'package:sopf_front/constans/colors.dart';
 import 'package:sopf_front/constans/text_styles.dart';
 import 'package:sopf_front/constans/gaps.dart';
 
-class multiProfileEdit extends StatefulWidget {
+class MultiProfileEdit extends StatefulWidget {
   @override
-  _multiProfileEditState createState() => _multiProfileEditState();
+  _MultiProfileEditState createState() => _MultiProfileEditState();
 }
 
-class _multiProfileEditState extends State<multiProfileEdit> {
+class _MultiProfileEditState extends State<MultiProfileEdit> {
   int selectedYear = DateTime.now().year;
   int selectedMonth = DateTime.now().month;
   int selectedDay = DateTime.now().day;

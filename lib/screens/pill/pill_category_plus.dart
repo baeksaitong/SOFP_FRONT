@@ -3,7 +3,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
 // Project imports:
-import 'package:sopf_front/managers/apiClient.dart';
+import 'package:sopf_front/managers/managers_api_client.dart';
 import 'package:sopf_front/navigates.dart';
 import '../../constans/gaps.dart';
 
@@ -11,17 +11,17 @@ import 'package:intl/intl.dart'; // 추가: 시간을 형식에 맞게 변환하
 import '../../constans/colors.dart'; // 색상 정의 파일
 import '../../constans/text_styles.dart'; // 텍스트 스타일 정의 파일
 
-class MedicationSchedulePage extends StatefulWidget {
+class PillCategoryPlus extends StatefulWidget {
   final Function(Map<String, dynamic>) onSave;
   final Map<String, dynamic>? category;
 
-  const MedicationSchedulePage({super.key, required this.onSave, this.category});
+  const PillCategoryPlus({super.key, required this.onSave, this.category});
 
   @override
-  _MedicationSchedulePageState createState() => _MedicationSchedulePageState();
+  _PillCategoryPlusState createState() => _PillCategoryPlusState();
 }
 
-class _MedicationSchedulePageState extends State<MedicationSchedulePage> {
+class _PillCategoryPlusState extends State<PillCategoryPlus> {
   bool _pushNotificationEnabled = true;
   final List<String> displayRoutines = []; // UI에 표시할 시간 리스트
   final List<String> apiRoutines = []; // API에 보낼 시간 리스트

@@ -8,12 +8,12 @@ import 'package:google_maps_flutter/google_maps_flutter.dart';
 // Project imports:
 import 'package:sopf_front/constans/colors.dart';
 
-class PharmacyMap extends StatefulWidget {
+class MapPharmacy extends StatefulWidget {
   @override
-  _PharmacyMapState createState() => _PharmacyMapState();
+  _MapPharmacyState createState() => _MapPharmacyState();
 }
 
-class _PharmacyMapState extends State<PharmacyMap> {
+class _MapPharmacyState extends State<MapPharmacy> {
   bool isNearbySelected = false;
   bool isNightSelected = false;
   late GoogleMapController mapController;

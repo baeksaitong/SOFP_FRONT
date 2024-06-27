@@ -15,10 +15,10 @@ import 'package:sopf_front/constans/gaps.dart';
 import 'package:sopf_front/navigates.dart';
 import 'result/search_result_image.dart';
 
-class ImageSearch extends StatelessWidget {
+class SearchImage extends StatelessWidget {
   final List<CameraDescription> cameras;
 
-  const ImageSearch({Key? key, required this.cameras}) : super(key: key);
+  const SearchImage({Key? key, required this.cameras}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -337,7 +337,7 @@ class _CameraScreenState extends State<CameraScreen> {
     Navigator.push(
       context,
       MaterialPageRoute(
-        builder: (context) => SearchResultPage(
+        builder: (context) => SearchResultImage(
           firstImageFile: _firstImageFile, // **첫 번째 이미지 파일 전달**
           secondImageFile: _secondImageFile, // **두 번째 이미지 파일 전달**
         ),

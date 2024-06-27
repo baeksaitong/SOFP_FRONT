@@ -10,7 +10,7 @@ import 'package:http/http.dart' as http;
 import 'package:image_picker/image_picker.dart';
 
 // Project imports:
-import 'package:sopf_front/managers/apiClient.dart';
+import 'package:sopf_front/managers/managers_api_client.dart';
 import 'package:sopf_front/constans/colors.dart';
 import 'package:sopf_front/constans/text_styles.dart';
 import 'package:sopf_front/constans/gaps.dart';

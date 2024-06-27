@@ -12,7 +12,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'package:table_calendar/table_calendar.dart';
 
 // Project imports:
-import 'package:sopf_front/managers/apiClient.dart';
+import 'package:sopf_front/managers/managers_api_client.dart';
 import 'package:sopf_front/providers/provider.dart';
 import 'package:sopf_front/screens/search/search_shape.dart';
 import '../../constans/colors.dart';

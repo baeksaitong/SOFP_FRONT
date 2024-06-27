@@ -19,10 +19,10 @@ import 'package:sopf_front/screens/map/map_pharmacy.dart';
 import 'package:sopf_front/providers/provider.dart';
 import 'package:sopf_front/screens/search/search_shape.dart';
 import 'package:sopf_front/screens/search/search_text.dart';
-import 'managers/apiClient.dart';
+import 'managers/managers_api_client.dart';
 import 'constans/text_styles.dart';
 import 'constans/text_styles.dart';
-import 'managers/globalResponseManager.dart';
+import 'managers/managers_global_response.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({super.key});
@@ -35,7 +35,7 @@ class _HomePageState extends State<HomePage> {
   int _selectedIndex = 1;
 
   static List<Widget> _widgetOptions = <Widget>[
-    PharmacyMap(), // PharmacyMap 구현되면 교체
+    MapPharmacy(), // PharmacyMap 구현되면 교체
     HomePageContent(),
     CalendarPage(),
     MyPage(),
@@ -262,9 +262,9 @@ class HomePageContent extends StatelessWidget {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: const [
-                TextSearch(),
+                SearchText(),
                 Gaps.h20,
-                ShapeSearch(),
+                SearchShape(),
               ],
             ),
           ),

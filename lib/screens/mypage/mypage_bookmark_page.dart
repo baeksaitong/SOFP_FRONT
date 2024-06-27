@@ -3,20 +3,20 @@ import 'package:flutter/material.dart';
 
 // Project imports:
 import 'package:sopf_front/constans/colors.dart';
-import '../../managers/apiClient.dart';
+import '../../managers/managers_api_client.dart';
 import '../../constans/text_styles.dart';
 import '../../constans/gaps.dart';
-import '../../managers/globalResponseManager.dart';
+import '../../managers/managers_global_response.dart';
 import '../../navigates.dart';
 
-class FavoritesPage extends StatefulWidget {
-  const FavoritesPage({super.key});
+class MyPageBookMarkPage extends StatefulWidget {
+  const MyPageBookMarkPage({super.key});
 
   @override
-  State<FavoritesPage> createState() => _FavoritesPageState();
+  State<MyPageBookMarkPage> createState() => _MyPageBookMarkPageState();
 }
 
-class _FavoritesPageState extends State<FavoritesPage> {
+class _MyPageBookMarkPageState extends State<MyPageBookMarkPage> {
   final APIClient apiClient = APIClient();
   List<FavoriteInfo> favorites = [];
 

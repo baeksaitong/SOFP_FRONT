@@ -9,13 +9,13 @@ import 'package:http/http.dart' as http;
 import 'package:provider/provider.dart';
 
 // Project imports:
-import 'package:sopf_front/managers/apiClient.dart';
+import 'package:sopf_front/managers/managers_api_client.dart';
 import 'package:sopf_front/constans/colors.dart';
 import 'package:sopf_front/constans/text_styles.dart';
 import 'package:sopf_front/screens/multi_profile/multi_profile_add.dart';
 import 'package:sopf_front/navigates.dart';
 import '../../constans/gaps.dart';
-import '../../managers/jwtManager.dart';
+import '../../managers/managers_jwt.dart';
 import '../sign/sign_in.dart';
 import 'mypage_edit.dart';
 import 'mypage_profile_edit.dart';
@@ -522,7 +522,7 @@ class _MyPageState extends State<MyPage> {
                     context,
                     MaterialPageRoute(
                       builder: (context) =>
-                          ProfileEdit(profileId: currentProfile?.id ?? ''),
+                          MyPageProfileEdit(profileId: currentProfile?.id ?? ''),
                     ),
                   );
                 },
@@ -662,7 +662,7 @@ class _MyPageState extends State<MyPage> {
     await JWTmanager().deleteTokens();
     Navigator.pushAndRemoveUntil(
       context,
-      MaterialPageRoute(builder: (context) => LoginPage()),
+      MaterialPageRoute(builder: (context) => SignIn()),
           (Route<dynamic> route) => false,
     );
   }

@@ -6,14 +6,14 @@ import '../../constans/colors.dart';
 import '../../constans/text_styles.dart';
 import '../../constans/gaps.dart';
 
-class SettingsPage extends StatefulWidget {
-  const SettingsPage({super.key});
+class MyPageSettingsPage extends StatefulWidget {
+  const MyPageSettingsPage({super.key});
 
   @override
-  _SettingsPageState createState() => _SettingsPageState();
+  _MyPageSettingsPageState createState() => _MyPageSettingsPageState();
 }
 
-class _SettingsPageState extends State<SettingsPage> {
+class _MyPageSettingsPageState extends State<MyPageSettingsPage> {
   bool _isAdEnabled = true;
   bool _isNotificationEnabled = true;
 

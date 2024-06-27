@@ -3,7 +3,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
 // Project imports:
-import 'package:sopf_front/managers/apiClient.dart';
+import 'package:sopf_front/managers/managers_api_client.dart';
 import 'package:sopf_front/navigates.dart';
 import '../../constans/colors.dart';
 import '../../constans/text_styles.dart';
@@ -15,14 +15,14 @@ final GlobalKey<_FormulationButtonState> formulationButtonKey = GlobalKey<_Formu
 final GlobalKey<_DivideLineButtonState> divideLineButtonKey = GlobalKey<_DivideLineButtonState>();
 final GlobalKey<_KeywordFieldState> keywordKey = GlobalKey<_KeywordFieldState>();
 
-class ShapeSearch extends StatefulWidget {
-  const ShapeSearch({super.key});
+class SearchShape extends StatefulWidget {
+  const SearchShape({super.key});
 
   @override
-  State<ShapeSearch> createState() => _ShapeSearchState();
+  State<SearchShape> createState() => _SearchShapeState();
 }
 
-class _ShapeSearchState extends State<ShapeSearch> {
+class _SearchShapeState extends State<SearchShape> {
   APIClient apiClient = APIClient();
 
   @override
@@ -932,7 +932,7 @@ class ShapeSearchPage extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.center,
             mainAxisAlignment: MainAxisAlignment.center,
             children: const [
-              ShapeSearch(),
+              SearchShape(),
             ],
           ),
           loadingOverlay(context), // Add the loading overlay here

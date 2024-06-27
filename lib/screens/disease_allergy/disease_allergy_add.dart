@@ -12,16 +12,16 @@ import '../../constans/gaps.dart';
 import '../../navigates.dart';
 import '../../providers/provider.dart';
 
-import '../../managers/jwtManager.dart'; // JWTmanager 클래스가 정의된 파일을 import
+import '../../managers/managers_jwt.dart'; // JWTmanager 클래스가 정의된 파일을 import
 
-class AddAllergyPage extends StatefulWidget {
-  const AddAllergyPage({super.key});
+class DiseaseAllergyAdd extends StatefulWidget {
+  const DiseaseAllergyAdd({super.key});
 
   @override
-  _AddAllergyPageState createState() => _AddAllergyPageState();
+  _DiseaseAllergyAddState createState() => _DiseaseAllergyAddState();
 }
 
-class _AddAllergyPageState extends State<AddAllergyPage> {
+class _DiseaseAllergyAddState extends State<DiseaseAllergyAdd> {
   List<String> searchResults = [];
   List<String> selectedItems = [];
   List<String> allergies = [];

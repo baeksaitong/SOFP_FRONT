@@ -5,20 +5,20 @@ import 'package:flutter/material.dart';
 import 'package:flutter_webview_plugin/flutter_webview_plugin.dart';
 
 // Project imports:
-import 'package:sopf_front/managers/apiClient.dart';
+import 'package:sopf_front/managers/managers_api_client.dart';
 
 import 'package:sopf_front/navigates.dart'; // navigateToAddAllergy 함수가 정의된 파일을 import 합니다.
 
-class NaverWebViewPage extends StatefulWidget {
+class SignNaver extends StatefulWidget {
   final String authUrl;
 
-  NaverWebViewPage(this.authUrl);
+  SignNaver(this.authUrl);
 
   @override
-  State<NaverWebViewPage> createState() => _NaverWebViewPageState();
+  State<SignNaver> createState() => _SignNaverState();
 }
 
-class _NaverWebViewPageState extends State<NaverWebViewPage> {
+class _SignNaverState extends State<SignNaver> {
   final flutterWebviewPlugin = FlutterWebviewPlugin();
   final APIClient apiClient = APIClient();
 

@@ -11,10 +11,10 @@ import 'package:image_picker/image_picker.dart';
 
 // Project imports:
 import 'package:sopf_front/constans/colors.dart';
-import 'package:sopf_front/managers/globalResponseManager.dart';
+import 'package:sopf_front/managers/managers_global_response.dart';
 import 'package:sopf_front/providers/provider.dart';
 import '../../constans/gaps.dart';
-import '../../managers/jwtManager.dart';
+import '../../managers/managers_jwt.dart';
 
 class MyPageEdit extends StatefulWidget {
   final String profileId;

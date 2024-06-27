@@ -9,18 +9,18 @@ import 'package:permission_handler/permission_handler.dart';
 import 'package:sopf_front/constans/colors.dart';
 import 'package:sopf_front/screens/search/search_image.dart';
 import 'package:sopf_front/navigates.dart';
-import '../../managers/apiClient.dart';
+import '../../managers/managers_api_client.dart';
 import '../../constans/text_styles.dart';
 import '../../constans/gaps.dart';
 
-class TextSearch extends StatefulWidget {
-  const TextSearch({super.key});
+class SearchText extends StatefulWidget {
+  const SearchText({super.key});
 
   @override
-  State<TextSearch> createState() => _TextSearchState();
+  State<SearchText> createState() => _SearchTextState();
 }
 
-class _TextSearchState extends State<TextSearch> {
+class _SearchTextState extends State<SearchText> {
   @override
   Widget build(BuildContext context) {
     return Stack(
@@ -95,7 +95,7 @@ class _TextSearchState extends State<TextSearch> {
           Navigator.push(
             context,
             MaterialPageRoute(
-              builder: (context) => ImageSearch(cameras: cameras),
+              builder: (context) => SearchImage(cameras: cameras),
             ),
           );
         } else {

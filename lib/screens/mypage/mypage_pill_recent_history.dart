@@ -3,20 +3,20 @@ import 'package:flutter/material.dart';
 
 // Project imports:
 import 'package:sopf_front/constans/colors.dart';
-import '../../managers/apiClient.dart';
+import '../../managers/managers_api_client.dart';
 import '../../constans/text_styles.dart';
 import '../../constans/gaps.dart';
-import '../../managers/globalResponseManager.dart';
+import '../../managers/managers_global_response.dart';
 import '../../navigates.dart';
 
-class RecentHistoryPill extends StatefulWidget {
-  const RecentHistoryPill({super.key});
+class MyPagePillRecentHistory extends StatefulWidget {
+  const MyPagePillRecentHistory({super.key});
 
   @override
-  State<RecentHistoryPill> createState() => _RecentHistoryPillState();
+  State<MyPagePillRecentHistory> createState() => _MyPagePillRecentHistoryState();
 }
 
-class _RecentHistoryPillState extends State<RecentHistoryPill> {
+class _MyPagePillRecentHistoryState extends State<MyPagePillRecentHistory> {
   final APIClient apiClient = APIClient();
   List<RecentHistoryInfo> recentHistories = [];
 

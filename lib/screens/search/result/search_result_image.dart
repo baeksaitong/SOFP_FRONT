@@ -11,22 +11,22 @@ import 'package:image_picker/image_picker.dart';
 import 'package:sopf_front/constans/colors.dart';
 import 'package:sopf_front/constans/text_styles.dart';
 import 'package:sopf_front/constans/gaps.dart';
-import '../../../managers/apiClient.dart';
-import '../../../managers/globalResponseManager.dart';
+import '../../../managers/managers_api_client.dart';
+import '../../../managers/managers_global_response.dart';
 import '../../../home.dart';
 import '../../../navigates.dart';
 
-class SearchResultPage extends StatefulWidget {
+class SearchResultImage extends StatefulWidget {
   final XFile? firstImageFile;
   final XFile? secondImageFile;
 
-  const SearchResultPage({super.key, this.firstImageFile, this.secondImageFile});
+  const SearchResultImage({super.key, this.firstImageFile, this.secondImageFile});
 
   @override
-  _SearchResultPageState createState() => _SearchResultPageState();
+  _SearchResultImageState createState() => _SearchResultImageState();
 }
 
-class _SearchResultPageState extends State<SearchResultPage> {
+class _SearchResultImageState extends State<SearchResultImage> {
   List<DrugInfo> drugs = [];
   List<FavoriteInfo> favorites = [];
   APIClient apiClient = APIClient();

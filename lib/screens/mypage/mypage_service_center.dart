@@ -7,22 +7,14 @@ import '../../constans/colors.dart';
 import '../../constans/text_styles.dart';
 import '../../constans/gaps.dart';
 
-void main() {
-  runApp(MaterialApp(
-    title: '고객센터',
-    theme: ThemeData(primarySwatch: Colors.blue),
-    home: CustomerServicePage(),
-  ));
-}
-
-class CustomerServicePage extends StatefulWidget {
-  const CustomerServicePage({super.key});
+class MyPageServiceCenter extends StatefulWidget {
+  const MyPageServiceCenter({super.key});
 
   @override
-  _CustomerServicePageState createState() => _CustomerServicePageState();
+  _MyPageServiceCenterState createState() => _MyPageServiceCenterState();
 }
 
-class _CustomerServicePageState extends State<CustomerServicePage> {
+class _MyPageServiceCenterState extends State<MyPageServiceCenter> {
   final TextEditingController _controller = TextEditingController();
 
   @override

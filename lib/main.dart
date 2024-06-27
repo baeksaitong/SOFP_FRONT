@@ -39,10 +39,9 @@ void main() async {
 
 
 void main() async {
-  await dotenv.load(fileName: ".env");
-
   WidgetsFlutterBinding.ensureInitialized();
 
+  await dotenv.load(fileName: ".env");
 
   final cameras = await availableCameras();
   CameraDescription? firstCamera;
@@ -126,7 +125,7 @@ class _SplashScreenState extends State<SplashScreen> {
         Duration(seconds: 3), () {}); // Show splash screen for 3 seconds
     Navigator.pushReplacement(
       context,
-      MaterialPageRoute(builder: (context) => LoginPage()),
+      MaterialPageRoute(builder: (context) => SignIn()),
     );
   }
 

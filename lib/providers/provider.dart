@@ -2,7 +2,7 @@
 import 'package:flutter/material.dart';
 
 // Project imports:
-import '../managers/globalResponseManager.dart';
+import '../managers/managers_global_response.dart';
 
 class ProfileProvider with ChangeNotifier {
   Profile? _currentProfile;

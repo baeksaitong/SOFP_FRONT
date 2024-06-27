@@ -14,7 +14,7 @@ import 'package:sopf_front/screens/pill/pill_category_detail.dart';
 import 'package:sopf_front/screens/pill/pill_category_plus.dart';
 import 'package:sopf_front/screens/mypage/mypage_bookmark_page.dart';
 import 'package:sopf_front/constans/gaps.dart';
-import 'package:sopf_front/managers/globalResponseManager.dart';
+import 'package:sopf_front/managers/managers_global_response.dart';
 import 'package:sopf_front/screens/mypage/mypage.dart';
 import 'package:sopf_front/screens/search/result/serach_result_pill_detail.dart';
 import 'package:sopf_front/screens/mypage/mypage_settings_page.dart';
@@ -69,7 +69,7 @@ Widget loadingOverlay(BuildContext context) {
 
 void navigateToAddAllergy() {
   navigatorKey.currentState?.push(
-    MaterialPageRoute(builder: (context) => AddAllergyPage()),
+    MaterialPageRoute(builder: (context) => DiseaseAllergyAdd()),
   );
 }
 
@@ -93,38 +93,38 @@ void navigateToSearchResult() {
 
 void navigateToSignUp() {
   navigatorKey.currentState?.push(
-    MaterialPageRoute(builder: (context) => SignUpPage()),
+    MaterialPageRoute(builder: (context) => SignUp()),
   );
 }
 
 void navigateToPillDetail(int serialNumber) {
   navigatorKey.currentState?.push(
-    MaterialPageRoute(builder: (context) => PillDetails(serialNumber: serialNumber, imgUrl: '')),
+    MaterialPageRoute(builder: (context) => SearchResultPillDetail(serialNumber: serialNumber, imgUrl: '')),
   );
 }
 
 void navigateToPreference() {
   navigatorKey.currentState?.push(
-    MaterialPageRoute(builder: (context) => SettingsPage()),
+    MaterialPageRoute(builder: (context) => MyPageSettingsPage()),
   );
 }
 
 void navigateToFavorite() {
   navigatorKey.currentState?.push(
-    MaterialPageRoute(builder: (context) => FavoritesPage()),
+    MaterialPageRoute(builder: (context) => MyPageBookMarkPage()),
   );
 }
 
 
 void navigateToRecentHistory() {
   navigatorKey.currentState?.push(
-    MaterialPageRoute(builder: (context) => RecentHistoryPill()),
+    MaterialPageRoute(builder: (context) => MyPagePillRecentHistory()),
   );
 }
 
 void navigateToCustomerService() {
   navigatorKey.currentState?.push(
-    MaterialPageRoute(builder: (context) => CustomerServicePage()),
+    MaterialPageRoute(builder: (context) => MyPageServiceCenter()),
   );
 }
 
@@ -136,7 +136,7 @@ void navigateToMyPage() {
 
 void navigateToMedicationsTaking() {
   navigatorKey.currentState?.push(
-    MaterialPageRoute(builder: (context) => MedicationPage()),
+    MaterialPageRoute(builder: (context) => PillTaskingList()),
   );
 }
 
@@ -151,7 +151,7 @@ void navigateToMedicationsTakingPlus(
     [CategoryDetails? category]) {
   Navigator.of(context).push(
     MaterialPageRoute(
-      builder: (context) => MedicationSchedulePage(
+      builder: (context) => PillCategoryPlus(
         onSave: onSave,
       ),
     ),
@@ -162,6 +162,6 @@ void navigateToMedicationCategory(
     BuildContext context, CategoryDetails category) {
   Navigator.of(context).push(
     MaterialPageRoute(
-        builder: (context) => MedicationCategoryPage(category: category)),
+        builder: (context) => PillCategoryDetail(category: category)),
   );
 }

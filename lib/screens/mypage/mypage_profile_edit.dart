@@ -13,19 +13,19 @@ import 'package:image_picker/image_picker.dart';
 import 'package:sopf_front/constans/colors.dart';
 import 'package:sopf_front/constans/text_styles.dart';
 import 'package:sopf_front/constans/gaps.dart';
-import 'package:sopf_front/managers/globalResponseManager.dart';
-import 'package:sopf_front/managers/jwtManager.dart';
+import 'package:sopf_front/managers/managers_global_response.dart';
+import 'package:sopf_front/managers/managers_jwt.dart';
 
-class ProfileEdit extends StatefulWidget {
+class MyPageProfileEdit extends StatefulWidget {
   final String profileId;
 
-  ProfileEdit({required this.profileId});
+  MyPageProfileEdit({required this.profileId});
 
   @override
-  _ProfileEditState createState() => _ProfileEditState();
+  _MyPageProfileEditState createState() => _MyPageProfileEditState();
 }
 
-class _ProfileEditState extends State<ProfileEdit> {
+class _MyPageProfileEditState extends State<MyPageProfileEdit> {
   XFile? _image;
   final ImagePicker _picker = ImagePicker();
   final TextEditingController nameController = TextEditingController();

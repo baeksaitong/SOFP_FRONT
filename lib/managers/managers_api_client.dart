@@ -14,9 +14,9 @@ import 'package:path_provider/path_provider.dart';
 import 'package:provider/provider.dart';
 
 // Project imports:
-import 'package:sopf_front/managers/jwtManager.dart';
+import 'package:sopf_front/managers/managers_jwt.dart';
 import 'package:sopf_front/providers/provider.dart';
-import 'globalResponseManager.dart';
+import 'managers_global_response.dart';
 import '../navigates.dart';
 
 class APIClient {
@@ -1011,5 +1011,3 @@ class APIClient {
     }
   }
 }
-
-

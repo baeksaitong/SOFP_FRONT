@@ -2,21 +2,21 @@
 import 'package:flutter/material.dart';
 
 // Project imports:
-import 'package:sopf_front/managers/apiClient.dart';
+import 'package:sopf_front/managers/managers_api_client.dart';
 import 'package:sopf_front/constans/colors.dart';
 import 'package:sopf_front/constans/gaps.dart';
 import '../../main.dart';
 import '../../navigates.dart';
 import 'sign_naver.dart';
 
-class LoginPage extends StatefulWidget {
-  const LoginPage({super.key});
+class SignIn extends StatefulWidget {
+  const SignIn({super.key});
 
   @override
-  State<LoginPage> createState() => _LoginPageState();
+  State<SignIn> createState() => _SignInState();
 }
 
-class _LoginPageState extends State<LoginPage> {
+class _SignInState extends State<SignIn> {
   final APIClient apiClient = APIClient();
   final TextEditingController idController = TextEditingController();
   final TextEditingController passwordController = TextEditingController();
@@ -189,7 +189,7 @@ class NaverButton extends StatelessWidget {
             '&redirect_uri=$redirectUri'
             '&state=$state';
         navigatorKey.currentState?.push(
-            MaterialPageRoute(builder: (context) => NaverWebViewPage(authUrl))
+            MaterialPageRoute(builder: (context) => SignNaver(authUrl))
         );
       },
       child: Ink.image(

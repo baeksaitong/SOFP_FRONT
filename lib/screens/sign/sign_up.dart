@@ -11,26 +11,18 @@ import 'package:fluttertoast/fluttertoast.dart';
 import '../../constans/colors.dart';
 import '../../constans/gaps.dart';
 import '../../constans/text_styles.dart';
-import '../../managers/apiClient.dart';
+import '../../managers/managers_api_client.dart';
 
 // Project imports:
 
-void main() {
-  runApp(MaterialApp(
-    title: 'Medication Schedule',
-    theme: ThemeData(primarySwatch: Colors.blue),
-    home: SignUpPage(),
-  ));
-}
-
-class SignUpPage extends StatefulWidget {
-  const SignUpPage({super.key});
+class SignUp extends StatefulWidget {
+  const SignUp({super.key});
 
   @override
-  _SignUpPageState createState() => _SignUpPageState();
+  _SignUpState createState() => _SignUpState();
 }
 
-class _SignUpPageState extends State<SignUpPage> {
+class _SignUpState extends State<SignUp> {
   String name = ''; // 이름
   String email = ''; // 이메일
   String gender = ''; // 성별을 저장하는 변수

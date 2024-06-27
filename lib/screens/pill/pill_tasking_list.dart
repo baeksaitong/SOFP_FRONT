@@ -5,8 +5,8 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 // Project imports:
-import 'package:sopf_front/managers/apiClient.dart';
-import 'package:sopf_front/managers/globalResponseManager.dart';
+import 'package:sopf_front/managers/managers_api_client.dart';
+import 'package:sopf_front/managers/managers_global_response.dart';
 import 'package:sopf_front/navigates.dart';
 import 'package:sopf_front/providers/provider.dart';
 import '../../constans/colors.dart';
@@ -15,14 +15,14 @@ import '../../constans/gaps.dart';
 import '../search/search_shape.dart';
 import '../search/search_text.dart';
 
-class MedicationPage extends StatefulWidget {
-  const MedicationPage({super.key});
+class PillTaskingList extends StatefulWidget {
+  const PillTaskingList({super.key});
 
   @override
-  _MedicationPageState createState() => _MedicationPageState();
+  _PillTaskingListState createState() => _PillTaskingListState();
 }
 
-class _MedicationPageState extends State<MedicationPage> {
+class _PillTaskingListState extends State<PillTaskingList> {
   List<TakingDrugsInfo> medications = [];
   bool isEditMode = false;
   Set<int> selectedIndexes = <int>{};

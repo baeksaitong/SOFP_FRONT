@@ -4,14 +4,14 @@ import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 
 // Project imports:
-import 'package:sopf_front/managers/apiClient.dart';
+import 'package:sopf_front/managers/managers_api_client.dart';
 import 'package:sopf_front/navigates.dart';
 import 'package:sopf_front/screens/search/result/serach_result_pill_detail.dart';
 import 'package:sopf_front/screens/search/search_shape.dart';
 import '../../../constans/colors.dart';
 import '../../../constans/text_styles.dart';
 import '../../../constans/gaps.dart';
-import '../../../managers/globalResponseManager.dart';
+import '../../../managers/managers_global_response.dart';
 
 class SearchResult extends StatefulWidget {
   const SearchResult({super.key});
@@ -85,7 +85,7 @@ class _SearchResultState extends State<SearchResult> {
     Navigator.push(
       context,
       MaterialPageRoute(
-        builder: (context) => PillDetails(serialNumber: serialNumber, imgUrl: imgUrl),
+        builder: (context) => SearchResultPillDetail(serialNumber: serialNumber, imgUrl: imgUrl),
       ),
     );
   }

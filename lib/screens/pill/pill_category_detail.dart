@@ -5,9 +5,9 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 // Project imports:
-import 'package:sopf_front/managers/globalResponseManager.dart';
+import 'package:sopf_front/managers/managers_global_response.dart';
 import 'package:sopf_front/providers/provider.dart';
-import '../../managers/apiClient.dart';
+import '../../managers/managers_api_client.dart';
 import '../../constans/colors.dart';
 import '../../constans/gaps.dart';
 import '../../navigates.dart';
@@ -16,16 +16,16 @@ import '../search/search_text.dart';
 
 import '../../constans/text_styles.dart'; // 원하는 글꼴 스타일이 정의된 파일을 임포트
 
-class MedicationCategoryPage extends StatefulWidget {
+class PillCategoryDetail extends StatefulWidget {
   final CategoryDetails category;
 
-  const MedicationCategoryPage({super.key, required this.category});
+  const PillCategoryDetail({super.key, required this.category});
 
   @override
-  State<MedicationCategoryPage> createState() => _MedicationCategoryPageState();
+  State<PillCategoryDetail> createState() => _PillCategoryDetailState();
 }
 
-class _MedicationCategoryPageState extends State<MedicationCategoryPage> {
+class _PillCategoryDetailState extends State<PillCategoryDetail> {
   bool isEditMode = false;
   Set<int> selectedIndexes = <int>{};
   String? selectedCategoryName;
