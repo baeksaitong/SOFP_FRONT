@@ -39,7 +39,7 @@
 ## 설치 방법
 ```bash
 # 저장소 클론
-git clone https://github.com/your-username/yacsok.git
+git clone [https://github.com/baeksaitong/SOFP_FRONT.git]
 
 # 프로젝트 디렉토리로 이동
 cd 너의 프로젝트 디렉토리 주소
@@ -66,14 +66,14 @@ flutter run
 (시연 영상) https://www.youtube.com/watch?v=BSpjq0oVcI4&t=1s
 
 ## 문서
-API 문서는 [여기](https://linktodocumentation.com)에서 확인할 수 있습니다.
+API Swagger : [http://15.164.18.65:8080/swagger-ui/index.html)]
 
 ## 문제 해결
 ### 일반적인 문제와 해결 방법
 - **문제 예시**: 어떠한 문제!
   - **해결 방법**:
-    1. Flutter 개발 환경이 올바르게 설정되어 있는지 확인하세요. `flutter doctor` 명령어를 사용하여 필요한 구성 요소가 모두 설치되었는지 확인합니다.
-    2. Flutter clean -> Flutter pub get -> Flutter run 혹은 버튼을 눌러 실행
+    1. `flutter doctor` 명령어를 사용하여 필요한 구성 요소가 모두 설치되었는지 확인합니다.
+    2. `Flutter clean` -> `Flutter pub get` -> `Flutter run 혹은 버튼을 눌러 실행`
   
 ## 프론트엔드 컨트리뷰터
 - **성명근**: 리더
