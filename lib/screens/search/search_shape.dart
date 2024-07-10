@@ -1,4 +1,3 @@
-// Flutter imports:
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
@@ -95,7 +94,7 @@ class _SearchShapeState extends State<SearchShape> {
                                 side: BorderSide.none,
                                 shape: RoundedRectangleBorder(
                                   borderRadius:
-                                      BorderRadius.all(Radius.circular(8)),
+                                  BorderRadius.all(Radius.circular(8)),
                                 ),
                               ),
                               child: Text(
@@ -123,7 +122,7 @@ class _SearchShapeState extends State<SearchShape> {
                                 side: BorderSide.none,
                                 shape: RoundedRectangleBorder(
                                   borderRadius:
-                                      BorderRadius.all(Radius.circular(8)),
+                                  BorderRadius.all(Radius.circular(8)),
                                 ),
                               ),
                               child: Text(
@@ -287,7 +286,7 @@ class _DivideLineButtonState extends State<DivideLineButton> {
       ),
       onPressed: () async {
         final DivideLineItem? selected =
-            await showModalBottomSheet<DivideLineItem>(
+        await showModalBottomSheet<DivideLineItem>(
           context: context,
           builder: (BuildContext context) {
             return Container(
@@ -330,9 +329,9 @@ class _DivideLineButtonState extends State<DivideLineButton> {
                               color: AppColors.gr200,
                               border: divideLineItems[index].isSelected
                                   ? Border.all(
-                                      width: 2.0,
-                                      color: Colors.redAccent,
-                                    )
+                                width: 2.0,
+                                color: Colors.redAccent,
+                              )
                                   : null,
                             ),
                             width: 76,
@@ -428,7 +427,7 @@ class _FormulationButtonState extends State<FormulationButton> {
       ),
       onPressed: () async {
         final FormulationItem? selected =
-            await showModalBottomSheet<FormulationItem>(
+        await showModalBottomSheet<FormulationItem>(
           context: context,
           builder: (BuildContext context) {
             return Container(
@@ -471,9 +470,9 @@ class _FormulationButtonState extends State<FormulationButton> {
                               color: AppColors.gr200,
                               border: formulationItems[index].isSelected
                                   ? Border.all(
-                                      width: 2.0,
-                                      color: Colors.redAccent,
-                                    )
+                                width: 2.0,
+                                color: Colors.redAccent,
+                              )
                                   : null,
                             ),
                             width: 76,
@@ -611,9 +610,9 @@ class _ShapeButtonState extends State<ShapeButton> {
                               color: AppColors.gr200,
                               border: shapeItems[index].isSelected
                                   ? Border.all(
-                                      width: 2.0,
-                                      color: Colors.redAccent,
-                                    )
+                                width: 2.0,
+                                color: Colors.redAccent,
+                              )
                                   : null,
                             ),
                             width: 76,
@@ -766,12 +765,12 @@ class _RgbButtonState extends State<RgbButton> {
                                 decoration: BoxDecoration(
                                   color: colorItems[index].color,
                                   borderRadius:
-                                      BorderRadius.all(Radius.circular(45)),
+                                  BorderRadius.all(Radius.circular(45)),
                                   border: colorItems[index].isSelected
                                       ? Border.all(
-                                          width: 2.0,
-                                          color: Colors.redAccent,
-                                        )
+                                    width: 2.0,
+                                    color: Colors.redAccent,
+                                  )
                                       : null,
                                 ),
                               ),
@@ -809,10 +808,10 @@ class _RgbButtonState extends State<RgbButton> {
           finalColor != null
               ? customRgbCircle()
               : Image.asset(
-                  'assets/solar_pallete-2-bold-duotone.png',
-                  width: 32,
-                  height: 32,
-                ),
+            'assets/solar_pallete-2-bold-duotone.png',
+            width: 32,
+            height: 32,
+          ),
           Gaps.h4,
           Text(
             finalText ?? '색상',
@@ -925,7 +924,8 @@ class ShapeSearchPage extends StatelessWidget {
           onPressed: () {
             Navigator.pop(context);
           },
-        ),      ),
+        ),
+      ),
       body: Stack(
         children: [
           Row(

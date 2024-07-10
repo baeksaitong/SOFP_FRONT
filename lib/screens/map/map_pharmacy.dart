@@ -1,12 +1,9 @@
-// Flutter imports:
+// lib/screens/map/map_pharmacy.dart
 import 'package:flutter/material.dart';
-
-// Package imports:
-import 'package:geolocator/geolocator.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
+import 'package:geolocator/geolocator.dart';
 
-// Project imports:
-import 'package:sopf_front/constans/colors.dart';
+import '../../constans/colors.dart';
 
 class MapPharmacy extends StatefulWidget {
   @override
@@ -542,18 +539,18 @@ class _MapPharmacyState extends State<MapPharmacy> {
               child: _currentPosition == null
                   ? Center(child: CircularProgressIndicator())
                   : GoogleMap(
-                      onMapCreated: _onMapCreated,
-                      initialCameraPosition: CameraPosition(
-                        target: LatLng(_currentPosition!.latitude,
-                            _currentPosition!.longitude),
-                        zoom: 17.0,
-                      ),
-                      myLocationEnabled: true,
-                      myLocationButtonEnabled: true,
-                      mapType: _currentMapType,
-                      markers: _markers,
-                      onCameraMove: _onCameraMove,
-                    ),
+                onMapCreated: _onMapCreated,
+                initialCameraPosition: CameraPosition(
+                  target: LatLng(_currentPosition!.latitude,
+                      _currentPosition!.longitude),
+                  zoom: 17.0,
+                ),
+                myLocationEnabled: true,
+                myLocationButtonEnabled: true,
+                mapType: _currentMapType,
+                markers: _markers,
+                onCameraMove: _onCameraMove,
+              ),
             ),
           ),
         ],

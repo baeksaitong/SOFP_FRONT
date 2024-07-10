@@ -234,7 +234,7 @@ class _TextSearchDetailState extends State<TextSearchDetail> {
                     itemBuilder: (context, index) {
                       return ListTile(
                         contentPadding:
-                            EdgeInsets.zero, // Remove padding inside ListTile
+                        EdgeInsets.zero, // Remove padding inside ListTile
                         title: GestureDetector(
                           onTap: () {
                             print(_recentSearches[index]);

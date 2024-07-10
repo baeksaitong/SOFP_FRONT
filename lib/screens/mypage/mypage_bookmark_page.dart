@@ -1,138 +1,23 @@
-// Flutter imports:
+// lib/screens/mypage/mypage_bookmark_page.dart
 import 'package:flutter/material.dart';
-
-// Project imports:
 import 'package:sopf_front/constans/colors.dart';
-import '../../managers/managers_api_client.dart';
-import '../../constans/text_styles.dart';
-import '../../constans/gaps.dart';
-import '../../managers/managers_global_response.dart';
-import '../../navigates.dart';
+import 'package:sopf_front/constans/text_styles.dart';
+import 'package:sopf_front/widgets/common/custom_appbar.dart';
 
-class MyPageBookMarkPage extends StatefulWidget {
-  const MyPageBookMarkPage({super.key});
-
-  @override
-  State<MyPageBookMarkPage> createState() => _MyPageBookMarkPageState();
-}
-
-class _MyPageBookMarkPageState extends State<MyPageBookMarkPage> {
-  final APIClient apiClient = APIClient();
-  List<FavoriteInfo> favorites = [];
-
-  @override
-  void initState() {
-    super.initState();
-    _loadFavoriteDrugs();
-  }
-
-  Future<void> _loadFavoriteDrugs() async {
-    await apiClient.favoriteGet(context);
-    setState(() {
-      favorites = FavoritesManager().favorites;
-    });
-  }
-
-  void _toggleBookmark(int index) {
-    setState(() {
-      favorites[index].isBookmarked = !favorites[index].isBookmarked;
-      print('${favorites[index].serialNumber}, ${favorites[index].imgUrl}');
-      if (favorites[index].isBookmarked == true) {
-        apiClient.favoritePost(context, favorites[index].serialNumber, favorites[index].imgUrl);
-      } else {
-        apiClient.favoriteDelete(context, favorites[index].serialNumber);
-      }
-    });
-  }
-
+class MyPageBookMarkPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        backgroundColor: AppColors.wh,
-        leading: IconButton(
-          icon: const Icon(Icons.arrow_back, color: Colors.black),
-          onPressed: () {
-            Navigator.pop(context);
-          },
-        ),
-        elevation: 0,
-      ),
-      body: Container(
-        color: AppColors.wh,
-        padding: const EdgeInsets.symmetric(vertical: 8.0, horizontal: 16.0),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
+      appBar: CustomAppBar(title: '북마크 페이지'),
+      body: Padding(
+        padding: const EdgeInsets.all(16.0),
+        child: ListView(
           children: [
-            Container(
-              width: double.infinity,
-              padding: const EdgeInsets.all(8.0),
-              child: Text(
-                '즐겨찾기',
-                style: AppTextStyles.title1B24.copyWith(color: AppColors.gr800),
-                textAlign: TextAlign.left,
-              ),
+            ListTile(
+              title: Text('북마크 아이템 1', style: AppTextStyles.body1S16),
             ),
-            Expanded(
-              child: ListView.separated(
-                itemCount: favorites.length,
-                itemBuilder: (context, index) {
-                  final drug = favorites[index];
-                  return GestureDetector(
-                    onTap: () async {
-                      await apiClient.searchGet(context, drug.serialNumber);
-                      navigateToPillDetail(drug.serialNumber);
-                    },
-                    child: Row(
-                      children: [
-                        Image.network(
-                          drug.imgUrl,
-                          width: 96,
-                          height: 96,
-                        ),
-                        Gaps.w16,
-                        Expanded(
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              Text(
-                                drug.name,
-                                style: AppTextStyles.body1S16,
-                                overflow: TextOverflow.ellipsis,
-                              ),
-                              Gaps.h6,
-                              Text(
-                                '제품명 : ${drug.name}',
-                                style: AppTextStyles.body5M14,
-                                overflow: TextOverflow.ellipsis,
-                              ),
-                              Text(
-                                '제조회사 : ${drug.enterprise}',
-                                style: AppTextStyles.body5M14,
-                                overflow: TextOverflow.ellipsis,
-                              ),
-                              Text(
-                                '분류 : ${drug.classification}',
-                                style: AppTextStyles.body5M14,
-                                overflow: TextOverflow.ellipsis,
-                              ),
-                            ],
-                          ),
-                        ),
-                        GestureDetector(
-                          onTap: () => _toggleBookmark(index),
-                          child: Image.asset(
-                            drug.isBookmarked ? 'assets/bookmarkclicked.png' : 'assets/bookmark.png',
-                            width: 20,
-                            height: 20,
-                          ),
-                        ),
-                      ],
-                    ),
-                  );
-                },
-                separatorBuilder: (context, index) => Gaps.h8,
-              ),
+            ListTile(
+              title: Text('북마크 아이템 2', style: AppTextStyles.body1S16),
             ),
           ],
         ),

@@ -81,11 +81,16 @@ class _SearchResultState extends State<SearchResult> {
     setState(() {});
   }
 
-  void navigateToPillDetail(int serialNumber, String imgUrl) {
+  void navigateToPillDetail(int serialNumber, String imgUrl, String pillName, String pillDescription) {
     Navigator.push(
       context,
       MaterialPageRoute(
-        builder: (context) => SearchResultPillDetail(serialNumber: serialNumber, imgUrl: imgUrl),
+        builder: (context) => SearchResultPillDetail(
+          serialNumber: serialNumber,
+          imgUrl: imgUrl,
+          pillName: pillName,
+          pillDescription: pillDescription,
+        ),
       ),
     );
   }
@@ -732,7 +737,8 @@ class _SearchResultState extends State<SearchResult> {
                       ),
                     ),
                   );
-                }, separatorBuilder: (context, index) => Gaps.h8,),
+                }, separatorBuilder: (context, index) => Gaps.h8,
+              ),
             ),
           ],
         ),
