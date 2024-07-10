@@ -29,7 +29,7 @@
 
 ## 기술 스택
 - **프론트엔드**: Flutter
-- **기타**: TensorFlow, Docker, Jenkins, Java Persistence API
+- **기타**: 
 
 ## 개발 도구
 - **디자인**: Figma
@@ -51,6 +51,7 @@ flutter pub get
 flutter run
 ```
 설치 전에 Flutter 개발 환경이 올바르게 설정되어 있는지 확인하세요.
+설치 후에 Flutter doctor 명령어를 이용하여 설치가 완료되었는지 확인하세요!
 
 ## 기여 방법
 이슈를 열고 풀 리퀘스트를 제출하면 됩니다!
@@ -63,10 +64,10 @@ flutter run
 **약속(Yacsok)**은 사용자가 다양한 약물 정보를 쉽게 검색하고 관리할 수 있도록 돕기 위해 개발되었습니다. 이 프로젝트는 복잡한 약물 정보를 효율적으로 제공하여 사용자들이 올바른 약물 복용을 할 수 있도록 지원하는 것을 목표로 합니다.
 
 ## 시연 영상 및 스크린샷
-(시연 영상) https://www.youtube.com/watch?v=BSpjq0oVcI4&t=1s
+**시연 영상** : https://www.youtube.com/watch?v=BSpjq0oVcI4&t=1s
 
 ## 문서
-API Swagger : [http://15.164.18.65:8080/swagger-ui/index.html)]
+**API Swagger** : [http://15.164.18.65:8080/swagger-ui/index.html)]
 
 ## 문제 해결
 ### 일반적인 문제와 해결 방법
