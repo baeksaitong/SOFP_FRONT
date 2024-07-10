@@ -29,8 +29,6 @@
 
 ## 기술 스택
 - **프론트엔드**: Flutter
-- **백엔드**: Spring Boot
-- **데이터베이스**: MongoDB, Redis
 - **기타**: TensorFlow, Docker, Jenkins, Java Persistence API
 
 ## 개발 도구
