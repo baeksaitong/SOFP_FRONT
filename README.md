@@ -79,11 +79,6 @@
   - `import_sorter`: ^4.6.0
   - `flutter_dotenv`: ^5.0.2
 
-## 개발 도구
-- **디자인**: Figma
-- **버전 관리**: Git
-- **협업 도구**: GitHub, Notion, Discord
-
 ## 설치 방법
 ```bash
 # 저장소 클론
