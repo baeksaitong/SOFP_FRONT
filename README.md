@@ -4,9 +4,33 @@
 ## 디벨로퍼
 ## 디벨로퍼
 
-| ![Developer 1](developer1_image_url) | ![Developer 2](developer2_image_url) | ![Developer 3](developer3_image_url) | ![Developer 4](developer4_image_url) | ![Developer 5](developer5_image_url) |
+| ![손창민]( ![손좆민](https://github.com/user-attachments/assets/b7e2bc71-4c41-4bd6-a825-fcb8e13d5915)
+) | ![성명근](![성명근](https://github.com/user-attachments/assets/acf8edc6-665f-4641-9421-88eb4537e5b7)
+ ) | ![신창윤]( ![신창윤](https://github.com/user-attachments/assets/71d4a17d-5f91-49ec-8ae8-6a1b8e8619ae)
+) | ![이한조]( ![이한조](https://github.com/user-attachments/assets/57b4a2b4-ce37-4001-952c-a1336e6da63f)
+) | ![정진우](developer5_image_url) |
 |:------------------------------------:|:------------------------------------:|:------------------------------------:|:------------------------------------:|:------------------------------------:|
-| **개발자 1 소개**                    | **개발자 2 소개**                    | **개발자 3 소개**                    | **개발자 4 소개**                    | **개발자 5 소개**                    |
+| **손창민 소개**   
+- 조장, 백(리드)
+- ckdals4600@naver.com
+- ckdals4600(레포지토리링크)
+- 2019203045
+| **성명근 소개**
+- 프론트(리드)
+- mg0454@naver.com
+- SEONG-MYEONG([레포지토리 링크](https://github.com/Seong-Myeong))
+- 2019203055
+| **신창윤 소개**
+- 인공지능, 백
+- blaze8411@naver.com
+- 깃허브아이디(레포지토리링크)
+- 2018203010
+| **이한조 소개**
+- 프론트
+- rktgkswh935@naver.com
+- 깃허브아이디(레포지토리링크)
+- 2018203019
+| **정진우 소개** |
 
 
 ## 목차
