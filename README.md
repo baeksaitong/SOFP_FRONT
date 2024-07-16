@@ -32,12 +32,17 @@
 
 ## 기술 스택
 
-| **분야** | **기술 스택** |
-|---------|--------------|
-| **프론트엔드** | Flutter |
-| **백엔드** | Spring Boot |
-| **데이터베이스** | MongoDB, Redis |
-| **기타** | TensorFlow, Docker, Jenkins, Java Persistence API |
+| **기술 스택**    | **도구**     | **협업 도구**   |
+|-----------------|-------------|----------------|
+| Spring Boot     | Figma       | GitHub         |
+| Flutter         | Git         | Notion         |
+| Java Persistence|             | Discord        |
+| TensorFlow      |             |                |
+| Jenkins         |             |                |
+| Redis           |             |                |
+| Docker          |             |                |
+| MongoDB         |             |                |
+
 
 ### 의존성 및 라이브러리
 
