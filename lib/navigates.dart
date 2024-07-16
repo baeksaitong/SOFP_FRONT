@@ -29,7 +29,6 @@ import 'home.dart';
 import 'providers/provider_loading.dart';
 import 'main.dart';
 import 'screens/multi_profile/multi_profile_add.dart';
-import 'screens/pill/category_details.dart'; // CategoryDetails import
 
 void showLoading(BuildContext context, {bool delayed = false}) {
   final loadingProvider = Provider.of<LoadingProvider>(context, listen: false);
@@ -98,9 +97,8 @@ void navigateToSignUp() {
   );
 }
 
-void navigateToPillDetail(BuildContext context, int serialNumber, String imgUrl, String pillName, String pillDescription) {
-  Navigator.push(
-    context,
+void navigateToPillDetail(int serialNumber, String imgUrl, String pillName, String pillDescription) {
+  navigatorKey.currentState?.push(
     MaterialPageRoute(
       builder: (context) => SearchResultPillDetail(
         serialNumber: serialNumber,

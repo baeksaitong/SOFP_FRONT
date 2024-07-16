@@ -6,7 +6,7 @@ import 'package:html/parser.dart' show parse;
 
 class GlobalResponseManager {
   static final GlobalResponseManager _instance =
-      GlobalResponseManager._internal();
+  GlobalResponseManager._internal();
   List<String> responses = [];
 
   factory GlobalResponseManager() {
@@ -139,11 +139,11 @@ class DrugInfo {
 
   DrugInfo(
       {required this.serialNumber,
-      required this.name,
-      required this.classification,
-      required this.enterprise,
-      required this.imgUrl,
-      required this.isBookmarked});
+        required this.name,
+        required this.classification,
+        required this.enterprise,
+        required this.imgUrl,
+        required this.isBookmarked});
 
   factory DrugInfo.fromJson(Map<String, dynamic> json) {
     return DrugInfo(
@@ -224,7 +224,6 @@ class TakingDrugsManager {
     }
   }
 }
-
 
 class FavoriteInfo {
   final int serialNumber;
@@ -347,8 +346,6 @@ class Profile {
   }
 }
 
-
-
 class ProfileResponse {
   final List<Profile> profileList;
 
@@ -406,6 +403,7 @@ class CategoryDetails {
   List<String> intakeDayList;
   List<String> intakeTimeList;
 
+
   CategoryDetails({
     required this.id,
     required this.name,
@@ -450,8 +448,6 @@ class CategoryDetailsManager {
     return categoryDetailsMap[categoryId];
   }
 }
-
-
 
 class MemberInfo {
   final String id;

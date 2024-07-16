@@ -1,10 +1,5 @@
-// Flutter imports:
 import 'package:flutter/material.dart';
-
-// Package imports:
 import 'package:provider/provider.dart';
-
-// Project imports:
 import 'package:sopf_front/managers/managers_api_client.dart';
 import 'package:sopf_front/managers/managers_global_response.dart';
 import 'package:sopf_front/navigates.dart';
@@ -241,8 +236,7 @@ class _PillTaskingListState extends State<PillTaskingList> {
             TextButton(
               child: Text(
                 '취소',
-                style:
-                AppTextStyles.body5M14.copyWith(color: AppColors.deepTeal),
+                style: AppTextStyles.body5M14.copyWith(color: AppColors.deepTeal),
               ),
               onPressed: () {
                 Navigator.of(context).pop();
@@ -255,8 +249,7 @@ class _PillTaskingListState extends State<PillTaskingList> {
             TextButton(
               child: Text(
                 '확인',
-                style:
-                AppTextStyles.body5M14.copyWith(color: AppColors.deepTeal),
+                style: AppTextStyles.body5M14.copyWith(color: AppColors.deepTeal),
               ),
               onPressed: () {
                 _removeSelectedMedications();
@@ -304,8 +297,7 @@ class _PillTaskingListState extends State<PillTaskingList> {
                   for (Category category in categories)
                     ListTile(
                       leading: Icon(Icons.folder, color: AppColors.deepTeal),
-                      title:
-                      Text(category.name, style: AppTextStyles.body2M16),
+                      title: Text(category.name, style: AppTextStyles.body2M16),
                       selected: selectedCategoryName == category.name,
                       selectedTileColor: AppColors.softTeal,
                       onTap: () async {
@@ -360,8 +352,7 @@ class _PillTaskingListState extends State<PillTaskingList> {
                           : AppColors.deepTeal,
                     ),
                     child: Text('이동',
-                        style: AppTextStyles.body1S16
-                            .copyWith(color: AppColors.wh)),
+                        style: AppTextStyles.body1S16.copyWith(color: AppColors.wh)),
                   ),
                 ],
               ),
@@ -397,8 +388,7 @@ class _PillTaskingListState extends State<PillTaskingList> {
       context,
           (updatedCategory) {
         setState(() {
-          int index =
-          categories.indexWhere((cat) => cat.name == category.name);
+          int index = categories.indexWhere((cat) => cat.name == category.name);
           if (index != -1) {
             categories[index] = updatedCategory as Category;
           }
@@ -444,8 +434,9 @@ class _PillTaskingListState extends State<PillTaskingList> {
                               context, category.categoryId);
                           final CategoryDetails? categoryDetail =
                               CategoryDetailsManager().currentCategory;
-                          navigateToMedicationCategory(
-                              context, categoryDetail!);
+                          if (categoryDetail != null) {
+                            navigateToMedicationCategory(context, categoryDetail);
+                          }
                         },
                         child: Container(
                           padding: const EdgeInsets.all(16.0),
@@ -510,7 +501,7 @@ class _PillTaskingListState extends State<PillTaskingList> {
                         Padding(
                           padding: const EdgeInsets.all(8.0),
                           child: Image.network(
-                            medication.imgUrl,
+                            medication.imgUrl ?? '',
                             width: 50,
                             height: 50,
                           ),
@@ -521,17 +512,17 @@ class _PillTaskingListState extends State<PillTaskingList> {
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
                               Text(
-                                medication.name,
+                                medication.name ?? '',
                                 style: AppTextStyles.body1S16,
                                 overflow: TextOverflow.ellipsis,
                               ),
                               Text(
-                                '제조사: ${medication.enterprise}',
+                                '제조사: ${medication.enterprise ?? ''}',
                                 style: AppTextStyles.body5M14,
                                 overflow: TextOverflow.ellipsis,
                               ),
                               Text(
-                                '분류: ${medication.classification}',
+                                '분류: ${medication.classification ?? ''}',
                                 style: AppTextStyles.body5M14,
                                 overflow: TextOverflow.ellipsis,
                               ),
