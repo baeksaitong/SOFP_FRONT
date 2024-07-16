@@ -120,27 +120,92 @@ flutter run
 ```plaintext
 SOFP_FRONT/
 │
+├── .dart_tool/
+├── .github/
+├── .idea/
 ├── android/
 ├── assets/
-│   ├── shapes/
-│   ├── divideLines/
-│   ├── formulations/
-│   ├── mypageEdit/
-│   ├── imagesearch/
-│   ├── bottombar/
-│   └── locations.json
 ├── build/
 ├── ios/
 ├── lib/
-│   ├── main.dart
-│   ├── models/
+│   ├── constans/
+│   │   ├── colors.dart
+│   │   ├── gaps.dart
+│   │   └── text_styles.dart
+│   ├── managers/
+│   │   ├── locations/
+│   │   ├── managers_api_client.dart
+│   │   ├── managers_global_response.dart
+│   │   └── managers_jwt.dart
+│   ├── providers/
+│   │   ├── provider.dart
+│   │   └── provider_loading.dart
 │   ├── screens/
-│   ├── services/
-│   ├── utils/
-│   └── widgets/
-├── test/
+│   │   ├── calendar/
+│   │   │   └── calenderPage.dart
+│   │   ├── disease_allergy/
+│   │   │   └── disease_allergy_add.dart
+│   │   ├── map/
+│   │   │   └── map_pharmacy.dart
+│   │   ├── multi_profile/
+│   │   │   ├── multi_profile_add.dart
+│   │   │   └── multi_profile_edit.dart
+│   │   ├── mypage/
+│   │   │   ├── mypage.dart
+│   │   │   ├── mypage_bookmark_page.dart
+│   │   │   ├── mypage_edit.dart
+│   │   │   ├── mypage_pill_recent_history.dart
+│   │   │   ├── mypage_profile_edit.dart
+│   │   │   ├── mypage_service_center.dart
+│   │   │   └── mypage_settings_page.dart
+│   │   ├── pill/
+│   │   │   ├── category_details.dart
+│   │   │   ├── pill_category_detail.dart
+│   │   │   ├── pill_category_plus.dart
+│   │   │   └── pill_tasking_list.dart
+│   │   ├── search/
+│   │   │   ├── result/
+│   │   │   │   ├── search_result.dart
+│   │   │   │   ├── search_result_image.dart
+│   │   │   │   ├── serach_result_pill_detail.dart
+│   │   │   ├── search_image.dart
+│   │   │   ├── search_shape.dart
+│   │   │   └── search_text.dart
+│   │   ├── sign/
+│   │   │   ├── sign_in.dart
+│   │   │   ├── sign_naver.dart
+│   │   │   └── sign_up.dart
+│   ├── widgets/
+│   │   ├── calender/
+│   │   │   ├── calender_bottomdialog.dart
+│   │   │   ├── calender_eventlist.dart
+│   │   │   ├── calender_eventmarker.dart
+│   │   │   └── calender_header.dart
+│   │   ├── common/
+│   │   │   ├── custom_appbar.dart
+│   │   │   ├── custom_button.dart
+│   │   │   ├── info_tile.dart
+│   │   │   └── settings_tile.dart
+│   │   ├── disease_allergy/
+│   │   │   ├── disease_allergy_bottom_sheet.dart
+│   │   │   ├── disease_allergy_search_field.dart
+│   │   │   └── disease_allergy_select_chip.dart
+│   │   ├── multi_profile/
+│   │   │   ├── birthdate_picker.dart
+│   │   │   ├── color_selector.dart
+│   │   │   ├── gender_selector.dart
+│   │   │   └── profile_image_picker.dart
+│   ├── home.dart
+│   ├── main.dart
+│   └── navigates.dart
 ├── .env
+├── .flutter-plugins
+├── .flutter-plugins-dependencies
 ├── .gitignore
+├── .import_sorter.yaml
+├── analysis_options.yaml
+├── pubspec.lock
 ├── pubspec.yaml
 └── README.md
+
 ```
