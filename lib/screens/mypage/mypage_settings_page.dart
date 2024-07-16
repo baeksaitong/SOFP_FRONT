@@ -2,33 +2,107 @@
 import 'package:flutter/material.dart';
 
 // Project imports:
-import 'package:sopf_front/constans/colors.dart';
-import 'package:sopf_front/constans/text_styles.dart';
-import 'package:sopf_front/widgets/common/custom_appbar.dart';
-import 'package:sopf_front/widgets/mypage/settings_tile.dart';
+import '../../constans/colors.dart';
+import '../../constans/text_styles.dart';
+import '../../constans/gaps.dart';
 
-class MyPageSettingsPage extends StatelessWidget {
-  const MyPageSettingsPage({Key? key}) : super(key: key);
+class MyPageSettingsPage extends StatefulWidget {
+  const MyPageSettingsPage({super.key});
+
+  @override
+  _MyPageSettingsPageState createState() => _MyPageSettingsPageState();
+}
+
+class _MyPageSettingsPageState extends State<MyPageSettingsPage> {
+  bool _isAdEnabled = true;
+  bool _isNotificationEnabled = true;
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: CustomAppBar(title: '설정'),
-      body: ListView(
-        children: [
-          SettingsTile(title: '알림 설정', onTap: () {
-            // 알림 설정 페이지로 이동
-          }),
-          SettingsTile(title: '계정 설정', onTap: () {
-            // 계정 설정 페이지로 이동
-          }),
-          SettingsTile(title: '테마 설정', onTap: () {
-            // 테마 설정 페이지로 이동
-          }),
-          SettingsTile(title: '기타 설정', onTap: () {
-            // 기타 설정 페이지로 이동
-          }),
-        ],
+      backgroundColor: AppColors.wh,
+      appBar: AppBar(
+        title: Text('환경설정',
+            style: AppTextStyles.body1S16.copyWith(color: AppColors.bk)),
+        backgroundColor: Colors.white,
+        leading: IconButton(
+          icon: const Icon(Icons.arrow_back, color: AppColors.bk),
+          onPressed: () {
+            Navigator.pop(context);
+          },
+        ),
+        centerTitle: true,
+        elevation: 0,
+      ),
+      body: Padding(
+        padding: const EdgeInsets.all(16.0),
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            Column(
+              children: [
+                SwitchListTile(
+                  title: Text(
+                    '광고 수신여부',
+                    style: AppTextStyles.body2M16.copyWith(color: AppColors.bk),
+                  ),
+                  value: _isAdEnabled,
+                  onChanged: (bool value) {
+                    setState(() {
+                      _isAdEnabled = value;
+                    });
+                  },
+                  activeColor: AppColors.wh, // Custom active color
+                  activeTrackColor:
+                  AppColors.deepTeal, // Custom active track color
+                  inactiveThumbColor:
+                  AppColors.wh, // Custom inactive thumb color
+                  inactiveTrackColor:
+                  AppColors.gr400, // Custom inactive track color
+                ),
+                SwitchListTile(
+                  title: Text(
+                    '알림 활성화',
+                    style: AppTextStyles.body2M16.copyWith(color: AppColors.bk),
+                  ),
+                  value: _isNotificationEnabled,
+                  onChanged: (bool value) {
+                    setState(() {
+                      _isNotificationEnabled = value;
+                    });
+                  },
+                  activeColor: AppColors.wh, // Custom active color
+                  activeTrackColor:
+                  AppColors.deepTeal, // Custom active track color
+                  inactiveThumbColor:
+                  AppColors.wh, // Custom inactive thumb color
+                  inactiveTrackColor:
+                  AppColors.gr400, // Custom inactive track color
+                ),
+                ListTile(
+                  title: Text(
+                    '이용약관',
+                    style: AppTextStyles.body2M16.copyWith(color: AppColors.bk),
+                  ),
+                  trailing: const Icon(Icons.arrow_forward_ios),
+                  onTap: () {
+                    // Navigate to terms and conditions page
+                  },
+                ),
+                const Divider(),
+              ],
+            ),
+            ListTile(
+              title: Text(
+                '회원 탈퇴',
+                style: AppTextStyles.body2M16.copyWith(color: AppColors.red),
+              ),
+              onTap: () {
+                // Handle account deletion
+              },
+            ),
+          ],
+        ),
       ),
     );
   }

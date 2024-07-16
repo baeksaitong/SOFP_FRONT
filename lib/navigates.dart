@@ -97,8 +97,9 @@ void navigateToSignUp() {
   );
 }
 
-void navigateToPillDetail(int serialNumber, String imgUrl, String pillName, String pillDescription) {
-  navigatorKey.currentState?.push(
+void navigateToPillDetail(BuildContext context, int serialNumber, String imgUrl, String pillName, String pillDescription) {
+  Navigator.push(
+    context,
     MaterialPageRoute(
       builder: (context) => SearchResultPillDetail(
         serialNumber: serialNumber,
@@ -109,6 +110,7 @@ void navigateToPillDetail(int serialNumber, String imgUrl, String pillName, Stri
     ),
   );
 }
+
 
 void navigateToPreference() {
   navigatorKey.currentState?.push(

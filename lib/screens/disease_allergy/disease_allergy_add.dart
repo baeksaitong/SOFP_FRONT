@@ -8,6 +8,8 @@ import 'package:sopf_front/constans/text_styles.dart';
 import 'package:sopf_front/constans/gaps.dart';
 import 'package:sopf_front/providers/provider.dart';
 import 'package:sopf_front/managers/managers_jwt.dart';
+import 'package:sopf_front/navigates.dart';
+import 'package:sopf_front/home.dart';
 
 class DiseaseAllergyAdd extends StatefulWidget {
   @override
@@ -113,6 +115,10 @@ class _DiseaseAllergyAddState extends State<DiseaseAllergyAdd> {
     } catch (e) {
       print('Error saving allergies: $e');
     }
+    Navigator.pushReplacement(
+        context,
+        MaterialPageRoute(builder: (context) => HomePage()),
+    );
   }
 
   @override
@@ -192,6 +198,7 @@ class _DiseaseAllergyAddState extends State<DiseaseAllergyAdd> {
               child: ElevatedButton(
                 onPressed: () {
                   saveSelections();
+                  navigateToHome();
                 },
                 style: ElevatedButton.styleFrom(
                   backgroundColor: AppColors.deepTeal,
@@ -202,7 +209,7 @@ class _DiseaseAllergyAddState extends State<DiseaseAllergyAdd> {
                 ),
                 child: Text(
                   '약속 시작하기',
-                  style: AppTextStyles.body1S16.copyWith(color: AppColors.deepTeal),
+                  style: AppTextStyles.body1S16.copyWith(color: AppColors.wh),
                 ),
               ),
             ),
