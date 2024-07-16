@@ -3,8 +3,7 @@
 
 ## 디벨로퍼
 
-| ![손좆민](https://github.com/user-attachments/assets/33e61767-558c-4d80-b597-18185312376b) | ![성명근](https://github.com/user-attachments/assets/e44e4e5e-e876-4653-bc81-df773e37cfe2) | ![신창윤](https://github.com/user-attachments/assets/611cde0c-c8b9-4d91-8157-f6029f6847b6)
-| ![이한조](https://github.com/user-attachments/assets/3e99bebc-b898-44e8-8f36-14593e1f26fe) | ![정진우](assets/정진우.jpg) |
+| ![손창민](assets/손창민.jpg) | ![성명근](assets/성명근.jpg) | ![신창윤](assets/신창윤.jpg) | ![이한조](assets/이한조.jpg) | ![정진우](assets/정진우.jpg) |
 |:---------------------------:|:---------------------------:|:---------------------------:|:---------------------------:|:---------------------------:|
 | 손창민 | 성명근  | 신창윤 | 이한조 | 정진우 |
 
