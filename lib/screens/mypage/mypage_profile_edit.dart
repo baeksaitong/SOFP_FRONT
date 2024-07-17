@@ -30,7 +30,7 @@ class _MyPageProfileEditState extends State<MyPageProfileEdit> {
   final ImagePicker _picker = ImagePicker();
   final TextEditingController nameController = TextEditingController();
   final TextEditingController birthdateController = TextEditingController();
-  final JWTmanager jwtManager = JWTmanager();
+  final JWTManager jwtManager = JWTManager();
   final GlobalResponseManager responseManager = GlobalResponseManager();
 
   String gender = "MALE";

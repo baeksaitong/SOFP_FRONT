@@ -27,7 +27,7 @@ class _DiseaseAllergyAddState extends State<DiseaseAllergyAdd> {
   List<String> allergies = [];
   String query = '';
   final Dio _dio = Dio(); // Dio 인스턴스 생성
-  final JWTmanager _jwtManager = JWTmanager(); // JWTmanager 인스턴스 생성
+  final JWTManager _jwtManager = JWTManager(); // JWTmanager 인스턴스 생성
 
   @override
   void initState() {

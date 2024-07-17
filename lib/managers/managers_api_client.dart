@@ -16,12 +16,19 @@ import 'package:provider/provider.dart';
 // Project imports:
 import 'package:sopf_front/managers/managers_jwt.dart';
 import 'package:sopf_front/providers/provider.dart';
+import '../models/models_drug_info_detail.dart';
+import '../models/models_profile.dart';
+import 'managers_category.dart';
+import 'managers_drugs.dart';
+import 'managers_favorites.dart';
 import 'managers_global_response.dart';
 import '../navigates.dart';
+import 'managers_recent_histories.dart';
+import 'managers_tasking_drugs.dart';
 
 class APIClient {
   static String? baseUrl = dotenv.env['API_URL'];
-  final JWTmanager _jwtManager = JWTmanager();
+  final JWTManager _jwtManager = JWTManager();
 
   Future<void> naverLogin(BuildContext context, String code) async {
     final String url = '$baseUrl/app/oauth/naver?code=$code';

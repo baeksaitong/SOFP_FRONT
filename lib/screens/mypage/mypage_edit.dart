@@ -45,7 +45,7 @@ class _MyPageEditState extends State<MyPageEdit> {
 
   Future<void> fetchMemberInfo() async {
     try {
-      final jwtManager = JWTmanager();
+      final jwtManager = JWTManager();
       final accessToken = await jwtManager.getValidAccessToken();
 
       final response = await http.get(
@@ -92,7 +92,7 @@ class _MyPageEditState extends State<MyPageEdit> {
     }
 
     try {
-      final jwtManager = JWTmanager();
+      final jwtManager = JWTManager();
       final accessToken = await jwtManager.getValidAccessToken();
 
       final url = Uri.parse('http://15.164.18.65:8080/app/member');

@@ -23,6 +23,7 @@ import 'package:sopf_front/screens/search/result/search_result.dart';
 import 'package:sopf_front/screens/pill/pill_tasking_list.dart';
 import 'package:sopf_front/screens/search/search_text.dart';
 import 'package:sopf_front/screens/sign/sign_up.dart';
+import 'models/models_category.dart';
 import 'screens/pill/pill_category_plus.dart';
 import 'screens/mypage/mypage_service_center.dart';
 import 'home.dart';

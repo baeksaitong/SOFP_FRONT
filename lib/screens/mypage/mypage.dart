@@ -65,7 +65,7 @@ class _MyPageState extends State<MyPage> {
     if (profile != null && profile!['id'] != null) {
       print('Fetching allergies and diseases...');
       try {
-        final accessToken = await JWTmanager().getValidAccessToken();
+        final accessToken = await JWTManager().getValidAccessToken();
         final response = await http.get(
           Uri.parse('http://15.164.18.65:8080/app/disease-allergy/${profile!['id']}'),
           headers: {
@@ -94,7 +94,7 @@ class _MyPageState extends State<MyPage> {
     if (profile != null && profile!['id'] != null) {
       print('Fetching medications...');
       try {
-        final accessToken = await JWTmanager().getValidAccessToken();
+        final accessToken = await JWTManager().getValidAccessToken();
         final response = await http.get(
           Uri.parse('http://15.164.18.65:8080/app/pill?profileId=${profile!['id']}'),
           headers: {
@@ -121,7 +121,7 @@ class _MyPageState extends State<MyPage> {
 
   Future<void> updateAllergiesAndDiseases() async {
     try {
-      final accessToken = await JWTmanager().getValidAccessToken();
+      final accessToken = await JWTManager().getValidAccessToken();
       final response = await http.patch(
         Uri.parse('http://15.164.18.65:8080/app/disease-allergy/${profile!['id']}'),
         headers: {
@@ -148,7 +148,7 @@ class _MyPageState extends State<MyPage> {
 
   Future<void> updateMedications() async {
     try {
-      final accessToken = await JWTmanager().getValidAccessToken();
+      final accessToken = await JWTManager().getValidAccessToken();
       final response = await http.post(
         Uri.parse('http://15.164.18.65:8080/app/pill/${profile!['id']}'),
         headers: {
@@ -178,7 +178,7 @@ class _MyPageState extends State<MyPage> {
 
     Future<void> onSearch(String value) async {
       try {
-        final accessToken = await JWTmanager().getValidAccessToken();
+        final accessToken = await JWTManager().getValidAccessToken();
         final response = await http.get(
           Uri.parse('http://15.164.18.65:8080/app/disease-allergy/search?keyword=$value'),
           headers: {
@@ -306,7 +306,7 @@ class _MyPageState extends State<MyPage> {
 
     Future<void> onSearch(String value) async {
       try {
-        final accessToken = await JWTmanager().getValidAccessToken();
+        final accessToken = await JWTManager().getValidAccessToken();
         final response = await http.get(
           Uri.parse('http://15.164.18.65:8080/app/pill/search?keyword=$value'),
           headers: {
@@ -659,7 +659,7 @@ class _MyPageState extends State<MyPage> {
 
 
   Future<void> _logout(BuildContext context) async {
-    await JWTmanager().deleteTokens();
+    await JWTManager().deleteTokens();
     Navigator.pushAndRemoveUntil(
       context,
       MaterialPageRoute(builder: (context) => SignIn()),

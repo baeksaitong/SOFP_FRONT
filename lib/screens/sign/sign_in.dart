@@ -6,6 +6,7 @@ import 'package:sopf_front/managers/managers_api_client.dart';
 import 'package:sopf_front/constans/colors.dart';
 import 'package:sopf_front/constans/gaps.dart';
 import '../../main.dart';
+import '../../managers/api/services_auth.dart';
 import '../../navigates.dart';
 import 'sign_naver.dart';
 
@@ -124,7 +125,7 @@ class LoginButton extends StatelessWidget {
 
   final TextEditingController passwordController;
   final TextEditingController idController;
-  final APIClient apiClient = APIClient();
+  final AuthService authService = AuthService();
 
   @override
   Widget build(BuildContext context) {
@@ -133,7 +134,7 @@ class LoginButton extends StatelessWidget {
       child: ElevatedButton(
         onPressed: () async {
           // await apiClient.login(context, idController.text, passwordController.text);
-          await apiClient.login(context, 'satong102@naver.com', 'asdf1234!');
+          await authService.login(context, 'satong102@naver.com', 'asdf1234!');
         },
         style: ElevatedButton.styleFrom(
           padding: EdgeInsets.symmetric(
