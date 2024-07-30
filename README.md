@@ -112,6 +112,7 @@ flutter run
 ### 일반적인 문제와 해결 방법
 - **문제 예시**: 어떠한 문제!
   - **해결 방법**:
+    예)
     1. `flutter doctor` 명령어를 사용하여 필요한 구성 요소가 모두 설치되었는지 확인합니다.
     2. `Flutter clean` -> `Flutter pub get` -> `Flutter run 혹은 버튼을 눌러 실행`
 
@@ -119,9 +120,6 @@ flutter run
 ```plaintext
 SOFP_FRONT/
 │
-├── .dart_tool/
-├── .github/
-├── .idea/
 ├── android/
 ├── assets/
 ├── build/
@@ -197,14 +195,7 @@ SOFP_FRONT/
 │   ├── home.dart
 │   ├── main.dart
 │   └── navigates.dart
-├── .env
-├── .flutter-plugins
-├── .flutter-plugins-dependencies
 ├── .gitignore
-├── .import_sorter.yaml
-├── analysis_options.yaml
-├── pubspec.lock
-├── pubspec.yaml
-└── README.md
+└── pubspec.yaml
 
 ```
