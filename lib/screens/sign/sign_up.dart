@@ -378,6 +378,9 @@ class _SignUpState extends State<SignUp> {
                   print('회원가입 버튼 클릭');
                   final String? Birth = dateOfBirth?.replaceAll('.', '-');
                   print(Birth);
+                  print(name);
+                  print(email);
+                  print(_password);
                   if (gender == "남자") {
                     await apiClient.signUp(
                         name, Birth!, email, "male", _password!, true);

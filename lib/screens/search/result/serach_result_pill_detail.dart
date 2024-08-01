@@ -11,7 +11,8 @@ import '../../../constans/gaps.dart';
 import '../../../managers/managers_global_response.dart';
 
 import '../../../constans/text_styles.dart'; // 원하는 글꼴 스타일이 정의된 파일을 임포트
-import '../../../constans/colors.dart'; // 색상 정의 파일을 임포트
+import '../../../constans/colors.dart';
+import '../../../models/models_drug_info_detail.dart'; // 색상 정의 파일을 임포트
 
 class SearchResultPillDetail extends StatefulWidget {
   final int serialNumber;

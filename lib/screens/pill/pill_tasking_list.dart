@@ -12,6 +12,10 @@ import 'package:sopf_front/providers/provider.dart';
 import '../../constans/colors.dart';
 import '../../constans/text_styles.dart';
 import '../../constans/gaps.dart';
+import '../../managers/managers_category.dart';
+import '../../managers/managers_tasking_drugs.dart';
+import '../../models/models_category.dart';
+import '../../models/models_taking_drugs_info.dart';
 import '../search/search_shape.dart';
 import '../search/search_text.dart';
 

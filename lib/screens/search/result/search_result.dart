@@ -11,7 +11,11 @@ import 'package:sopf_front/screens/search/search_shape.dart';
 import '../../../constans/colors.dart';
 import '../../../constans/text_styles.dart';
 import '../../../constans/gaps.dart';
+import '../../../managers/managers_drugs.dart';
+import '../../../managers/managers_favorites.dart';
 import '../../../managers/managers_global_response.dart';
+import '../../../models/models_drug_info.dart';
+import '../../../models/models_favorite_info.dart';
 
 class SearchResult extends StatefulWidget {
   const SearchResult({super.key});

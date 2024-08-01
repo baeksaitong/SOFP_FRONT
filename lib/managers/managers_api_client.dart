@@ -416,7 +416,6 @@ class APIClient {
     }
   }
 
-
   Future<void> diseaseAllergyList() async {
     final String? accessToken = await _jwtManager.getAccessToken();
     final url = Uri.parse('$baseUrl/app/disease-allergy');

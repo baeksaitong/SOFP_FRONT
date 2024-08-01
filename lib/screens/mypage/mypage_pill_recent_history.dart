@@ -7,6 +7,8 @@ import '../../managers/managers_api_client.dart';
 import '../../constans/text_styles.dart';
 import '../../constans/gaps.dart';
 import '../../managers/managers_global_response.dart';
+import '../../managers/managers_recent_histories.dart';
+import '../../models/models_recent_history_info.dart';
 import '../../navigates.dart';
 
 class MyPagePillRecentHistory extends StatefulWidget {

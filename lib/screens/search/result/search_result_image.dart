@@ -12,8 +12,12 @@ import 'package:sopf_front/constans/colors.dart';
 import 'package:sopf_front/constans/text_styles.dart';
 import 'package:sopf_front/constans/gaps.dart';
 import '../../../managers/managers_api_client.dart';
+import '../../../managers/managers_drugs.dart';
+import '../../../managers/managers_favorites.dart';
 import '../../../managers/managers_global_response.dart';
 import '../../../home.dart';
+import '../../../models/models_drug_info.dart';
+import '../../../models/models_favorite_info.dart';
 import '../../../navigates.dart';
 
 class SearchResultImage extends StatefulWidget {

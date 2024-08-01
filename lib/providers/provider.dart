@@ -3,6 +3,8 @@ import 'package:flutter/material.dart';
 
 // Project imports:
 import '../managers/managers_global_response.dart';
+import '../models/models_drug_info_detail.dart';
+import '../models/models_profile.dart';
 
 class ProfileProvider with ChangeNotifier {
   Profile? _currentProfile;

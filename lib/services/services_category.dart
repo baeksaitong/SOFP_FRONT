@@ -4,32 +4,55 @@ import 'package:provider/provider.dart';
 import 'package:sopf_front/services/services_api_client.dart';
 
 import '../managers/managers_category.dart';
+import '../managers/managers_jwt.dart';
 import '../providers/provider.dart';
-import '../managers/managers_global_response.dart';
+import 'package:http/http.dart' as http;
 
 class CategoryService extends APIClient {
+  final JWTManager _jwtManager = JWTManager();
+
   Future<void> categoryGet(BuildContext context, String categoryId) async {
-    final response = await get(Uri.parse('${APIClient.baseUrl}/app/category/$categoryId'));
+    final currentProfile =
+        Provider.of<ProfileProvider>(context, listen: false).currentProfile;
+    final String? accessToken = await _jwtManager.getAccessToken();
+    final url = buildUri('/app/category/$categoryId');
+    final response = await http.get(url, headers: <String, String>{
+      'Content-Type': 'application/json; charset=UTF-8',
+      'Accept': 'application/json',
+      'Authorization': 'Bearer $accessToken', // 인증 헤더 추가
+    });
 
     if (response.statusCode == 200) {
+      // 성공적으로 처리된 경우
       final jsonResponse = utf8.decode(response.bodyBytes);
-      print('카테고리 조회 성공: $jsonResponse');
+      print('카테고리 조회 성공: ${utf8.decode(response.bodyBytes)}');
       CategoryDetailsManager().updateCategoryDetails(jsonResponse);
     } else {
+      // 실패 처리
       print(response.statusCode);
       print('카테고리 조회 실패: ${utf8.decode(response.bodyBytes)}');
     }
   }
 
   Future<String> categoryGetAll(BuildContext context, String id) async {
-    final response = await get(Uri.parse('${APIClient.baseUrl}/app/category?profileId=$id'));
+    final currentProfile =
+        Provider.of<ProfileProvider>(context, listen: false).currentProfile;
+    final String? accessToken = await _jwtManager.getAccessToken();
+    final url = buildUri('/app/category?profileId=$id');
+    final response = await http.get(url, headers: <String, String>{
+      'Content-Type': 'application/json; charset=UTF-8',
+      'Accept': 'application/json',
+      'Authorization': 'Bearer $accessToken', // 인증 헤더 추가
+    });
 
     if (response.statusCode == 200) {
+      // 성공적으로 처리된 경우
       final jsonResponse = utf8.decode(response.bodyBytes);
-      print('모든 카테고리 조회 성공: $jsonResponse');
-      CategoryManager().updateCategories(jsonResponse);
+      print('모든 카테고리 조회 성공: ${utf8.decode(response.bodyBytes)}');
+      CategoryManager().updateCategories(jsonResponse);  // CategoryManager 업데이트
       return jsonResponse;
     } else {
+      // 실패 처리
       print(response.statusCode);
       print('모든 카테고리 조회 실패: ${utf8.decode(response.bodyBytes)}');
       return '';
@@ -37,13 +60,21 @@ class CategoryService extends APIClient {
   }
 
   Future<String> categoryDayGet(BuildContext context, String id, String day) async {
-    final response = await get(Uri.parse('${APIClient.baseUrl}/app/category/$id/$day'));
+    final String? accessToken = await _jwtManager.getAccessToken();
+    final url = buildUri('/app/category/$id/$day');
+    final response = await http.get(url, headers: <String, String>{
+      'Content-Type': 'application/json; charset=UTF-8',
+      'Accept': 'application/json',
+      'Authorization': 'Bearer $accessToken', // 인증 헤더 추가
+    });
 
     if (response.statusCode == 200) {
+      // 성공적으로 처리된 경우
       final jsonResponse = utf8.decode(response.bodyBytes);
-      print('요일 카테고리 조회 성공: $jsonResponse');
+      print('요일 카테고리 조회 성공: ${utf8.decode(response.bodyBytes)}');
       return jsonResponse;
     } else {
+      // 실패 처리
       print(response.statusCode);
       print('요일 카테고리 조회 실패: ${utf8.decode(response.bodyBytes)}');
       return '';
@@ -51,33 +82,51 @@ class CategoryService extends APIClient {
   }
 
   Future<void> categoryPost(BuildContext context, Map<String, dynamic>? category) async {
-    final currentProfile = Provider.of<ProfileProvider>(context, listen: false).currentProfile;
-    final response = await post(
-      Uri.parse('${APIClient.baseUrl}/app/category/${currentProfile?.id}'),
-      body: {
+    final currentProfile =
+        Provider.of<ProfileProvider>(context, listen: false).currentProfile;
+    final String? accessToken = await _jwtManager.getAccessToken();
+    final url = buildUri('/app/category/${currentProfile?.id}');
+    final response = await http.post(url, headers: <String, String>{
+      'Content-Type': 'application/json; charset=UTF-8',
+      'Accept': 'application/json',
+      'Authorization': 'Bearer $accessToken', // 인증 헤더 추가
+    },
+      body: jsonEncode(<String, dynamic>{
         "name": category?['name'],
         "intakeDayList": category?['intakeDayList'],
         "intakeTimeList": category?['intakeTimeList'],
         "period": category?['period'],
         "alarm": category?['alarm'],
-      },
+      }),
     );
 
     if (response.statusCode == 200) {
+      // 성공적으로 처리된 경우
       print('카테고리 추가 성공: ${utf8.decode(response.bodyBytes)}');
     } else {
+      // 실패 처리
       print(response.statusCode);
       print('카테고리 추가 실패: ${utf8.decode(response.bodyBytes)}');
     }
   }
 
   Future<void> categoryDelete(BuildContext context, String categoryId, bool isAllDelete) async {
-    final response = await delete(Uri.parse('${APIClient.baseUrl}/app/category/$categoryId?isAllDelete=$isAllDelete'));
+    final currentProfile =
+        Provider.of<ProfileProvider>(context, listen: false).currentProfile;
+    final String? accessToken = await _jwtManager.getAccessToken();
+    final url = buildUri('/app/category/$categoryId?isAllDelete=$isAllDelete');
+    final response = await http.delete(url, headers: <String, String>{
+      'Content-Type': 'application/json; charset=UTF-8',
+      'Accept': 'application/json',
+      'Authorization': 'Bearer $accessToken', // 인증 헤더 추가
+    });
 
     if (response.statusCode == 200) {
+      // 성공적으로 처리된 경우
       final jsonResponse = utf8.decode(response.bodyBytes);
-      print('카테고리 삭제 성공: $jsonResponse');
+      print('카테고리 삭제 성공: ${utf8.decode(response.bodyBytes)}');
     } else {
+      // 실패 처리
       print(response.statusCode);
       print('카테고리 삭제 실패: ${utf8.decode(response.bodyBytes)}');
     }
