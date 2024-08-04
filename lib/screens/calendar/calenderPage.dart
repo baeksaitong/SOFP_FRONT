@@ -9,6 +9,7 @@ import 'package:intl/date_symbol_data_local.dart';
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:sopf_front/services/services_category.dart';
 import 'package:table_calendar/table_calendar.dart';
 
 // Project imports:
@@ -105,7 +106,7 @@ class _CalendarPageState extends State<CalendarPage> {
   String _selectedAccount = ''; // 선택된 계정
   Color _selectedColor = AppColors.customBlue; // 선택된 계정 색상
   List<String> _selectedProfileIds = []; // 선택된 프로필 ID 리스트
-  final APIClient apiClient = APIClient();
+  final CategoryService categoryService = CategoryService();
 
   @override
   void initState() {
@@ -207,7 +208,7 @@ class _CalendarPageState extends State<CalendarPage> {
       Color profileColor = getColorFromText(profile.color) ?? Colors.grey; // 프로필 색상 가져오기
 
       for (String day in ['MON', 'TUE', 'WED', 'THU', 'FRI', 'SAT', 'SUN']) {
-        String response = await apiClient.categoryDayGet(context, profileId, day);
+        String response = await categoryService.categoryDayGet(context, profileId, day);
         print("요일 카테고리 조회 성공: $response"); // 디버깅용 출력
         if (response.isNotEmpty) {
           Map<String, dynamic> jsonMap = jsonDecode(response);
@@ -518,7 +519,6 @@ class BottomDialog extends StatefulWidget {
 
 class _BottomDialogState extends State<BottomDialog> {
   late Map<String, bool> selectedProfiles;
-  final APIClient apiClient = APIClient();
 
   @override
   void initState() {

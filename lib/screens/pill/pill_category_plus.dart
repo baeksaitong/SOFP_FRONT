@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 // Project imports:
 import 'package:sopf_front/managers/managers_api_client.dart';
 import 'package:sopf_front/navigates.dart';
+import 'package:sopf_front/services/services_category.dart';
 import '../../constans/gaps.dart';
 
 import 'package:intl/intl.dart'; // 추가: 시간을 형식에 맞게 변환하기 위해 사용
@@ -28,7 +29,8 @@ class _PillCategoryPlusState extends State<PillCategoryPlus> {
   final TextEditingController _categoryNameController = TextEditingController();
   final TextEditingController _periodController = TextEditingController();
   final List<bool> _selectedWeekdays = [false, false, false, false, false, false, false];
-  final APIClient apiClient = APIClient();
+  final CategoryService categoryService = CategoryService();
+
   @override
   void initState() {
     super.initState();
@@ -60,7 +62,7 @@ class _PillCategoryPlusState extends State<PillCategoryPlus> {
       'period': _periodController.text,
     };
 
-    await apiClient.categoryPost(context, newCategory);
+    await categoryService.categoryPost(context, newCategory);
 
     widget.onSave(newCategory);
     Navigator.pop(context);

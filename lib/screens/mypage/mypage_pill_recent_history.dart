@@ -3,6 +3,8 @@ import 'package:flutter/material.dart';
 
 // Project imports:
 import 'package:sopf_front/constans/colors.dart';
+import 'package:sopf_front/services/services_pill.dart';
+import 'package:sopf_front/services/services_search.dart';
 import '../../managers/managers_api_client.dart';
 import '../../constans/text_styles.dart';
 import '../../constans/gaps.dart';
@@ -19,8 +21,9 @@ class MyPagePillRecentHistory extends StatefulWidget {
 }
 
 class _MyPagePillRecentHistoryState extends State<MyPagePillRecentHistory> {
-  final APIClient apiClient = APIClient();
   List<RecentHistoryInfo> recentHistories = [];
+  final PillService pillService = PillService();
+  final SearchService searchService = SearchService();
 
   @override
   void initState() {
@@ -29,14 +32,14 @@ class _MyPagePillRecentHistoryState extends State<MyPagePillRecentHistory> {
   }
 
   Future<void> _loadRecentHistoryDrugs() async {
-    await apiClient.recentViewPillGet(context);
+    await pillService.recentViewPillGet(context);
     setState(() {
       recentHistories = RecentHistoriesManager().recentHistories;
     });
   }
 
   Future<void> _recentDelete(int index) async {
-    bool success = await apiClient.recentViewPillDelete(recentHistories[index].serialNumber, context);
+    bool success = await pillService.recentViewPillDelete(recentHistories[index].serialNumber, context);
     if (success) {
       setState(() {
         recentHistories.removeAt(index);
@@ -83,7 +86,7 @@ class _MyPagePillRecentHistoryState extends State<MyPagePillRecentHistory> {
                   final drug = recentHistories[index];
                   return GestureDetector(
                     onTap: () async {
-                      await apiClient.searchGet(context, drug.serialNumber);
+                      await searchService.searchGet(context, drug.serialNumber);
                       navigateToPillDetail(
                           context,
                           drug.serialNumber,

@@ -4,6 +4,8 @@ import 'package:sopf_front/managers/managers_api_client.dart';
 import 'package:sopf_front/managers/managers_global_response.dart';
 import 'package:sopf_front/navigates.dart';
 import 'package:sopf_front/providers/provider.dart';
+import 'package:sopf_front/services/services_category.dart';
+import 'package:sopf_front/services/services_pill.dart';
 import '../../constans/colors.dart';
 import '../../constans/text_styles.dart';
 import '../../constans/gaps.dart';
@@ -28,8 +30,8 @@ class _PillTaskingListState extends State<PillTaskingList> {
   String? selectedCategoryName;
   Category? selectedCategoryDetails;
   List<Category> categories = [];
-
-  final APIClient apiClient = APIClient();
+  final PillService pillService = PillService();
+  final CategoryService categoryService = CategoryService();
 
   @override
   void initState() {
@@ -39,7 +41,7 @@ class _PillTaskingListState extends State<PillTaskingList> {
   }
 
   void _initializeMedications() async {
-    await apiClient.pillGet(context, null);
+    await pillService.pillGet(context, null);
     setState(() {
       medications = TakingDrugsManager().drugs;
       print(medications);
@@ -50,7 +52,7 @@ class _PillTaskingListState extends State<PillTaskingList> {
     final currentProfile =
         Provider.of<ProfileProvider>(context, listen: false).currentProfile;
     print('현재 프로필 : ${currentProfile?.id}');
-    await apiClient.categoryGetAll(context, currentProfile!.id);
+    await categoryService.categoryGetAll(context, currentProfile!.id);
     setState(() {
       categories = CategoryManager().categories;
       print(categories);
@@ -271,7 +273,7 @@ class _PillTaskingListState extends State<PillTaskingList> {
 
   void _removeSelectedMedications() async {
     for (int index in selectedIndexes) {
-      await apiClient.pillDelete(context, medications[index].serialNumber);
+      await pillService.pillDelete(context, medications[index].serialNumber);
     }
     setState(() {
       medications = medications
@@ -333,7 +335,7 @@ class _PillTaskingListState extends State<PillTaskingList> {
                           '이동하기 클릭 : ${selectedCategoryDetails!.categoryId}');
                       for (int index in selectedIndexes) {
                         print(index);
-                        await apiClient.pillPatch(
+                        await pillService.pillPatch(
                             context,
                             medications[index].serialNumber,
                             selectedCategoryDetails!.categoryId);
@@ -434,7 +436,7 @@ class _PillTaskingListState extends State<PillTaskingList> {
                           shadowColor: Colors.transparent, // 그림자 제거
                         ),
                         onPressed: () async {
-                          await apiClient.categoryGet(
+                          await categoryService.categoryGet(
                               context, category.categoryId);
                           final CategoryDetails? categoryDetail =
                               CategoryDetailsManager().currentCategory;

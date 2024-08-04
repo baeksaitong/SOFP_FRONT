@@ -7,6 +7,8 @@ import 'package:provider/provider.dart';
 // Project imports:
 import 'package:sopf_front/managers/managers_global_response.dart';
 import 'package:sopf_front/providers/provider.dart';
+import 'package:sopf_front/services/services_category.dart';
+import 'package:sopf_front/services/services_pill.dart';
 import '../../managers/managers_api_client.dart';
 import '../../constans/colors.dart';
 import '../../constans/gaps.dart';
@@ -38,7 +40,8 @@ class _PillCategoryDetailState extends State<PillCategoryDetail> {
   List<TakingDrugsInfo> medications = [];
   List<Category> categories = [];
 
-  final APIClient apiClient = APIClient();
+  final PillService pillService = PillService();
+  final CategoryService categoryService = CategoryService();
 
   @override
   void initState() {
@@ -49,7 +52,7 @@ class _PillCategoryDetailState extends State<PillCategoryDetail> {
 
   void _initializeMedications() async {
     print('categoryId:${widget.category.id}');
-    await apiClient.pillGet(context, widget.category.id);
+    await pillService.pillGet(context, widget.category.id);
     setState(() {
       medications = TakingDrugsManager().drugs;
       print(medications);
@@ -59,7 +62,7 @@ class _PillCategoryDetailState extends State<PillCategoryDetail> {
   void _initializeCatories() async {
     final currentProfile =
         Provider.of<ProfileProvider>(context, listen: false).currentProfile;
-    await apiClient.categoryGetAll(context, currentProfile!.id);
+    await categoryService.categoryGetAll(context, currentProfile!.id);
     setState(() {
       categories = CategoryManager().categories;
       print(categories);
@@ -276,7 +279,7 @@ class _PillCategoryDetailState extends State<PillCategoryDetail> {
 
   void _removeSelectedMedications() async {
     for (int index in selectedIndexes) {
-      await apiClient.pillDelete(context, medications[index].serialNumber);
+      await pillService.pillDelete(context, medications[index].serialNumber);
     }
     setState(() {
       medications = medications
@@ -339,7 +342,7 @@ class _PillCategoryDetailState extends State<PillCategoryDetail> {
                       print('이동하기 클릭 : ${selectedCategoryDetails!.categoryId}');
                       for (int index in selectedIndexes) {
                         print(index);
-                        await apiClient.pillPatch(context, medications[index].serialNumber, selectedCategoryDetails!.categoryId);
+                        await pillService.pillPatch(context, medications[index].serialNumber, selectedCategoryDetails!.categoryId);
                       }
                       _moveSelectedMedications();
                       Navigator.of(context).pop();
@@ -467,7 +470,7 @@ class _PillCategoryDetailState extends State<PillCategoryDetail> {
                                 actions: <Widget>[
                                   OutlinedButton(
                                     onPressed: () async {
-                                      await apiClient.categoryDelete(context, widget.category.id, false);
+                                      await categoryService.categoryDelete(context, widget.category.id, false);
                                       navigateToMedicationsTaking();
                                     },
                                     style: OutlinedButton.styleFrom(
@@ -487,7 +490,7 @@ class _PillCategoryDetailState extends State<PillCategoryDetail> {
                                   ),
                                   OutlinedButton(
                                     onPressed: () async {
-                                      await apiClient.categoryDelete(context, widget.category.id, false);
+                                      await categoryService.categoryDelete(context, widget.category.id, false);
                                       navigateToMedicationsTaking();
                                     },
                                     style: OutlinedButton.styleFrom(

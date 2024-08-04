@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 // Project imports:
 import 'package:sopf_front/managers/managers_api_client.dart';
 import 'package:sopf_front/navigates.dart';
+import 'package:sopf_front/services/services_search.dart';
 import '../../constans/colors.dart';
 import '../../constans/text_styles.dart';
 import '../../constans/gaps.dart';
@@ -22,7 +23,7 @@ class SearchShape extends StatefulWidget {
 }
 
 class _SearchShapeState extends State<SearchShape> {
-  APIClient apiClient = APIClient();
+  SearchService searchService = SearchService();
 
   @override
   Widget build(BuildContext context) {
@@ -178,7 +179,7 @@ class _SearchShapeState extends State<SearchShape> {
                   }
                   showLoading(context, delayed: true); // Show loading spinner with delay
 
-                  await apiClient.searchTextAndShape(context, null, shape, keyword, color, formulation, divideLine);
+                  await searchService.searchTextAndShape(context, null, shape, keyword, color, formulation, divideLine);
 
                   hideLoading(context); // Hide loading spinner
 

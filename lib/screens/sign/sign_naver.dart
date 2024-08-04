@@ -7,6 +7,7 @@ import 'package:flutter_webview_plugin/flutter_webview_plugin.dart';
 import 'package:sopf_front/managers/managers_api_client.dart';
 
 import 'package:sopf_front/navigates.dart';
+import 'package:sopf_front/services/services_auth.dart';
 
 class SignNaver extends StatefulWidget {
   final String authUrl;
@@ -19,8 +20,7 @@ class SignNaver extends StatefulWidget {
 
 class _SignNaverState extends State<SignNaver> {
   final flutterWebviewPlugin = FlutterWebviewPlugin();
-  final APIClient apiClient = APIClient();
-
+  final AuthService authService = AuthService();
   @override
   void initState() {
     super.initState();
@@ -34,7 +34,7 @@ class _SignNaverState extends State<SignNaver> {
           // 인가 코드를 성공적으로 받음
           print('Authorization Code: $code');
           try {
-            await apiClient.naverLogin(context, code);
+            await authService.naverLogin(context, code);
             print('Login successful');
             flutterWebviewPlugin.close();
             if (context.mounted) {

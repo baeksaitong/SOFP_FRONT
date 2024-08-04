@@ -15,6 +15,7 @@ import 'package:sopf_front/constans/text_styles.dart';
 import 'package:sopf_front/constans/gaps.dart';
 import 'package:sopf_front/managers/managers_global_response.dart';
 import 'package:sopf_front/managers/managers_jwt.dart';
+import 'package:sopf_front/models/models_profile.dart';
 
 class MyPageProfileEdit extends StatefulWidget {
   final String profileId;

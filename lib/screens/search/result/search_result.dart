@@ -8,6 +8,8 @@ import 'package:sopf_front/managers/managers_api_client.dart';
 import 'package:sopf_front/navigates.dart';
 import 'package:sopf_front/screens/search/result/serach_result_pill_detail.dart';
 import 'package:sopf_front/screens/search/search_shape.dart';
+import 'package:sopf_front/services/services_favortie.dart';
+import 'package:sopf_front/services/services_search.dart';
 import '../../../constans/colors.dart';
 import '../../../constans/text_styles.dart';
 import '../../../constans/gaps.dart';
@@ -37,7 +39,8 @@ class _SearchResultState extends State<SearchResult> {
   String colorText = '색상';
   String formulationText = '제형';
 
-  APIClient apiClient = APIClient();
+  FavoriteService favoriteService = FavoriteService();
+  SearchService searchService = SearchService();
 
   List<DrugInfo> drugs = [];
   List<FavoriteInfo> favorites = [];
@@ -47,10 +50,10 @@ class _SearchResultState extends State<SearchResult> {
       drugs[index].isBookmarked = !drugs[index].isBookmarked;
       print('${drugs[index].serialNumber}, ${drugs[index].imgUrl}');
       if (drugs[index].isBookmarked == true) {
-        apiClient.favoritePost(
+        favoriteService.favoritePost(
             context, drugs[index].serialNumber, drugs[index].imgUrl);
       } else {
-        apiClient.favoriteDelete(context, drugs[index].serialNumber);
+        favoriteService.favoriteDelete(context, drugs[index].serialNumber);
       }
     });
   }
@@ -71,7 +74,7 @@ class _SearchResultState extends State<SearchResult> {
   }
 
   void _initializeDrugs() async {
-    await apiClient.favoriteGet(context);
+    await favoriteService.favoriteGet(context);
     favorites = FavoritesManager().favorites;
     drugs = DrugsManager().drugs; // GlobalManager에서 직접 데이터를 가져옵니다.
     for (var drug in drugs) {
@@ -683,7 +686,7 @@ class _SearchResultState extends State<SearchResult> {
                   final drug = drugs[index];
                   return GestureDetector(
                     onTap: () async {
-                      await apiClient.searchGet(context, drug.serialNumber);
+                      await searchService.searchGet(context, drug.serialNumber);
                       navigateToPillDetail(
                           context,
                           drug.serialNumber,

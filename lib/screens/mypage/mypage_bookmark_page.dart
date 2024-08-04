@@ -3,6 +3,8 @@ import 'package:flutter/material.dart';
 
 // Project imports:
 import 'package:sopf_front/constans/colors.dart';
+import 'package:sopf_front/services/services_favortie.dart';
+import 'package:sopf_front/services/services_search.dart';
 import '../../managers/managers_api_client.dart';
 import '../../constans/text_styles.dart';
 import '../../constans/gaps.dart';
@@ -19,8 +21,9 @@ class MyPageBookMarkPage extends StatefulWidget {
 }
 
 class _MyPageBookMarkPageState extends State<MyPageBookMarkPage> {
-  final APIClient apiClient = APIClient();
-  List<FavoriteInfo> favorites = [];
+  late List<FavoriteInfo> favorites = [];
+  final FavoriteService favoriteService = FavoriteService();
+  final SearchService searchService = SearchService();
 
   @override
   void initState() {
@@ -29,7 +32,7 @@ class _MyPageBookMarkPageState extends State<MyPageBookMarkPage> {
   }
 
   Future<void> _loadFavoriteDrugs() async {
-    await apiClient.favoriteGet(context);
+    await favoriteService.favoriteGet(context);
     setState(() {
       favorites = FavoritesManager().favorites;
     });
@@ -40,9 +43,9 @@ class _MyPageBookMarkPageState extends State<MyPageBookMarkPage> {
       favorites[index].isBookmarked = !favorites[index].isBookmarked;
       print('${favorites[index].serialNumber}, ${favorites[index].imgUrl}');
       if (favorites[index].isBookmarked == true) {
-        apiClient.favoritePost(context, favorites[index].serialNumber, favorites[index].imgUrl);
+        favoriteService.favoritePost(context, favorites[index].serialNumber, favorites[index].imgUrl);
       } else {
-        apiClient.favoriteDelete(context, favorites[index].serialNumber);
+        favoriteService.favoriteDelete(context, favorites[index].serialNumber);
       }
     });
   }
@@ -82,7 +85,7 @@ class _MyPageBookMarkPageState extends State<MyPageBookMarkPage> {
                   final drug = favorites[index];
                   return GestureDetector(
                     onTap: () async {
-                      await apiClient.searchGet(context, drug.serialNumber);
+                      await searchService.searchGet(context, drug.serialNumber);
                       navigateToPillDetail(
                           context,
                           drug.serialNumber,

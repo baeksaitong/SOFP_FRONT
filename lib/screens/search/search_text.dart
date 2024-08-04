@@ -9,6 +9,7 @@ import 'package:permission_handler/permission_handler.dart';
 import 'package:sopf_front/constans/colors.dart';
 import 'package:sopf_front/screens/search/search_image.dart';
 import 'package:sopf_front/navigates.dart';
+import 'package:sopf_front/services/services_search.dart';
 import '../../managers/managers_api_client.dart';
 import '../../constans/text_styles.dart';
 import '../../constans/gaps.dart';
@@ -131,7 +132,7 @@ class TextSearchDetail extends StatefulWidget {
 class _TextSearchDetailState extends State<TextSearchDetail> {
   final TextEditingController _controller = TextEditingController();
   final FocusNode _focusNode = FocusNode();
-  final APIClient apiClient = APIClient();
+  final SearchService searchService = SearchService();
 
   final List<String> _recentSearches = [];
 
@@ -139,7 +140,7 @@ class _TextSearchDetailState extends State<TextSearchDetail> {
     if (term.isNotEmpty) {
       showLoading(context, delayed: true); // Show loading spinner with delay
 
-      await apiClient.searchTextAndShape(
+      await searchService.searchTextAndShape(
           context, term, null, null, null, null, null);
 
       setState(() {
