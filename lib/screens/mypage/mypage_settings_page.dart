@@ -54,11 +54,11 @@ class _MyPageSettingsPageState extends State<MyPageSettingsPage> {
                   },
                   activeColor: AppColors.wh, // Custom active color
                   activeTrackColor:
-                      AppColors.deepTeal, // Custom active track color
+                  AppColors.deepTeal, // Custom active track color
                   inactiveThumbColor:
-                      AppColors.wh, // Custom inactive thumb color
+                  AppColors.wh, // Custom inactive thumb color
                   inactiveTrackColor:
-                      AppColors.gr400, // Custom inactive track color
+                  AppColors.gr400, // Custom inactive track color
                 ),
                 SwitchListTile(
                   title: Text(
@@ -73,11 +73,11 @@ class _MyPageSettingsPageState extends State<MyPageSettingsPage> {
                   },
                   activeColor: AppColors.wh, // Custom active color
                   activeTrackColor:
-                      AppColors.deepTeal, // Custom active track color
+                  AppColors.deepTeal, // Custom active track color
                   inactiveThumbColor:
-                      AppColors.wh, // Custom inactive thumb color
+                  AppColors.wh, // Custom inactive thumb color
                   inactiveTrackColor:
-                      AppColors.gr400, // Custom inactive track color
+                  AppColors.gr400, // Custom inactive track color
                 ),
                 ListTile(
                   title: Text(

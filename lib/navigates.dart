@@ -46,25 +46,25 @@ Widget loadingOverlay(BuildContext context) {
 
   return loadingProvider.isLoading
       ? Container(
-          color: AppColors.wh,
-          child: Center(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.center,
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                SpinKitWaveSpinner(
-                  color: AppColors.vibrantTeal,
-                  size: 55.0,
-                ),
-                Gaps.h16,
-                Text(
-                  '정보를 가져오는 중 입니다.',
-                  style: AppTextStyles.body5M14.copyWith(color: AppColors.gr600),
-                ),
-              ],
-            ),
+    color: AppColors.wh,
+    child: Center(
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.center,
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          SpinKitWaveSpinner(
+            color: AppColors.vibrantTeal,
+            size: 55.0,
           ),
-        )
+          Gaps.h16,
+          Text(
+            '정보를 가져오는 중 입니다.',
+            style: AppTextStyles.body5M14.copyWith(color: AppColors.gr600),
+          ),
+        ],
+      ),
+    ),
+  )
       : SizedBox.shrink();
 }
 
@@ -98,11 +98,20 @@ void navigateToSignUp() {
   );
 }
 
-void navigateToPillDetail(int serialNumber) {
-  navigatorKey.currentState?.push(
-    MaterialPageRoute(builder: (context) => SearchResultPillDetail(serialNumber: serialNumber, imgUrl: '')),
+void navigateToPillDetail(BuildContext context, int serialNumber, String imgUrl, String pillName, String pillDescription) {
+  Navigator.push(
+    context,
+    MaterialPageRoute(
+      builder: (context) => SearchResultPillDetail(
+        serialNumber: serialNumber,
+        imgUrl: imgUrl,
+        pillName: pillName,
+        pillDescription: pillDescription,
+      ),
+    ),
   );
 }
+
 
 void navigateToPreference() {
   navigatorKey.currentState?.push(
@@ -115,7 +124,6 @@ void navigateToFavorite() {
     MaterialPageRoute(builder: (context) => MyPageBookMarkPage()),
   );
 }
-
 
 void navigateToRecentHistory() {
   navigatorKey.currentState?.push(
