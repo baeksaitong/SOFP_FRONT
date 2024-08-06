@@ -125,7 +125,7 @@ class _SplashScreenState extends State<SplashScreen> {
         Duration(seconds: 3), () {}); // Show splash screen for 3 seconds
     Navigator.pushReplacement(
       context,
-      MaterialPageRoute(builder: (context) => MultiProfileAdd()),
+      MaterialPageRoute(builder: (context) => SignIn()),
     );
   }
 
