@@ -38,7 +38,9 @@ class _MultiProfileAddState extends State<MultiProfileAdd> {
   final TextEditingController birthdateController = TextEditingController();
   ColorItem? selectedColorItem; // To store the selected color item
 
-  String gender = "남성"; // 초기값 설정
+  String gender = "남성";
+
+  get image => null; // 초기값 설정
 
   Future<void> getImage() async {
     final XFile? pickedFile = await _picker.pickImage(source: ImageSource.gallery);
@@ -95,7 +97,7 @@ class _MultiProfileAddState extends State<MultiProfileAdd> {
                       GestureDetector(
                         onTap: getImage,
                         child: ProfileImagePicker(
-                          image: _image, onImageSelected: (String ) {  },
+                          image: image, onImageSelected: (string) {  },
                         ),
                       ),
                       Padding(
