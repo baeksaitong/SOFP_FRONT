@@ -22,7 +22,7 @@ import 'constans/colors.dart';
 import 'screens/calendar/calenderPage.dart';
 import 'home.dart';
 import 'providers/provider_loading.dart';
-import 'screens/mypage/mypage.dart';
+import 'screens/multi_profile/multi_profile_add.dart';
 
 /* hanjo
 void main() async {
@@ -125,7 +125,7 @@ class _SplashScreenState extends State<SplashScreen> {
         Duration(seconds: 3), () {}); // Show splash screen for 3 seconds
     Navigator.pushReplacement(
       context,
-      MaterialPageRoute(builder: (context) => SignIn()),
+      MaterialPageRoute(builder: (context) => MultiProfileAdd()),
     );
   }
 

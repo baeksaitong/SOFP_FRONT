@@ -1,36 +1,56 @@
-// Flutter imports:
 import 'package:flutter/material.dart';
-
-// Project imports:
 import 'package:sopf_front/constans/colors.dart';
 import 'package:sopf_front/constans/text_styles.dart';
 
-class ProfileImagePicker extends StatelessWidget {
-  final Function(String) onImageSelected;
+class BirthdatePicker extends StatelessWidget {
+  final String label;
+  final String hintText;
+  final TextEditingController controller;
 
-  const ProfileImagePicker({required this.onImageSelected, Key? key}) : super(key: key);
+  const BirthdatePicker({
+    Key? key,
+    required this.label,
+    required this.hintText,
+    required this.controller,
+  }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    return GestureDetector(
-      onTap: () {
-        // 이미지 선택 로직
-        onImageSelected('image_url');
-      },
-      child: Container(
-        padding: EdgeInsets.all(16),
-        decoration: BoxDecoration(
-          color: AppColors.gr250,
-          borderRadius: BorderRadius.circular(8),
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: <Widget>[
+        Text(
+          label,
+          style: TextStyle(
+            fontWeight: FontWeight.w500, // Medium
+            fontSize: 14,
+            color: AppColors.gr550,
+          ),
         ),
-        child: Column(
-          children: [
-            Icon(Icons.camera_alt, color: AppColors.gr400, size: 40),
-            SizedBox(height: 8),
-            Text('프로필 사진 선택', style: AppTextStyles.body2M16.copyWith(color: AppColors.gr600)),
-          ],
+        TextFormField(
+          controller: controller,
+          decoration: InputDecoration(
+            border: InputBorder.none,
+            hintText: hintText,
+            hintStyle: TextStyle(
+              fontSize: 14,
+              fontWeight: FontWeight.w600,
+              color: AppColors.gr400,
+            ),
+            filled: true,
+            fillColor: AppColors.gr150,
+            contentPadding: EdgeInsets.symmetric(horizontal: 12, vertical: 14),
+            enabledBorder: OutlineInputBorder(
+              borderSide: BorderSide.none,
+              borderRadius: BorderRadius.circular(8),
+            ),
+            focusedBorder: OutlineInputBorder(
+              borderSide: BorderSide(color: AppColors.vibrantTeal, width: 2),
+              borderRadius: BorderRadius.circular(8),
+            ),
+          ),
         ),
-      ),
+      ],
     );
   }
 }
