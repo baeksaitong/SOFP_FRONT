@@ -1,15 +1,12 @@
-// lib/screens/disease_allergy/disease_allergy_add.dart
-
 import 'package:flutter/material.dart';
-import 'package:dio/dio.dart';
 import 'package:provider/provider.dart';
 import 'package:sopf_front/constans/colors.dart';
 import 'package:sopf_front/constans/text_styles.dart';
 import 'package:sopf_front/constans/gaps.dart';
 import 'package:sopf_front/providers/provider.dart';
-import 'package:sopf_front/managers/managers_jwt.dart';
 import 'package:sopf_front/navigates.dart';
 import 'package:sopf_front/home.dart';
+import 'package:sopf_front/services/services_disease_allergy.dart';
 
 class DiseaseAllergyAdd extends StatefulWidget {
   @override
@@ -21,8 +18,7 @@ class _DiseaseAllergyAddState extends State<DiseaseAllergyAdd> {
   List<String> selectedItems = [];
   List<String> allergies = [];
   String query = '';
-  final Dio _dio = Dio(); // Dio 인스턴스 생성
-  final JWTManager _jwtManager = JWTManager(); // JWTmanager 인스턴스 생성
+  final DiseaseAllergyService diseaseAllergyService = DiseaseAllergyService();
 
   @override
   void initState() {
@@ -35,19 +31,10 @@ class _DiseaseAllergyAddState extends State<DiseaseAllergyAdd> {
     if (currentProfile == null) return;
 
     try {
-      final accessToken = await _jwtManager.getValidAccessToken();
-      final response = await _dio.get(
-        'http://15.164.18.65:8080/app/disease-allergy/${currentProfile.id}',
-        options: Options(headers: {
-          'Authorization': 'Bearer $accessToken'
-        }),
-      );
-
-      if (response.statusCode == 200) {
-        setState(() {
-          allergies = List<String>.from(response.data['DiseaseAllergyList']);
-        });
-      }
+      final result = await DiseaseAllergyService().diseaseAllergyGet(context);
+      setState(() {
+        allergies = result ?? []; // null이면 빈 리스트를 사용
+      });
     } catch (e) {
       print('Error loading allergies: $e');
     }
@@ -59,20 +46,10 @@ class _DiseaseAllergyAddState extends State<DiseaseAllergyAdd> {
     });
 
     try {
-      final accessToken = await _jwtManager.getValidAccessToken();
-      final response = await _dio.get(
-        'http://15.164.18.65:8080/app/disease-allergy/search',
-        queryParameters: {'keyword': query},
-        options: Options(headers: {
-          'Authorization': 'Bearer $accessToken'
-        }),
-      );
-
-      if (response.statusCode == 200) {
-        setState(() {
-          searchResults = List<String>.from(response.data['DiseaseAllergyList']);
-        });
-      }
+      final result = await diseaseAllergyService.diseaseAllergySearch(query);
+      setState(() {
+        searchResults = result != null ? List<String>.from(result) : [];
+      });
     } catch (e) {
       print('Error searching allergies: $e');
     }
@@ -90,34 +67,23 @@ class _DiseaseAllergyAddState extends State<DiseaseAllergyAdd> {
 
   Future<void> saveSelections() async {
     try {
-      final accessToken = await _jwtManager.getValidAccessToken();
-      final response = await _dio.patch(
-        'http://15.164.18.65:8080/app/disease-allergy/${Provider.of<ProfileProvider>(context, listen: false).currentProfile?.id}',
-        data: {
-          'addDiseaseAllergyList': selectedItems,
-          'removeDiseaseAllergyList': []
-        },
-        options: Options(headers: {
-          'Authorization': 'Bearer $accessToken'
-        }),
+      await diseaseAllergyService.diseaseAllergyAddOrDelete(
+        context,
+        selectedItems.isNotEmpty ? selectedItems.join(',') : null,
+        null,
       );
-
-      if (response.statusCode == 200) {
-        setState(() {
-          allergies.addAll(selectedItems);
-          selectedItems.clear();
-        });
-        print('Allergies saved successfully');
-        Navigator.of(context).pop(true);
-      } else {
-        print('Failed to save allergies. Status code: ${response.statusCode}');
-      }
+      setState(() {
+        allergies.addAll(selectedItems);
+        selectedItems.clear();
+      });
+      print('Allergies saved successfully');
+      Navigator.of(context).pop(true);
     } catch (e) {
       print('Error saving allergies: $e');
     }
     Navigator.pushReplacement(
-        context,
-        MaterialPageRoute(builder: (context) => HomePage()),
+      context,
+      MaterialPageRoute(builder: (context) => HomePage()),
     );
   }
 

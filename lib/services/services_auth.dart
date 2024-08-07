@@ -52,7 +52,6 @@ class AuthService extends APIClient {
           print('프로필 설정 완료: ${profileResponse.profileList[0].name}');
         }
       }
-      diseaseAllergyService.diseaseAllergyList();
       if(context.mounted) {
         pillService.recentViewPillGet(context);
       }
@@ -209,7 +208,6 @@ class AuthService extends APIClient {
               .setCurrentProfile(profileResponse.profileList[0]);
         }
       }
-      diseaseAllergyService.diseaseAllergyList();
       if (context.mounted) {
         await pillService.recentViewPillGet(context); // await 추가
         await pillService.pillGet(context, null); // await 추가
