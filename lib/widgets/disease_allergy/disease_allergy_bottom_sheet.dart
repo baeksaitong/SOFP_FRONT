@@ -1,11 +1,8 @@
-// lib/widgets/disease_allergy/disease_allergy_bottom_sheet.dart
-
 import 'package:flutter/material.dart';
-import 'package:dio/dio.dart';
 import 'package:sopf_front/constans/colors.dart';
 import 'package:sopf_front/constans/text_styles.dart';
 import 'package:sopf_front/constans/gaps.dart';
-import 'package:sopf_front/managers/managers_jwt.dart';
+import 'package:sopf_front/services/services_disease_allergy.dart';
 
 class DiseaseAllergyBottomSheet extends StatefulWidget {
   final Function(List<String>) onSave;
@@ -20,8 +17,7 @@ class _DiseaseAllergyBottomSheetState extends State<DiseaseAllergyBottomSheet> {
   List<String> searchResults = [];
   List<String> selectedItems = [];
   String query = '';
-  final Dio _dio = Dio();
-  final JWTmanager _jwtManager = JWTmanager();
+  final DiseaseAllergyService diseaseAllergyService = DiseaseAllergyService();
 
   Future<void> onSearch(String value) async {
     setState(() {
@@ -29,20 +25,10 @@ class _DiseaseAllergyBottomSheetState extends State<DiseaseAllergyBottomSheet> {
     });
 
     try {
-      final accessToken = await _jwtManager.getValidAccessToken();
-      final response = await _dio.get(
-        'http://15.164.18.65:8080/app/disease-allergy/search',
-        queryParameters: {'keyword': query},
-        options: Options(headers: {
-          'Authorization': 'Bearer $accessToken'
-        }),
-      );
-
-      if (response.statusCode == 200) {
-        setState(() {
-          searchResults = List<String>.from(response.data['DiseaseAllergyList']);
-        });
-      }
+      final result = await diseaseAllergyService.diseaseAllergySearch(query);
+      setState(() {
+        searchResults = result != null ? List<String>.from(result) : [];
+      });
     } catch (e) {
       print('Error searching allergies: $e');
     }

@@ -8,6 +8,8 @@ import 'package:sopf_front/navigates.dart';
 import 'package:sopf_front/home.dart';
 import 'package:sopf_front/services/services_disease_allergy.dart';
 
+import '../../widgets/disease_allergy/disease_allergy_bottom_sheet.dart';
+
 class DiseaseAllergyAdd extends StatefulWidget {
   @override
   _DiseaseAllergyAddState createState() => _DiseaseAllergyAddState();
@@ -147,8 +149,14 @@ class _DiseaseAllergyAddState extends State<DiseaseAllergyAdd> {
                 onPressed: () {
                   showModalBottomSheet(
                     context: context,
-                    builder: (context) => Container(
-                      // Add your bottom sheet content here
+                    isScrollControlled: true, // To ensure it expands to full height if needed
+                    builder: (context) => DiseaseAllergyBottomSheet(
+                      onSave: (selectedItems) {
+                        setState(() {
+                          // 추가된 알레르기를 선택 항목에 추가
+                          allergies.addAll(selectedItems);
+                        });
+                      },
                     ),
                   );
                 },
