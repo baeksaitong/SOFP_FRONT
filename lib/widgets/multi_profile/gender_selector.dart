@@ -8,7 +8,7 @@ import 'package:sopf_front/constans/text_styles.dart';
 class GenderSelector extends StatelessWidget {
   final Function(String) onGenderSelected;
 
-  const GenderSelector({required this.onGenderSelected, Key? key}) : super(key: key);
+  const GenderSelector({required this.onGenderSelected, Key? key, required String initialGender, required Null Function(String newGender) onGenderChanged}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {

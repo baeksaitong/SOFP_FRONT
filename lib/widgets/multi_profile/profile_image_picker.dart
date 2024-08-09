@@ -1,4 +1,5 @@
 // Flutter imports:
+import 'package:cross_file/src/types/interface.dart';
 import 'package:flutter/material.dart';
 
 // Project imports:
@@ -7,7 +8,7 @@ import 'package:sopf_front/constans/colors.dart';
 class ProfileImagePicker extends StatelessWidget {
   final Function(String) onImageSelected;
 
-  const ProfileImagePicker({required this.onImageSelected, Key? key}) : super(key: key);
+  const ProfileImagePicker({required this.onImageSelected, Key? key, XFile? image}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
