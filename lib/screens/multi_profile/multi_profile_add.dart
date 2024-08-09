@@ -16,6 +16,7 @@ import 'package:sopf_front/constans/text_styles.dart';
 import 'package:sopf_front/constans/gaps.dart';
 import 'package:sopf_front/navigates.dart';
 import 'package:sopf_front/screens/search/search_shape.dart';
+import 'package:sopf_front/services/services_profile.dart';
 
 // Widget imports:
 import 'package:sopf_front/widgets/multi_profile/birthdate_picker.dart';
@@ -57,13 +58,13 @@ class _MultiProfileAddState extends State<MultiProfileAdd> {
     final String name = nameController.text;
     String birthdate = birthdateController.text;
     birthdate = birthdate.replaceAll('.', '-');
-    final APIClient apiClient = APIClient();
+    final ProfileService profileService = ProfileService();
     String colorName = selectedColorItem?.text ?? '초록'; // Default color
 
     if (gender == '남성') {
-      await apiClient.profilePost(name, birthdate, 'MALE', colorName, null);
+      await profileService.profilePost(name, birthdate, 'MALE', colorName, null);
     } else {
-      await apiClient.profilePost(name, birthdate, 'FEMALE', colorName, null);
+      await profileService.profilePost(name, birthdate, 'FEMALE', colorName, null);
     }
     navigateToHome();
   }

@@ -1,5 +1,6 @@
 import 'dart:convert';
 
+import 'package:camera/camera.dart';
 import 'package:sopf_front/services/services_api_client.dart';
 
 import 'package:http/http.dart' as http;
@@ -65,6 +66,43 @@ class ProfileService extends APIClient {
       print(response.statusCode);
       print('실패했습니다: ${response.body}');
       return null;
+    }
+  }
+
+  Future<void> profilePost(
+      String name, String birthday, String gender, String color, XFile? _image
+      ) async {
+    final String? accessToken = await _jwtManager.getAccessToken();
+
+    var url = buildUri('/app/profile');
+    var headers = {
+      'Content-Type': 'application/json',
+      'Authorization': 'Bearer $accessToken',
+    };
+
+    // 이미지 파일을 base64로 인코딩
+    String? base64Image;
+    if (_image != null) {
+      List<int> imageBytes = await _image.readAsBytes();
+      base64Image = base64Encode(imageBytes);
+    }
+
+    var body = jsonEncode({
+      'name': name,
+      'birthday': birthday,
+      'gender': gender,
+      'color': color,
+      'profileImg': base64Image, // 이미지 파일이 있을 경우 추가
+    });
+
+    var response = await http.post(url, headers: headers, body: body);
+
+    if (response.statusCode == 200) {
+      print('프로필이 성공적으로 저장되었습니다');
+    } else {
+      print('Failed to save profile');
+      print('Status code: ${response.statusCode}');
+      print('Response body: ${response.body}');
     }
   }
 }
