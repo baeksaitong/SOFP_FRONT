@@ -13,7 +13,6 @@ import 'package:sopf_front/services/services_category.dart';
 import 'package:table_calendar/table_calendar.dart';
 
 // Project imports:
-import 'package:sopf_front/managers/managers_api_client.dart';
 import 'package:sopf_front/providers/provider.dart';
 import 'package:sopf_front/screens/search/search_shape.dart';
 import '../../constans/colors.dart';

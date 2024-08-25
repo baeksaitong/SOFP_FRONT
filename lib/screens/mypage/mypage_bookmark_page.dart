@@ -5,11 +5,9 @@ import 'package:flutter/material.dart';
 import 'package:sopf_front/constans/colors.dart';
 import 'package:sopf_front/services/services_favortie.dart';
 import 'package:sopf_front/services/services_search.dart';
-import '../../managers/managers_api_client.dart';
 import '../../constans/text_styles.dart';
 import '../../constans/gaps.dart';
 import '../../managers/managers_favorites.dart';
-import '../../managers/managers_global_response.dart';
 import '../../models/models_favorite_info.dart';
 import '../../navigates.dart';
 

@@ -1,18 +1,13 @@
 // Dart imports:
-import 'dart:convert';
-import 'dart:io';
 
 // Flutter imports:
 import 'package:flutter/material.dart';
 
 // Package imports:
-import 'package:http/http.dart' as http;
 import 'package:image_picker/image_picker.dart';
 
 // Project imports:
-import 'package:sopf_front/managers/managers_api_client.dart';
 import 'package:sopf_front/constans/colors.dart';
-import 'package:sopf_front/constans/text_styles.dart';
 import 'package:sopf_front/constans/gaps.dart';
 import 'package:sopf_front/navigates.dart';
 import 'package:sopf_front/screens/search/search_shape.dart';
