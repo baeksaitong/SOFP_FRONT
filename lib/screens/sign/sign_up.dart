@@ -39,6 +39,7 @@ class _SignUpState extends State<SignUp> {
     super.dispose();
   }
 
+
   // 인증번호 전송 버튼 클릭 시 수행되는 함수
   void onSendVerificationButtonClicked() {
     if (!_timerStarted) {
@@ -908,7 +909,7 @@ class _NameTextBoxState extends State<NameTextBox> {
               ),
             ),
             contentPadding: EdgeInsets.fromLTRB(12, 10, 12, 10),
-            labelText: _isDefaultText ? null : '이름', // 기본 텍스트는 라벨로 표시하지 않음
+            labelText: _isDefaultText ? null : '', // 기본 텍스트는 라벨로 표시하지 않음
             hintText: _isDefaultText ? '홍길동' : null, // 기본 텍스트는 힌트로 표시
           ),
         ),
