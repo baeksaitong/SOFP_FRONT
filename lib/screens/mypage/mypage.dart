@@ -9,10 +9,9 @@ import 'package:http/http.dart' as http;
 import 'package:provider/provider.dart';
 
 // Project imports:
-import 'package:sopf_front/managers/managers_api_client.dart';
 import 'package:sopf_front/constans/colors.dart';
 import 'package:sopf_front/constans/text_styles.dart';
-import 'package:sopf_front/screens/multi_profile/multi_profile_add.dart';
+
 import 'package:sopf_front/navigates.dart';
 import '../../constans/gaps.dart';
 import '../../managers/managers_jwt.dart';

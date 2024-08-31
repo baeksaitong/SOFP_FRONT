@@ -11,8 +11,6 @@ import 'package:image_picker/image_picker.dart';
 
 // Project imports:
 import 'package:sopf_front/constans/colors.dart';
-import 'package:sopf_front/managers/managers_global_response.dart';
-import 'package:sopf_front/providers/provider.dart';
 import '../../constans/gaps.dart';
 import '../../managers/managers_jwt.dart';
 
@@ -270,6 +268,14 @@ class CustomTextField extends StatelessWidget {
               borderSide: BorderSide(color: AppColors.wh), // 테두리 색상을 흰색으로 설정
               borderRadius: BorderRadius.circular(8.0),
             ),
+            enabledBorder: OutlineInputBorder(
+              borderSide: BorderSide(color: AppColors.wh), // 비활성 상태의 테두리 색상을 흰색으로 설정
+              borderRadius: BorderRadius.circular(8.0),
+            ),
+            focusedBorder: OutlineInputBorder(
+              borderSide: BorderSide(color: AppColors.wh), // 포커스된 상태의 테두리 색상을 흰색으로 설정
+              borderRadius: BorderRadius.circular(8.0),
+            ),
             hintText: hintText,
             hintStyle: TextStyle(
               fontSize: 14,
@@ -285,6 +291,7 @@ class CustomTextField extends StatelessWidget {
     );
   }
 }
+
 
 class MemberInfo {
   final String email;

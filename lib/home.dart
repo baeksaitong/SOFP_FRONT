@@ -1,5 +1,4 @@
 // Dart imports:
-import 'dart:convert';
 
 // Flutter imports:
 import 'package:flutter/cupertino.dart';
@@ -19,9 +18,7 @@ import 'package:sopf_front/screens/map/map_pharmacy.dart';
 import 'package:sopf_front/providers/provider.dart';
 import 'package:sopf_front/screens/search/search_shape.dart';
 import 'package:sopf_front/screens/search/search_text.dart';
-import 'managers/managers_api_client.dart';
 import 'constans/text_styles.dart';
-import 'managers/managers_global_response.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({super.key});
