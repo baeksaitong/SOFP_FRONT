@@ -5,8 +5,10 @@ import 'package:provider/provider.dart';
 import 'package:sopf_front/constans/colors.dart'; // 색상 정의 파일을 임포트
 import 'package:sopf_front/constans/text_styles.dart'; // 글꼴 스타일 정의 파일을 임포트
 import 'package:sopf_front/models/models_drug_info_detail.dart';
+import 'package:sopf_front/navigates.dart';
 import 'package:sopf_front/providers/provider.dart';
 import 'package:sopf_front/services/services_auth.dart';
+import 'package:sopf_front/services/services_pill.dart';
 
 class SearchResultPillDetail extends StatefulWidget {
   final int serialNumber;
@@ -29,7 +31,7 @@ class SearchResultPillDetail extends StatefulWidget {
 class _SearchResultPillDetailState extends State<SearchResultPillDetail> {
   bool showWarning = true; // 초기에는 주의사항을 보이게 설정
   bool isFavorite = false; // 즐겨찾기 상태
-  final AuthService authService = AuthService();
+  final PillService pillService = PillService();
 
   @override
   Widget build(BuildContext context) {
@@ -89,8 +91,9 @@ class _SearchResultPillDetailState extends State<SearchResultPillDetail> {
                       ),
                       OutlinedButton(
                         onPressed: () async {
-                          // await authService.pillPost(context, widget.serialNumber);
-                          Navigator.of(context).pop();
+
+                          await pillService.pillPost(context, widget.serialNumber);
+                          navigateToHome();
                           // 초기화 로직을 추가하세요.
                         },
                         style: OutlinedButton.styleFrom(

@@ -73,8 +73,9 @@ void navigateToAddAllergy() {
 }
 
 void navigateToHome() {
-  navigatorKey.currentState?.push(
+  navigatorKey.currentState?.pushAndRemoveUntil(
     MaterialPageRoute(builder: (context) => HomePage()),
+        (Route<dynamic> route) => false,  // 모든 이전 화면을 제거합니다.
   );
 }
 

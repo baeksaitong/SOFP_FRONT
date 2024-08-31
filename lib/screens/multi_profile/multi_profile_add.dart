@@ -7,6 +7,7 @@ import 'package:flutter/material.dart';
 
 // Package imports:
 import 'package:image_picker/image_picker.dart';
+import 'package:provider/provider.dart';
 
 // Project imports:
 import 'package:sopf_front/constans/colors.dart';
@@ -23,6 +24,9 @@ import 'package:sopf_front/widgets/multi_profile/color_selector.dart';
 import 'package:sopf_front/widgets/multi_profile/gender_selector.dart';
 import 'package:sopf_front/widgets/multi_profile/profile_image_picker.dart';
 
+import '../../models/models_profile.dart';
+import '../../providers/provider.dart';
+
 class MultiProfileAdd extends StatefulWidget {
   @override
   _MultiProfileAddState createState() => _MultiProfileAddState();
@@ -37,8 +41,7 @@ class _MultiProfileAddState extends State<MultiProfileAdd> {
   final TextEditingController nameController = TextEditingController();
   final TextEditingController birthdateController = TextEditingController();
   ColorItem? selectedColorItem; // To store the selected color item
-  final AuthService authService = AuthService();
-
+  final ProfileService profileService = ProfileService();
   String gender = "남성"; // 초기값 설정
 
   Future<void> getImage() async {
@@ -66,6 +69,16 @@ class _MultiProfileAddState extends State<MultiProfileAdd> {
     } else {
       await profileService.profilePost(name, birthdate, 'FEMALE', colorName, null);
     }
+
+    // 새 프로필을 추가한 후, 전체 프로필 목록을 다시 가져와서 업데이트
+    final ProfileResponse? profileResponse = await profileService.profileAll();
+    if (profileResponse != null) {
+      final List<Profile> profiles = profileResponse.profileList;
+      if (context.mounted) {
+        Provider.of<ProfileProvider>(context, listen: false).setProfileList(profiles);
+      }
+    }
+
     navigateToHome();
   }
 

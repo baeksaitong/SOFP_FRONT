@@ -21,6 +21,11 @@ class ProfileProvider with ChangeNotifier {
     _profileList = profiles;
     notifyListeners();
   }
+
+  void loadProfiles(List<Profile> profiles) {
+    _profileList = profiles;
+    notifyListeners(); // UI 업데이트
+  }
 }
 
 class DrugInfoDetailProvider with ChangeNotifier {
