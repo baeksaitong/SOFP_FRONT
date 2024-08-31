@@ -102,6 +102,19 @@ class _SearchResultState extends State<SearchResult> {
     );
   }
 
+  void _searchTerm(String term) async {
+    if (term.isNotEmpty) {
+      showLoading(context, delayed: true); // Show loading spinner with delay
+
+      await searchService.searchTextAndShape(
+          context, term, null, null, null, null, null);
+
+      navigateToSearchResult();
+
+      hideLoading(context); // Hide loading spinner
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -155,6 +168,7 @@ class _SearchResultState extends State<SearchResult> {
                         border: InputBorder.none,
                         hintText: "알약 이름을 검색해보세요",
                       ),
+                      onSubmitted: _searchTerm,
                     ),
                   ),
                 ],
@@ -675,7 +689,7 @@ class _SearchResultState extends State<SearchResult> {
             ),
             Gaps.h16,
             Text(
-              '검색 결과 10건',
+              '검색 결과 ${drugs.length}건',
               style: AppTextStyles.body5M14,
             ),
             Gaps.h12,

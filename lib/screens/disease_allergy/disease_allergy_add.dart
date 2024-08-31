@@ -83,10 +83,8 @@ class _DiseaseAllergyAddState extends State<DiseaseAllergyAdd> {
     } catch (e) {
       print('Error saving allergies: $e');
     }
-    Navigator.pushReplacement(
-      context,
-      MaterialPageRoute(builder: (context) => HomePage()),
-    );
+
+    navigateToHome();
   }
 
   @override
@@ -172,7 +170,6 @@ class _DiseaseAllergyAddState extends State<DiseaseAllergyAdd> {
               child: ElevatedButton(
                 onPressed: () {
                   saveSelections();
-                  navigateToHome();
                 },
                 style: ElevatedButton.styleFrom(
                   backgroundColor: AppColors.deepTeal,
