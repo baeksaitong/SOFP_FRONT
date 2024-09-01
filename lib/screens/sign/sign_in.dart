@@ -1,15 +1,21 @@
-// Flutter imports:
 import 'package:flutter/material.dart';
-
-// Project imports:
-import 'package:sopf_front/managers/managers_api_client.dart';
 import 'package:sopf_front/constans/colors.dart';
 import 'package:sopf_front/constans/gaps.dart';
+import 'package:sopf_front/main.dart';
+import 'package:sopf_front/managers/managers_api_client.dart';
+import 'package:sopf_front/navigates.dart';
+import 'package:sopf_front/screens/sign/sign_naver.dart';
+import 'package:sopf_front/services/services_api_client.dart';
 import 'package:sopf_front/services/services_auth.dart';
-import '../../main.dart';
-import '../../navigates.dart';
-import '../../services/services_api_client.dart';
-import 'sign_naver.dart';
+
+
+// void main() {
+//   runApp(MaterialApp(
+//     title: 'First App',
+//     theme: ThemeData(primarySwatch: Colors.blue),
+//     home: LoginPage(),
+//   ));
+// }
 
 class SignIn extends StatefulWidget {
   const SignIn({super.key});
@@ -36,6 +42,10 @@ class _SignInState extends State<SignIn> {
       print('Error checking login status: $e');
     }
   }
+
+  // Future<void> _login() async {
+  //
+  // }
 
   @override
   Widget build(BuildContext context) {
@@ -135,8 +145,7 @@ class LoginButton extends StatelessWidget {
       width: double.infinity,
       child: ElevatedButton(
         onPressed: () async {
-          // await apiClient.login(context, idController.text, passwordController.text);
-          // await apiClient.login(context, 'mg0454@naver.com', 'asdf1234!');
+          // await authService.login(context, idController.text, passwordController.text);
           await authService.login(context, 'mg0454@naver.com', 'asdf1234!');
         },
         style: ElevatedButton.styleFrom(

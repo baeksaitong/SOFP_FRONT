@@ -3,23 +3,15 @@ import 'package:flutter/material.dart';
 
 // Package imports:
 import 'package:camera/camera.dart';
-import 'package:intl/date_symbol_data_local.dart';
-import 'package:lottie/lottie.dart';
-import 'package:permission_handler/permission_handler.dart';
+
 import 'package:provider/provider.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 
 
 // Project imports:
-import 'package:sopf_front/screens/search/search_image.dart';
-import 'package:sopf_front/screens/map/map_pharmacy.dart';
-import 'package:sopf_front/screens/search/result/serach_result_pill_detail.dart';
 import 'package:sopf_front/providers/provider.dart';
-import 'package:sopf_front/screens/search/result/search_result.dart';
-import 'package:sopf_front/screens/search/search_text.dart';
 import 'package:sopf_front/screens/sign/sign_in.dart';
 import 'constans/colors.dart';
-import 'screens/calendar/calenderPage.dart';
 import 'home.dart';
 import 'providers/provider_loading.dart';
 
@@ -106,7 +98,7 @@ class MyApp extends StatelessWidget {
         ),
       ),
       navigatorKey: navigatorKey,
-      home: SplashScreen(), // Show the splash screen first
+      home: SplashScreen(),
     );
   }
 }
@@ -130,7 +122,7 @@ class _SplashScreenState extends State<SplashScreen> {
         Duration(seconds: 3), () {}); // Show splash screen for 3 seconds
     Navigator.pushReplacement(
       context,
-      MaterialPageRoute(builder: (context) => HomePage()),
+      MaterialPageRoute(builder: (context) => SignIn()),
     );
   }
 

@@ -212,6 +212,7 @@ class AuthService extends APIClient {
         await pillService.recentViewPillGet(context); // await 추가
         await pillService.pillGet(context, null); // await 추가
       }
+      Navigator.pop(context); // 로그인 페이지 끄기
       if (jsonResponse['isNew'] == false) {
         navigateToAddAllergy();
       } else {

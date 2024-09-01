@@ -2,11 +2,8 @@
 import 'package:flutter/material.dart';
 
 // Package imports:
-import 'package:lottie/lottie.dart';
-import 'package:provider/provider.dart';
 
 // Project imports:
-import '../constans/colors.dart';
 
 class LoadingProvider with ChangeNotifier {
   bool _isLoading = false;
