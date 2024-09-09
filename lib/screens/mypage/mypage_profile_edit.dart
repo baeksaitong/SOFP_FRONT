@@ -1,21 +1,14 @@
-// Dart imports:
-
 import 'dart:io';
-
-// Flutter imports:
 import 'package:flutter/material.dart';
-
-// Package imports:
 import 'package:http/http.dart' as http;
 import 'package:image_picker/image_picker.dart';
-
-// Project imports:
 import 'package:sopf_front/constans/colors.dart';
 import 'package:sopf_front/constans/text_styles.dart';
 import 'package:sopf_front/constans/gaps.dart';
 import 'package:sopf_front/managers/managers_global_response.dart';
 import 'package:sopf_front/managers/managers_jwt.dart';
 import 'package:sopf_front/models/models_profile.dart';
+import 'package:sopf_front/services/services_profile.dart'; // Profile 모델
 
 class MyPageProfileEdit extends StatefulWidget {
   final String profileId;
@@ -33,12 +26,37 @@ class _MyPageProfileEditState extends State<MyPageProfileEdit> {
   final TextEditingController birthdateController = TextEditingController();
   final JWTManager jwtManager = JWTManager();
   final GlobalResponseManager responseManager = GlobalResponseManager();
+  final ProfileService profileService = ProfileService();
 
   String gender = "MALE";
   String color = "#FFFFFF";
+  bool isLoading = true; // 로딩 상태를 위한 변수
+
+  @override
+  void initState() {
+    super.initState();
+    birthdateController.addListener(_updateBirthdayFormat);
+    _loadProfileDetail(); // 프로필 상세 정보 로딩
+  }
+
+  Future<void> _loadProfileDetail() async {
+    ProfileDetail? profileDetail = await profileService.profileDetail(context);
+    if (profileDetail != null) {
+      setState(() {
+        nameController.text = profileDetail.name;
+        birthdateController.text = profileDetail.birthday;
+        gender = profileDetail.gender;
+        color = profileDetail.color;
+      });
+    } else {
+      print('프로필 로드 실패');
+    }
+  }
+
 
   Future<void> getImage() async {
-    final XFile? pickedFile = await _picker.pickImage(source: ImageSource.gallery);
+    final XFile? pickedFile = await _picker.pickImage(
+        source: ImageSource.gallery);
     if (pickedFile != null) {
       setState(() {
         _image = pickedFile;
@@ -53,7 +71,8 @@ class _MyPageProfileEditState extends State<MyPageProfileEdit> {
     final String birthdate = birthdateController.text.replaceAll('.', '-');
     final String accessToken = await jwtManager.getValidAccessToken();
 
-    var url = Uri.parse('http://15.164.18.65:8080/app/profile/${widget.profileId}');
+    var url = Uri.parse(
+        'http://3.39.8.147:8080/app/profile/${widget.profileId}');
     var request = http.MultipartRequest('PUT', url);
     request.headers['Authorization'] = 'Bearer $accessToken';
 
@@ -62,27 +81,22 @@ class _MyPageProfileEditState extends State<MyPageProfileEdit> {
     request.fields['gender'] = gender;
     request.fields['color'] = color;
 
-    if (_image != null) {
-      request.files.add(await http.MultipartFile.fromPath('profileImg', _image!.path));
+    if (_image != null && _image!.path.isNotEmpty) {
+      request.files.add(
+          await http.MultipartFile.fromPath('profileImg', _image!.path));
     }
 
     var response = await request.send();
 
     if (response.statusCode == 200) {
       final responseString = await response.stream.bytesToString();
-      responseManager.addResponse(responseString);
+        responseManager.addResponse(responseString);
       print('프로필이 성공적으로 저장되었습니다');
     } else {
       print('Failed to save profile');
       print('Status code: ${response.statusCode}');
       print('Response body: ${await response.stream.bytesToString()}');
     }
-  }
-
-  @override
-  void initState() {
-    super.initState();
-    birthdateController.addListener(_updateBirthdayFormat);
   }
 
   @override
@@ -100,7 +114,9 @@ class _MyPageProfileEditState extends State<MyPageProfileEdit> {
         text: '$text.',
         selection: TextSelection.collapsed(offset: text.length + 1),
       );
-    } else if (text.length == 7 && text.split('.').length - 1 == 1) {
+    } else if (text.length == 7 && text
+        .split('.')
+        .length - 1 == 1) {
       birthdateController.value = TextEditingValue(
         text: '$text.',
         selection: TextSelection.collapsed(offset: text.length + 1),
@@ -124,6 +140,7 @@ class _MyPageProfileEditState extends State<MyPageProfileEdit> {
         centerTitle: true,
         backgroundColor: AppColors.wh,
       ),
+      // isLoading 체크를 제거하고 바로 프로필 데이터 표시
       body: SingleChildScrollView(
         padding: const EdgeInsets.all(16.0),
         child: Column(
@@ -137,8 +154,11 @@ class _MyPageProfileEditState extends State<MyPageProfileEdit> {
                       radius: 50,
                       backgroundColor: AppColors.wh,
                       backgroundImage: _image != null
-                          ? FileImage(File(_image!.path)) as ImageProvider<Object>
-                          : AssetImage('assets/mypageEdit/user-icon.png') as ImageProvider<Object>,
+                          ? FileImage(File(_image!.path)) as ImageProvider<
+                          Object>
+                          : AssetImage(
+                          'assets/mypageEdit/user-icon.png') as ImageProvider<
+                          Object>,
                     ),
                   ),
                   Gaps.h20,
@@ -174,13 +194,15 @@ class _MyPageProfileEditState extends State<MyPageProfileEdit> {
                           border: InputBorder.none,
                           filled: true,
                           fillColor: AppColors.gr150,
-                          contentPadding: EdgeInsets.symmetric(horizontal: 12, vertical: 14),
+                          contentPadding: EdgeInsets.symmetric(
+                              horizontal: 12, vertical: 14),
                           enabledBorder: OutlineInputBorder(
                             borderSide: BorderSide.none,
                             borderRadius: BorderRadius.circular(8),
                           ),
                           focusedBorder: OutlineInputBorder(
-                            borderSide: BorderSide(color: AppColors.vibrantTeal, width: 2),
+                            borderSide: BorderSide(
+                                color: AppColors.vibrantTeal, width: 2),
                             borderRadius: BorderRadius.circular(8),
                           ),
                         ),
@@ -189,7 +211,8 @@ class _MyPageProfileEditState extends State<MyPageProfileEdit> {
                             gender = newValue!;
                           });
                         },
-                        items: <String>['MALE', 'FEMALE'].map<DropdownMenuItem<String>>((String value) {
+                        items: <String>['MALE', 'FEMALE']
+                            .map<DropdownMenuItem<String>>((String value) {
                           return DropdownMenuItem<String>(
                             value: value,
                             child: Text(
@@ -220,7 +243,8 @@ class _MyPageProfileEditState extends State<MyPageProfileEdit> {
                     ),
                   ),
                   style: ElevatedButton.styleFrom(
-                    shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
+                    shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(8)),
                     backgroundColor: AppColors.vibrantTeal,
                     minimumSize: Size.fromHeight(48),
                   ),
@@ -234,7 +258,7 @@ class _MyPageProfileEditState extends State<MyPageProfileEdit> {
   }
 }
 
-class CustomTextField extends StatelessWidget {
+  class CustomTextField extends StatelessWidget {
   final String label;
   final String hintText;
   final bool isPassword;

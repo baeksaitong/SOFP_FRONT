@@ -11,8 +11,10 @@ import 'package:image_picker/image_picker.dart';
 
 // Project imports:
 import 'package:sopf_front/constans/colors.dart';
+import 'package:sopf_front/services/services_member.dart';
 import '../../constans/gaps.dart';
 import '../../managers/managers_jwt.dart';
+import '../../models/models_member_info.dart';
 
 class MyPageEdit extends StatefulWidget {
   final String profileId;
@@ -31,7 +33,7 @@ class _MyPageEditState extends State<MyPageEdit> {
   late TextEditingController confirmPasswordController;
   bool _isSubscribed = false;
   late MemberInfo memberInfo;
-
+  final MemberService memberService = MemberService();
   @override
   void initState() {
     super.initState();
@@ -42,31 +44,13 @@ class _MyPageEditState extends State<MyPageEdit> {
   }
 
   Future<void> fetchMemberInfo() async {
-    try {
-      final jwtManager = JWTManager();
-      final accessToken = await jwtManager.getValidAccessToken();
-
-      final response = await http.get(
-        Uri.parse('http://15.164.18.65:8080/app/member'),
-        headers: {
-          'Content-Type': 'application/json',
-          'Authorization': 'Bearer $accessToken',
-        },
-      );
-
-      if (response.statusCode == 200) {
-        final responseBody = response.body;
-        print('Response body: $responseBody'); // 응답 본문을 출력하여 확인
-        memberInfo = MemberInfo.fromJson(json.decode(responseBody));
-        setState(() {
-          emailController.text = memberInfo.email;
-          _isSubscribed = memberInfo.advertisement;
-        });
-      } else {
-        print('Failed to load member info: ${response.statusCode}');
-      }
-    } catch (e) {
-      print('Error fetching member info: $e');
+    MemberInfo? fetchedMemberInfo = await memberService.fetchMemberInfo();
+    if (fetchedMemberInfo != null) {
+      setState(() {
+        memberInfo = fetchedMemberInfo;
+        emailController.text = memberInfo.email;
+        _isSubscribed = memberInfo.advertisement;
+      });
     }
   }
 
@@ -89,45 +73,24 @@ class _MyPageEditState extends State<MyPageEdit> {
       return;
     }
 
-    try {
-      final jwtManager = JWTManager();
-      final accessToken = await jwtManager.getValidAccessToken();
+    bool isSuccess = await memberService.saveMemberData(
+      passwordController.text,
+      _isSubscribed,
+    );
 
-      final url = Uri.parse('http://15.164.18.65:8080/app/member');
-      final response = await http.put(
-        url,
-        headers: <String, String>{
-          'Content-Type': 'application/json; charset=UTF-8',
-          'Authorization': 'Bearer $accessToken',
-        },
-        body: jsonEncode(<String, dynamic>{
-          'password': passwordController.text,
-          'advertisement': _isSubscribed,
-        }),
-      );
-
-      print('Response status: ${response.statusCode}');
-      print('Response body: ${response.body}');
-
-      if (response.statusCode == 200) {
-        ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-          content: Text('정보가 성공적으로 저장되었습니다.'),
-        ));
-        Navigator.pop(context, {
-          'email': emailController.text,
-          'image': _image?.path,
-          'isSubscribed': _isSubscribed,
-        });
-      } else {
-        ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-          content: Text('저장 중 오류가 발생했습니다. 다시 시도해주세요.'),
-        ));
-      }
-    } catch (e) {
+    if (isSuccess) {
+      ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+        content: Text('정보가 성공적으로 저장되었습니다.'),
+      ));
+      Navigator.pop(context, {
+        'email': emailController.text,
+        'image': _image?.path,
+        'isSubscribed': _isSubscribed,
+      });
+    } else {
       ScaffoldMessenger.of(context).showSnackBar(SnackBar(
         content: Text('저장 중 오류가 발생했습니다. 다시 시도해주세요.'),
       ));
-      print('Error: $e');
     }
   }
 
@@ -289,30 +252,5 @@ class CustomTextField extends StatelessWidget {
         ),
       ],
     );
-  }
-}
-
-
-class MemberInfo {
-  final String email;
-  final bool advertisement;
-
-  MemberInfo({
-    required this.email,
-    required this.advertisement,
-  });
-
-  factory MemberInfo.fromJson(Map<String, dynamic> json) {
-    return MemberInfo(
-      email: json['email'] ?? '',
-      advertisement: json['advertisement'] ?? false,
-    );
-  }
-
-  Map<String, dynamic> toJson() {
-    return {
-      'email': email,
-      'advertisement': advertisement,
-    };
   }
 }
