@@ -7,6 +7,8 @@ import 'package:sopf_front/constans/text_styles.dart'; // 글꼴 스타일 정�
 import 'package:sopf_front/models/models_drug_info_detail.dart';
 import 'package:sopf_front/providers/provider.dart';
 import 'package:sopf_front/services/services_auth.dart';
+import 'package:sopf_front/services/services_favortie.dart';
+import 'package:sopf_front/services/services_pill.dart';
 
 class SearchResultPillDetail extends StatefulWidget {
   final int serialNumber;

@@ -234,11 +234,11 @@ class _TextSearchDetailState extends State<TextSearchDetail> {
                     itemCount: _recentSearches.length,
                     itemBuilder: (context, index) {
                       return ListTile(
-                        contentPadding:
-                        EdgeInsets.zero, // Remove padding inside ListTile
+                        contentPadding: EdgeInsets.zero, // Remove padding inside ListTile
                         title: GestureDetector(
                           onTap: () {
-                            print(_recentSearches[index]);
+                            // 최근 검색어를 눌렀을 때 해당 검색어로 다시 검색
+                            _addSearchTerm(_recentSearches[index]);
                           },
                           child: Text(
                             _recentSearches[index],

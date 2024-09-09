@@ -7,7 +7,6 @@ import 'package:sopf_front/constans/text_styles.dart';
 import 'package:flutter/services.dart';
 import 'package:sopf_front/services/services_auth.dart';
 
-
 class SignUp extends StatefulWidget {
   const SignUp({super.key});
 
@@ -22,7 +21,9 @@ class _SignUpState extends State<SignUp> {
   String buttonLabel = '인증번호 전송'; // 버튼 레이블 초기값 설정
   String? dateOfBirth; // 생년월일
   String? _password; // 비밀번호
+  String? _confirmPassword; // 비밀번호 확인
   String? emailCode; // 인증번호
+  bool _isEmailVerified = false; // 이메일 인증 완료 여부
   Timer? startTimer; // 타이머 선언
   final TextEditingController _dateOfBirthController = TextEditingController();
   bool _timerStarted = false; // 타이머 시작 여부
@@ -38,7 +39,6 @@ class _SignUpState extends State<SignUp> {
     _dateOfBirthController.dispose();
     super.dispose();
   }
-
 
   // 인증번호 전송 버튼 클릭 시 수행되는 함수
   void onSendVerificationButtonClicked() {
@@ -65,7 +65,7 @@ class _SignUpState extends State<SignUp> {
         dateOfBirth == null ||
         _password == null ||
         emailCode == null ||
-        privacyPolicyAccepted) {
+        !privacyPolicyAccepted) { // 개인정보 처리방침 동의 확인
       // 필수 입력란 중 하나라도 비어 있으면 토스트 메시지 출력
       Fluttertoast.showToast(
         msg: '모든 필수 입력란을 채워주세요.',
@@ -73,25 +73,46 @@ class _SignUpState extends State<SignUp> {
         backgroundColor: Colors.red,
         textColor: Colors.white,
       );
-    } else {
-      // 모든 필수 입력란이 채워져 있으면 회원가입 정보 출력
-      print('회원가입 정보:');
-      print('이름: $name');
-      print('생년월일: $dateOfBirth');
-      print('성별: $gender');
-      print('이메일: $email');
-      print('비밀번호: $_password');
+      return;
+    }
 
-      // 여기에 실제 회원가입 로직을 추가할 수 있습니다.
-
-      // 회원가입 완료 메시지 출력
+    // 비밀번호와 비밀번호 확인이 일치하는지 확인
+    if (_password != _confirmPassword) {
       Fluttertoast.showToast(
-        msg: '회원가입이 완료되었습니다.',
+        msg: '비밀번호가 일치하지 않습니다.',
         gravity: ToastGravity.BOTTOM,
-        backgroundColor: Colors.green,
+        backgroundColor: Colors.red,
         textColor: Colors.white,
       );
+      return;
     }
+
+    // 이메일 인증이 완료되었는지 확인 (emailCode를 확인)
+    if (!_isEmailVerified) {
+      Fluttertoast.showToast(
+        msg: '이메일 인증을 완료해주세요.',
+        gravity: ToastGravity.BOTTOM,
+        backgroundColor: Colors.red,
+        textColor: Colors.white,
+      );
+      return;
+    }
+
+    // 모든 필수 입력란이 채워져 있고, 비밀번호가 일치하며, 이메일 인증이 완료된 경우 회원가입 진행
+    print('회원가입 정보:');
+    print('이름: $name');
+    print('생년월일: $dateOfBirth');
+    print('성별: $gender');
+    print('이메일: $email');
+    print('비밀번호: $_password');
+
+    // 회원가입 로직을 여기에 추가
+    Fluttertoast.showToast(
+      msg: '회원가입이 완료되었습니다.',
+      gravity: ToastGravity.BOTTOM,
+      backgroundColor: Colors.green,
+      textColor: Colors.white,
+    );
   }
 
   void _onDateOfBirthChanged(String value) {
@@ -331,9 +352,23 @@ class _SignUpState extends State<SignUp> {
                         // 인증번호 확인 로직 구현
                         print('인증번호 확인 버튼이 클릭되었습니다.');
                         await authService.mailCheck(email, emailCode!);
+
+                        // 인증이 성공했다고 가정하고 성공 메시지 출력 (메서드 내부에서 성공 여부를 관리)
+                        setState(() {
+                          _isEmailVerified = true; // 이메일 인증 완료
+                        });
+
+                        Fluttertoast.showToast(
+                          msg: '이메일 인증이 완료되었습니다.',
+                          gravity: ToastGravity.BOTTOM,
+                          backgroundColor: Colors.green,
+                          textColor: Colors.white,
+                        );
                       },
                     ),
                   ),
+
+
                 ],
               ),
 
@@ -543,42 +578,6 @@ class _VerificationState extends State<Verification> {
   }
 }
 
-class LabeledCheckbox extends StatelessWidget {
-  const LabeledCheckbox({
-    super.key,
-    required this.label,
-    required this.value,
-    required this.onChanged,
-  });
-
-  final String label;
-  final bool value;
-  final ValueChanged<bool> onChanged;
-
-  @override
-  Widget build(BuildContext context) {
-    return InkWell(
-      onTap: () {
-        onChanged(!value);
-      },
-      child: Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 20.0),
-        child: Row(
-          children: <Widget>[
-            Expanded(child: Text(label)),
-            Checkbox(
-              value: value,
-              onChanged: (bool? newValue) {
-                onChanged(newValue!);
-              },
-            ),
-          ],
-        ),
-      ),
-    );
-  }
-}
-
 class LabeledCheckboxExample extends StatelessWidget {
   const LabeledCheckboxExample({
     super.key,
@@ -642,18 +641,20 @@ class _PasswordFieldsContainerState extends State<PasswordFieldsContainer> {
       children: [
         PasswordTextBox(
           onPasswordChanged: (value) {
-            _password = value;
+            setState(() {
+              _password = value;
+              _passwordsMatch = _password == _confirmPassword;
+            });
             widget.onPasswordChanged(value); // 부모 위젯에 비밀번호 전달
           },
         ),
         Gaps.h40,
         PasswordCheckTextBox(
           onConfirmPasswordChanged: (value) {
-            _confirmPassword = value;
-            _passwordsMatch = _password == _confirmPassword;
-            if (_passwordsMatch) {
-              widget.onPasswordChanged(_password); // 비밀번호 확인이 일치하면 업데이트
-            }
+            setState(() {
+              _confirmPassword = value;
+              _passwordsMatch = _password == _confirmPassword;
+            });
           },
           passwordsMatch: _passwordsMatch,
         ),
@@ -764,8 +765,6 @@ class PasswordCheckTextBox extends StatelessWidget {
   }
 }
 
-// 이메일 텍스트박스
-
 class EmailTextBox extends StatefulWidget {
   final ValueChanged<String> onChanged;
 
@@ -845,8 +844,6 @@ class _EmailTextBoxState extends State<EmailTextBox> {
     super.dispose();
   }
 }
-
-//이름 텍스트박스
 
 class NameTextBox extends StatefulWidget {
   final ValueChanged<String> onChanged;
