@@ -103,9 +103,9 @@ class DiseaseAllergyService extends APIClient {
     }
   }
 
-  Future<List<String>?> diseaseAllergySearch(String keyword) async {
+  Future<List<String>?> diseaseAllergySearch(String keyword, {int page = 1, int pageSize = 30}) async {
     final String? accessToken = await _jwtManager.getAccessToken();
-    final url = buildUri('/app/disease-allergy/search?keyword=$keyword');
+    final url = buildUri('/app/disease-allergy/search?keyword=$keyword&page=$page&pageSize=$pageSize');
     final response = await http.get(
       url,
       headers: <String, String>{
@@ -117,7 +117,13 @@ class DiseaseAllergyService extends APIClient {
 
     if (response.statusCode == 200) {
       final jsonResponse = jsonDecode(utf8.decode(response.bodyBytes));
-      return List<String>.from(jsonResponse['DiseaseAllergyList']);
+      final List<String> diseaseAllergyList = List<String>.from(jsonResponse['DiseaseAllergyList']);
+
+      // 갯수 출력
+      print('검색된 질병 및 알레르기 수: ${diseaseAllergyList.length}');
+      print('질병 및 알레르기 검색 중: $jsonResponse');
+
+      return diseaseAllergyList;
     } else {
       print('질병 및 알레르기 검색 실패: ${response.statusCode}');
       return null;
