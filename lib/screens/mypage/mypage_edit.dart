@@ -27,6 +27,7 @@ class MyPageEdit extends StatefulWidget {
 
 class _MyPageEditState extends State<MyPageEdit> {
   XFile? _image;
+  String? _networkImageUrl; // 프로필 이미지 URL을 저장할 변수
   final ImagePicker _picker = ImagePicker();
   late TextEditingController emailController;
   late TextEditingController passwordController;
@@ -123,8 +124,12 @@ class _MyPageEditState extends State<MyPageEdit> {
                       radius: 50,
                       backgroundColor: AppColors.wh,
                       backgroundImage: _image != null
-                          ? FileImage(File(_image!.path)) as ImageProvider<Object>
-                          : AssetImage('assets/mypageEdit/user-icon.png') as ImageProvider<Object>,
+                          ? FileImage(File(_image!.path))
+                          : (_networkImageUrl != null && _networkImageUrl!.isNotEmpty
+                          ? (Uri.tryParse(_networkImageUrl!)?.isAbsolute == true
+                          ? NetworkImage(_networkImageUrl!) // 네트워크 이미지 URL
+                          : AssetImage(_networkImageUrl!) as ImageProvider) // 로컬 애셋 이미지
+                          : AssetImage('assets/mypageEdit/user-icon.png') as ImageProvider), // 기본 이미지 처리
                     ),
                   ),
                   Gaps.h20,

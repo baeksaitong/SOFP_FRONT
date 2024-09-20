@@ -21,6 +21,7 @@ class MyPageProfileEdit extends StatefulWidget {
 
 class _MyPageProfileEditState extends State<MyPageProfileEdit> {
   XFile? _image;
+  String? _networkImageUrl; // 프로필 이미지 URL을 저장할 변수
   final ImagePicker _picker = ImagePicker();
   final TextEditingController nameController = TextEditingController();
   final TextEditingController birthdateController = TextEditingController();
@@ -47,16 +48,15 @@ class _MyPageProfileEditState extends State<MyPageProfileEdit> {
         birthdateController.text = profileDetail.birthday;
         gender = profileDetail.gender;
         color = profileDetail.color;
+        _networkImageUrl = profileDetail.imgURL ?? 'assets/mypageEdit/user-icon.png'; // 기본 이미지 처리
       });
     } else {
       print('프로필 로드 실패');
     }
   }
 
-
   Future<void> getImage() async {
-    final XFile? pickedFile = await _picker.pickImage(
-        source: ImageSource.gallery);
+    final XFile? pickedFile = await _picker.pickImage(source: ImageSource.gallery);
     if (pickedFile != null) {
       setState(() {
         _image = pickedFile;
@@ -70,9 +70,9 @@ class _MyPageProfileEditState extends State<MyPageProfileEdit> {
     final String name = nameController.text;
     final String birthdate = birthdateController.text.replaceAll('.', '-');
     final String accessToken = await jwtManager.getValidAccessToken();
+    final ProfileService profileService = ProfileService();
 
-    var url = Uri.parse(
-        'http://3.39.8.147:8080/app/profile/${widget.profileId}');
+    var url = Uri.parse('http://3.39.8.147:80/app/profile/${widget.profileId}');
     var request = http.MultipartRequest('PUT', url);
     request.headers['Authorization'] = 'Bearer $accessToken';
 
@@ -82,16 +82,19 @@ class _MyPageProfileEditState extends State<MyPageProfileEdit> {
     request.fields['color'] = color;
 
     if (_image != null && _image!.path.isNotEmpty) {
-      request.files.add(
-          await http.MultipartFile.fromPath('profileImg', _image!.path));
+      request.files.add(await http.MultipartFile.fromPath('profileImg', _image!.path));
     }
 
     var response = await request.send();
 
     if (response.statusCode == 200) {
       final responseString = await response.stream.bytesToString();
-        responseManager.addResponse(responseString);
+      responseManager.addResponse(responseString);
+
+      print('$name, $birthdate, $gender, $color');
       print('프로필이 성공적으로 저장되었습니다');
+
+      profileService.profileAll();
     } else {
       print('Failed to save profile');
       print('Status code: ${response.statusCode}');
@@ -114,9 +117,7 @@ class _MyPageProfileEditState extends State<MyPageProfileEdit> {
         text: '$text.',
         selection: TextSelection.collapsed(offset: text.length + 1),
       );
-    } else if (text.length == 7 && text
-        .split('.')
-        .length - 1 == 1) {
+    } else if (text.length == 7 && text.split('.').length - 1 == 1) {
       birthdateController.value = TextEditingValue(
         text: '$text.',
         selection: TextSelection.collapsed(offset: text.length + 1),
@@ -140,7 +141,6 @@ class _MyPageProfileEditState extends State<MyPageProfileEdit> {
         centerTitle: true,
         backgroundColor: AppColors.wh,
       ),
-      // isLoading 체크를 제거하고 바로 프로필 데이터 표시
       body: SingleChildScrollView(
         padding: const EdgeInsets.all(16.0),
         child: Column(
@@ -154,12 +154,12 @@ class _MyPageProfileEditState extends State<MyPageProfileEdit> {
                       radius: 50,
                       backgroundColor: AppColors.wh,
                       backgroundImage: _image != null
-                          ? FileImage(File(_image!.path)) as ImageProvider<
-                          Object>
-                          : AssetImage(
-                          'assets/mypageEdit/user-icon.png') as ImageProvider<
-                          Object>,
+                          ? FileImage(File(_image!.path))
+                          : (_networkImageUrl != null && _networkImageUrl!.isNotEmpty
+                          ? NetworkImage(_networkImageUrl!) as ImageProvider<Object>
+                          : AssetImage('assets/mypageEdit/user-icon.png')),
                     ),
+
                   ),
                   Gaps.h20,
                 ],
@@ -194,15 +194,13 @@ class _MyPageProfileEditState extends State<MyPageProfileEdit> {
                           border: InputBorder.none,
                           filled: true,
                           fillColor: AppColors.gr150,
-                          contentPadding: EdgeInsets.symmetric(
-                              horizontal: 12, vertical: 14),
+                          contentPadding: EdgeInsets.symmetric(horizontal: 12, vertical: 14),
                           enabledBorder: OutlineInputBorder(
                             borderSide: BorderSide.none,
                             borderRadius: BorderRadius.circular(8),
                           ),
                           focusedBorder: OutlineInputBorder(
-                            borderSide: BorderSide(
-                                color: AppColors.vibrantTeal, width: 2),
+                            borderSide: BorderSide(color: AppColors.vibrantTeal, width: 2),
                             borderRadius: BorderRadius.circular(8),
                           ),
                         ),
@@ -243,8 +241,7 @@ class _MyPageProfileEditState extends State<MyPageProfileEdit> {
                     ),
                   ),
                   style: ElevatedButton.styleFrom(
-                    shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(8)),
+                    shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
                     backgroundColor: AppColors.vibrantTeal,
                     minimumSize: Size.fromHeight(48),
                   ),
@@ -258,7 +255,7 @@ class _MyPageProfileEditState extends State<MyPageProfileEdit> {
   }
 }
 
-  class CustomTextField extends StatelessWidget {
+class CustomTextField extends StatelessWidget {
   final String label;
   final String hintText;
   final bool isPassword;

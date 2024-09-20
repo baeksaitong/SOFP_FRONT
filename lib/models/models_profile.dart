@@ -76,8 +76,9 @@ class ProfileDetail {
       name: json['name'],
       gender: json['gender'],
       color: json['color'],
-      imgURL: json['imgURL'],
-      birthday: birthday, // 변환된 생년월일
+      imgURL: json['imgUrl'],
+      birthday: birthday,
     );
   }
+
 }

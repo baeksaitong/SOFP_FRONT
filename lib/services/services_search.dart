@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'dart:ffi';
 import 'dart:io';
 
 import 'package:flutter/cupertino.dart';
@@ -24,13 +25,15 @@ class SearchService extends APIClient {
       String? sign,
       String? color,
       String? formulation,
-      String? line) async {
+      String? line,
+      Int? lastId) async {
     final currentProfile =
         Provider.of<ProfileProvider>(context, listen: false).currentProfile;
     final String? accessToken = await _jwtManager.getAccessToken();
     final url = buildUri('/app/search/keyword'
         '?profileId=${currentProfile?.id}'
         '&limit=10'
+        '&lastId=$lastId'
         '&keyword=$keyword'
         '&shape=$shape'
         '&sign=$sign'

@@ -141,7 +141,7 @@ class _TextSearchDetailState extends State<TextSearchDetail> {
       showLoading(context, delayed: true); // Show loading spinner with delay
 
       await searchService.searchTextAndShape(
-          context, term, null, null, null, null, null);
+          context, term, null, null, null, null, null, null);
 
       setState(() {
         _recentSearches.remove(term);
