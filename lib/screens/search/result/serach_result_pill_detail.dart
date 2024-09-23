@@ -1,5 +1,3 @@
-// lib/screens/search/result/search_result_pill_detail.dart
-
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:sopf_front/constans/colors.dart'; // 색상 정의 파일을 임포트
@@ -7,7 +5,7 @@ import 'package:sopf_front/constans/text_styles.dart'; // 글꼴 스타일 정�
 import 'package:sopf_front/models/models_drug_info_detail.dart';
 import 'package:sopf_front/providers/provider.dart';
 import 'package:sopf_front/services/services_auth.dart';
-import 'package:sopf_front/services/services_favortie.dart';
+import 'package:sopf_front/services/services_favorite.dart';
 import 'package:sopf_front/services/services_pill.dart';
 
 class SearchResultPillDetail extends StatefulWidget {

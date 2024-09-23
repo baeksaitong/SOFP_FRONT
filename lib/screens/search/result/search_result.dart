@@ -8,7 +8,7 @@ import 'package:sopf_front/managers/managers_api_client.dart';
 import 'package:sopf_front/navigates.dart';
 import 'package:sopf_front/screens/search/result/serach_result_pill_detail.dart';
 import 'package:sopf_front/screens/search/search_shape.dart';
-import 'package:sopf_front/services/services_favortie.dart';
+import 'package:sopf_front/services/services_favorite.dart';
 import 'package:sopf_front/services/services_search.dart';
 import '../../../constans/colors.dart';
 import '../../../constans/text_styles.dart';
