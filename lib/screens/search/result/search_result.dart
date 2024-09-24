@@ -100,7 +100,7 @@ class _SearchResultState extends State<SearchResult> {
       selectedColorItem?.text,
       selectedFormulationItem?.text,
       null, // line 매개변수는 현재 선택된 값이 없으므로 null로 설정
-      lastDrugId as Int?, // 마지막 알약의 ID 전달
+      lastDrugId, // 마지막 알약의 ID 전달
     );
 
     setState(() {
@@ -139,7 +139,7 @@ class _SearchResultState extends State<SearchResult> {
       showLoading(context, delayed: true); // Show loading spinner with delay
 
       await searchService.searchTextAndShape(
-          context, term, null, null, null, null, null, 0 as Int?);
+          context, term, null, null, null, null, null, 0);
 
       hideLoading(context); // Hide loading spinner
 

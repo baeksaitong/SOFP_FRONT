@@ -26,22 +26,29 @@ class SearchService extends APIClient {
       String? color,
       String? formulation,
       String? line,
-      Int? lastId) async {
+      int? lastId) async { // Int? 대신 int? 사용
+
     final currentProfile =
         Provider.of<ProfileProvider>(context, listen: false).currentProfile;
     final String? accessToken = await _jwtManager.getAccessToken();
+
+    // lastId가 null이면 쿼리에서 제외
+    final lastIdParam = lastId != null ? '&lastId=$lastId' : '';
+
     final url = buildUri('/app/search/keyword'
         '?profileId=${currentProfile?.id}'
         '&limit=10'
-        '&lastId=$lastId'
+        '$lastIdParam'
         '&keyword=$keyword'
         '&shape=$shape'
         '&sign=$sign'
         '&color=$color'
         '&formulation=$formulation'
         '&line=$line');
+
     print(keyword);
     print(url);
+
     final response = await http.get(
       url,
       headers: <String, String>{
