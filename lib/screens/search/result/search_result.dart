@@ -6,7 +6,7 @@ import 'package:flutter/widgets.dart';
 // Project imports:
 import 'package:sopf_front/managers/managers_api_client.dart';
 import 'package:sopf_front/navigates.dart';
-import 'package:sopf_front/screens/search/result/serach_result_pill_detail.dart';
+import 'package:sopf_front/screens/search/result/search_result_pill_detail.dart';
 import 'package:sopf_front/screens/search/search_shape.dart';
 import 'package:sopf_front/services/services_favorite.dart';
 import 'package:sopf_front/services/services_search.dart';

@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:sopf_front/constans/colors.dart'; // 색상 정의 파일을 임포트
 import 'package:sopf_front/constans/text_styles.dart'; // 글꼴 스타일 정의 파일을 임포트
+import 'package:sopf_front/managers/managers_favorites.dart';
 import 'package:sopf_front/models/models_drug_info_detail.dart';
 import 'package:sopf_front/providers/provider.dart';
 import 'package:sopf_front/services/services_auth.dart';
@@ -28,13 +29,59 @@ class SearchResultPillDetail extends StatefulWidget {
 
 class _SearchResultPillDetailState extends State<SearchResultPillDetail> {
   bool showWarning = true; // 초기에는 주의사항을 보이게 설정
-  bool isFavorite = false; // 즐겨찾기 상태
+  bool isBookmarked = false; // 즐겨찾기 상태
   final AuthService authService = AuthService();
+  final FavoriteService favoriteService = FavoriteService(); // 즐겨찾기 서비스 인스턴스
+
+  @override
+  void initState() {
+    super.initState();
+    _loadBookmarkStatus(); // 초기 즐겨찾기 상태 로드
+  }
+
+  // 즐겨찾기 상태를 서버에서 로드하는 함수
+// 즐겨찾기 상태를 서버에서 로드하는 함수
+  void _loadBookmarkStatus() async {
+    await favoriteService.favoriteGet(context); // 즐겨찾기 목록을 서버에서 가져옴
+    var favorites = FavoritesManager().favorites; // FavoritesManager에서 즐겨찾기 목록 가져오기
+    setState(() {
+      isBookmarked = favorites.any((favorite) => favorite.serialNumber == widget.serialNumber); // 목록에 해당 항목이 있는지 확인
+    });
+  }
+
+
+  void _toggleBookmark() async {
+    try {
+      if (isBookmarked) {
+        // 즐겨찾기 삭제 요청
+        await favoriteService.favoriteDelete(context, widget.serialNumber);
+        print('즐겨찾기 삭제 성공');
+      } else {
+        // 즐겨찾기 추가 요청
+        // 추가 인자를 확인하고, 올바른 값을 전달합니다.
+        await favoriteService.favoritePost(context, widget.serialNumber, widget.imgUrl);
+        print('즐겨찾기 추가 성공');
+      }
+
+      // 상태 업데이트 및 UI 새로고침
+      setState(() {
+        isBookmarked = !isBookmarked; // 즐겨찾기 상태 토글
+        print('상태 변경: $isBookmarked');
+      });
+    } catch (e) {
+      // 오류 메시지 출력
+      print('즐겨찾기 상태 변경 오류: $e');
+    }
+  }
+
+
+
+
+
 
   @override
   Widget build(BuildContext context) {
     final currentDrugInfoDetail = Provider.of<DrugInfoDetailProvider>(context, listen: false).currentDrugInfoDetail;
-
 
     return Scaffold(
       appBar: AppBar(
@@ -43,7 +90,7 @@ class _SearchResultPillDetailState extends State<SearchResultPillDetail> {
         leading: IconButton(
           icon: Icon(Icons.arrow_back),
           onPressed: () {
-            Navigator.pop(context);
+            Navigator.pop(context, isBookmarked);
           },
         ),
         actions: [
@@ -89,7 +136,6 @@ class _SearchResultPillDetailState extends State<SearchResultPillDetail> {
                       ),
                       OutlinedButton(
                         onPressed: () async {
-                          // await authService.pillPost(context, widget.serialNumber);
                           Navigator.of(context).pop();
                           // 초기화 로직을 추가하세요.
                         },
@@ -130,14 +176,10 @@ class _SearchResultPillDetailState extends State<SearchResultPillDetail> {
                 bottom: 8.0,
                 child: IconButton(
                   icon: Icon(
-                    isFavorite ? Icons.star : Icons.star_border,
-                    color: isFavorite ? AppColors.vibrantTeal : Colors.grey,
+                    isBookmarked ? Icons.star : Icons.star_border,
+                    color: isBookmarked ? AppColors.vibrantTeal : Colors.grey,
                   ),
-                  onPressed: () {
-                    setState(() {
-                      isFavorite = !isFavorite;
-                    });
-                  },
+                  onPressed: _toggleBookmark,
                 ),
               ),
             ],
