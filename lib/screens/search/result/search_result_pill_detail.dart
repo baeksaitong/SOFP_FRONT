@@ -5,6 +5,7 @@ import 'package:sopf_front/constans/text_styles.dart'; // 글꼴 스타일 정�
 import 'package:sopf_front/managers/managers_favorites.dart';
 import 'package:sopf_front/models/models_drug_info_detail.dart';
 import 'package:sopf_front/providers/provider.dart';
+import 'package:sopf_front/screens/search/result/search_result.dart';
 import 'package:sopf_front/services/services_auth.dart';
 import 'package:sopf_front/services/services_favorite.dart';
 import 'package:sopf_front/services/services_pill.dart';
@@ -90,7 +91,12 @@ class _SearchResultPillDetailState extends State<SearchResultPillDetail> {
         leading: IconButton(
           icon: Icon(Icons.arrow_back),
           onPressed: () {
-            Navigator.pop(context, isBookmarked);
+            Navigator.push(
+              context,
+              MaterialPageRoute(
+                builder: (context) => SearchResult(), // SearchResult 페이지로 이동
+              ),
+            );
           },
         ),
         actions: [
