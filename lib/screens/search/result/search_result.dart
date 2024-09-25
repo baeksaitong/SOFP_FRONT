@@ -2,6 +2,8 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
+import 'package:sopf_front/home.dart';
+import 'package:sopf_front/main.dart';
 
 // Project imports:
 import 'package:sopf_front/managers/managers_api_client.dart';
@@ -88,6 +90,13 @@ class _SearchResultState extends State<SearchResult> {
     setState(() {});
   }
 
+  void navigateToHome() {
+    navigatorKey.currentState?.pushAndRemoveUntil(
+      MaterialPageRoute(builder: (context) => HomePage()),
+          (Route<dynamic> route) => false,  // 모든 이전 화면을 제거합니다.
+    );
+  }
+
   void navigateToPillDetail(BuildContext context, int serialNumber, String imgUrl, String pillName, String pillDescription) {
     Navigator.push(
       context,
@@ -120,7 +129,7 @@ class _SearchResultState extends State<SearchResult> {
             height: 20,
           ),
           onPressed: () {
-            Navigator.pop(context);
+            navigateToHome();
           },
         ),
       ),
