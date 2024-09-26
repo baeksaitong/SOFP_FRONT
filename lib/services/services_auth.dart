@@ -137,7 +137,7 @@ class AuthService extends APIClient {
     }
   }
 
-  Future<void> mailCheck(String email, String code) async {
+  Future<bool> mailCheck(String email, String code) async {
     final url = buildUri('/app/verification/mail/check');
     final response = await http.post(
       url,
@@ -156,19 +156,24 @@ class AuthService extends APIClient {
       var jsonResponse = jsonDecode(decodedResponse);
       if (response.statusCode == 200) {
         print('전송 성공 : $jsonResponse');
+        return true;  // 인증 성공 시 true 반환
       } else {
         print(response.statusCode);
         print('전송 실패 : $jsonResponse');
+        return false;  // 인증 실패 시 false 반환
       }
     } catch (e) {
       if (response.statusCode == 200) {
-        print('전송 성공 : $decodedResponse'); // 성공 메시지가 일반 텍스트인 경우
+        print('전송 성공 : $decodedResponse');
+        return true;  // 성공 시 true 반환
       } else {
         print(response.statusCode);
-        print('전송 실패 : $decodedResponse'); // 오류 메시지가 일반 텍스트인 경우
+        print('전송 실패 : $decodedResponse');
+        return false;  // 실패 시 false 반환
       }
     }
   }
+
 
   Future<void> login(BuildContext context, String email, String pwd) async {
     final url = buildUri('/app/auth/login');
