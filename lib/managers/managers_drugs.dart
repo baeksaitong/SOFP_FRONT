@@ -17,4 +17,10 @@ class DrugsManager {
     final data = jsonDecode(jsonResponse)['result'] as List;
     drugs = data.map((json) => DrugInfo.fromJson(json)).toList();
   }
+
+  // 기존 데이터에 새 데이터를 추가
+  void addDrugs(String jsonResponse) {
+    final data = jsonDecode(jsonResponse)['result'] as List;
+    drugs.addAll(data.map((json) => DrugInfo.fromJson(json)).toList());
+  }
 }

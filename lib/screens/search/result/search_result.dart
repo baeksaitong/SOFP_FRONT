@@ -20,7 +20,9 @@ import 'package:sopf_front/screens/search/search_shape.dart';
 import '../../../navigates.dart';
 
 class SearchResult extends StatefulWidget {
-  const SearchResult({super.key});
+  final String searchKeyword; // 검색어 전달받음
+
+  const SearchResult({super.key, required this.searchKeyword});
 
   @override
   State<SearchResult> createState() => _SearchResultState();
@@ -50,6 +52,9 @@ class _SearchResultState extends State<SearchResult> {
   @override
   void initState() {
     super.initState();
+
+    // TextEditingController에 초기 검색어 설정
+    _controller.text = widget.searchKeyword; // 전달받은 검색어를 컨트롤러에 설정
     _initializeDrugs();
     _scrollController.addListener(_onScroll);
   }
@@ -57,6 +62,7 @@ class _SearchResultState extends State<SearchResult> {
   @override
   void dispose() {
     _scrollController.dispose();
+    _controller.dispose(); // controller 해제
     super.dispose();
   }
 
@@ -89,7 +95,7 @@ class _SearchResultState extends State<SearchResult> {
     });
 
     // 리스트에서 마지막 알약의 ID 가져오기
-    final lastDrugId = drugs.last.serialNumber;
+    final lastDrugId = drugs.last.pillId;
 
     // 더 많은 데이터를 로드하기 위해 searchTextAndShape 함수 호출
     await searchService.searchTextAndShape(
@@ -139,7 +145,7 @@ class _SearchResultState extends State<SearchResult> {
       showLoading(context, delayed: true); // Show loading spinner with delay
 
       await searchService.searchTextAndShape(
-          context, term, null, null, null, null, null, 0);
+          context, term, null, null, null, null, null, null);
 
       hideLoading(context); // Hide loading spinner
 
@@ -294,7 +300,6 @@ class _SearchResultState extends State<SearchResult> {
                       ),
                     );
                   } else {
-                    // 로딩 중일 때 표시할 위젯
                     return Center(
                       child: CircularProgressIndicator(),
                     );

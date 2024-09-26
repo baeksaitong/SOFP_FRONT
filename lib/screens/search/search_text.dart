@@ -150,7 +150,7 @@ class _TextSearchDetailState extends State<TextSearchDetail> {
         _controller.clear();
         _focusNode.requestFocus();
         // Request focus back to the text field
-        navigateToSearchResult();
+        navigateToSearchResult(term);
       });
 
       hideLoading(context); // Hide loading spinner

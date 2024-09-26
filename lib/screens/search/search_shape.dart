@@ -183,7 +183,7 @@ class _SearchShapeState extends State<SearchShape> {
 
                   hideLoading(context); // Hide loading spinner
 
-                  navigateToSearchResult();
+                  navigateToSearchResult(keyword!);
                 },
                 style: OutlinedButton.styleFrom(
                   side: BorderSide.none,

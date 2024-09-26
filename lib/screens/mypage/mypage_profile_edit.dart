@@ -72,7 +72,7 @@ class _MyPageProfileEditState extends State<MyPageProfileEdit> {
     final String accessToken = await jwtManager.getValidAccessToken();
     final ProfileService profileService = ProfileService();
 
-    var url = Uri.parse('http://3.39.8.147:80/app/profile/${widget.profileId}');
+    var url = Uri.parse('http://3.39.8.147:8080/app/profile/${widget.profileId}');
     var request = http.MultipartRequest('PUT', url);
     request.headers['Authorization'] = 'Bearer $accessToken';
 

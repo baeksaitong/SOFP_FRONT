@@ -146,5 +146,4 @@ class ProfileService extends APIClient {
       return null;
     }
   }
-
 }

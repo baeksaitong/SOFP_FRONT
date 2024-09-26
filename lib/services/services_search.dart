@@ -26,19 +26,16 @@ class SearchService extends APIClient {
       String? color,
       String? formulation,
       String? line,
-      int? lastId) async { // Int? 대신 int? 사용
-
+      String? lastId, // String으로 처리
+      ) async {
     final currentProfile =
         Provider.of<ProfileProvider>(context, listen: false).currentProfile;
     final String? accessToken = await _jwtManager.getAccessToken();
 
-    // lastId가 null이면 쿼리에서 제외
-    final lastIdParam = lastId != null ? '&lastId=$lastId' : '';
-
     final url = buildUri('/app/search/keyword'
         '?profileId=${currentProfile?.id}'
         '&limit=10'
-        '$lastIdParam'
+        '&lastId=$lastId'
         '&keyword=$keyword'
         '&shape=$shape'
         '&sign=$sign'
@@ -46,25 +43,23 @@ class SearchService extends APIClient {
         '&formulation=$formulation'
         '&line=$line');
 
-    print(keyword);
-    print(url);
-
     final response = await http.get(
       url,
       headers: <String, String>{
         'Content-Type': 'application/json; charset=UTF-8',
         'Accept': 'application/json',
-        'Authorization': 'Bearer $accessToken', // 인증 헤더 추가
+        'Authorization': 'Bearer $accessToken',
       },
     );
+
     if (response.statusCode == 200) {
-      // 성공적으로 처리된 경우
-      print('검색완료: ${utf8.decode(response.bodyBytes)}');
-      DrugsManager().updateDrugs(utf8.decode(response.bodyBytes));
+      final jsonResponse = utf8.decode(response.bodyBytes);
+
+      // DrugsManager를 사용하여 응답 업데이트
+      DrugsManager().addDrugs(jsonResponse);
+      print('검색 완료: ${DrugsManager().drugs.length}개의 알약이 검색됨');
     } else {
-      // 실패 처리
-      print(response.statusCode);
-      print('실패: ${utf8.decode(response.bodyBytes)}');
+      print('검색 실패: ${utf8.decode(response.bodyBytes)}');
     }
   }
 
