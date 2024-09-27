@@ -12,8 +12,6 @@ import 'package:sopf_front/managers/managers_favorites.dart';
 import 'package:sopf_front/models/models_drug_info.dart';
 import 'package:sopf_front/models/models_favorite_info.dart';
 import 'package:sopf_front/providers/provider.dart';
-import 'package:sopf_front/screens/search/result/serach_result_pill_detail.dart';
-import 'package:sopf_front/services/services_favortie.dart';
 import 'package:flutter/widgets.dart';
 import 'package:sopf_front/home.dart';
 import 'package:sopf_front/main.dart';
@@ -30,7 +28,7 @@ import 'package:sopf_front/screens/search/search_shape.dart';
 import '../../../navigates.dart';
 
 class SearchResult extends StatefulWidget {
-  final String searchKeyword; // 검색어 전달받음
+  final String searchKeyword;
 
   const SearchResult({super.key, required this.searchKeyword});
 
@@ -43,11 +41,13 @@ class _SearchResultState extends State<SearchResult> {
   final ScrollController _scrollController = ScrollController();
   bool _isLoading = false;
 
+  // 선택된 필터 옵션들
   ColorItem? selectedColorItem;
   ShapeItem? selectedShapeItem;
   FormulationItem? selectedFormulationItem;
   DivideLineItem? selectedDivideLineItem;
 
+  // 필터 버튼의 초기 텍스트
   String shapeText = '모양';
   String divideLineText = '분할선';
   String colorText = '색상';
@@ -63,8 +63,8 @@ class _SearchResultState extends State<SearchResult> {
   void initState() {
     super.initState();
 
-    // TextEditingController에 초기 검색어 설정
-    _controller.text = widget.searchKeyword; // 전달받은 검색어를 컨트롤러에 설정
+    // 검색어 설정
+    _controller.text = widget.searchKeyword;
     _initializeDrugs();
     _scrollController.addListener(_onScroll);
   }
@@ -80,6 +80,8 @@ class _SearchResultState extends State<SearchResult> {
     await favoriteService.favoriteGet(context);
     favorites = FavoritesManager().favorites;
     drugs = DrugsManager().drugs;
+
+    // 북마크 설정
     for (var drug in drugs) {
       for (var favorite in favorites) {
         if (drug.serialNumber == favorite.serialNumber) {
@@ -104,10 +106,9 @@ class _SearchResultState extends State<SearchResult> {
       _isLoading = true;
     });
 
-    // 리스트에서 마지막 알약의 ID 가져오기
     final lastDrugId = drugs.last.pillId;
 
-    // 더 많은 데이터를 로드하기 위해 searchTextAndShape 함수 호출
+    // 검색 API 호출 (추가 데이터 로드)
     await searchService.searchTextAndShape(
       context,
       _controller.text,
@@ -115,8 +116,8 @@ class _SearchResultState extends State<SearchResult> {
       selectedDivideLineItem?.text,
       selectedColorItem?.text,
       selectedFormulationItem?.text,
-      null, // line 매개변수는 현재 선택된 값이 없으므로 null로 설정
-      lastDrugId, // 마지막 알약의 ID 전달
+      null, // 기타 필터
+      lastDrugId, // 마지막 알약 ID
     );
 
     setState(() {
@@ -128,17 +129,11 @@ class _SearchResultState extends State<SearchResult> {
     setState(() {
       drugs[index].isBookmarked = !drugs[index].isBookmarked;
       if (drugs[index].isBookmarked == true) {
-        favoriteService.favoritePost(
-            context, drugs[index].serialNumber, drugs[index].imgUrl);
+        favoriteService.favoritePost(context, drugs[index].serialNumber, drugs[index].imgUrl);
       } else {
         favoriteService.favoriteDelete(context, drugs[index].serialNumber);
       }
     });
-  void navigateToHome() {
-    navigatorKey.currentState?.pushAndRemoveUntil(
-      MaterialPageRoute(builder: (context) => HomePage()),
-          (Route<dynamic> route) => false,  // 모든 이전 화면을 제거합니다.
-    );
   }
 
   void navigateToPillDetail(BuildContext context, int serialNumber, String imgUrl, String pillName, String pillDescription) {
@@ -157,12 +152,20 @@ class _SearchResultState extends State<SearchResult> {
 
   void _searchTerm(String term) async {
     if (term.isNotEmpty) {
-      showLoading(context, delayed: true); // Show loading spinner with delay
+      showLoading(context, delayed: true); // 로딩 표시
 
       await searchService.searchTextAndShape(
-          context, term, null, null, null, null, null, null);
+        context,
+        term,
+        selectedShapeItem?.text,
+        selectedDivideLineItem?.text,
+        selectedColorItem?.text,
+        selectedFormulationItem?.text,
+        null,
+        null,
+      );
 
-      hideLoading(context); // Hide loading spinner
+      hideLoading(context); // 로딩 숨기기
 
       setState(() {
         drugs = DrugsManager().drugs;
@@ -197,7 +200,7 @@ class _SearchResultState extends State<SearchResult> {
             height: 20,
           ),
           onPressed: () {
-            navigateToHome();
+            Navigator.pop(context);
           },
         ),
       ),
@@ -218,7 +221,10 @@ class _SearchResultState extends State<SearchResult> {
               child: Row(
                 children: [
                   IconButton(
-                    onPressed: () {},
+                    onPressed: () {
+                      // TextField에서 입력된 검색어를 가져와서 _searchTerm 함수 호출
+                      _searchTerm(_controller.text);
+                    },
                     icon: Image.asset(
                       'assets/ion_search.png',
                       width: 20,
@@ -239,7 +245,8 @@ class _SearchResultState extends State<SearchResult> {
               ),
             ),
             Gaps.h16,
-            // 필터 버튼들 (모양, 분할선, 색상, 제형) 생략
+            // 필터 버튼들 (모양, 분할선, 색상, 제형)
+            //...
             Row(
               children: [
                 Container(
@@ -761,7 +768,7 @@ class _SearchResultState extends State<SearchResult> {
             Expanded(
               child: ListView.separated(
                 controller: _scrollController,
-                itemCount: drugs.length + (_isLoading ? 1 : 0), // 로딩 중일 때 로딩 표시를 위한 추가 아이템
+                itemCount: drugs.length + (_isLoading ? 1 : 0),
                 itemBuilder: (context, index) {
                   if (index < drugs.length) {
                     final drug = drugs[index];

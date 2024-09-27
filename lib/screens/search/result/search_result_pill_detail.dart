@@ -92,7 +92,7 @@ class _SearchResultPillDetailState extends State<SearchResultPillDetail> {
             Navigator.push(
               context,
               MaterialPageRoute(
-                builder: (context) => SearchResult(), // SearchResult 페이지로 이동
+                builder: (context) => SearchResult(searchKeyword: '',), // SearchResult 페이지로 이동
               ),
             );
           },
