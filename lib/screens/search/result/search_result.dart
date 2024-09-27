@@ -200,7 +200,7 @@ class _SearchResultState extends State<SearchResult> {
             height: 20,
           ),
           onPressed: () {
-            Navigator.pop(context);
+            navigateToHome();
           },
         ),
       ),
