@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 
 // Project imports:
 import 'package:sopf_front/constans/colors.dart';
-import 'package:sopf_front/services/services_favortie.dart';
+import 'package:sopf_front/services/services_favorite.dart';
 import 'package:sopf_front/services/services_search.dart';
 import '../../constans/text_styles.dart';
 import '../../constans/gaps.dart';

@@ -1,12 +1,10 @@
 import 'package:flutter/material.dart';
-import 'package:fluttertoast/fluttertoast.dart';
 import 'dart:async';
 import 'package:sopf_front/constans/gaps.dart';
 import 'package:sopf_front/constans/colors.dart';
 import 'package:sopf_front/constans/text_styles.dart';
 import 'package:flutter/services.dart';
 import 'package:sopf_front/services/services_auth.dart';
-
 
 class SignUp extends StatefulWidget {
   const SignUp({super.key});
@@ -30,7 +28,8 @@ class _SignUpState extends State<SignUp> {
   final int _seconds = 0;
   bool privacyPolicyAccepted = false; // 개인정보 처리방침 동의 여부 필수체크
   bool emailSubscriptionAccepted = false; // 광고성이메일 수신 동의 여부 선택체크
-  final AuthService authService = AuthService();
+
+  final AuthService authService = AuthService();  // AuthService 객체 생성
 
   @override
   void dispose() {
@@ -39,14 +38,63 @@ class _SignUpState extends State<SignUp> {
     super.dispose();
   }
 
+  // 공통 다이얼로그 함수
+  void showCustomDialog(BuildContext context, String title, String content) {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: Text(title),
+          content: Text(content),
+          actions: <Widget>[
+            TextButton(
+              style: TextButton.styleFrom(
+                backgroundColor: AppColors.softTeal, // 버튼 배경색
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(8.0), // 모서리 둥글게
+                ),
+              ),
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+              child: Text(
+                '확인',
+                style: TextStyle(
+                  color: AppColors.deepTeal, // 글씨 색상
+                  fontWeight: FontWeight.bold, // 글씨 bold
+                ),
+              ),
+            ),
+          ],
+        );
+      },
+    );
+  }
 
   // 인증번호 전송 버튼 클릭 시 수행되는 함수
-  void onSendVerificationButtonClicked() {
-    if (!_timerStarted) {
+  void onSendVerificationButtonClicked() async {
+    try {
+      await authService.mailSend(email);
       setState(() {
         buttonLabel = '인증번호 확인';
         _timerStarted = true;
       });
+      showCustomDialog(context, '인증번호 전송 완료', '이메일로 인증번호가 전송되었습니다.');
+    } catch (e) {
+      showCustomDialog(context, '인증번호 전송 실패', '메일 전송에 실패했습니다. 다시 시도해주세요.');
+    }
+  }
+
+  void onVerificationButtonClicked() async {
+    try {
+      bool isVerified = await authService.mailCheck(email, emailCode!);
+      if (isVerified) {
+        showCustomDialog(context, '인증 성공', '이메일 인증이 성공적으로 완료되었습니다.');
+      } else {
+        showCustomDialog(context, '인증 실패', '인증번호가 올바르지 않습니다.');
+      }
+    } catch (e) {
+      showCustomDialog(context, '인증 실패', e.toString());
     }
   }
 
@@ -57,45 +105,38 @@ class _SignUpState extends State<SignUp> {
     });
   }
 
-  void onSignupButtonClicked() {
-    // 필수 입력란이 모두 채워져 있는지 확인
-    if (name.isEmpty ||
-        email.isEmpty ||
-        gender.isEmpty ||
-        dateOfBirth == null ||
-        _password == null ||
-        emailCode == null ||
-        privacyPolicyAccepted) {
-      // 필수 입력란 중 하나라도 비어 있으면 토스트 메시지 출력
-      Fluttertoast.showToast(
-        msg: '모든 필수 입력란을 채워주세요.',
-        gravity: ToastGravity.BOTTOM,
-        backgroundColor: Colors.red,
-        textColor: Colors.white,
-      );
+  void onSignupButtonClicked() async {
+    if (name.isEmpty || email.isEmpty || gender.isEmpty || dateOfBirth == null || _password == null || emailCode == null || !privacyPolicyAccepted) {
+      // 필수 입력 항목이 채워지지 않았을 때 모달
+      showCustomDialog(context, '회원가입 실패', '모든 필수 입력란을 채워주시고, 개인정보 처리방침에 동의해주세요.');
     } else {
-      // 모든 필수 입력란이 채워져 있으면 회원가입 정보 출력
-      print('회원가입 정보:');
-      print('이름: $name');
-      print('생년월일: $dateOfBirth');
-      print('성별: $gender');
-      print('이메일: $email');
-      print('비밀번호: $_password');
-
-      // 여기에 실제 회원가입 로직을 추가할 수 있습니다.
-
-      // 회원가입 완료 메시지 출력
-      Fluttertoast.showToast(
-        msg: '회원가입이 완료되었습니다.',
-        gravity: ToastGravity.BOTTOM,
-        backgroundColor: Colors.green,
-        textColor: Colors.white,
-      );
+      try {
+        // 이메일 인증 번호 확인
+        bool isVerified = await authService.mailCheck(email, emailCode!);
+        if (!isVerified) {
+          // 인증번호가 맞지 않으면 모달 띄우기
+          showCustomDialog(context, '인증 실패', '인증번호가 올바르지 않습니다.');
+        } else {
+          // 모든 필수 입력란이 채워져 있으면 회원가입 진행
+          await authService.signUp(
+              name,
+              dateOfBirth!.replaceAll('.', '-'),
+              email,
+              gender == '남자' ? 'MALE' : 'FEMALE',
+              _password!,
+              emailSubscriptionAccepted
+          );
+          // 회원가입 성공 모달
+          showCustomDialog(context, '회원가입 완료', '회원가입이 성공적으로 완료되었습니다.');
+        }
+      } catch (e) {
+        // 회원가입 오류 처리
+        showCustomDialog(context, '회원가입 실패', '회원가입 중 오류가 발생했습니다. 다시 시도해주세요.');
+      }
     }
   }
 
   void _onDateOfBirthChanged(String value) {
-    // 점을 추가하는 로직
     final newValue = value.replaceAll('.', '');
     if (newValue.length > 8) return;
 
@@ -123,11 +164,9 @@ class _SignUpState extends State<SignUp> {
       appBar: AppBar(
         leading: IconButton(
           onPressed: () {
-            // 왼쪽 버튼이 클릭되었을 때 수행될 동작
-            print('왼쪽 버튼이 클릭되었습니다.');
             Navigator.pop(context);
           },
-          icon: Icon(Icons.arrow_back_ios), // 버튼에 아이콘 추가
+          icon: Icon(Icons.arrow_back_ios),
         ),
         title: SizedBox(
           width: double.infinity,
@@ -147,10 +186,10 @@ class _SignUpState extends State<SignUp> {
               NameTextBox(
                 onChanged: (value) {
                   setState(() {
-                    name = value; // 이름 값 업데이트
+                    name = value;
                   });
                 },
-              ), // 이름 입력란
+              ),
               Gaps.h20,
               Padding(
                 padding: const EdgeInsets.all(0.0),
@@ -175,21 +214,19 @@ class _SignUpState extends State<SignUp> {
                     border: OutlineInputBorder(
                       borderRadius: BorderRadius.circular(4.0),
                       borderSide: BorderSide(
-                        color: AppColors.gr600, // The color of the border
+                        color: AppColors.gr600,
                       ),
                     ),
                     enabledBorder: OutlineInputBorder(
                       borderRadius: BorderRadius.circular(4.0),
                       borderSide: BorderSide(
-                        color: AppColors
-                            .gr600, // The color of the border when enabled
+                        color: AppColors.gr600,
                       ),
                     ),
                     focusedBorder: OutlineInputBorder(
                       borderRadius: BorderRadius.circular(4.0),
                       borderSide: BorderSide(
-                        color: AppColors
-                            .gr600, // The color of the border when focused
+                        color: AppColors.gr600,
                       ),
                     ),
                     hintStyle: TextStyle(color: AppColors.gr500),
@@ -209,7 +246,7 @@ class _SignUpState extends State<SignUp> {
                       children: [
                         Expanded(
                           child: SizedBox(
-                            height: 50, // Adjust the height as needed
+                            height: 50,
                             child: OutlinedButton(
                               onPressed: () {
                                 setState(() {
@@ -243,7 +280,7 @@ class _SignUpState extends State<SignUp> {
                         SizedBox(width: 8),
                         Expanded(
                           child: SizedBox(
-                            height: 50, // Adjust the height as needed
+                            height: 50,
                             child: OutlinedButton(
                               onPressed: () {
                                 setState(() {
@@ -279,7 +316,6 @@ class _SignUpState extends State<SignUp> {
                   ],
                 ),
               ),
-
               Gaps.h20,
               Row(
                 children: [
@@ -288,10 +324,10 @@ class _SignUpState extends State<SignUp> {
                     child: EmailTextBox(
                       onChanged: (value) {
                         setState(() {
-                          email = value; // 이메일 값 업데이트
+                          email = value;
                         });
                       },
-                    ), // 이메일 입력란
+                    ),
                   ),
                   SizedBox(width: 8),
                   Expanded(
@@ -302,11 +338,10 @@ class _SignUpState extends State<SignUp> {
                         onSendVerificationButtonClicked();
                         await authService.idCheck(email);
                       },
-                    ), // 인증번호 전송 버튼
+                    ),
                   ),
                 ],
               ),
-
               Gaps.h20,
               Row(
                 children: [
@@ -315,7 +350,7 @@ class _SignUpState extends State<SignUp> {
                     child: Verification(
                       onChanged: (value) {
                         setState(() {
-                          emailCode = value; // 인증번호 업데이트
+                          emailCode = value;
                         });
                       },
                       minutes: _minutes,
@@ -328,23 +363,26 @@ class _SignUpState extends State<SignUp> {
                     flex: 2,
                     child: VerificationButton(
                       onPressed: () async {
-                        // 인증번호 확인 로직 구현
-                        print('인증번호 확인 버튼이 클릭되었습니다.');
-                        await authService.mailCheck(email, emailCode!);
+                        try {
+                          print('인증번호 확인 버튼이 클릭되었습니다.');
+                          await authService.mailCheck(email, emailCode!);
+                          showCustomDialog(context, '이메일 인증 완료', '이메일 인증이 완료되었습니다.');
+                        } catch (error) {
+                          showCustomDialog(context, '인증 실패', '인증번호가 올바르지 않습니다.');
+                        }
                       },
                     ),
                   ),
                 ],
               ),
-
               Gaps.h20,
               PasswordFieldsContainer(
                 onPasswordChanged: (password) {
                   setState(() {
-                    _password = password; // 비밀번호 상태 업데이트
+                    _password = password;
                   });
                 },
-              ), // 비밀번호 입력란
+              ),
               Gaps.h20,
               LabeledCheckboxExample(
                 label: '개인정보 처리방침에 동의합니다.',
@@ -354,7 +392,7 @@ class _SignUpState extends State<SignUp> {
                     privacyPolicyAccepted = newValue;
                   });
                 },
-              ), // 개인정보 처리방침 동의 체크박스
+              ),
               LabeledCheckboxExample(
                 label: '이메일 수신에 동의합니다.',
                 value: emailSubscriptionAccepted,
@@ -363,14 +401,12 @@ class _SignUpState extends State<SignUp> {
                     emailSubscriptionAccepted = newValue;
                   });
                 },
-              ), // 이메일 수신 동의 체크박스
+              ),
               Gaps.h32,
               ElevatedButton(
                 onPressed: () async {
                   onSignupButtonClicked();
-                  print('회원가입 버튼 클릭');
                   final String? Birth = dateOfBirth?.replaceAll('.', '-');
-                  print(Birth);
                   if (gender == "남자") {
                     await authService.signUp(
                         name, Birth!, email, "male", _password!, true);
@@ -378,25 +414,25 @@ class _SignUpState extends State<SignUp> {
                     await authService.signUp(
                         name, Birth!, email, "female", _password!, true);
                   }
-                }, // 회원가입 버튼 클릭 시 함수 실행
+                },
                 style: ButtonStyle(
                   backgroundColor: MaterialStateProperty.all<Color>(
-                      AppColors.deepTeal), // 배경색 설정
+                      AppColors.deepTeal),
                   shape: MaterialStateProperty.all<RoundedRectangleBorder>(
                     RoundedRectangleBorder(
                       borderRadius:
-                      BorderRadius.circular(10.0), // 모서리를 둥근 사각형으로 설정
+                      BorderRadius.circular(10.0),
                     ),
                   ),
                   padding: MaterialStateProperty.all<EdgeInsetsGeometry>(
                       EdgeInsets.symmetric(
-                          vertical: 20.0, horizontal: 30.0)), // 패딩값 설정
+                          vertical: 20.0, horizontal: 30.0)),
                 ),
                 child: SizedBox(
-                  width: double.infinity, // 가로폭을 최대한으로 설정
+                  width: double.infinity,
                   child: Center(
                     child: Text(
-                      '회원가입', // 회원가입 버튼 텍스트
+                      '회원가입',
                       style:
                       AppTextStyles.body5M14.copyWith(color: AppColors.wh),
                     ),
@@ -464,7 +500,7 @@ class _VerificationState extends State<Verification> {
           style: AppTextStyles.body5M14,
         ),
         Padding(
-          padding: EdgeInsets.only(top: 0.0), // 위쪽에 0.0의 패딩 추가
+          padding: EdgeInsets.only(top: 0.0),
           child: Stack(
             alignment: Alignment.centerRight,
             children: [
@@ -481,21 +517,19 @@ class _VerificationState extends State<Verification> {
                   border: OutlineInputBorder(
                     borderRadius: BorderRadius.circular(4.0),
                     borderSide: BorderSide(
-                      color: AppColors.gr600, // The color of the border
+                      color: AppColors.gr600,
                     ),
                   ),
                   enabledBorder: OutlineInputBorder(
                     borderRadius: BorderRadius.circular(4.0),
                     borderSide: BorderSide(
-                      color: AppColors
-                          .gr600, // The color of the border when enabled
+                      color: AppColors.gr600,
                     ),
                   ),
                   focusedBorder: OutlineInputBorder(
                     borderRadius: BorderRadius.circular(4.0),
                     borderSide: BorderSide(
-                      color: AppColors
-                          .gr600, // The color of the border when focused
+                      color: AppColors.gr600,
                     ),
                   ),
                   contentPadding: EdgeInsets.fromLTRB(12, 10, 12, 10),
@@ -605,7 +639,7 @@ class LabeledCheckboxExample extends StatelessWidget {
               child: Text(
                 label,
                 style: AppTextStyles.body5M14.copyWith(
-                    color: AppColors.gr600), // Apply the new text style
+                    color: AppColors.gr600),
               ),
             ),
             Checkbox(
@@ -622,7 +656,7 @@ class LabeledCheckboxExample extends StatelessWidget {
 }
 
 class PasswordFieldsContainer extends StatefulWidget {
-  final Function(String) onPasswordChanged; // 비밀번호 변경 핸들러 추가
+  final Function(String) onPasswordChanged;
 
   const PasswordFieldsContainer({super.key, required this.onPasswordChanged});
 
@@ -643,7 +677,7 @@ class _PasswordFieldsContainerState extends State<PasswordFieldsContainer> {
         PasswordTextBox(
           onPasswordChanged: (value) {
             _password = value;
-            widget.onPasswordChanged(value); // 부모 위젯에 비밀번호 전달
+            widget.onPasswordChanged(value);
           },
         ),
         Gaps.h40,
@@ -652,7 +686,7 @@ class _PasswordFieldsContainerState extends State<PasswordFieldsContainer> {
             _confirmPassword = value;
             _passwordsMatch = _password == _confirmPassword;
             if (_passwordsMatch) {
-              widget.onPasswordChanged(_password); // 비밀번호 확인이 일치하면 업데이트
+              widget.onPasswordChanged(_password);
             }
           },
           passwordsMatch: _passwordsMatch,
@@ -679,7 +713,7 @@ class PasswordTextBox extends StatelessWidget {
         TextField(
           cursorColor: AppColors.gr600,
           style: TextStyle(
-            letterSpacing: 1.5, // 글자 간격 조절
+            letterSpacing: 1.5,
           ),
           onChanged: onPasswordChanged,
           obscureText: true,
@@ -687,19 +721,19 @@ class PasswordTextBox extends StatelessWidget {
             border: OutlineInputBorder(
               borderRadius: BorderRadius.circular(4.0),
               borderSide: BorderSide(
-                color: AppColors.gr600, // The color of the border
+                color: AppColors.gr600,
               ),
             ),
             enabledBorder: OutlineInputBorder(
               borderRadius: BorderRadius.circular(4.0),
               borderSide: BorderSide(
-                color: AppColors.gr600, // The color of the border when enabled
+                color: AppColors.gr600,
               ),
             ),
             focusedBorder: OutlineInputBorder(
               borderRadius: BorderRadius.circular(4.0),
               borderSide: BorderSide(
-                color: AppColors.gr600, // The color of the border when focused
+                color: AppColors.gr600,
               ),
             ),
             contentPadding: EdgeInsets.fromLTRB(12, 10, 12, 10),
@@ -733,26 +767,26 @@ class PasswordCheckTextBox extends StatelessWidget {
           cursorColor: AppColors.gr600,
           onChanged: onConfirmPasswordChanged,
           style: TextStyle(
-            letterSpacing: 1.5, // 글자 간격 조절
+            letterSpacing: 1.5,
           ),
           obscureText: true,
           decoration: InputDecoration(
             border: OutlineInputBorder(
               borderRadius: BorderRadius.circular(4.0),
               borderSide: BorderSide(
-                color: AppColors.gr600, // The color of the border
+                color: AppColors.gr600,
               ),
             ),
             enabledBorder: OutlineInputBorder(
               borderRadius: BorderRadius.circular(4.0),
               borderSide: BorderSide(
-                color: AppColors.gr600, // The color of the border when enabled
+                color: AppColors.gr600,
               ),
             ),
             focusedBorder: OutlineInputBorder(
               borderRadius: BorderRadius.circular(4.0),
               borderSide: BorderSide(
-                color: AppColors.gr600, // The color of the border when focused
+                color: AppColors.gr600,
               ),
             ),
             contentPadding: EdgeInsets.fromLTRB(12, 10, 12, 10),
@@ -763,8 +797,6 @@ class PasswordCheckTextBox extends StatelessWidget {
     );
   }
 }
-
-// 이메일 텍스트박스
 
 class EmailTextBox extends StatefulWidget {
   final ValueChanged<String> onChanged;
@@ -795,43 +827,41 @@ class _EmailTextBoxState extends State<EmailTextBox> {
           controller: _controller,
           onChanged: (value) {
             setState(() {
-              _isDefaultText = value.isEmpty; // 입력값이 없으면 기본 텍스트 표시
+              _isDefaultText = value.isEmpty;
             });
             widget.onChanged(value);
           },
           onTap: () {
             if (_isDefaultText) {
-              _controller.clear(); // 텍스트 박스 클릭 시 기본 텍스트 지우기
+              _controller.clear();
             }
           },
           style: TextStyle(
-            color:
-            _isDefaultText ? Colors.grey : Colors.black, // 기본 텍스트는 회색으로 표시
+            color: _isDefaultText ? Colors.grey : Colors.black,
           ),
           decoration: InputDecoration(
             border: OutlineInputBorder(
               borderRadius: BorderRadius.circular(4.0),
               borderSide: BorderSide(
-                color: AppColors.gr600, // The color of the border
+                color: AppColors.gr600,
               ),
             ),
             enabledBorder: OutlineInputBorder(
               borderRadius: BorderRadius.circular(4.0),
               borderSide: BorderSide(
-                color: AppColors.gr600, // The color of the border when enabled
+                color: AppColors.gr600,
               ),
             ),
             focusedBorder: OutlineInputBorder(
               borderRadius: BorderRadius.circular(4.0),
               borderSide: BorderSide(
-                color: AppColors.gr600, // The color of the border when focused
+                color: AppColors.gr600,
               ),
             ),
             contentPadding: EdgeInsets.fromLTRB(12, 10, 12, 10),
-            hintText:
-            _isDefaultText ? 'promise@gmail.com' : null, // 기본 텍스트는 힌트로 표시
+            hintText: _isDefaultText ? 'promise@gmail.com' : null,
             hintStyle: TextStyle(
-              color: Colors.grey.withOpacity(0.5), // 기본 텍스트는 불투명하게 표시
+              color: Colors.grey.withOpacity(0.5),
             ),
           ),
         ),
@@ -845,8 +875,6 @@ class _EmailTextBoxState extends State<EmailTextBox> {
     super.dispose();
   }
 }
-
-//이름 텍스트박스
 
 class NameTextBox extends StatefulWidget {
   final ValueChanged<String> onChanged;
@@ -876,13 +904,13 @@ class _NameTextBoxState extends State<NameTextBox> {
           controller: _controller,
           onChanged: (value) {
             setState(() {
-              _isDefaultText = value.isEmpty; // 입력값이 없으면 기본 텍스트 표시
+              _isDefaultText = value.isEmpty;
             });
             widget.onChanged(value);
           },
           onTap: () {
             if (_isDefaultText) {
-              _controller.clear(); // 텍스트 박스 클릭 시 기본 텍스트 지우기
+              _controller.clear();
             }
           },
           style: TextStyle(
@@ -893,24 +921,24 @@ class _NameTextBoxState extends State<NameTextBox> {
             border: OutlineInputBorder(
               borderRadius: BorderRadius.circular(4.0),
               borderSide: BorderSide(
-                color: AppColors.gr600, // The color of the border
+                color: AppColors.gr600,
               ),
             ),
             enabledBorder: OutlineInputBorder(
               borderRadius: BorderRadius.circular(4.0),
               borderSide: BorderSide(
-                color: AppColors.gr600, // The color of the border when enabled
+                color: AppColors.gr600,
               ),
             ),
             focusedBorder: OutlineInputBorder(
               borderRadius: BorderRadius.circular(4.0),
               borderSide: BorderSide(
-                color: AppColors.gr600, // The color of the border when focused
+                color: AppColors.gr600,
               ),
             ),
             contentPadding: EdgeInsets.fromLTRB(12, 10, 12, 10),
-            labelText: _isDefaultText ? null : '', // 기본 텍스트는 라벨로 표시하지 않음
-            hintText: _isDefaultText ? '홍길동' : null, // 기본 텍스트는 힌트로 표시
+            labelText: _isDefaultText ? null : '',
+            hintText: _isDefaultText ? '홍길동' : null,
           ),
         ),
       ],
@@ -932,22 +960,22 @@ class VerificationButton extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: EdgeInsets.only(top: 18.0), // 위쪽에 18.0의 패딩 추가
+      padding: EdgeInsets.only(top: 18.0),
       child: SizedBox(
-        height: 48.0, // 버튼의 위아래 크기를 텍스트 박스와 동일하게 설정
+        height: 48.0,
         child: ElevatedButton(
           onPressed: onPressed,
           style: ButtonStyle(
             backgroundColor:
-            MaterialStateProperty.all<Color>(AppColors.softTeal), // 배경색 설정
+            MaterialStateProperty.all<Color>(AppColors.softTeal),
             shape: MaterialStateProperty.all<RoundedRectangleBorder>(
               RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(10.0), // 모서리를 둥근 사각형으로 설정
+                borderRadius: BorderRadius.circular(10.0),
               ),
             ),
           ),
           child: Text(
-            '인증번호 확인', // 버튼 텍스트 설정
+            '인증번호 확인',
             style: AppTextStyles.body5M14.copyWith(color: AppColors.deepTeal),
           ),
         ),
@@ -957,13 +985,13 @@ class VerificationButton extends StatelessWidget {
 }
 
 class SendVerificationButton extends StatelessWidget {
-  final String email; // 이메일 프로퍼티 추가
-  final VoidCallback onPressed; // onPressed 콜백 추가
+  final String email;
+  final VoidCallback onPressed;
 
   const SendVerificationButton({
     super.key,
     required this.email,
-    required this.onPressed, // onPressed 콜백 받기
+    required this.onPressed,
   });
 
   @override
@@ -972,23 +1000,23 @@ class SendVerificationButton extends StatelessWidget {
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
         Padding(
-          padding: EdgeInsets.only(top: 18.0), // 버튼 위쪽에 10.0의 패딩 추가
+          padding: EdgeInsets.only(top: 18.0),
           child: SizedBox(
-            height: 48.0, // 버튼의 위아래 크기를 텍스트 박스와 동일하게 설정
+            height: 48.0,
             child: ElevatedButton(
-              onPressed: onPressed, // onPressed 콜백 사용
+              onPressed: onPressed,
               style: ButtonStyle(
                 backgroundColor: MaterialStateProperty.all<Color>(
-                    AppColors.softTeal), // 배경색 설정
+                    AppColors.softTeal),
                 shape: MaterialStateProperty.all<RoundedRectangleBorder>(
                   RoundedRectangleBorder(
                     borderRadius:
-                    BorderRadius.circular(10.0), // 모서리를 둥근 사각형으로 설정
+                    BorderRadius.circular(10.0),
                   ),
                 ),
               ),
               child: Text(
-                '인증번호 전송', // 버튼 텍스트 설정
+                '인증번호 전송',
                 style:
                 AppTextStyles.body5M14.copyWith(color: AppColors.deepTeal),
               ),

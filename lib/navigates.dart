@@ -15,7 +15,7 @@ import 'package:sopf_front/screens/pill/pill_category_plus.dart';
 import 'package:sopf_front/screens/mypage/mypage_bookmark_page.dart';
 import 'package:sopf_front/constans/gaps.dart';
 import 'package:sopf_front/screens/mypage/mypage.dart';
-import 'package:sopf_front/screens/search/result/serach_result_pill_detail.dart';
+import 'package:sopf_front/screens/search/result/search_result_pill_detail.dart';
 import 'package:sopf_front/screens/mypage/mypage_settings_page.dart';
 import 'package:sopf_front/screens/mypage/mypage_pill_recent_history.dart';
 import 'package:sopf_front/screens/search/result/search_result.dart';

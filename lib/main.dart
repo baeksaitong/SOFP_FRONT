@@ -6,6 +6,7 @@ import 'package:camera/camera.dart';
 
 import 'package:provider/provider.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
+import 'package:sopf_front/constans/text_styles.dart';
 
 
 // Project imports:
@@ -92,9 +93,15 @@ class MyApp extends StatelessWidget {
       //   ),
       // ),
       theme: ThemeData(
+        dialogBackgroundColor: AppColors.wh, // 다이얼로그 배경 다 하얀색!
+        // 다이얼로그 버튼 테마 설정 (선택 사항)
+        bottomSheetTheme: BottomSheetThemeData(
+        backgroundColor: AppColors.wh,
+        ),
         scaffoldBackgroundColor: AppColors.wh,
         appBarTheme: AppBarTheme(
-        backgroundColor: Colors.white,
+        backgroundColor: AppColors.wh,
+
         ),
       ),
       navigatorKey: navigatorKey,

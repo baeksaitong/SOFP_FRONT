@@ -14,6 +14,16 @@ import 'package:sopf_front/models/models_favorite_info.dart';
 import 'package:sopf_front/providers/provider.dart';
 import 'package:sopf_front/screens/search/result/serach_result_pill_detail.dart';
 import 'package:sopf_front/services/services_favortie.dart';
+import 'package:flutter/widgets.dart';
+import 'package:sopf_front/home.dart';
+import 'package:sopf_front/main.dart';
+
+// Project imports:
+import 'package:sopf_front/managers/managers_api_client.dart';
+import 'package:sopf_front/navigates.dart';
+import 'package:sopf_front/screens/search/result/search_result_pill_detail.dart';
+import 'package:sopf_front/screens/search/search_shape.dart';
+import 'package:sopf_front/services/services_favorite.dart';
 import 'package:sopf_front/services/services_search.dart';
 import 'package:sopf_front/screens/search/search_shape.dart';
 
@@ -124,6 +134,11 @@ class _SearchResultState extends State<SearchResult> {
         favoriteService.favoriteDelete(context, drugs[index].serialNumber);
       }
     });
+  void navigateToHome() {
+    navigatorKey.currentState?.pushAndRemoveUntil(
+      MaterialPageRoute(builder: (context) => HomePage()),
+          (Route<dynamic> route) => false,  // 모든 이전 화면을 제거합니다.
+    );
   }
 
   void navigateToPillDetail(BuildContext context, int serialNumber, String imgUrl, String pillName, String pillDescription) {
@@ -182,7 +197,7 @@ class _SearchResultState extends State<SearchResult> {
             height: 20,
           ),
           onPressed: () {
-            Navigator.pop(context);
+            navigateToHome();
           },
         ),
       ),
