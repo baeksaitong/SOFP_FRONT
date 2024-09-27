@@ -85,9 +85,9 @@ void navigateToTextSearchDetail() {
   );
 }
 
-void navigateToSearchResult() {
+void navigateToSearchResult(String keyword) {
   navigatorKey.currentState?.push(
-    MaterialPageRoute(builder: (context) => SearchResult()),
+    MaterialPageRoute(builder: (context) => SearchResult(searchKeyword: keyword,)),
   );
 }
 

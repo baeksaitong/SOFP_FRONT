@@ -1,4 +1,5 @@
 class DrugInfo {
+  final String pillId;
   final int serialNumber;
   final String name;
   final String classification;
@@ -7,6 +8,7 @@ class DrugInfo {
   bool isBookmarked;
 
   DrugInfo({
+    required this.pillId,
     required this.serialNumber,
     required this.name,
     required this.classification,
@@ -17,6 +19,7 @@ class DrugInfo {
 
   factory DrugInfo.fromJson(Map<String, dynamic> json) {
     return DrugInfo(
+      pillId: json['pillId'],
       serialNumber: json['serialNumber'],
       name: json['name'],
       classification: json['classification'],

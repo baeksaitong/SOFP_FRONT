@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'dart:ffi';
 import 'dart:io';
 
 import 'package:flutter/cupertino.dart';
@@ -24,37 +25,41 @@ class SearchService extends APIClient {
       String? sign,
       String? color,
       String? formulation,
-      String? line) async {
+      String? line,
+      String? lastId, // String으로 처리
+      ) async {
     final currentProfile =
         Provider.of<ProfileProvider>(context, listen: false).currentProfile;
     final String? accessToken = await _jwtManager.getAccessToken();
+
     final url = buildUri('/app/search/keyword'
         '?profileId=${currentProfile?.id}'
         '&limit=10'
+        '&lastId=$lastId'
         '&keyword=$keyword'
         '&shape=$shape'
         '&sign=$sign'
         '&color=$color'
         '&formulation=$formulation'
         '&line=$line');
-    print(keyword);
-    print(url);
+
     final response = await http.get(
       url,
       headers: <String, String>{
         'Content-Type': 'application/json; charset=UTF-8',
         'Accept': 'application/json',
-        'Authorization': 'Bearer $accessToken', // 인증 헤더 추가
+        'Authorization': 'Bearer $accessToken',
       },
     );
+
     if (response.statusCode == 200) {
-      // 성공적으로 처리된 경우
-      print('검색완료: ${utf8.decode(response.bodyBytes)}');
-      DrugsManager().updateDrugs(utf8.decode(response.bodyBytes));
+      final jsonResponse = utf8.decode(response.bodyBytes);
+
+      // DrugsManager를 사용하여 응답 업데이트
+      DrugsManager().addDrugs(jsonResponse);
+      print('검색 완료: ${DrugsManager().drugs.length}개의 알약이 검색됨');
     } else {
-      // 실패 처리
-      print(response.statusCode);
-      print('실패: ${utf8.decode(response.bodyBytes)}');
+      print('검색 실패: ${utf8.decode(response.bodyBytes)}');
     }
   }
 

@@ -179,11 +179,11 @@ class _SearchShapeState extends State<SearchShape> {
                   }
                   showLoading(context, delayed: true); // Show loading spinner with delay
 
-                  await searchService.searchTextAndShape(context, null, shape, keyword, color, formulation, divideLine);
+                  await searchService.searchTextAndShape(context, null, shape, keyword, color, formulation, divideLine, null);
 
                   hideLoading(context); // Hide loading spinner
 
-                  navigateToSearchResult();
+                  navigateToSearchResult(keyword!);
                 },
                 style: OutlinedButton.styleFrom(
                   side: BorderSide.none,

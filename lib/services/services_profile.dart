@@ -1,11 +1,14 @@
 import 'dart:convert';
 
 import 'package:camera/camera.dart';
+import 'package:flutter/cupertino.dart';
+import 'package:provider/provider.dart';
 import 'package:sopf_front/services/services_api_client.dart';
 
 import 'package:http/http.dart' as http;
 import '../managers/managers_jwt.dart';
 import '../models/models_profile.dart';
+import '../providers/provider.dart';
 
 class ProfileService extends APIClient {
   final JWTManager _jwtManager = JWTManager();
@@ -103,6 +106,44 @@ class ProfileService extends APIClient {
       print('Failed to save profile');
       print('Status code: ${response.statusCode}');
       print('Response body: ${response.body}');
+    }
+  }
+
+  Future<ProfileDetail?> profileDetail(BuildContext context) async {
+    // 현재 선택된 프로필 가져오기
+    final currentProfile =
+        Provider.of<ProfileProvider>(context, listen: false).currentProfile;
+    final String? accessToken = await _jwtManager.getAccessToken();
+
+    // API 요청을 위한 URL 설정
+    final url = buildUri('/app/profile/${currentProfile?.id}/detail');
+
+    // API 요청
+    final response = await http.get(
+      url,
+      headers: <String, String>{
+        'Content-Type': 'application/json; charset=UTF-8',
+        'Accept': 'application/json',
+        'Authorization': 'Bearer $accessToken',
+      },
+    );
+
+    // 응답이 성공적인 경우
+    if (response.statusCode == 200) {
+      // 응답 데이터를 디코딩
+      String decodedResponse = utf8.decode(response.bodyBytes);
+      print('현재 프로필 출력: $decodedResponse');
+
+      // JSON 응답을 Profile 객체로 변환
+      Map<String, dynamic> jsonResponse = jsonDecode(decodedResponse);
+
+      // Profile 객체로 반환
+      return ProfileDetail.fromJson(jsonResponse);
+    } else {
+      // 실패 시 오류 처리
+      print(response.statusCode);
+      print('실패했습니다: ${response.body}');
+      return null;
     }
   }
 }
