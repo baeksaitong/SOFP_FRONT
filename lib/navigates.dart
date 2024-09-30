@@ -173,3 +173,4 @@ void navigateToMedicationCategory(
         builder: (context) => PillCategoryDetail(category: category)),
   );
 }
+
