@@ -152,6 +152,8 @@ class _SearchResultState extends State<SearchResult> {
 
   void _searchTerm(String term) async {
     if (term.isNotEmpty) {
+      DrugsManager().clearDrugs();
+
       showLoading(context, delayed: true); // 로딩 표시
 
       await searchService.searchTextAndShape(
@@ -200,6 +202,7 @@ class _SearchResultState extends State<SearchResult> {
             height: 20,
           ),
           onPressed: () {
+            DrugsManager().clearDrugs();
             navigateToHome();
           },
         ),
