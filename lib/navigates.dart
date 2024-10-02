@@ -20,6 +20,7 @@ import 'package:sopf_front/screens/mypage/mypage_settings_page.dart';
 import 'package:sopf_front/screens/mypage/mypage_pill_recent_history.dart';
 import 'package:sopf_front/screens/search/result/search_result.dart';
 import 'package:sopf_front/screens/pill/pill_tasking_list.dart';
+import 'package:sopf_front/screens/search/search_image.dart';
 import 'package:sopf_front/screens/search/search_text.dart';
 import 'package:sopf_front/screens/sign/sign_up.dart';
 import 'models/models_category.dart';

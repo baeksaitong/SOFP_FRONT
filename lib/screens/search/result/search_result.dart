@@ -17,7 +17,6 @@ import 'package:sopf_front/home.dart';
 import 'package:sopf_front/main.dart';
 
 // Project imports:
-import 'package:sopf_front/managers/managers_api_client.dart';
 import 'package:sopf_front/navigates.dart';
 import 'package:sopf_front/screens/search/result/search_result_pill_detail.dart';
 import 'package:sopf_front/screens/search/search_shape.dart';
@@ -237,6 +236,7 @@ class _SearchResultState extends State<SearchResult> {
                       decoration: InputDecoration(
                         border: InputBorder.none,
                         hintText: "알약 이름을 검색해보세요",
+                        focusedBorder: InputBorder.none,
                       ),
                       onSubmitted: _searchTerm,
                     ),

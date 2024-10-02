@@ -160,17 +160,6 @@ class _MyPageEditState extends State<MyPageEdit> {
                   controller: confirmPasswordController,
                 ),
                 Gaps.h10,
-                CheckboxListTile(
-                  title: Text("광고성 이메일 수신 동의"),
-                  value: _isSubscribed,
-                  onChanged: (bool? value) {
-                    setState(() {
-                      _isSubscribed = value ?? false;
-                    });
-                  },
-                  controlAffinity: ListTileControlAffinity.leading,
-                ),
-                Gaps.h10,
                 ElevatedButton(
                   onPressed: saveData,
                   child: Text(

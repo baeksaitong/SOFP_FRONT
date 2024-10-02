@@ -103,6 +103,15 @@ class MyApp extends StatelessWidget {
         backgroundColor: AppColors.wh,
 
         ),
+      inputDecorationTheme: InputDecorationTheme(
+        focusedBorder: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(12.0),
+          borderSide: BorderSide(
+            color: AppColors.vibrantTeal, // 포커스 시 테두리 색상
+            width: 2.0,
+          ),
+        ),
+      ),
       ),
       navigatorKey: navigatorKey,
       home: SplashScreen(),

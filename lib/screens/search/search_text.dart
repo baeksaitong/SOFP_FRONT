@@ -217,6 +217,7 @@ class _TextSearchDetailState extends State<TextSearchDetail> {
                           decoration: InputDecoration(
                             border: InputBorder.none,
                             hintText: "알약 이름을 검색해보세요",
+                            focusedBorder: InputBorder.none,
                           ),
                           onSubmitted: _addSearchTerm,
                         ),
@@ -266,3 +267,4 @@ class _TextSearchDetailState extends State<TextSearchDetail> {
     );
   }
 }
+
