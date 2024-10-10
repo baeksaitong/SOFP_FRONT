@@ -11,74 +11,6 @@ import 'package:http/http.dart' as http;
 class DiseaseAllergyService extends APIClient {
   final JWTManager _jwtManager = JWTManager();
 
-  // Future<void> diseaseAllergyList() async {
-  //   final String? accessToken = await _jwtManager.getAccessToken();
-  //   final url = buildUri('/app/disease-allergy');
-  //   final response = await http.get(
-  //     url,
-  //     headers: <String, String>{
-  //       'Content-Type': 'application/json; charset=UTF-8',
-  //       'Accept': 'application/json',
-  //       'Authorization': 'Bearer $accessToken', // 인증 헤더 추가
-  //     },
-  //   );
-  //
-  //   var decodedResponse = utf8.decode(response.bodyBytes);
-  //   var jsonResponse = jsonDecode(decodedResponse);
-  //   if (response.statusCode == 200) {
-  //     print('질병 및 알레르기 불러오기 성공 : $jsonResponse');
-  //   } else {
-  //     print(response.statusCode);
-  //     print('질병 및 알레르기 불러오기 실패 : $jsonResponse');
-  //   }
-  // }
-  //
-  // Future<void> diseaseAllergySearch(String keyword) async {
-  //   final String? accessToken = await _jwtManager.getAccessToken();
-  //   final url = buildUri('/app/disease-allergy/search?keyword=$keyword');
-  //   final response = await http.get(
-  //     url,
-  //     headers: <String, String>{
-  //       'Content-Type': 'application/json; charset=UTF-8',
-  //       'Accept': 'application/json',
-  //       'Authorization': 'Bearer $accessToken', // 인증 헤더 추가
-  //     },
-  //   );
-  //
-  //   var decodedResponse = utf8.decode(response.bodyBytes);
-  //   var jsonResponse = jsonDecode(decodedResponse);
-  //   if (response.statusCode == 200) {
-  //     print('검색 성공 : $jsonResponse');
-  //   } else {
-  //     print(response.statusCode);
-  //     print('검색 실패 : $jsonResponse');
-  //   }
-  // }
-  //
-  // Future<void> diseaseAllergyGet(BuildContext context, String keyword) async {
-  //   final currentProfile =
-  //       Provider.of<ProfileProvider>(context, listen: false).currentProfile;
-  //   final String? accessToken = await _jwtManager.getAccessToken();
-  //   final url = buildUri('/app/disease-allergy/${currentProfile?.id}');
-  //   final response = await http.get(
-  //     url,
-  //     headers: <String, String>{
-  //       'Content-Type': 'application/json; charset=UTF-8',
-  //       'Accept': 'application/json',
-  //       'Authorization': 'Bearer $accessToken', // 인증 헤더 추가
-  //     },
-  //   );
-  //
-  //   var decodedResponse = utf8.decode(response.bodyBytes);
-  //   var jsonResponse = jsonDecode(decodedResponse);
-  //   if (response.statusCode == 200) {
-  //     print('질병 및 알레르기 목록 조회 성공 : $jsonResponse');
-  //   } else {
-  //     print(response.statusCode);
-  //     print('질병 및 알레르기 목록 조회 실패 : $jsonResponse');
-  //   }
-  // }
-
   Future<List<String>?> diseaseAllergyList(BuildContext context) async {
     final currentProfile = Provider.of<ProfileProvider>(context, listen: false).currentProfile;
     if (currentProfile == null) return null;
@@ -184,3 +116,72 @@ class DiseaseAllergyService extends APIClient {
     }
   }
 }
+
+// 코드 리팩토링 중 바꾼 코드들 -> 왜 남겨뒀냐
+// Future<void> diseaseAllergyList() async {
+//   final String? accessToken = await _jwtManager.getAccessToken();
+//   final url = buildUri('/app/disease-allergy');
+//   final response = await http.get(
+//     url,
+//     headers: <String, String>{
+//       'Content-Type': 'application/json; charset=UTF-8',
+//       'Accept': 'application/json',
+//       'Authorization': 'Bearer $accessToken', // 인증 헤더 추가
+//     },
+//   );
+//
+//   var decodedResponse = utf8.decode(response.bodyBytes);
+//   var jsonResponse = jsonDecode(decodedResponse);
+//   if (response.statusCode == 200) {
+//     print('질병 및 알레르기 불러오기 성공 : $jsonResponse');
+//   } else {
+//     print(response.statusCode);
+//     print('질병 및 알레르기 불러오기 실패 : $jsonResponse');
+//   }
+// }
+//
+// Future<void> diseaseAllergySearch(String keyword) async {
+//   final String? accessToken = await _jwtManager.getAccessToken();
+//   final url = buildUri('/app/disease-allergy/search?keyword=$keyword');
+//   final response = await http.get(
+//     url,
+//     headers: <String, String>{
+//       'Content-Type': 'application/json; charset=UTF-8',
+//       'Accept': 'application/json',
+//       'Authorization': 'Bearer $accessToken', // 인증 헤더 추가
+//     },
+//   );
+//
+//   var decodedResponse = utf8.decode(response.bodyBytes);
+//   var jsonResponse = jsonDecode(decodedResponse);
+//   if (response.statusCode == 200) {
+//     print('검색 성공 : $jsonResponse');
+//   } else {
+//     print(response.statusCode);
+//     print('검색 실패 : $jsonResponse');
+//   }
+// }
+//
+// Future<void> diseaseAllergyGet(BuildContext context, String keyword) async {
+//   final currentProfile =
+//       Provider.of<ProfileProvider>(context, listen: false).currentProfile;
+//   final String? accessToken = await _jwtManager.getAccessToken();
+//   final url = buildUri('/app/disease-allergy/${currentProfile?.id}');
+//   final response = await http.get(
+//     url,
+//     headers: <String, String>{
+//       'Content-Type': 'application/json; charset=UTF-8',
+//       'Accept': 'application/json',
+//       'Authorization': 'Bearer $accessToken', // 인증 헤더 추가
+//     },
+//   );
+//
+//   var decodedResponse = utf8.decode(response.bodyBytes);
+//   var jsonResponse = jsonDecode(decodedResponse);
+//   if (response.statusCode == 200) {
+//     print('질병 및 알레르기 목록 조회 성공 : $jsonResponse');
+//   } else {
+//     print(response.statusCode);
+//     print('질병 및 알레르기 목록 조회 실패 : $jsonResponse');
+//   }
+// }

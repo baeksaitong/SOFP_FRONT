@@ -211,7 +211,10 @@ class _DiseaseAllergyBottomSheetState extends State<DiseaseAllergyBottomSheet> {
                   SizedBox(
                     width: double.infinity,
                     child: ElevatedButton(
-                      onPressed: () => widget.onSave(selectedItems),
+                      onPressed: () {
+                        widget.onSave(selectedItems);
+                        Navigator.pop(context);
+                      },
                       style: ElevatedButton.styleFrom(
                         foregroundColor: AppColors.deepTeal,
                         backgroundColor: AppColors.softTeal,

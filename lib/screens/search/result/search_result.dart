@@ -136,25 +136,17 @@ class _SearchResultState extends State<SearchResult> {
     });
   }
 
-  void navigateToPillDetail(BuildContext context, int serialNumber, String imgUrl, String pillName, String pillDescription) {
-    Navigator.push(
-      context,
-      MaterialPageRoute(
-        builder: (context) => SearchResultPillDetail(
-          serialNumber: serialNumber,
-          imgUrl: imgUrl,
-          pillName: pillName,
-          pillDescription: pillDescription,
-        ),
-      ),
-    );
-  }
-
   void _searchTerm(String term) async {
     if (term.isNotEmpty) {
       DrugsManager().clearDrugs();
 
       showLoading(context, delayed: true); // 로딩 표시
+
+      print('Searching with filters:');
+      print('Shape: ${selectedShapeItem?.text}');
+      print('DivideLine: ${selectedDivideLineItem?.text}');
+      print('Color: ${selectedColorItem?.text}');
+      print('Formulation: ${selectedFormulationItem?.text}');
 
       await searchService.searchTextAndShape(
         context,
@@ -175,12 +167,35 @@ class _SearchResultState extends State<SearchResult> {
     }
   }
 
+
   void updateButtonText() {
     setState(() {
       shapeText = selectedShapeItem?.text ?? '모양';
       divideLineText = selectedDivideLineItem?.text ?? '분할선';
       colorText = selectedColorItem?.text ?? '색상';
       formulationText = selectedFormulationItem?.text ?? '제형';
+    });
+  }
+
+  void resetButton() {
+    setState(() {
+      shapeText = '모양';
+      divideLineText = '분할선';
+      colorText = '색상';
+      formulationText = '제형';
+
+      for (var item in colorItems) {
+        item.isSelected = false;
+      }
+      for (var item in shapeItems) {
+        item.isSelected = false;
+      }
+      for (var item in formulationItems) {
+        item.isSelected = false;
+      }
+      for (var item in divideLineItems) {
+        item.isSelected = false;
+      }
     });
   }
 
@@ -629,39 +644,77 @@ class _SearchResultState extends State<SearchResult> {
                                               ),
                                             ),
                                           ),
-                                          Container(
-                                            width: 335,
-                                            height: 52,
-                                            margin: EdgeInsets.all(20),
-                                            decoration: BoxDecoration(
-                                              borderRadius:
-                                              BorderRadius.all(Radius.circular(8)),
-                                              color: AppColors.softTeal,
-                                            ),
-                                            child: OutlinedButton(
-                                              onPressed: () {
-                                                debugPrint(selectedShapeItem?.text);
-                                                debugPrint(
-                                                    selectedDivideLineItem?.text);
-                                                debugPrint(selectedColorItem?.text);
-                                                debugPrint(
-                                                    selectedFormulationItem?.text);
-                                                debugPrint(shapeText);
-                                                debugPrint(divideLineText);
-                                                debugPrint(colorText);
-                                                debugPrint(formulationText);
+                                          Row(
+                                            children: [
+                                              Container(
+                                                width: 335,
+                                                height: 52,
+                                                margin: EdgeInsets.all(20),
+                                                decoration: BoxDecoration(
+                                                  borderRadius:
+                                                  BorderRadius.all(Radius.circular(8)),
+                                                  color: AppColors.softTeal,
+                                                ),
+                                                child: OutlinedButton(
+                                                  onPressed: () {
+                                                    debugPrint(selectedShapeItem?.text);
+                                                    debugPrint(selectedDivideLineItem?.text);
+                                                    debugPrint(selectedColorItem?.text);
+                                                    debugPrint(selectedFormulationItem?.text);
+                                                    debugPrint(shapeText);
+                                                    debugPrint(divideLineText);
+                                                    debugPrint(colorText);
+                                                    debugPrint(formulationText);
 
-                                                Navigator.of(context).pop();
-                                              },
-                                              style: OutlinedButton.styleFrom(
-                                                side: BorderSide.none,
+                                                    Navigator.of(context).pop();
+
+                                                    _searchTerm(widget.searchKeyword);
+                                                  },
+                                                  style: OutlinedButton.styleFrom(
+                                                    side: BorderSide.none,
+                                                  ),
+                                                  child: Text(
+                                                    '검색하기',
+                                                    style: AppTextStyles.body1S16.copyWith(
+                                                        color: AppColors.deepTeal),
+                                                  ),
+                                                ),
                                               ),
-                                              child: Text(
-                                                '검색하기',
-                                                style: AppTextStyles.body1S16.copyWith(
-                                                    color: AppColors.deepTeal),
+                                              Container(
+                                                width: 335,
+                                                height: 52,
+                                                margin: EdgeInsets.all(20),
+                                                decoration: BoxDecoration(
+                                                  borderRadius:
+                                                  BorderRadius.all(Radius.circular(8)),
+                                                  color: AppColors.softTeal,
+                                                ),
+                                                child: OutlinedButton(
+                                                  onPressed: () {
+                                                    debugPrint(selectedShapeItem?.text);
+                                                    debugPrint(selectedDivideLineItem?.text);
+                                                    debugPrint(selectedColorItem?.text);
+                                                    debugPrint(selectedFormulationItem?.text);
+                                                    debugPrint(shapeText);
+                                                    debugPrint(divideLineText);
+                                                    debugPrint(colorText);
+                                                    debugPrint(formulationText);
+
+                                                    Navigator.of(context).pop();
+
+                                                    _searchTerm(widget.searchKeyword);
+                                                  },
+                                                  style: OutlinedButton.styleFrom(
+                                                    side: BorderSide.none,
+                                                  ),
+                                                  child: Text(
+                                                    '검색하기',
+                                                    style: AppTextStyles.body1S16.copyWith(
+                                                        color: AppColors.deepTeal),
+                                                  ),
+                                                ),
                                               ),
-                                            ),
+                                            ],
                                           ),
                                         ],
                                       ),
@@ -762,6 +815,25 @@ class _SearchResultState extends State<SearchResult> {
                                 .copyWith(color: AppColors.gr700),
                           )),
                     ),
+                    Gaps.w8,
+                    Container(
+                      width: 53,
+                      height: 38,
+                      child: OutlinedButton(
+                          onPressed: resetButton,
+                          style: OutlinedButton.styleFrom(
+                            side: BorderSide(
+                              color: AppColors.gr300,
+                              width: 1.0,
+                            ),
+                            padding: EdgeInsets.zero, // 내부 패딩을 제거하여 공간 확보
+                          ),
+                          child: Text(
+                            '초기화',
+                            style: AppTextStyles.body5M14
+                                .copyWith(color: AppColors.gr700),
+                          )),
+                    ),
                   ],
                 ),
                 Gaps.h16,
@@ -785,7 +857,6 @@ class _SearchResultState extends State<SearchResult> {
                                 drug.serialNumber,
                                 drug.imgUrl,
                                 drug.name,
-                                "여기에 알약 설명을 추가하세요"
                             );
                           },
                           child: Container(

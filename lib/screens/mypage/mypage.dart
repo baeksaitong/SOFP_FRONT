@@ -66,7 +66,7 @@ class _MyPageState extends State<MyPage> {
       try {
         final accessToken = await JWTManager().getValidAccessToken();
         final response = await http.get(
-          Uri.parse('http://3.39.8.147:80/app/disease-allergy/${profile!['id']}'),
+          Uri.parse('http://3.39.8.147:8080/app/disease-allergy/${profile!['id']}'),
           headers: {
             'Authorization': 'Bearer $accessToken',
             'Content-Type': 'application/json; charset=UTF-8',
@@ -95,7 +95,7 @@ class _MyPageState extends State<MyPage> {
       try {
         final accessToken = await JWTManager().getValidAccessToken();
         final response = await http.get(
-          Uri.parse('http://3.39.8.147:80/app/pill?profileId=${profile!['id']}'),
+          Uri.parse('http://3.39.8.147:8080/app/pill?profileId=${profile!['id']}'),
           headers: {
             'Authorization': 'Bearer $accessToken',
             'Content-Type': 'application/json; charset=UTF-8',
@@ -122,7 +122,7 @@ class _MyPageState extends State<MyPage> {
     try {
       final accessToken = await JWTManager().getValidAccessToken();
       final response = await http.patch(
-        Uri.parse('http://3.39.8.147:80/app/disease-allergy/${profile!['id']}'),
+        Uri.parse('http://3.39.8.147:8080/app/disease-allergy/${profile!['id']}'),
         headers: {
           'Authorization': 'Bearer $accessToken',
           'Content-Type': 'application/json; charset=UTF-8',
@@ -149,7 +149,7 @@ class _MyPageState extends State<MyPage> {
     try {
       final accessToken = await JWTManager().getValidAccessToken();
       final response = await http.post(
-        Uri.parse('http://3.39.8.147:80/app/pill/${profile!['id']}'),
+        Uri.parse('http://3.39.8.147:8080/app/pill/${profile!['id']}'),
         headers: {
           'Authorization': 'Bearer $accessToken',
           'Content-Type': 'application/json; charset=UTF-8',
@@ -179,7 +179,7 @@ class _MyPageState extends State<MyPage> {
       try {
         final accessToken = await JWTManager().getValidAccessToken();
         final response = await http.get(
-          Uri.parse('http://3.39.8.147:80/app/disease-allergy/search?keyword=$value'),
+          Uri.parse('http://3.39.8.147:8080/app/disease-allergy/search?keyword=$value'),
           headers: {
             'Content-Type': 'application/json; charset=UTF-8',
             'Authorization': 'Bearer $accessToken',
@@ -307,7 +307,7 @@ class _MyPageState extends State<MyPage> {
       try {
         final accessToken = await JWTManager().getValidAccessToken();
         final response = await http.get(
-          Uri.parse('http://3.39.8.147:80/app/pill/search?keyword=$value'),
+          Uri.parse('http://3.39.8.147:8080/app/pill/search?keyword=$value'),
           headers: {
             'Content-Type': 'application/json; charset=UTF-8',
             'Authorization': 'Bearer $accessToken',

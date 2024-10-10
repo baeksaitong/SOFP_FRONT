@@ -11,18 +11,18 @@ import 'package:sopf_front/services/services_auth.dart';
 import 'package:sopf_front/services/services_favorite.dart';
 import 'package:sopf_front/services/services_pill.dart';
 
+import '../../../services/services_disease_allergy.dart';
+
 class SearchResultPillDetail extends StatefulWidget {
   final int serialNumber;
   final String imgUrl;
   final String pillName;
-  final String pillDescription;
 
   const SearchResultPillDetail({
     Key? key,
     required this.serialNumber,
     required this.imgUrl,
     required this.pillName,
-    required this.pillDescription,
   }) : super(key: key);
 
   @override
@@ -30,21 +30,37 @@ class SearchResultPillDetail extends StatefulWidget {
 }
 
 class _SearchResultPillDetailState extends State<SearchResultPillDetail> {
-  bool showWarning = true; // 초기에는 주의사항을 보이게 설정
+  bool showWarning = false; // 초기에는 주의사항을 보이게 설정
   bool isFavorite = false; // 즐겨찾기 상태
   final PillService pillService = PillService();
   bool isBookmarked = false; // 즐겨찾기 상태
   final AuthService authService = AuthService();
   final FavoriteService favoriteService = FavoriteService(); // 즐겨찾기 서비스 인스턴스
+  List<String> allergies = []; // 알레르기 목록
 
   @override
   void initState() {
     super.initState();
     _loadBookmarkStatus(); // 초기 즐겨찾기 상태 로드
+    _loadAllergies();
+  }
+
+  Future<void> _loadAllergies() async {
+    final currentProfile = Provider.of<ProfileProvider>(context, listen: false).currentProfile;
+    if (currentProfile == null) return;
+
+    try {
+      final result = await DiseaseAllergyService().diseaseAllergyGet(context);
+      setState(() {
+        allergies = result ?? []; // null이면 빈 리스트를 사용
+        allergies.add('감기'); // 샘플 알레르기 단어 추가
+      });
+    } catch (e) {
+      print('Error loading allergies: $e');
+    }
   }
 
   // 즐겨찾기 상태를 서버에서 로드하는 함수
-// 즐겨찾기 상태를 서버에서 로드하는 함수
   void _loadBookmarkStatus() async {
     await favoriteService.favoriteGet(context); // 즐겨찾기 목록을 서버에서 가져옴
     var favorites = FavoritesManager().favorites; // FavoritesManager에서 즐겨찾기 목록 가져오기
@@ -52,7 +68,6 @@ class _SearchResultPillDetailState extends State<SearchResultPillDetail> {
       isBookmarked = favorites.any((favorite) => favorite.serialNumber == widget.serialNumber); // 목록에 해당 항목이 있는지 확인
     });
   }
-
 
   void _toggleBookmark() async {
     try {
@@ -62,7 +77,6 @@ class _SearchResultPillDetailState extends State<SearchResultPillDetail> {
         print('즐겨찾기 삭제 성공');
       } else {
         // 즐겨찾기 추가 요청
-        // 추가 인자를 확인하고, 올바른 값을 전달합니다.
         await favoriteService.favoritePost(context, widget.serialNumber, widget.imgUrl);
         print('즐겨찾기 추가 성공');
       }
@@ -81,6 +95,7 @@ class _SearchResultPillDetailState extends State<SearchResultPillDetail> {
   @override
   Widget build(BuildContext context) {
     final currentDrugInfoDetail = Provider.of<DrugInfoDetailProvider>(context, listen: false).currentDrugInfoDetail;
+    final currentProfile = Provider.of<ProfileProvider>(context, listen: false).currentProfile;
 
     return Scaffold(
       appBar: AppBar(
@@ -92,7 +107,7 @@ class _SearchResultPillDetailState extends State<SearchResultPillDetail> {
             Navigator.push(
               context,
               MaterialPageRoute(
-                builder: (context) => SearchResult(searchKeyword: '',), // SearchResult 페이지로 이동
+                builder: (context) => SearchResult(searchKeyword: ''), // SearchResult 페이지로 이동
               ),
             );
           },
@@ -172,10 +187,7 @@ class _SearchResultPillDetailState extends State<SearchResultPillDetail> {
         children: [
           Stack(
             children: [
-              Image.network(
-                widget.imgUrl,
-                fit: BoxFit.cover,
-              ),
+              Image.network(widget.imgUrl, fit: BoxFit.cover),
               Positioned(
                 right: 8.0,
                 bottom: 8.0,
@@ -195,10 +207,7 @@ class _SearchResultPillDetailState extends State<SearchResultPillDetail> {
             style: AppTextStyles.body3S15.copyWith(color: AppColors.vibrantTeal),
           ),
           const SizedBox(height: 8.0),
-          Text(
-            widget.pillName,
-            style: AppTextStyles.title2B20,
-          ),
+          Text(widget.pillName, style: AppTextStyles.title2B20),
           const SizedBox(height: 8.0),
           Visibility(
             visible: showWarning,
@@ -213,7 +222,7 @@ class _SearchResultPillDetailState extends State<SearchResultPillDetail> {
                   Icon(Icons.warning, color: Colors.yellow),
                   const SizedBox(width: 8.0),
                   Text(
-                    '주의: ${widget.pillDescription}',
+                    '주의: 사용자께서 주의해야하시는 알약입니다.',
                     style: AppTextStyles.body5M14.copyWith(color: AppColors.bk),
                   ),
                 ],
@@ -221,10 +230,7 @@ class _SearchResultPillDetailState extends State<SearchResultPillDetail> {
             ),
           ),
           const SizedBox(height: 16.0),
-          Text(
-            '성분',
-            style: AppTextStyles.body4S14,
-          ),
+          Text('성분', style: AppTextStyles.body4S14),
           const SizedBox(height: 4.0),
           Text(
             currentDrugInfoDetail?.material ?? 'No material information',
@@ -235,13 +241,13 @@ class _SearchResultPillDetailState extends State<SearchResultPillDetail> {
           const SizedBox(height: 20.0),
           buildDetailSection('용법용량', currentDrugInfoDetail?.dosageUsage),
           const SizedBox(height: 20.0),
-          buildDetailSection('주의사항', currentDrugInfoDetail?.cautionGeneral),
+          buildDetailSection('주의사항', currentDrugInfoDetail?.cautionGeneral, true), // 주의사항일 때만 true 전달
         ],
       ),
     );
   }
 
-  Widget buildDetailSection(String title, DetailSection? section) {
+  Widget buildDetailSection(String title, DetailSection? section, [bool isCaution = false]) {
     if (section == null) {
       return Text(
         '$title 정보 없음',
@@ -256,13 +262,13 @@ class _SearchResultPillDetailState extends State<SearchResultPillDetail> {
           title,
           style: AppTextStyles.body4S14,
         ),
-        ...?section.sectionList?.map((subSection) => buildDetailSection(subSection.title!, subSection)).toList(),
-        ...?section.articleList?.map((article) => buildArticle(article)).toList(),
+        ...?section.sectionList?.map((subSection) => buildDetailSection(subSection.title!, subSection, isCaution)).toList(),
+        ...?section.articleList?.map((article) => buildArticle(article, isCaution)).toList(),
       ],
     );
   }
 
-  Widget buildArticle(Article article) {
+  Widget buildArticle(Article article, bool isCaution) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -273,12 +279,54 @@ class _SearchResultPillDetailState extends State<SearchResultPillDetail> {
           ),
         ...?article.paragraphList?.map((paragraph) => Padding(
           padding: const EdgeInsets.only(left: 16.0, top: 4.0),
-          child: Text(
-            paragraph.description ?? '',
-            style: AppTextStyles.body5M14,
-          ),
+          child: paragraph.description != null
+              ? isCaution
+              ? buildHighlightedText(paragraph.description!) // 주의사항이면 하이라이트
+              : Text(paragraph.description!) // 주의사항이 아니면 일반 텍스트
+              : Text(''),
         )).toList(),
       ],
+    );
+  }
+
+  // Helper function to build the highlighted text
+  RichText buildHighlightedText(String paragraph) {
+    List<TextSpan> spans = [];
+    bool foundAllergy = false; // 알레르기 단어 발견 여부
+
+    final words = paragraph.split(' ');
+
+    for (var word in words) {
+      bool isAllergyWord = allergies.any((allergy) => word.toLowerCase().contains(allergy.toLowerCase())); // 알레르기 체크
+
+      if (isAllergyWord) {
+        foundAllergy = true; // 알레르기 단어가 발견되면 true로 설정
+      }
+
+      spans.add(TextSpan(
+        text: '$word ', // 각 단어 뒤에 공백 추가
+        style: isAllergyWord
+            ? AppTextStyles.body5M14.copyWith(
+          backgroundColor: Colors.yellow, // 하이라이트 배경 적용
+          color: AppColors.bk, // 글꼴 색상 설정
+        )
+            : AppTextStyles.body5M14.copyWith(
+          backgroundColor: null,
+          color: AppColors.bk,
+        ), // 알레르기 단어가 아닌 경우 스타일 없음
+      ));
+    }
+
+    // 알레르기 단어가 발견되면 showWarning을 true로 설정
+    if (foundAllergy && !showWarning) {
+      setState(() {
+        showWarning = true;
+        print('알레르기 단어가 발견되어 주의 사항을 활성화했습니다.');
+      });
+    }
+
+    return RichText(
+      text: TextSpan(children: spans),
     );
   }
 }
