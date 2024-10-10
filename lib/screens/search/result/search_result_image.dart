@@ -1,4 +1,3 @@
-// Dart imports:
 import 'dart:io';
 
 // Flutter imports:
@@ -75,6 +74,10 @@ class _SearchResultImageState extends State<SearchResultImage> {
     setState(() {});
   }
 
+  void _retakePhotos() {
+    Navigator.of(context).pop(); // "재촬영하기" 버튼 눌렀을 때 뒤로 가기 (이 부분은 필요에 따라 수정 가능)
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -99,6 +102,8 @@ class _SearchResultImageState extends State<SearchResultImage> {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
+
+                // 이미지 Row 부분
                 Row(
                   children: [
                     Expanded(
@@ -124,12 +129,48 @@ class _SearchResultImageState extends State<SearchResultImage> {
                     ),
                   ],
                 ),
+
                 Gaps.h8,
-                Text(
-                  '촬영된 사진의 검색 결과 ${drugs.length}건',
-                  style: AppTextStyles.body2M16,
+
+                // 검색 결과와 재촬영하기 버튼을 나란히 배치
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Text(
+                      '촬영된 사진의 검색 결과 ${drugs.length}건',
+                      style: AppTextStyles.body2M16,
+                    ),
+                    Container(
+                      width: 86,
+                      height: 40,
+                      decoration: BoxDecoration(
+                        color: AppColors.vibrantTeal, // 버튼 색상
+                        borderRadius: BorderRadius.circular(8), // 모서리 구부리기
+                      ),
+                      child: TextButton(
+                        onPressed: _retakePhotos,
+                        child: Text(
+                          '재촬영하기',
+                          style: AppTextStyles.body5M14.copyWith(
+                            color: AppColors.softTeal, // 글자 색상
+                          ),
+                        ),
+                      ),
+                    ),
+                  ],
                 ),
+
                 Gaps.h8,
+
+                // 구분선 추가
+                Divider(
+                  height: 8,
+                  thickness: 8, // 구분선 두께
+                  color: AppColors.gr100, // 구분선 색상
+                ),
+
+                Gaps.h8,
+
                 Expanded(
                   child: ListView.separated(
                     itemCount: drugs.length,

@@ -64,7 +64,6 @@ class _CameraScreenState extends State<CameraScreen> {
   void initState() {
     super.initState();
     _initializeCamera();
-    // _loadLatestImage(); // 이 줄을 제거했습니다.
   }
 
   Future<void> _initializeCamera() async {
@@ -75,16 +74,22 @@ class _CameraScreenState extends State<CameraScreen> {
     }
   }
 
-  Future<void> _loadLatestImage() async {
-    setState(() {
-      _isLoadingImage = true;
-    });
-
-    final XFile? pickedFile = await _picker.pickImage(source: ImageSource.gallery);
-    setState(() {
-      _latestImage = pickedFile != null ? File(pickedFile.path) : null;
-      _isLoadingImage = false;
-    });
+  Future<void> _loadImagesFromGallery() async {
+    try {
+      final List<XFile>? pickedFiles = await _picker.pickMultiImage();  // 여러 이미지를 선택하도록 변경
+      if (pickedFiles != null && pickedFiles.length >= 2) {
+        setState(() {
+          _firstImageFile = pickedFiles[0];
+          _secondImageFile = pickedFiles[1];
+        });
+        _showSecondConfirmationDialog();
+      } else {
+        // 선택한 이미지가 2개 미만일 경우
+        print("Error: 2개의 이미지를 선택하세요.");
+      }
+    } catch (e) {
+      print('갤러리에서 이미지 선택에 실패했습니다: $e');
+    }
   }
 
   @override
@@ -147,23 +152,11 @@ class _CameraScreenState extends State<CameraScreen> {
 
   Widget _galleryButton() {
     return GestureDetector(
-      onTap: _loadLatestImage, // **갤러리 버튼을 눌렀을 때만 이미지를 로드합니다.**
+      onTap: _loadImagesFromGallery, // **갤러리 버튼 클릭 시 다중 이미지 선택**
       child: CircleAvatar(
         radius: 22,
         backgroundColor: AppColors.wh,
-        child: Container(
-          width: 20,
-          height: 20,
-          decoration: BoxDecoration(
-            shape: BoxShape.circle,
-            image: DecorationImage(
-              image: _latestImage != null
-                  ? FileImage(_latestImage!) as ImageProvider
-                  : const AssetImage('assets/imagesearch/defaultgallery.png'),
-              fit: BoxFit.fill,
-            ),
-          ),
-        ),
+        child: Icon(Icons.image, size: 24, color: AppColors.gr600),
       ),
     );
   }
@@ -347,7 +340,6 @@ class _CameraScreenState extends State<CameraScreen> {
 
   void _performSearch() {
     print('Performing search with the captured images.');
-    // gpt에서 만들어준 텍스트 일단 그냥 두겠음
   }
 
   void _switchCamera() async {
