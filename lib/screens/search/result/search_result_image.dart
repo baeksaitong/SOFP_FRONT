@@ -138,7 +138,7 @@ class _SearchResultImageState extends State<SearchResultImage> {
                   children: [
                     Text(
                       '촬영된 사진의 검색 결과 ${drugs.length}건',
-                      style: AppTextStyles.body2M16,
+                      style: AppTextStyles.title2B20,
                     ),
                     Container(
                       width: 86,
@@ -160,16 +160,7 @@ class _SearchResultImageState extends State<SearchResultImage> {
                   ],
                 ),
 
-                Gaps.h8,
-
-                // 구분선 추가
-                Divider(
-                  height: 8,
-                  thickness: 8, // 구분선 두께
-                  color: AppColors.gr100, // 구분선 색상
-                ),
-
-                Gaps.h8,
+                Gaps.h24,
 
                 Expanded(
                   child: ListView.separated(

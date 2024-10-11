@@ -1,4 +1,3 @@
-// Dart imports:
 import 'dart:io';
 
 // Flutter imports:
@@ -77,102 +76,22 @@ class _CameraScreenState extends State<CameraScreen> {
   Future<void> _loadImagesFromGallery() async {
     try {
       final List<XFile>? pickedFiles = await _picker.pickMultiImage();  // 여러 이미지를 선택하도록 변경
-      if (pickedFiles != null && pickedFiles.length >= 2) {
-        setState(() {
-          _firstImageFile = pickedFiles[0];
-          _secondImageFile = pickedFiles[1];
-        });
-        _showSecondConfirmationDialog();
-      } else {
-        // 선택한 이미지가 2개 미만일 경우
-        print("Error: 2개의 이미지를 선택하세요.");
+      if (pickedFiles != null) {
+        if (pickedFiles.length == 2) {
+          // 정확히 2장의 사진이 선택되었을 때만 처리
+          setState(() {
+            _firstImageFile = pickedFiles[0];
+            _secondImageFile = pickedFiles[1];
+          });
+          _showSecondConfirmationDialog();
+        } else {
+          // 선택한 이미지가 2개 미만 또는 초과일 경우
+          _showErrorDialog('2장의 이미지만 선택하셔야 합니다.');
+        }
       }
     } catch (e) {
       print('갤러리에서 이미지 선택에 실패했습니다: $e');
     }
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    return Stack(
-      children: <Widget>[
-        Positioned.fill(
-          child: _cameraPreviewWidget(),
-        ),
-        _cameraOverlayWidget(),
-      ],
-    );
-  }
-
-  Widget _cameraPreviewWidget() {
-    return _controller != null && _controller!.value.isInitialized
-        ? CameraPreview(_controller!)
-        : const Center(child: Text('카메라를 시작할 수 없습니다.'));
-  }
-
-  Widget _cameraOverlayWidget() {
-    return Align(
-      alignment: Alignment.bottomCenter,
-      child: Container(
-        height: 160,
-        color: AppColors.bk.withOpacity(0.3),
-        child: Stack(
-          children: [
-            Align(
-              alignment: Alignment.center,
-              child: Column(
-                mainAxisSize: MainAxisSize.min,
-                children: [
-                  Text(
-                    '알약을 선명하게 찍어주세요',
-                    style: TextStyle(
-                      color: Colors.white,
-                      fontSize: 16,
-                      fontWeight: FontWeight.w500,
-                      fontFamily: 'pretendard',
-                    ),
-                  ),
-                  Gaps.h8,
-                  _shootButton(),
-                ],
-              ),
-            ),
-            Align(
-              alignment: Alignment.centerLeft,
-              child: Padding(
-                padding: const EdgeInsets.only(left: 16.0),
-                child: _galleryButton(),
-              ),
-            ),
-          ],
-        ),
-      ),
-    );
-  }
-
-  Widget _galleryButton() {
-    return GestureDetector(
-      onTap: _loadImagesFromGallery, // **갤러리 버튼 클릭 시 다중 이미지 선택**
-      child: CircleAvatar(
-        radius: 22,
-        backgroundColor: AppColors.wh,
-        child: Icon(Icons.image, size: 24, color: AppColors.gr600),
-      ),
-    );
-  }
-
-  Widget _shootButton() {
-    return GestureDetector(
-      onTap: _takePicture,
-      child: CircleAvatar(
-        radius: 30,
-        backgroundColor: AppColors.wh,
-        child: CircleAvatar(
-          backgroundColor: AppColors.gr600,
-          radius: 27,
-        ),
-      ),
-    );
   }
 
   Future<void> _takePicture() async {
@@ -211,6 +130,42 @@ class _CameraScreenState extends State<CameraScreen> {
         _isTakingPicture = false;
       });
     }
+  }
+
+  void _showErrorDialog(String message) {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: Text(
+            '오류',
+            style: TextStyle(
+              fontSize: 22,
+              fontWeight: FontWeight.w600,
+              fontFamily: 'pretendard',
+              color: AppColors.bk,
+            ),
+          ),
+          content: Text(message),
+          actions: <Widget>[
+            TextButton(
+              child: Text(
+                '확인',
+                style: TextStyle(
+                  fontSize: 14,
+                  fontWeight: FontWeight.w600,
+                  fontFamily: 'pretendard',
+                  color: AppColors.vibrantTeal,
+                ),
+              ),
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+            ),
+          ],
+        );
+      },
+    );
   }
 
   void _showFirstConfirmationDialog() {
@@ -338,30 +293,86 @@ class _CameraScreenState extends State<CameraScreen> {
     );
   }
 
-  void _performSearch() {
-    print('Performing search with the captured images.');
+  @override
+  Widget build(BuildContext context) {
+    return Stack(
+      children: <Widget>[
+        Positioned.fill(
+          child: _cameraPreviewWidget(),
+        ),
+        _cameraOverlayWidget(),
+      ],
+    );
   }
 
-  void _switchCamera() async {
-    if (_controller == null) return;
+  Widget _cameraPreviewWidget() {
+    return _controller != null && _controller!.value.isInitialized
+        ? CameraPreview(_controller!)
+        : const Center(child: Text('카메라를 시작할 수 없습니다.'));
+  }
 
-    final currentDirection = _controller!.description.lensDirection;
-
-    CameraDescription newCamera = widget.cameras.firstWhere(
-          (camera) => camera.lensDirection != currentDirection,
-      orElse: () => _controller!.description,
+  Widget _cameraOverlayWidget() {
+    return Align(
+      alignment: Alignment.bottomCenter,
+      child: Container(
+        height: 160,
+        color: AppColors.bk.withOpacity(0.3),
+        child: Stack(
+          children: [
+            Align(
+              alignment: Alignment.center,
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  Text(
+                    '알약을 선명하게 찍어주세요',
+                    style: TextStyle(
+                      color: Colors.white,
+                      fontSize: 16,
+                      fontWeight: FontWeight.w500,
+                      fontFamily: 'pretendard',
+                    ),
+                  ),
+                  Gaps.h8,
+                  _shootButton(),
+                ],
+              ),
+            ),
+            Align(
+              alignment: Alignment.centerLeft,
+              child: Padding(
+                padding: const EdgeInsets.only(left: 16.0),
+                child: _galleryButton(),
+              ),
+            ),
+          ],
+        ),
+      ),
     );
+  }
 
-    if (newCamera != _controller!.description) {
-      CameraController newController = CameraController(
-        newCamera,
-        ResolutionPreset.high,
-      );
+  Widget _galleryButton() {
+    return GestureDetector(
+      onTap: _loadImagesFromGallery, // **갤러리 버튼 클릭 시 다중 이미지 선택**
+      child: CircleAvatar(
+        radius: 22,
+        backgroundColor: AppColors.wh,
+        child: Icon(Icons.image, size: 24, color: AppColors.gr600),
+      ),
+    );
+  }
 
-      await _controller?.dispose();
-      _controller = newController;
-      await _controller?.initialize();
-      setState(() {});
-    }
+  Widget _shootButton() {
+    return GestureDetector(
+      onTap: _takePicture,
+      child: CircleAvatar(
+        radius: 30,
+        backgroundColor: AppColors.wh,
+        child: CircleAvatar(
+          backgroundColor: AppColors.gr600,
+          radius: 27,
+        ),
+      ),
+    );
   }
 }
