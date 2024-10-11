@@ -8,15 +8,6 @@ import 'package:sopf_front/screens/sign/sign_naver.dart';
 import 'package:sopf_front/services/services_api_client.dart';
 import 'package:sopf_front/services/services_auth.dart';
 
-
-// void main() {
-//   runApp(MaterialApp(
-//     title: 'First App',
-//     theme: ThemeData(primarySwatch: Colors.blue),
-//     home: LoginPage(),
-//   ));
-// }
-
 class SignIn extends StatefulWidget {
   const SignIn({super.key});
 
@@ -43,10 +34,6 @@ class _SignInState extends State<SignIn> {
     }
   }
 
-  // Future<void> _login() async {
-  //
-  // }
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -64,11 +51,20 @@ class _SignInState extends State<SignIn> {
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
               // Image.asset('promiss.png'),
-              IdTextField(idController: idController),
+              CustomTextField(
+                label: '아이디',
+                hintText: '아이디를 입력하세요',
+                controller: idController,
+              ),
               SizedBox(height: 20),
-              PassTextField(passwordController: passwordController),
+              CustomTextField(
+                label: '비밀번호',
+                hintText: '비밀번호를 입력하세요',
+                isPassword: true,
+                controller: passwordController,
+              ),
               SizedBox(height: 20),
-              LoginButton(idController: idController, passwordController: passwordController,),
+              LoginButton(idController: idController, passwordController: passwordController),
               SizedBox(height: 10),
               SignupButton(),
               SizedBox(height: 20),
@@ -94,6 +90,66 @@ class _SignInState extends State<SignIn> {
   }
 }
 
+class CustomTextField extends StatelessWidget {
+  final String label;
+  final String hintText;
+  final bool isPassword;
+  final TextEditingController? controller;
+
+  const CustomTextField({
+    Key? key,
+    required this.label,
+    required this.hintText,
+    this.isPassword = false,
+    this.controller,
+  }) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: <Widget>[
+        Text(
+          label,
+          style: TextStyle(
+            fontWeight: FontWeight.w600,
+            fontSize: 14,
+            fontFamily: 'pretendard',
+            color: AppColors.bk,
+          ),
+        ),
+        TextFormField(
+          controller: controller,
+          obscureText: isPassword,
+          decoration: InputDecoration(
+            border: OutlineInputBorder(
+              borderSide: BorderSide(color: AppColors.wh),
+              borderRadius: BorderRadius.circular(8.0),
+            ),
+            enabledBorder: OutlineInputBorder(
+              borderSide: BorderSide(color: AppColors.wh),
+              borderRadius: BorderRadius.circular(8.0),
+            ),
+            focusedBorder: OutlineInputBorder(
+              borderSide: BorderSide(color: AppColors.wh),
+              borderRadius: BorderRadius.circular(8.0),
+            ),
+            hintText: hintText,
+            hintStyle: TextStyle(
+              fontSize: 14,
+              fontFamily: 'pretendard',
+              fontWeight: FontWeight.w600,
+              color: AppColors.gr400,
+            ),
+            filled: true,
+            fillColor: AppColors.gr150,
+          ),
+        ),
+      ],
+    );
+  }
+}
+
 class SignupButton extends StatelessWidget {
   const SignupButton({
     super.key,
@@ -105,21 +161,20 @@ class SignupButton extends StatelessWidget {
       width: double.infinity,
       child: ElevatedButton(
         onPressed: () {
-          // Handle sign up button pressed
           navigateToSignUp();
         },
         style: ElevatedButton.styleFrom(
           padding: EdgeInsets.symmetric(
-              vertical: 16.0, horizontal: 12.0), // Adjust padding
-          backgroundColor: Color(0xFFFFFFFF), // Background color
+              vertical: 16.0, horizontal: 12.0),
+          backgroundColor: Color(0xFFFFFFFF),
           shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(10.0), // Rounded corners
+            borderRadius: BorderRadius.circular(10.0),
           ),
         ),
         child: Text(
           '회원가입',
           style: TextStyle(
-            color: Color(0xFF0BC2AC), // Text color
+            color: Color(0xFF0BC2AC),
           ),
         ),
       ),
@@ -137,7 +192,6 @@ class LoginButton extends StatelessWidget {
   final TextEditingController passwordController;
   final TextEditingController idController;
   final AuthService authService = AuthService();
-  // final APIClient apiClient = APIClient();
 
   @override
   Widget build(BuildContext context) {
@@ -145,23 +199,20 @@ class LoginButton extends StatelessWidget {
       width: double.infinity,
       child: ElevatedButton(
         onPressed: () async {
-          // await authService.login(context, idController.text, passwordController.text);
-          await authService.login(context, '1234@naver.com', 'asdf1234!');
-          // await authService.login(context, 'rktgkswh935@naver.com', '1q2w3e4r');
-
+          await authService.login(context, 'rktgkswh935@naver.com', '1q2w3e4r');
         },
         style: ElevatedButton.styleFrom(
           padding: EdgeInsets.symmetric(
-              vertical: 16.0, horizontal: 12.0), // Adjust padding
-          backgroundColor: Color(0xFF0BC2AC), // Background color
+              vertical: 16.0, horizontal: 12.0),
+          backgroundColor: Color(0xFF0BC2AC),
           shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(10.0), // Rounded corners
+            borderRadius: BorderRadius.circular(10.0),
           ),
         ),
         child: Text(
           '로그인',
           style: TextStyle(
-            color: Colors.white, // Text color
+            color: Colors.white,
           ),
         ),
       ),
@@ -179,9 +230,9 @@ class KakaoButton extends StatelessWidget {
         // Handle Kakao login button pressed
       },
       child: Ink.image(
-        image: AssetImage('assets/kakao_icon.png'), // Path to your image
-        width: 50, // Adjust the width of the image
-        height: 50, // Adjust the height of the image
+        image: AssetImage('assets/kakao_icon.png'),
+        width: 50,
+        height: 50,
       ),
     );
   }
@@ -208,84 +259,10 @@ class NaverButton extends StatelessWidget {
         );
       },
       child: Ink.image(
-        image: AssetImage('assets/naver_icon.png'), // Path to your Naver logo image
-        width: 50, // Adjust the width of the image
-        height: 50, // Adjust the height of the image
+        image: AssetImage('assets/naver_icon.png'),
+        width: 50,
+        height: 50,
       ),
-    );
-  }
-}
-
-
-class PassTextField extends StatelessWidget {
-  const PassTextField({
-    super.key,
-    required this.passwordController,
-  });
-
-  final TextEditingController passwordController;
-
-  @override
-  Widget build(BuildContext context) {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        Text(
-          '비밀번호',
-          style: TextStyle(
-            fontWeight: FontWeight.bold,
-          ),
-        ),
-        TextField(
-          controller: passwordController,
-          decoration: InputDecoration(
-            hintText: '비밀번호를 입력하세요', // Optional hint text
-            border: OutlineInputBorder(
-              borderRadius: BorderRadius.circular(10.0), // Rounded corners
-            ),
-            contentPadding: EdgeInsets.symmetric(
-                vertical: 16.0, horizontal: 12.0), // Adjust padding
-          ),
-          obscureText: true,
-        ),
-      ],
-    );
-  }
-}
-
-class IdTextField extends StatelessWidget {
-  const IdTextField({
-    super.key,
-    required this.idController,
-  });
-
-  final TextEditingController idController;
-
-  @override
-  Widget build(BuildContext context) {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        Text(
-          '아이디',
-          style: TextStyle(
-            fontWeight: FontWeight.bold,
-          ),
-        ),
-        TextField(
-          controller: idController,
-          decoration: InputDecoration(
-            hintText: '아이디를 입력하세요', // Optional hint text
-            border: OutlineInputBorder(
-              borderRadius: BorderRadius.circular(10.0), // Rounded corners
-            ),
-            contentPadding: EdgeInsets.symmetric(
-              vertical: 16.0,
-              horizontal: 12.0,
-            ), // Adjust padding
-          ),
-        ),
-      ],
     );
   }
 }
