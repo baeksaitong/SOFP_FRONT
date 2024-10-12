@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:sopf_front/constans/colors.dart'; // 색상 정의 파일을 임포트
+import 'package:sopf_front/constans/gaps.dart';
 import 'package:sopf_front/constans/text_styles.dart'; // 글꼴 스타일 정의 파일을 임포트
 import 'package:sopf_front/managers/managers_favorites.dart';
 import 'package:sopf_front/models/models_drug_info_detail.dart';
@@ -229,18 +230,18 @@ class _SearchResultPillDetailState extends State<SearchResultPillDetail> {
               ),
             ),
           ),
-          const SizedBox(height: 16.0),
+          Gaps.h16,
           Text('성분', style: AppTextStyles.body4S14),
-          const SizedBox(height: 4.0),
+          Gaps.h4,
           Text(
             currentDrugInfoDetail?.material ?? 'No material information',
             style: AppTextStyles.body5M14,
           ),
-          const SizedBox(height: 20.0),
+          Gaps.h20,
           buildDetailSection('효능효과', currentDrugInfoDetail?.efficacyEffect),
-          const SizedBox(height: 20.0),
+          Gaps.h20,
           buildDetailSection('용법용량', currentDrugInfoDetail?.dosageUsage),
-          const SizedBox(height: 20.0),
+          Gaps.h20,
           buildDetailSection('주의사항', currentDrugInfoDetail?.cautionGeneral, true), // 주의사항일 때만 true 전달
         ],
       ),

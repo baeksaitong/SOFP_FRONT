@@ -58,6 +58,7 @@ class _SearchResultState extends State<SearchResult> {
 
   List<DrugInfo> drugs = [];
   List<FavoriteInfo> favorites = [];
+  List<DrugInfo> filteredDrugs = [];
 
   @override
   void initState() {
@@ -76,6 +77,18 @@ class _SearchResultState extends State<SearchResult> {
     super.dispose();
   }
 
+  // 필터링 로직 적용
+  void _applyFilters() {
+    setState(() {
+      filteredDrugs = drugs.where((drug) {
+        final matchesColor = selectedColorItem?.text == null || drug.color == selectedColorItem?.text;
+        final matchesShape = selectedShapeItem?.text == null || drug.shape == selectedShapeItem?.text;
+        final matchesLine = selectedDivideLineItem?.text == null || drug.line == selectedDivideLineItem?.text;
+        return matchesColor && matchesShape && matchesLine;
+      }).toList();
+    });
+  }
+
   void _initializeDrugs() async {
     await favoriteService.favoriteGet(context);
     favorites = FavoritesManager().favorites;
@@ -90,7 +103,9 @@ class _SearchResultState extends State<SearchResult> {
         }
       }
     }
-    setState(() {});
+    setState(() {
+      _applyFilters();
+    });
   }
 
   void _onScroll() {
@@ -112,16 +127,17 @@ class _SearchResultState extends State<SearchResult> {
     await searchService.searchTextAndShape(
       context,
       _controller.text,
-      selectedShapeItem?.text,
-      selectedDivideLineItem?.text,
-      selectedColorItem?.text,
-      selectedFormulationItem?.text,
+      null,
+      null,
+      null,
+      null,
       null, // 기타 필터
       lastDrugId, // 마지막 알약 ID
     );
 
     setState(() {
       _isLoading = false;
+      _applyFilters();
     });
   }
 
@@ -151,10 +167,10 @@ class _SearchResultState extends State<SearchResult> {
       await searchService.searchTextAndShape(
         context,
         term,
-        selectedShapeItem?.text,
-        selectedDivideLineItem?.text,
-        selectedColorItem?.text,
-        selectedFormulationItem?.text,
+        null,
+        null,
+        null,
+        null,
         null,
         null,
       );
@@ -163,6 +179,7 @@ class _SearchResultState extends State<SearchResult> {
 
       setState(() {
         drugs = DrugsManager().drugs;
+        filteredDrugs = List.from(drugs); // 초기에는 전체 리스트를 표시
       });
     }
   }
@@ -179,23 +196,26 @@ class _SearchResultState extends State<SearchResult> {
 
   void resetButton() {
     setState(() {
+      // 필터 텍스트 초기화
       shapeText = '모양';
       divideLineText = '분할선';
       colorText = '색상';
       formulationText = '제형';
 
-      for (var item in colorItems) {
-        item.isSelected = false;
-      }
-      for (var item in shapeItems) {
-        item.isSelected = false;
-      }
-      for (var item in formulationItems) {
-        item.isSelected = false;
-      }
-      for (var item in divideLineItems) {
-        item.isSelected = false;
-      }
+      // 필터 항목 초기화
+      selectedShapeItem = null;
+      selectedColorItem = null;
+      selectedDivideLineItem = null;
+      selectedFormulationItem = null;
+
+      // 필터 항목 선택 상태 초기화
+      for (var item in colorItems) item.isSelected = false;
+      for (var item in shapeItems) item.isSelected = false;
+      for (var item in formulationItems) item.isSelected = false;
+      for (var item in divideLineItems) item.isSelected = false;
+
+      // 필터 초기화 후 전체 데이터 표시
+      filteredDrugs = List.from(drugs);
     });
   }
 
@@ -266,7 +286,6 @@ class _SearchResultState extends State<SearchResult> {
                 ),
                 Gaps.h16,
                 // 필터 버튼들 (모양, 분할선, 색상, 제형)
-                //...
                 Row(
                   children: [
                     Container(
@@ -668,42 +687,8 @@ class _SearchResultState extends State<SearchResult> {
 
                                                     Navigator.of(context).pop();
 
-                                                    _searchTerm(widget.searchKeyword);
-                                                  },
-                                                  style: OutlinedButton.styleFrom(
-                                                    side: BorderSide.none,
-                                                  ),
-                                                  child: Text(
-                                                    '검색하기',
-                                                    style: AppTextStyles.body1S16.copyWith(
-                                                        color: AppColors.deepTeal),
-                                                  ),
-                                                ),
-                                              ),
-                                              Container(
-                                                width: 335,
-                                                height: 52,
-                                                margin: EdgeInsets.all(20),
-                                                decoration: BoxDecoration(
-                                                  borderRadius:
-                                                  BorderRadius.all(Radius.circular(8)),
-                                                  color: AppColors.softTeal,
-                                                ),
-                                                child: OutlinedButton(
-                                                  onPressed: () {
-                                                    debugPrint(selectedShapeItem?.text);
-                                                    debugPrint(selectedDivideLineItem?.text);
-                                                    debugPrint(selectedColorItem?.text);
-                                                    debugPrint(selectedFormulationItem?.text);
-                                                    debugPrint(shapeText);
-                                                    debugPrint(divideLineText);
-                                                    debugPrint(colorText);
-                                                    debugPrint(formulationText);
-
-                                                    Navigator.of(context).pop();
-
-                                                    _searchTerm(widget.searchKeyword);
-                                                  },
+                                                    _applyFilters();
+                                                    },
                                                   style: OutlinedButton.styleFrom(
                                                     side: BorderSide.none,
                                                   ),
@@ -838,17 +823,20 @@ class _SearchResultState extends State<SearchResult> {
                 ),
                 Gaps.h16,
                 Text(
-                  '검색 결과 ${drugs.length}건',
+                  '검색 결과 ${filteredDrugs.length}건',
                   style: AppTextStyles.body5M14,
                 ),
                 Gaps.h12,
                 Expanded(
                   child: ListView.separated(
                     controller: _scrollController,
-                    itemCount: drugs.length + (_isLoading ? 1 : 0),
+                    itemCount: filteredDrugs.length + (_isLoading ? 1 : 0),
                     itemBuilder: (context, index) {
-                      if (index < drugs.length) {
-                        final drug = drugs[index];
+                      if (index < filteredDrugs.length) {
+                        final drug = filteredDrugs[index];
+                        print(drugs[index].shape);
+                        print(drugs[index].color);
+                        print(drugs[index].line);
                         return GestureDetector(
                           onTap: () async {
                             await searchService.searchGet(context, drug.serialNumber);
