@@ -49,6 +49,7 @@ android {
         targetSdkVersion flutter.targetSdkVersion
         versionCode flutterVersionCode.toInteger()
         versionName flutterVersionName
+        resValue "string", "google_map_api_key", "\"${System.getenv('GOOGLE_MAP_API_KEY') ?: 'your_default_key'}\""
     }
 
     buildTypes {
