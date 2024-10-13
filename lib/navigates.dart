@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 // Package imports:
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:provider/provider.dart';
+import 'package:sopf_front/managers/managers_drugs.dart';
 
 // Project imports:
 import 'package:sopf_front/screens/disease_allergy/disease_allergy_add.dart';
@@ -74,6 +75,7 @@ void navigateToAddAllergy() {
 }
 
 void navigateToHome() {
+  DrugsManager().clearDrugs();
   navigatorKey.currentState?.pushAndRemoveUntil(
     MaterialPageRoute(builder: (context) => HomePage()),
         (Route<dynamic> route) => false,  // 모든 이전 화면을 제거합니다.
@@ -98,7 +100,7 @@ void navigateToSignUp() {
   );
 }
 
-void navigateToPillDetail(BuildContext context, int serialNumber, String imgUrl, String pillName, String pillDescription) {
+void navigateToPillDetail(BuildContext context, int serialNumber, String imgUrl, String pillName) {
   Navigator.push(
     context,
     MaterialPageRoute(
@@ -106,7 +108,6 @@ void navigateToPillDetail(BuildContext context, int serialNumber, String imgUrl,
         serialNumber: serialNumber,
         imgUrl: imgUrl,
         pillName: pillName,
-        pillDescription: pillDescription,
       ),
     ),
   );

@@ -57,6 +57,7 @@ class SearchService extends APIClient {
 
       // DrugsManager를 사용하여 응답 업데이트
       DrugsManager().addDrugs(jsonResponse);
+      print('검색 완료 정보 : $jsonResponse');
       print('검색 완료: ${DrugsManager().drugs.length}개의 알약이 검색됨');
     } else {
       print('검색 실패: ${utf8.decode(response.bodyBytes)}');

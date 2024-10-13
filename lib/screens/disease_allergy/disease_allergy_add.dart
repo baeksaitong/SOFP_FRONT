@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
 import 'package:sopf_front/constans/colors.dart';
 import 'package:sopf_front/constans/text_styles.dart';
@@ -69,9 +70,11 @@ class _DiseaseAllergyAddState extends State<DiseaseAllergyAdd> {
 
   Future<void> saveSelections() async {
     try {
+      print(selectedItems);
+      print(allergies);
       await diseaseAllergyService.diseaseAllergyAddOrDelete(
         context,
-        selectedItems.isNotEmpty ? selectedItems.join(',') : null,
+        allergies.isNotEmpty ? allergies.join(',') : null,
         null,
       );
       setState(() {

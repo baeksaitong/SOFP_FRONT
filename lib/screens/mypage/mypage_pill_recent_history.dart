@@ -90,7 +90,6 @@ class _MyPagePillRecentHistoryState extends State<MyPagePillRecentHistory> {
                           drug.serialNumber,
                           drug.imgUrl,
                           drug.name,
-                          "여기에 알약 설명을 추가하세요" // 알약 설명을 추가합니다.
                       );
                     },
                     child: Row(
