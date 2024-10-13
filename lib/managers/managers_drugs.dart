@@ -23,4 +23,8 @@ class DrugsManager {
     final data = jsonDecode(jsonResponse)['result'] as List;
     drugs.addAll(data.map((json) => DrugInfo.fromJson(json)).toList());
   }
+
+  void clearDrugs() {
+    drugs.clear();
+  }
 }
