@@ -170,7 +170,7 @@ class _SearchResultImageState extends State<SearchResultImage> {
                       return GestureDetector(
                         onTap: () async {
                           await searchService.searchGet(context, drug.serialNumber);
-                          navigateToPillDetail(context, drug.serialNumber, drug.imgUrl, drug.name, "설명 추가");
+                          navigateToPillDetail(context, drug.serialNumber, drug.imgUrl, drug.name);
                         },
                         child: Container(
                           width: 336,

@@ -17,6 +17,7 @@ import 'package:sopf_front/home.dart';
 import 'package:sopf_front/main.dart';
 
 // Project imports:
+import 'package:sopf_front/managers/managers_api_client.dart';
 import 'package:sopf_front/navigates.dart';
 import 'package:sopf_front/screens/search/result/search_result_pill_detail.dart';
 import 'package:sopf_front/screens/search/search_shape.dart';
@@ -241,51 +242,14 @@ class _SearchResultState extends State<SearchResult> {
           },
         ),
       ),
-      body: Container(
-        margin: EdgeInsets.symmetric(vertical: 10, horizontal: 20),
-        width: 336,
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.start,
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Container(
-              width: 335,
-              height: 48,
-              decoration: BoxDecoration(
-                color: AppColors.gr150,
-                borderRadius: BorderRadius.circular(16.0),
-              ),
-              child: Row(
-                children: [
-                  IconButton(
-                    onPressed: () {
-                      // TextField에서 입력된 검색어를 가져와서 _searchTerm 함수 호출
-                      _searchTerm(_controller.text);
-                    },
-                    icon: Image.asset(
-                      'assets/ion_search.png',
-                      width: 20,
-                      height: 20,
-                    ),
-                  ),
-                  Flexible(
-                    child: TextField(
-                      controller: _controller,
-                      decoration: InputDecoration(
-                        border: InputBorder.none,
-                        hintText: "알약 이름을 검색해보세요",
-                        focusedBorder: InputBorder.none,
-                      ),
-                      onSubmitted: _searchTerm,
-                    ),
-                  ),
-                ],
-              ),
-            ),
-            Gaps.h16,
-            // 필터 버튼들 (모양, 분할선, 색상, 제형)
-            //...
-            Row(
+      body: Stack(
+        children: [
+          Container(
+            margin: EdgeInsets.symmetric(vertical: 10, horizontal: 20),
+            width: 336,
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.start,
+              crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Container(
                   width: 335,
@@ -724,7 +688,7 @@ class _SearchResultState extends State<SearchResult> {
                                                     Navigator.of(context).pop();
 
                                                     _applyFilters();
-                                                    },
+                                                  },
                                                   style: OutlinedButton.styleFrom(
                                                     side: BorderSide.none,
                                                   ),
@@ -877,10 +841,10 @@ class _SearchResultState extends State<SearchResult> {
                           onTap: () async {
                             await searchService.searchGet(context, drug.serialNumber);
                             navigateToPillDetail(
-                                context,
-                                drug.serialNumber,
-                                drug.imgUrl,
-                                drug.name,
+                              context,
+                              drug.serialNumber,
+                              drug.imgUrl,
+                              drug.name,
                             );
                           },
                           child: Container(
