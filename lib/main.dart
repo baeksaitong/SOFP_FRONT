@@ -5,7 +5,6 @@ import 'package:flutter/material.dart';
 import 'package:camera/camera.dart';
 
 import 'package:provider/provider.dart';
-import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:sopf_front/constans/text_styles.dart';
 
 
@@ -32,8 +31,6 @@ void main() async {
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
-
-  await dotenv.load(fileName: ".env");
 
   final cameras = await availableCameras();
   CameraDescription? firstCamera;
