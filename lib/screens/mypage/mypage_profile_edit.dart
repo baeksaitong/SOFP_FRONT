@@ -72,34 +72,35 @@ class _MyPageProfileEditState extends State<MyPageProfileEdit> {
     final String accessToken = await jwtManager.getValidAccessToken();
     final ProfileService profileService = ProfileService();
 
-    var url = Uri.parse('http://3.39.8.147:8080/app/profile/${widget.profileId}');
-    var request = http.MultipartRequest('PUT', url);
-    request.headers['Authorization'] = 'Bearer $accessToken';
-
-    request.fields['name'] = name;
-    request.fields['birthday'] = birthdate;
-    request.fields['gender'] = gender;
-    request.fields['color'] = color;
-
-    if (_image != null && _image!.path.isNotEmpty) {
-      request.files.add(await http.MultipartFile.fromPath('profileImg', _image!.path));
-    }
-
-    var response = await request.send();
-
-    if (response.statusCode == 200) {
-      final responseString = await response.stream.bytesToString();
-      responseManager.addResponse(responseString);
-
-      print('$name, $birthdate, $gender, $color');
-      print('프로필이 성공적으로 저장되었습니다');
-
-      profileService.profileAll();
-    } else {
-      print('Failed to save profile');
-      print('Status code: ${response.statusCode}');
-      print('Response body: ${await response.stream.bytesToString()}');
-    }
+    print('$name, $birthdate, $gender, $color');
+    profileService.profilePost(name, birthdate, gender, color, _image);
+    // var url = Uri.parse('http://3.39.8.147:8080/app/profile/${widget.profileId}');
+    // var request = http.MultipartRequest('PUT', url);
+    // request.headers['Authorization'] = 'Bearer $accessToken';
+    //
+    // request.fields['name'] = name;
+    // request.fields['birthday'] = birthdate;
+    // request.fields['gender'] = gender;
+    // request.fields['color'] = color;
+    //
+    // if (_image != null && _image!.path.isNotEmpty) {
+    //   request.files.add(await http.MultipartFile.fromPath('profileImg', _image!.path));
+    // }
+    //
+    // var response = await request.send();
+    //
+    // if (response.statusCode == 200) {
+    //   final responseString = await response.stream.bytesToString();
+    //   responseManager.addResponse(responseString);
+    //
+    //   print('프로필이 성공적으로 저장되었습니다');
+    //
+    //   profileService.profileAll();
+    // } else {
+    //   print('Failed to save profile');
+    //   print('Status code: ${response.statusCode}');
+    //   print('Response body: ${await response.stream.bytesToString()}');
+    // }
   }
 
   @override

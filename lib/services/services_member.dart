@@ -8,11 +8,13 @@ class MemberService extends APIClient {
   final JWTManager jwtManager = JWTManager();
 
   Future<MemberInfo?> fetchMemberInfo() async {
+    final url = buildUri('/app/member');
+
     try {
       final accessToken = await jwtManager.getValidAccessToken();
 
       final response = await http.get(
-        Uri.parse('http://3.39.8.147:8080/app/member'),
+        url,
         headers: {
           'Content-Type': 'application/json',
           'Authorization': 'Bearer $accessToken',
@@ -37,7 +39,7 @@ class MemberService extends APIClient {
     try {
       final accessToken = await jwtManager.getValidAccessToken();
 
-      final url = Uri.parse('http://3.39.8.147:8080/app/member');
+      final url = buildUri('/app/member');
       final response = await http.put(
         url,
         headers: <String, String>{

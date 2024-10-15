@@ -6,6 +6,7 @@ import 'package:provider/provider.dart';
 import 'package:sopf_front/services/services_api_client.dart';
 
 import 'package:http/http.dart' as http;
+import '../managers/managers_global_response.dart';
 import '../managers/managers_jwt.dart';
 import '../models/models_profile.dart';
 import '../providers/provider.dart';
@@ -144,6 +145,42 @@ class ProfileService extends APIClient {
       print(response.statusCode);
       print('실패했습니다: ${response.body}');
       return null;
+    }
+  }
+
+  Future<void> profilePut(
+      String name, String birthdate, String gender, String color, XFile? _image
+      ) async {
+    final String? accessToken = await _jwtManager.getAccessToken();
+    final GlobalResponseManager responseManager = GlobalResponseManager();
+
+    var url = buildUri('/app/profile');
+    var request = http.MultipartRequest('PUT', url);
+    request.headers['Authorization'] = 'Bearer $accessToken';
+
+    request.fields['name'] = name;
+    request.fields['birthday'] = birthdate;
+    request.fields['gender'] = gender;
+    request.fields['color'] = color;
+
+    if (_image != null && _image.path.isNotEmpty) {
+      request.files.add(
+          await http.MultipartFile.fromPath('profileImg', _image!.path));
+    }
+
+    var response = await request.send();
+
+    if (response.statusCode == 200) {
+      final responseString = await response.stream.bytesToString();
+      responseManager.addResponse(responseString);
+
+      print('프로필이 성공적으로 저장되었습니다');
+
+      profileAll();
+    } else {
+      print('Failed to save profile');
+      print('Status code: ${response.statusCode}');
+      print('Response body: ${await response.stream.bytesToString()}');
     }
   }
 }
