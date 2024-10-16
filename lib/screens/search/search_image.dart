@@ -6,6 +6,7 @@ import 'package:flutter/material.dart';
 // Package imports:
 import 'package:camera/camera.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:permission_handler/permission_handler.dart'; // 카메라 권한 요청을 위한 패키지
 
 // Project imports:
 import 'package:sopf_front/constans/colors.dart';
@@ -55,13 +56,24 @@ class _CameraScreenState extends State<CameraScreen> {
   XFile? _firstImageFile;
   XFile? _secondImageFile;
   final ImagePicker _picker = ImagePicker();
-  File? _latestImage;
   bool _isLoadingImage = false;
   bool _isTakingPicture = false;
 
   @override
   void initState() {
     super.initState();
+    _checkCameraPermission();
+  }
+
+  Future<void> _checkCameraPermission() async {
+    var status = await Permission.camera.status;
+    if (!status.isGranted) {
+      status = await Permission.camera.request();
+      if (!status.isGranted) {
+        _showErrorDialog('카메라 권한이 필요합니다.');
+        return;
+      }
+    }
     _initializeCamera();
   }
 
@@ -287,7 +299,8 @@ class _CameraScreenState extends State<CameraScreen> {
       MaterialPageRoute(
         builder: (context) => SearchResultImage(
           firstImageFile: _firstImageFile, // **첫 번째 이미지 파일 전달**
-          secondImageFile: _secondImageFile, // **두 번째 이미지 파일 전달**
+          secondImageFile: _secondImageFile,
+          cameras: widget.cameras, // **두 번째 이미지 파일 전달**
         ),
       ),
     );

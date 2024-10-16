@@ -5,11 +5,13 @@ import 'package:flutter/material.dart';
 
 // Package imports:
 import 'package:image_picker/image_picker.dart';
+import 'package:camera/camera.dart'; // 카메라 관련 패키지
 
 // Project imports:
 import 'package:sopf_front/constans/colors.dart';
 import 'package:sopf_front/constans/text_styles.dart';
 import 'package:sopf_front/constans/gaps.dart';
+import 'package:sopf_front/screens/search/search_image.dart';
 import '../../../managers/managers_drugs.dart';
 import '../../../managers/managers_favorites.dart';
 import '../../../services/services_favorite.dart';
@@ -22,8 +24,9 @@ import '../../../navigates.dart';
 class SearchResultImage extends StatefulWidget {
   final XFile? firstImageFile;
   final XFile? secondImageFile;
+  final List<CameraDescription> cameras; // 카메라 리스트 추가
 
-  const SearchResultImage({super.key, this.firstImageFile, this.secondImageFile});
+  const SearchResultImage({super.key, this.firstImageFile, this.secondImageFile, required this.cameras});
 
   @override
   _SearchResultImageState createState() => _SearchResultImageState();
@@ -74,8 +77,14 @@ class _SearchResultImageState extends State<SearchResultImage> {
     setState(() {});
   }
 
+  // **SearchImage로 이동하는 로직**
   void _retakePhotos() {
-    Navigator.of(context).pop(); // "재촬영하기" 버튼 눌렀을 때 뒤로 가기 (이 부분은 필요에 따라 수정 가능)
+    Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (context) => SearchImage(cameras: widget.cameras), // SearchImage로 이동
+      ),
+    );
   }
 
   @override
