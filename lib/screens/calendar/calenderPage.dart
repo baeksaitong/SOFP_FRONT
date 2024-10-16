@@ -188,6 +188,9 @@ class _CalendarPageState extends State<CalendarPage> {
       _selectedAccount = selectedAccounts.keys.join(', ');
       _selectedColor = selectedAccounts.values.first;
       _selectedProfileIds = selectedProfileIds;
+
+      // 이전 계정의 이벤트 데이터를 초기화
+      _events.clear();
     });
 
     await _saveSelectedProfiles(); // 선택된 프로필 저장
