@@ -44,8 +44,14 @@ class _SignUpState extends State<SignUp> {
       context: context,
       builder: (BuildContext context) {
         return AlertDialog(
-          title: Text(title),
-          content: Text(content),
+          title: Text(
+            title,
+            style: AppTextStyles.body1S16, // 제목 스타일 적용
+          ),
+          content: Text(
+            content,
+            style: AppTextStyles.body5M14, // 내용 스타일 적용
+          ),
           actions: <Widget>[
             TextButton(
               style: TextButton.styleFrom(
@@ -59,8 +65,8 @@ class _SignUpState extends State<SignUp> {
               },
               child: Text(
                 '확인',
-                style: TextStyle(
-                  color: AppColors.deepTeal, // 글씨 색상
+                style: AppTextStyles.body5M14.copyWith( // 버튼 글씨체를 5M14로 변경
+                  color: AppColors.deepTeal,
                   fontWeight: FontWeight.bold, // 글씨 bold
                 ),
               ),
@@ -70,6 +76,7 @@ class _SignUpState extends State<SignUp> {
       },
     );
   }
+
 
   // 인증번호 전송 버튼 클릭 시 수행되는 함수
   void onSendVerificationButtonClicked() async {
@@ -883,11 +890,11 @@ class VerificationButton extends StatelessWidget {
       padding: EdgeInsets.only(top: 18.0),
       child: SizedBox(
         height: 48.0,
+        width: double.infinity,  // 가로 크기를 '인증번호 전송' 버튼과 동일하게 맞춤
         child: ElevatedButton(
           onPressed: onPressed,
           style: ButtonStyle(
-            backgroundColor:
-            MaterialStateProperty.all<Color>(AppColors.softTeal),
+            backgroundColor: MaterialStateProperty.all<Color>(AppColors.softTeal),
             shape: MaterialStateProperty.all<RoundedRectangleBorder>(
               RoundedRectangleBorder(
                 borderRadius: BorderRadius.circular(10.0),
@@ -916,34 +923,29 @@ class SendVerificationButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Row(
-      mainAxisAlignment: MainAxisAlignment.center,
-      children: [
-        Padding(
-          padding: EdgeInsets.only(top: 18.0),
-          child: SizedBox(
-            height: 48.0,
-            child: ElevatedButton(
-              onPressed: onPressed,
-              style: ButtonStyle(
-                backgroundColor: MaterialStateProperty.all<Color>(
-                    AppColors.softTeal),
-                shape: MaterialStateProperty.all<RoundedRectangleBorder>(
-                  RoundedRectangleBorder(
-                    borderRadius:
-                    BorderRadius.circular(10.0),
-                  ),
-                ),
-              ),
-              child: Text(
-                '인증번호 전송',
-                style:
-                AppTextStyles.body5M14.copyWith(color: AppColors.deepTeal),
+    return Padding(
+      padding: EdgeInsets.only(top: 18.0),
+      child: SizedBox(
+        height: 48.0,
+        width: double.infinity,  // 가로 크기를 동일하게 맞춤
+        child: ElevatedButton(
+          onPressed: onPressed,
+          style: ButtonStyle(
+            backgroundColor: MaterialStateProperty.all<Color>(AppColors.softTeal),
+            shape: MaterialStateProperty.all<RoundedRectangleBorder>(
+              RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(10.0),
               ),
             ),
           ),
+          child: Text(
+            '인증번호 전송',
+            style: AppTextStyles.body5M14.copyWith(color: AppColors.deepTeal),
+          ),
         ),
-      ],
+      ),
     );
   }
 }
+
+
