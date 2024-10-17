@@ -51,7 +51,6 @@ class _SignInState extends State<SignIn> {
             mainAxisAlignment: MainAxisAlignment.start, // 전체적으로 위로 정렬
             crossAxisAlignment: CrossAxisAlignment.center, // 가운데 정렬
             children: [
-              SizedBox(height: 40), // 전체 화면을 약간 위로 올리기 위해 추가한 공간
               Image.asset(
                 'assets/signinpill.png',
                 width: 150,
