@@ -8,6 +8,7 @@ import 'package:flutter/material.dart';
 // Package imports:
 import 'package:http/http.dart' as http;
 import 'package:image_picker/image_picker.dart';
+import 'package:logger/logger.dart';
 
 // Project imports:
 import 'package:sopf_front/constans/colors.dart';
@@ -35,6 +36,9 @@ class _MyPageEditState extends State<MyPageEdit> {
   bool _isSubscribed = false;
   late MemberInfo memberInfo;
   final MemberService memberService = MemberService();
+
+  var logger = Logger();
+
   @override
   void initState() {
     super.initState();
@@ -62,7 +66,7 @@ class _MyPageEditState extends State<MyPageEdit> {
         _image = pickedFile;
       });
     } else {
-      print('No image selected.');
+      logger.e('No image selected.');
     }
   }
 

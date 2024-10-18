@@ -1,17 +1,20 @@
 import 'dart:convert';
 
 import 'package:flutter/cupertino.dart';
+import 'package:logger/logger.dart';
 import 'package:provider/provider.dart';
 import 'package:sopf_front/services/services_api_client.dart';
 
 import '../managers/managers_jwt.dart';
 import '../managers/managers_recent_histories.dart';
-import '../managers/managers_tasking_drugs.dart';
+import '../managers/managers_taking_drugs.dart';
 import '../providers/provider.dart';
 import 'package:http/http.dart' as http;
 
 class PillService extends APIClient {
   final JWTManager _jwtManager = JWTManager();
+
+  var logger = Logger();
 
   Future<void> pillPost(BuildContext context, int serialNumber) async {
     final currentProfile =
@@ -30,11 +33,10 @@ class PillService extends APIClient {
 
     if (response.statusCode == 200) {
       // 성공적으로 처리된 경우
-      print('복용 중인 알약 추가 성공: ${utf8.decode(response.bodyBytes)}');
+      logger.e('복용 중인 알약 추가 성공: ${utf8.decode(response.bodyBytes)}');
     } else {
       // 실패 처리
-      print(response.statusCode);
-      print('복용 중인 알약 추가 실패: ${utf8.decode(response.bodyBytes)}');
+      logger.e('복용 중인 알약 추가 실패: ${utf8.decode(response.bodyBytes)}');
     }
   }
 
@@ -51,11 +53,10 @@ class PillService extends APIClient {
 
     if (response.statusCode == 200) {
       // 성공적으로 처리된 경우
-      print('복용 중인 알약 삭제 성공: ${utf8.decode(response.bodyBytes)}');
+      logger.e('복용 중인 알약 삭제 성공: ${utf8.decode(response.bodyBytes)}');
     } else {
       // 실패 처리
-      print(response.statusCode);
-      print('복용 중인 알약 삭제 실패: ${utf8.decode(response.bodyBytes)}');
+      logger.e('복용 중인 알약 삭제 실패: ${utf8.decode(response.bodyBytes)}');
     }
   }
 
@@ -77,11 +78,10 @@ class PillService extends APIClient {
 
     if (response.statusCode == 200) {
       // 성공적으로 처리된 경우
-      print('복용 중인 알약 이동 성공: ${utf8.decode(response.bodyBytes)}');
+      logger.e('복용 중인 알약 이동 성공: ${utf8.decode(response.bodyBytes)}');
     } else {
       // 실패 처리
-      print(response.statusCode);
-      print('복용 중인 알약 이동 실패: ${utf8.decode(response.bodyBytes)}');
+      logger.e('복용 중인 알약 이동 실패: ${utf8.decode(response.bodyBytes)}');
     }
   }
 
@@ -105,14 +105,10 @@ class PillService extends APIClient {
     if (response.statusCode == 200) {
       // 성공적으로 처리된 경우
       final jsonResponse = utf8.decode(response.bodyBytes);
-
-      print('복용 중인 알약 조회 성공: ${utf8.decode(response.bodyBytes)}');
       TakingDrugsManager().updateDrugs(jsonResponse);
-      print(TakingDrugsManager().drugs);
     } else {
       // 실패 처리
-      print(response.statusCode);
-      print('복용 중인 알약 조회 실패: ${utf8.decode(response.bodyBytes)}');
+      logger.e('복용 중인 알약 조회 실패: ${utf8.decode(response.bodyBytes)}');
     }
   }
 
@@ -133,11 +129,9 @@ class PillService extends APIClient {
     var decodedResponse = utf8.decode(response.bodyBytes);
     var jsonResponse = jsonDecode(decodedResponse);
     if (response.statusCode == 200) {
-      print('최근 조회 알약 조회 성공 : $jsonResponse');
       RecentHistoriesManager().updateFavorites(utf8.decode(response.bodyBytes));
     } else {
-      print(response.statusCode);
-      print('최근 조회 알약 조회 실패 : $jsonResponse');
+      logger.e('최근 조회 알약 조회 실패 : $jsonResponse');
     }
   }
 
@@ -157,11 +151,9 @@ class PillService extends APIClient {
 
     var decodedResponse = utf8.decode(response.bodyBytes); // 응답을 UTF-8로 디코딩
     if (response.statusCode == 200) {
-      print('최근 조회 알약 삭제 성공 : $decodedResponse');
       return true;
     } else {
-      print(response.statusCode);
-      print('최근 조회 알약 삭제 실패 : $decodedResponse');
+      logger.e('최근 조회 알약 삭제 실패 : $decodedResponse');
       return false;
     }
   }

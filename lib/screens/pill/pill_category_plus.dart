@@ -3,7 +3,6 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
 // Project imports:
-import 'package:sopf_front/managers/managers_api_client.dart';
 import 'package:sopf_front/navigates.dart';
 import 'package:sopf_front/services/services_category.dart';
 import '../../constans/gaps.dart';

@@ -7,6 +7,7 @@ import 'package:flutter/material.dart';
 // Package imports:
 import 'package:intl/date_symbol_data_local.dart';
 import 'package:intl/intl.dart';
+import 'package:logger/logger.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:sopf_front/services/services_category.dart';
@@ -158,8 +159,6 @@ class _CalendarPageState extends State<CalendarPage> {
   // 선택된 날짜에 해당하는 약 이벤트 목록 반환
   List<CalendarDetails> _getEventsForDay(DateTime day) {
     final dayWithoutTime = DateTime(day.year, day.month, day.day);
-    print("Getting events for day: $dayWithoutTime"); // 디버깅용 출력
-    print("Events: ${_events[dayWithoutTime]}"); // 디버깅용 출력
     return _events[dayWithoutTime] ?? [];
   }
 
@@ -202,13 +201,14 @@ class _CalendarPageState extends State<CalendarPage> {
     final profileProvider = Provider.of<ProfileProvider>(context, listen: false);
     final profiles = profileProvider.profileList;
 
+    var logger = Logger();
+
     for (String profileId in profileIds) {
       final profile = profiles.firstWhere((p) => p.id == profileId);
       Color profileColor = getColorFromText(profile.color) ?? Colors.grey; // 프로필 색상 가져오기
 
       for (String day in ['MON', 'TUE', 'WED', 'THU', 'FRI', 'SAT', 'SUN']) {
         String response = await categoryService.categoryDayGet(context, profileId, day);
-        print("요일 카테고리 조회 성공: $response"); // 디버깅용 출력
         if (response.isNotEmpty) {
           Map<String, dynamic> jsonMap = jsonDecode(response);
           if (jsonMap['categoryList'] != null) {
@@ -219,7 +219,7 @@ class _CalendarPageState extends State<CalendarPage> {
                 try {
                   return CalendarDetails.fromJson(json, profileColor);
                 } catch (e) {
-                  print("Error parsing event: $e"); // 디버깅용 출력
+                  logger.e("Error parsing event: $e"); // 디버깅용 출력
                   return null;
                 }
               }).where((event) => event != null).toList().cast<CalendarDetails>();
@@ -232,7 +232,6 @@ class _CalendarPageState extends State<CalendarPage> {
                 while (currentDate.isBefore(endDate) || currentDate.isAtSameMomentAs(endDate)) {
                   if (currentDate.weekday == _dayMapping[day]) {
                     final eventDateWithoutTime = DateTime(currentDate.year, currentDate.month, currentDate.day);
-                    print("Adding event on date: $eventDateWithoutTime"); // 디버깅용 출력
                     if (loadedEvents.containsKey(eventDateWithoutTime)) {
                       loadedEvents[eventDateWithoutTime]!.add(event);
                     } else {
@@ -251,7 +250,6 @@ class _CalendarPageState extends State<CalendarPage> {
     setState(() {
       _events.addAll(loadedEvents);
     });
-    print("Loaded Events: $_events"); // 디버깅용 출력
   }
 
   DateTime _getEndOfMonth(DateTime date) {
@@ -561,8 +559,6 @@ class _BottomDialogState extends State<BottomDialog> {
     String selectedOptionText = selectedOptions.isNotEmpty
         ? '선택된 계정: ${selectedOptions.keys.join(', ')}'
         : '선택된 계정이 없습니다';
-
-    print(selectedOptionText); // 선택된 텍스트들 출력
 
     widget.onOptionSelected(selectedOptions, selectedProfileIds);
 

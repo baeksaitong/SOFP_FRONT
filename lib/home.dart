@@ -30,7 +30,7 @@ class HomePage extends StatefulWidget {
 class _HomePageState extends State<HomePage> {
   int _selectedIndex = 1;
 
-  static List<Widget> _widgetOptions = <Widget>[
+  static final List<Widget> _widgetOptions = <Widget>[
     MapPharmacy(), // PharmacyMap 구현되면 교체
     HomePageContent(),
     CalendarPage(),
@@ -148,7 +148,6 @@ class _HomePageState extends State<HomePage> {
   Widget build(BuildContext context) {
     final bool isKeyboardVisible =
         MediaQuery.of(context).viewInsets.bottom != 0; // 키보드 위치 확인
-    final currentProfile = Provider.of<ProfileProvider>(context).currentProfile;
 
     return Scaffold(
       backgroundColor: AppColors.wh,
@@ -174,7 +173,7 @@ class HomePageContent extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final currentProfile =
-        Provider.of<ProfileProvider>(context, listen: false).currentProfile;
+        Provider.of<ProfileProvider>(context, listen: true).currentProfile;
     return SingleChildScrollView(
       child: Column(
         children: [

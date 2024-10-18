@@ -2,7 +2,6 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
 // Project imports:
-import 'package:sopf_front/managers/managers_api_client.dart';
 import 'package:sopf_front/navigates.dart';
 import 'package:sopf_front/services/services_search.dart';
 import '../../constans/colors.dart';
@@ -157,13 +156,6 @@ class _SearchShapeState extends State<SearchShape> {
                   final formulation = formulationButtonKey.currentState?.finalText;
                   final divideLine = divideLineButtonKey.currentState?.finalText;
                   final keyword = keywordKey.currentState?._keywordController.text;
-
-                  // 선택된 항목 로그로 출력
-                  debugPrint('입력한 키워드: $keyword');
-                  debugPrint('선택된 색상: $color');
-                  debugPrint('선택된 모양: $shape');
-                  debugPrint('선택된 제형: $formulation');
-                  debugPrint('선택된 분할선: $divideLine');
 
                   for (var item in colorItems) {
                     item.isSelected = false; // 모든 colorItems의 isSelected를 false로 설정

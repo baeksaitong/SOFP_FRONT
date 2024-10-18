@@ -1,6 +1,7 @@
 import 'dart:convert';
 
 import 'package:flutter/cupertino.dart';
+import 'package:logger/logger.dart';
 import 'package:sopf_front/services/services_api_client.dart';
 import 'package:http/http.dart' as http;
 
@@ -9,6 +10,8 @@ import '../models/models_pharmacy_info.dart';  // Pharmacy 모델 임포트
 
 class PharmacyService extends APIClient {
   final JWTManager _jwtManager = JWTManager();
+
+  var logger = Logger();
 
   Future<List<Pharmacy>?> pharmacyAroundGet(BuildContext context, String longitude, String latitude) async {
     final String? accessToken = await _jwtManager.getAccessToken();
@@ -20,13 +23,11 @@ class PharmacyService extends APIClient {
     });
 
     if (response.statusCode == 200) {
-      print('주변 약국 조회 성공: ${utf8.decode(response.bodyBytes)}');
-
       final jsonResponse = utf8.decode(response.bodyBytes);
       final List<dynamic> jsonList = jsonDecode(jsonResponse)['aroundPharmacyList'];
       return jsonList.map((item) => Pharmacy.fromJson(item)).toList();
     } else {
-      print('주변 약국 조회 실패: ${response.statusCode}, 응답: ${utf8.decode(response.bodyBytes)}');
+      logger.e('주변 약국 조회 실패: ${response.statusCode}, 응답: ${utf8.decode(response.bodyBytes)}');
       return null;
     }
   }
@@ -41,13 +42,11 @@ class PharmacyService extends APIClient {
     });
 
     if (response.statusCode == 200) {
-      print('야간 약국 조회 성공: ${utf8.decode(response.bodyBytes)}');
-
       final jsonResponse = utf8.decode(response.bodyBytes);
       final List<dynamic> jsonList = jsonDecode(jsonResponse)['aroundPharmacyList'];
       return jsonList.map((item) => Pharmacy.fromJson(item)).toList();
     } else {
-      print('야간 약국 조회 실패: ${response.statusCode}, 응답: ${utf8.decode(response.bodyBytes)}');
+      logger.e('야간 약국 조회 실패: ${response.statusCode}, 응답: ${utf8.decode(response.bodyBytes)}');
       return null;
     }
   }

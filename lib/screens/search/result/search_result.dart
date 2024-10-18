@@ -17,7 +17,6 @@ import 'package:sopf_front/home.dart';
 import 'package:sopf_front/main.dart';
 
 // Project imports:
-import 'package:sopf_front/managers/managers_api_client.dart';
 import 'package:sopf_front/navigates.dart';
 import 'package:sopf_front/screens/search/result/search_result_pill_detail.dart';
 import 'package:sopf_front/screens/search/search_shape.dart';
@@ -157,12 +156,6 @@ class _SearchResultState extends State<SearchResult> {
       DrugsManager().clearDrugs();
 
       showLoading(context, delayed: true); // 로딩 표시
-
-      print('Searching with filters:');
-      print('Shape: ${selectedShapeItem?.text}');
-      print('DivideLine: ${selectedDivideLineItem?.text}');
-      print('Color: ${selectedColorItem?.text}');
-      print('Formulation: ${selectedFormulationItem?.text}');
 
       await searchService.searchTextAndShape(
         context,
@@ -676,14 +669,6 @@ class _SearchResultState extends State<SearchResult> {
                                                 ),
                                                 child: OutlinedButton(
                                                   onPressed: () {
-                                                    debugPrint(selectedShapeItem?.text);
-                                                    debugPrint(selectedDivideLineItem?.text);
-                                                    debugPrint(selectedColorItem?.text);
-                                                    debugPrint(selectedFormulationItem?.text);
-                                                    debugPrint(shapeText);
-                                                    debugPrint(divideLineText);
-                                                    debugPrint(colorText);
-                                                    debugPrint(formulationText);
 
                                                     Navigator.of(context).pop();
 
@@ -802,7 +787,7 @@ class _SearchResultState extends State<SearchResult> {
                     ),
                     Gaps.w8,
                     Container(
-                      width: 53,
+                      width: 30,
                       height: 38,
                       child: OutlinedButton(
                           onPressed: resetButton,
@@ -813,11 +798,8 @@ class _SearchResultState extends State<SearchResult> {
                             ),
                             padding: EdgeInsets.zero, // 내부 패딩을 제거하여 공간 확보
                           ),
-                          child: Text(
-                            '초기화',
-                            style: AppTextStyles.body5M14
-                                .copyWith(color: AppColors.gr700),
-                          )),
+                          child: Icon(Icons.refresh_outlined, size: 20,)
+                      ),
                     ),
                   ],
                 ),
@@ -834,9 +816,7 @@ class _SearchResultState extends State<SearchResult> {
                     itemBuilder: (context, index) {
                       if (index < filteredDrugs.length) {
                         final drug = filteredDrugs[index];
-                        print(drugs[index].shape);
-                        print(drugs[index].color);
-                        print(drugs[index].line);
+
                         return GestureDetector(
                           onTap: () async {
                             await searchService.searchGet(context, drug.serialNumber);

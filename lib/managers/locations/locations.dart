@@ -8,6 +8,8 @@ import 'package:flutter/services.dart' show rootBundle;
 import 'package:http/http.dart' as http;
 import 'package:json_annotation/json_annotation.dart';
 
+import 'package:logger/logger.dart';
+
 part 'locations.g.dart';
 
 @JsonSerializable()
@@ -84,6 +86,7 @@ class Locations {
 }
 
 Future<Locations> getGoogleOffices() async {
+  var logger = Logger();
   const googleLocationsURL = 'https://about.google/static/data/locations.json';
 
   // Retrieve the locations of Google offices
@@ -93,7 +96,7 @@ Future<Locations> getGoogleOffices() async {
       return Locations.fromJson(json.decode(response.body));
     }
   } catch (e) {
-    print(e);
+    logger.e(e);
   }
 
   // Fallback for when the above HTTP request fails.

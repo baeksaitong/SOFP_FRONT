@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 
 // Package imports:
 import 'package:camera/camera.dart';
+import 'package:logger/logger.dart';
 import 'package:permission_handler/permission_handler.dart';
 
 // Project imports:
@@ -10,7 +11,6 @@ import 'package:sopf_front/constans/colors.dart';
 import 'package:sopf_front/screens/search/search_image.dart';
 import 'package:sopf_front/navigates.dart';
 import 'package:sopf_front/services/services_search.dart';
-import '../../managers/managers_api_client.dart';
 import '../../constans/text_styles.dart';
 import '../../constans/gaps.dart';
 
@@ -22,6 +22,8 @@ class SearchText extends StatefulWidget {
 }
 
 class _SearchTextState extends State<SearchText> {
+  var logger = Logger();
+
   @override
   Widget build(BuildContext context) {
     return Stack(
@@ -107,7 +109,7 @@ class _SearchTextState extends State<SearchText> {
         }
       } catch (e) {
         // 카메라 초기화 중에 발생한 예외 처리
-        print('카메라 초기화 오류: $e');
+        logger.e('카메라 초기화 오류: $e');
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(content: Text('카메라를 초기화하는 동안 오류가 발생했습니다.')),
         );

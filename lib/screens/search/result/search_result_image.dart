@@ -38,7 +38,6 @@ class _SearchResultImageState extends State<SearchResultImage> {
   void _toggleBookmark(int index) {
     setState(() {
       drugs[index].isBookmarked = !drugs[index].isBookmarked;
-      print('${drugs[index].serialNumber}, ${drugs[index].imgUrl}');
       if (drugs[index].isBookmarked == true) {
         favoriteService.favoritePost(
             context, drugs[index].serialNumber, drugs[index].imgUrl);

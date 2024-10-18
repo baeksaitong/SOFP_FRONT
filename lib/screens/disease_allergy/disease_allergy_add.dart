@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:logger/logger.dart';
 import 'package:provider/provider.dart';
 import 'package:sopf_front/constans/colors.dart';
 import 'package:sopf_front/constans/text_styles.dart';
@@ -23,6 +24,8 @@ class _DiseaseAllergyAddState extends State<DiseaseAllergyAdd> {
   String query = '';
   final DiseaseAllergyService diseaseAllergyService = DiseaseAllergyService();
 
+  var logger = Logger();
+
   @override
   void initState() {
     super.initState();
@@ -39,7 +42,7 @@ class _DiseaseAllergyAddState extends State<DiseaseAllergyAdd> {
         allergies = result ?? []; // null이면 빈 리스트를 사용
       });
     } catch (e) {
-      print('Error loading allergies: $e');
+      logger.e('Error loading allergies: $e');
     }
   }
 
@@ -54,7 +57,7 @@ class _DiseaseAllergyAddState extends State<DiseaseAllergyAdd> {
         searchResults = result != null ? List<String>.from(result) : [];
       });
     } catch (e) {
-      print('Error searching allergies: $e');
+      logger.e('Error searching allergies: $e');
     }
   }
 
@@ -70,8 +73,6 @@ class _DiseaseAllergyAddState extends State<DiseaseAllergyAdd> {
 
   Future<void> saveSelections() async {
     try {
-      print(selectedItems);
-      print(allergies);
       await diseaseAllergyService.diseaseAllergyAddOrDelete(
         context,
         allergies.isNotEmpty ? allergies.join(',') : null,
@@ -81,10 +82,9 @@ class _DiseaseAllergyAddState extends State<DiseaseAllergyAdd> {
         allergies.addAll(selectedItems);
         selectedItems.clear();
       });
-      print('Allergies saved successfully');
       Navigator.of(context).pop(true);
     } catch (e) {
-      print('Error saving allergies: $e');
+      logger.e('Error saving allergies: $e');
     }
 
     navigateToHome();

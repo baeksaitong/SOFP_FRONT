@@ -9,11 +9,10 @@ import 'package:sopf_front/managers/managers_global_response.dart';
 import 'package:sopf_front/providers/provider.dart';
 import 'package:sopf_front/services/services_category.dart';
 import 'package:sopf_front/services/services_pill.dart';
-import '../../managers/managers_api_client.dart';
 import '../../constans/colors.dart';
 import '../../constans/gaps.dart';
 import '../../managers/managers_category.dart';
-import '../../managers/managers_tasking_drugs.dart';
+import '../../managers/managers_taking_drugs.dart';
 import '../../models/models_category.dart';
 import '../../models/models_taking_drugs_info.dart';
 import '../../navigates.dart';
@@ -51,11 +50,9 @@ class _PillCategoryDetailState extends State<PillCategoryDetail> {
   }
 
   void _initializeMedications() async {
-    print('categoryId:${widget.category.id}');
     await pillService.pillGet(context, widget.category.id);
     setState(() {
       medications = TakingDrugsManager().drugs;
-      print(medications);
     });
   }
 
@@ -65,7 +62,6 @@ class _PillCategoryDetailState extends State<PillCategoryDetail> {
     await categoryService.categoryGetAll(context, currentProfile!.id);
     setState(() {
       categories = CategoryManager().categories;
-      print(categories);
     });
   }
 
@@ -339,9 +335,7 @@ class _PillCategoryDetailState extends State<PillCategoryDetail> {
                     onPressed: selectedCategoryName == null
                         ? null
                         : () async {
-                      print('이동하기 클릭 : ${selectedCategoryDetails!.categoryId}');
                       for (int index in selectedIndexes) {
-                        print(index);
                         await pillService.pillPatch(context, medications[index].serialNumber, selectedCategoryDetails!.categoryId);
                       }
                       _moveSelectedMedications();

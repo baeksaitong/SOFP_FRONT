@@ -1,5 +1,6 @@
 import 'dart:async';
 import 'package:flutter/material.dart';
+import 'package:logger/logger.dart';
 import 'package:provider/provider.dart'; // Provider 추가
 import 'package:sopf_front/constans/colors.dart';
 import 'package:sopf_front/constans/text_styles.dart';
@@ -28,6 +29,8 @@ class _DiseaseAllergyBottomSheetState extends State<DiseaseAllergyBottomSheet> {
   bool isLoadingMore = false;
   bool hasMoreData = true;
   final ScrollController _scrollController = ScrollController();
+
+  var logger = Logger();
 
   @override
   void initState() {
@@ -68,7 +71,7 @@ class _DiseaseAllergyBottomSheetState extends State<DiseaseAllergyBottomSheet> {
         hasMoreData = result != null && result.length == pageSize;
       });
     } catch (e) {
-      print('Error searching allergies: $e');
+      logger.e('Error searching allergies: $e');
     } finally {
     }
   }
@@ -86,7 +89,7 @@ class _DiseaseAllergyBottomSheetState extends State<DiseaseAllergyBottomSheet> {
           hasMoreData = result != null && result.length == pageSize;
         });
       } catch (e) {
-        print('Error loading more data: $e');
+        logger.e('Error loading more data: $e');
       } finally {
         setState(() {
           isLoadingMore = false;

@@ -62,33 +62,6 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      // title: 'Flutter Demo',
-      // theme: ThemeData(
-      //   primarySwatch: Colors.blue,
-      //   textSelectionTheme: TextSelectionThemeData(
-      //     cursorColor: Colors.grey, // Set the global cursor color here
-      //   ),
-      //   inputDecorationTheme: InputDecorationTheme(
-      //     border: OutlineInputBorder(
-      //       borderRadius: BorderRadius.circular(4.0),
-      //       borderSide: BorderSide(
-      //         color: AppColors.gr600, // The color of the border
-      //       ),
-      //     ),
-      //     enabledBorder: OutlineInputBorder(
-      //       borderRadius: BorderRadius.circular(4.0),
-      //       borderSide: BorderSide(
-      //         color: AppColors.gr600, // The color of the border when enabled
-      //       ),
-      //     ),
-      //     focusedBorder: OutlineInputBorder(
-      //       borderRadius: BorderRadius.circular(4.0),
-      //       borderSide: BorderSide(
-      //         color: AppColors.gr600, // The color of the border when focused
-      //       ),
-      //     ),
-      //   ),
-      // ),
       theme: ThemeData(
         dialogBackgroundColor: AppColors.wh, // 다이얼로그 배경 다 하얀색!
         // 다이얼로그 버튼 테마 설정 (선택 사항)

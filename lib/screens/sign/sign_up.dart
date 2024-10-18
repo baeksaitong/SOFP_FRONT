@@ -364,7 +364,6 @@ class _SignUpState extends State<SignUp> {
                     child: VerificationButton(
                       onPressed: () async {
                         try {
-                          print('인증번호 확인 버튼이 클릭되었습니다.');
                           await authService.mailCheck(email, emailCode!);
                           showCustomDialog(context, '이메일 인증 완료', '이메일 인증이 완료되었습니다.');
                         } catch (error) {

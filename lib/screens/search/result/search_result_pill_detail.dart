@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:logger/logger.dart';
 import 'package:provider/provider.dart';
 import 'package:sopf_front/constans/colors.dart'; // 색상 정의 파일을 임포트
 import 'package:sopf_front/constans/gaps.dart';
@@ -37,7 +38,9 @@ class _SearchResultPillDetailState extends State<SearchResultPillDetail> {
   bool isBookmarked = false; // 즐겨찾기 상태
   final AuthService authService = AuthService();
   final FavoriteService favoriteService = FavoriteService(); // 즐겨찾기 서비스 인스턴스
-  List<String> allergies = []; // 알레르기 목록
+  List<String> allergies = [];
+
+  var logger = Logger(); // 알레르기 목록
 
   @override
   void initState() {
@@ -57,7 +60,7 @@ class _SearchResultPillDetailState extends State<SearchResultPillDetail> {
         allergies.add('감기'); // 샘플 알레르기 단어 추가
       });
     } catch (e) {
-      print('Error loading allergies: $e');
+      logger.e('Error loading allergies: $e');
     }
   }
 
@@ -75,21 +78,18 @@ class _SearchResultPillDetailState extends State<SearchResultPillDetail> {
       if (isBookmarked) {
         // 즐겨찾기 삭제 요청
         await favoriteService.favoriteDelete(context, widget.serialNumber);
-        print('즐겨찾기 삭제 성공');
       } else {
         // 즐겨찾기 추가 요청
         await favoriteService.favoritePost(context, widget.serialNumber, widget.imgUrl);
-        print('즐겨찾기 추가 성공');
       }
 
       // 상태 업데이트 및 UI 새로고침
       setState(() {
         isBookmarked = !isBookmarked; // 즐겨찾기 상태 토글
-        print('상태 변경: $isBookmarked');
       });
     } catch (e) {
       // 오류 메시지 출력
-      print('즐겨찾기 상태 변경 오류: $e');
+      logger.e('즐겨찾기 상태 변경 오류: $e');
     }
   }
 
@@ -322,7 +322,6 @@ class _SearchResultPillDetailState extends State<SearchResultPillDetail> {
     if (foundAllergy && !showWarning) {
       setState(() {
         showWarning = true;
-        print('알레르기 단어가 발견되어 주의 사항을 활성화했습니다.');
       });
     }
 

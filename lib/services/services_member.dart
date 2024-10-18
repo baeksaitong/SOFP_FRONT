@@ -1,11 +1,14 @@
 import 'dart:convert';
 import 'package:http/http.dart' as http;
+import 'package:logger/logger.dart';
 import 'package:sopf_front/managers/managers_jwt.dart';
 import 'package:sopf_front/services/services_api_client.dart';
 import '../models/models_member_info.dart';
 
 class MemberService extends APIClient {
   final JWTManager jwtManager = JWTManager();
+
+  var logger = Logger();
 
   Future<MemberInfo?> fetchMemberInfo() async {
     final url = buildUri('/app/member');
@@ -23,14 +26,13 @@ class MemberService extends APIClient {
 
       if (response.statusCode == 200) {
         final responseBody = response.body;
-        print('Response body: $responseBody');
         return MemberInfo.fromJson(json.decode(responseBody));
       } else {
-        print('Failed to load member info: ${response.statusCode}');
+        logger.e('Failed to load member info: ${response.statusCode}');
         return null;
       }
     } catch (e) {
-      print('Error fetching member info: $e');
+      logger.e('Error fetching member info: $e');
       return null;
     }
   }
@@ -52,12 +54,9 @@ class MemberService extends APIClient {
         }),
       );
 
-      print('Response status: ${response.statusCode}');
-      print('Response body: ${response.body}');
-
       return response.statusCode == 200;
     } catch (e) {
-      print('Error saving member data: $e');
+      logger.e('Error saving member data: $e');
       return false;
     }
   }

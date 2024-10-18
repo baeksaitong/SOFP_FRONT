@@ -1,6 +1,7 @@
 import 'dart:convert';
 
 import 'package:flutter/cupertino.dart';
+import 'package:logger/logger.dart';
 import 'package:provider/provider.dart';
 import 'package:sopf_front/services/services_api_client.dart';
 
@@ -11,6 +12,8 @@ import 'package:http/http.dart' as http;
 
 class CalendarService extends APIClient {
   final JWTManager _jwtManager = JWTManager();
+
+  var logger = Logger();
 
   Future<void> calendarGet(BuildContext context, String id) async {
     final currentProfile =
@@ -26,11 +29,9 @@ class CalendarService extends APIClient {
     if (response.statusCode == 200) {
       // 성공적으로 처리된 경우
       final jsonResponse = utf8.decode(response.bodyBytes);
-      print('프로필 캘린더 조회 성공: ${utf8.decode(response.bodyBytes)}');
     } else {
       // 실패 처리
-      print(response.statusCode);
-      print('프로필 캘린더 조회 실패: ${utf8.decode(response.bodyBytes)}');
+      logger.e('프로필 캘린더 조회 실패: ${utf8.decode(response.bodyBytes)}');
     }
   }
 
@@ -58,11 +59,9 @@ class CalendarService extends APIClient {
     if (response.statusCode == 200) {
       // 성공적으로 처리된 경우
       final jsonResponse = utf8.decode(response.bodyBytes);
-      print('일부 캘린더 조회 성공: ${utf8.decode(response.bodyBytes)}');
     } else {
       // 실패 처리
-      print(response.statusCode);
-      print('일부 캘린더 조회 실패: ${utf8.decode(response.bodyBytes)}');
+      logger.e('일부 캘린더 조회 실패: ${utf8.decode(response.bodyBytes)}');
     }
   }
 }

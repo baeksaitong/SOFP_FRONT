@@ -1,4 +1,5 @@
 // Dart imports:
+import 'dart:async';
 import 'dart:convert';
 
 // Flutter imports:
@@ -6,12 +7,13 @@ import 'package:flutter/material.dart';
 
 // Package imports:
 import 'package:http/http.dart' as http;
+import 'package:logger/logger.dart';
 import 'package:provider/provider.dart';
 
 // Project imports:
 import 'package:sopf_front/constans/colors.dart';
 import 'package:sopf_front/constans/text_styles.dart';
-import 'package:sopf_front/managers/managers_tasking_drugs.dart';
+import 'package:sopf_front/managers/managers_taking_drugs.dart';
 
 import 'package:sopf_front/navigates.dart';
 import 'package:sopf_front/services/services_disease_allergy.dart';
@@ -40,6 +42,11 @@ class _MyPageState extends State<MyPage> {
   final DiseaseAllergyService diseaseAllergyService = DiseaseAllergyService();
   final PillService pillService = PillService();
 
+  Timer? _debounce;
+  String query = '';
+
+  var logger = Logger();
+
   @override
   void initState() {
     super.initState();
@@ -47,7 +54,6 @@ class _MyPageState extends State<MyPage> {
   }
 
   Future<void> fetchProfile() async {
-    print('Fetching profile...');
     try {
       final profileProvider = Provider.of<ProfileProvider>(context, listen: false);
       final currentProfile = profileProvider.currentProfile;
@@ -55,127 +61,21 @@ class _MyPageState extends State<MyPage> {
         setState(() {
           profile = currentProfile.toJson();
         });
-        print('Profile fetched successfully: $profile');
-        allergiesanddisease=diseaseAllergyService.diseaseAllergyList(context) as List<String>;
-        print(allergiesanddisease);
+        final fetchedAllergies = await diseaseAllergyService.diseaseAllergyList(context);
+        setState(() {
+          allergiesanddisease = fetchedAllergies ?? []; // null인 경우 빈 리스트 할당
+        });
         await pillService.pillGet(context, null);
-        medications=TakingDrugsManager().drugs.cast<String>();
-        print(medications);
+        setState(() {
+          medications = TakingDrugsManager().drugs.map((drug) => drug.name).toList();
+        });
       } else {
-        print('No current profile found.');
+        logger.e('No current profile found.');
       }
     } catch (e) {
-      print('Error fetching profile: $e');
+      logger.e('Error fetching profile: $e');
     }
   }
-
-  // Future<void> fetchAllergiesAndDiseases() async {
-  //   if (profile != null && profile!['id'] != null) {
-  //     print('Fetching allergies and diseases...');
-  //     try {
-  //       final accessToken = await JWTManager().getValidAccessToken();
-  //       final response = await http.get(
-  //         Uri.parse('http://3.39.8.147:8080/app/disease-allergy/${profile!['id']}'),
-  //         headers: {
-  //           'Authorization': 'Bearer $accessToken',
-  //           'Content-Type': 'application/json; charset=UTF-8',
-  //         },
-  //       );
-  //       if (response.statusCode == 200) {
-  //         setState(() {
-  //           _allergiesanddisease =
-  //           List<String>.from(json.decode(utf8.decode(response.bodyBytes))['DiseaseAllergyList']);
-  //         });
-  //         print('Allergies and diseases fetched successfully: $_allergiesanddisease');
-  //       } else {
-  //         print('Failed to load allergies and diseases. Status code: ${response.statusCode}');
-  //       }
-  //     } catch (e) {
-  //       print('Error fetching allergies and diseases: $e');
-  //     }
-  //   } else {
-  //     print('Profile ID is null, cannot fetch allergies and diseases.');
-  //   }
-  // }
-
-  // Future<void> fetchMedications() async {
-  //   if (profile != null && profile!['id'] != null) {
-  //     print('Fetching medications...');
-  //     try {
-  //       final accessToken = await JWTManager().getValidAccessToken();
-  //       final response = await http.get(
-  //         Uri.parse('http://3.39.8.147:8080/app/pill?profileId=${profile!['id']}'),
-  //         headers: {
-  //           'Authorization': 'Bearer $accessToken',
-  //           'Content-Type': 'application/json; charset=UTF-8',
-  //         },
-  //       );
-  //       if (response.statusCode == 200) {
-  //         setState(() {
-  //           medications = List<String>.from(
-  //               json.decode(utf8.decode(response.bodyBytes))['pillInfoList'].map((pill) => pill['name']));
-  //         });
-  //         print('Medications fetched successfully: $medications');
-  //       } else {
-  //         print('Failed to load medications. Status code: ${response.statusCode}');
-  //       }
-  //     } catch (e) {
-  //       print('Error fetching medications: $e');
-  //     }
-  //   } else {
-  //     print('Profile ID is null, cannot fetch medications.');
-  //   }
-  // }
-
-  // Future<void> updateAllergiesAndDiseases() async {
-  //   try {
-  //     final accessToken = await JWTManager().getValidAccessToken();
-  //     final response = await http.patch(
-  //       Uri.parse('http://3.39.8.147:8080/app/disease-allergy/${profile!['id']}'),
-  //       headers: {
-  //         'Authorization': 'Bearer $accessToken',
-  //         'Content-Type': 'application/json; charset=UTF-8',
-  //       },
-  //       body: json.encode({
-  //         'addDiseaseAllergyList': _selectedAllergiesanddisease,
-  //         'removeDiseaseAllergyList': allergiesanddisease
-  //             .where((item) => !_selectedAllergiesanddisease.contains(item))
-  //             .toList(),
-  //       }),
-  //     );
-  //     if (response.statusCode == 200) {
-  //       print('Allergies and diseases updated successfully.');
-  //       diseaseAllergyService.diseaseAllergyList(context); // 업데이트 후 다시 불러오기
-  //     } else {
-  //       print('Failed to update allergies and diseases. Status code: ${response.statusCode}');
-  //     }
-  //   } catch (e) {
-  //     print('Error updating allergies and diseases: $e');
-  //   }
-  // }
-
-  // Future<void> updateMedications() async {
-  //   try {
-  //     final accessToken = await JWTManager().getValidAccessToken();
-  //     final response = await http.post(
-  //       Uri.parse('http://3.39.8.147:8080/app/pill/${profile!['id']}'),
-  //       headers: {
-  //         'Authorization': 'Bearer $accessToken',
-  //         'Content-Type': 'application/json; charset=UTF-8',
-  //       },
-  //       body: json.encode({
-  //         'pillSerialNumberList': _selectedMedications,
-  //       }),
-  //     );
-  //     if (response.statusCode == 200) {
-  //       print('Medications updated successfully.');
-  //     } else {
-  //       print('Failed to update medications. Status code: ${response.statusCode}');
-  //     }
-  //   } catch (e) {
-  //     print('Error updating medications: $e');
-  //   }
-  // }
 
   Future<void> updateMedications() async {
     // _selectedMedications 리스트에 있는 알약의 serialNumber를 반복 처리
@@ -187,11 +87,9 @@ class _MyPageState extends State<MyPage> {
         await pillService.pillPost(context, serialNumber);
 
       } catch (e) {
-        print('Error adding medication with serial number $medication: $e');
+        logger.e('Error adding medication with serial number $medication: $e');
       }
     }
-
-    print('모든 알약 추가 완료');
   }
 
   void showEditAllergiesBottomSheet(BuildContext context) {
@@ -201,28 +99,21 @@ class _MyPageState extends State<MyPage> {
     _selectedAllergiesanddisease.addAll(allergiesanddisease);
 
     Future<void> onSearch(String value) async {
-      searchResults=diseaseAllergyService.diseaseAllergySearch(value) as List<String>;
-      // try {
-      //   final accessToken = await JWTManager().getValidAccessToken();
-      //   final response = await http.get(
-      //     Uri.parse('http://3.39.8.147:8080/app/disease-allergy/search?keyword=$value'),
-      //     headers: {
-      //       'Content-Type': 'application/json; charset=UTF-8',
-      //       'Authorization': 'Bearer $accessToken',
-      //     },
-      //   );
-      //
-      //   if (response.statusCode == 200) {
-      //     setState(() {
-      //       searchResults = List<String>.from(
-      //           json.decode(utf8.decode(response.bodyBytes))['DiseaseAllergyList']);
-      //     });
-      //   } else {
-      //     print('Failed to search allergies. Status code: ${response.statusCode}');
-      //   }
-      // } catch (e) {
-      //   print('Error searching allergies: $e');
-      // }
+      if (_debounce?.isActive ?? false) _debounce!.cancel();
+
+      _debounce = Timer(Duration(milliseconds: 100), () async {
+        setState(() {
+          query = value;
+          searchResults.clear();
+        });
+        if (query.isNotEmpty) {
+          final searchAllergies = await diseaseAllergyService.diseaseAllergySearch(query);
+
+          setState(() {
+            searchResults= searchAllergies ?? [];
+          });
+        }
+      });
     }
 
     showModalBottomSheet(
@@ -340,31 +231,6 @@ class _MyPageState extends State<MyPage> {
       await pillService.pillGet(context, null);
       searchResults=TakingDrugsManager().drugs.cast<String>();
     }
-
-    // Future<void> onSearch(String value) async {
-    //   try {
-    //     final accessToken = await JWTManager().getValidAccessToken();
-    //     final response = await http.get(
-    //       Uri.parse('http://3.39.8.147:8080/app/pill/search?keyword=$value'),
-    //       headers: {
-    //         'Content-Type': 'application/json; charset=UTF-8',
-    //         'Authorization': 'Bearer $accessToken',
-    //       },
-    //     );
-    //
-    //     if (response.statusCode == 200) {
-    //       setState(() {
-    //         searchResults = List<String>.from(
-    //             json.decode(utf8.decode(response.bodyBytes))['pillInfoList'].map((pill) => pill['name']));
-    //       });
-    //     } else {
-    //       print('Failed to search medications. Status code: ${response.statusCode}');
-    //     }
-    //   } catch (e) {
-    //     print('Error searching medications: $e');
-    //   }
-    //
-    // }
 
     showModalBottomSheet(
       backgroundColor: AppColors.wh,

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_webview_plugin/flutter_webview_plugin.dart';
+import 'package:logger/logger.dart';
 import 'package:sopf_front/navigates.dart';
 import 'package:sopf_front/services/services_auth.dart';
 
@@ -15,34 +16,34 @@ class SignNaver extends StatefulWidget {
 class _SignNaverState extends State<SignNaver> {
   final flutterWebviewPlugin = FlutterWebviewPlugin();
   final AuthService authService = AuthService();
-  // final APIClient apiClient = APIClient();
+  static String baseUrl = const String.fromEnvironment('API_URL', defaultValue: 'http://default-url.com');
+
+  var logger = Logger();
 
   @override
   void initState() {
     super.initState();
     flutterWebviewPlugin.onUrlChanged.listen((String url) async {
-      print('URL changed: $url');
-      if (url.startsWith('http://15.164.18.65:8080/app/oauth/naver')) {
+      if (url.startsWith('$baseUrl/app/oauth/naver')) {
         Uri uri = Uri.parse(url);
         String? code = uri.queryParameters['code'];
 
         if (code != null) {
           // 인가 코드를 성공적으로 받음
-          print('Authorization Code: $code');
+          logger.e('Authorization Code: $code');
           try {
             await authService.naverLogin(context, code);
             // await apiClient.naverLogin(context, code);
-            print('Login successful');
             flutterWebviewPlugin.close();
             if (context.mounted) {
               Navigator.pop(context);
               navigateToAddAllergy(); // 로그인 성공 후 navigateToAddAllergy로 이동
             }
           } catch (e) {
-            print('Error during naverLogin: $e');
+            logger.e('Error during naverLogin: $e');
           }
         } else {
-          print('Authorization code not found');
+          logger.e('Authorization code not found');
         }
       }
     });

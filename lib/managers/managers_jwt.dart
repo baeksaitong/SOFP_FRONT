@@ -7,7 +7,7 @@ import 'package:http/http.dart' as http;
   import 'package:jwt_decoder/jwt_decoder.dart';
 
   class JWTManager{
-    static const String baseUrl = 'https://15.164.18.65/app/auth';
+    static String baseUrl = const String.fromEnvironment('API_URL', defaultValue: 'http://default-url.com');
     final FlutterSecureStorage _storage = FlutterSecureStorage();
 
     Future<void> saveTokens(String accessToken, String refreshToken) async {

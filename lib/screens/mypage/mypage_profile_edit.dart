@@ -2,13 +2,18 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'package:image_picker/image_picker.dart';
+import 'package:logger/logger.dart';
+import 'package:provider/provider.dart';
 import 'package:sopf_front/constans/colors.dart';
 import 'package:sopf_front/constans/text_styles.dart';
 import 'package:sopf_front/constans/gaps.dart';
 import 'package:sopf_front/managers/managers_global_response.dart';
 import 'package:sopf_front/managers/managers_jwt.dart';
 import 'package:sopf_front/models/models_profile.dart';
-import 'package:sopf_front/services/services_profile.dart'; // Profile 모델
+import 'package:sopf_front/navigates.dart';
+import 'package:sopf_front/services/services_profile.dart';
+
+import '../../providers/provider.dart'; // Profile 모델
 
 class MyPageProfileEdit extends StatefulWidget {
   final String profileId;
@@ -33,6 +38,8 @@ class _MyPageProfileEditState extends State<MyPageProfileEdit> {
   String color = "#FFFFFF";
   bool isLoading = true; // 로딩 상태를 위한 변수
 
+  var logger = Logger();
+
   @override
   void initState() {
     super.initState();
@@ -51,7 +58,7 @@ class _MyPageProfileEditState extends State<MyPageProfileEdit> {
         _networkImageUrl = profileDetail.imgURL ?? 'assets/mypageEdit/user-icon.png'; // 기본 이미지 처리
       });
     } else {
-      print('프로필 로드 실패');
+      logger.e('프로필 로드 실패');
     }
   }
 
@@ -62,45 +69,18 @@ class _MyPageProfileEditState extends State<MyPageProfileEdit> {
         _image = pickedFile;
       });
     } else {
-      print('No image selected.');
+      logger.e('No image selected.');
     }
   }
 
   Future<void> saveProfile() async {
     final String name = nameController.text;
     final String birthdate = birthdateController.text.replaceAll('.', '-');
-    final String accessToken = await jwtManager.getValidAccessToken();
     final ProfileService profileService = ProfileService();
 
-    print('$name, $birthdate, $gender, $color');
-    profileService.profilePost(name, birthdate, gender, color, _image);
-    // var url = Uri.parse('http://3.39.8.147:8080/app/profile/${widget.profileId}');
-    // var request = http.MultipartRequest('PUT', url);
-    // request.headers['Authorization'] = 'Bearer $accessToken';
-    //
-    // request.fields['name'] = name;
-    // request.fields['birthday'] = birthdate;
-    // request.fields['gender'] = gender;
-    // request.fields['color'] = color;
-    //
-    // if (_image != null && _image!.path.isNotEmpty) {
-    //   request.files.add(await http.MultipartFile.fromPath('profileImg', _image!.path));
-    // }
-    //
-    // var response = await request.send();
-    //
-    // if (response.statusCode == 200) {
-    //   final responseString = await response.stream.bytesToString();
-    //   responseManager.addResponse(responseString);
-    //
-    //   print('프로필이 성공적으로 저장되었습니다');
-    //
-    //   profileService.profileAll();
-    // } else {
-    //   print('Failed to save profile');
-    //   print('Status code: ${response.statusCode}');
-    //   print('Response body: ${await response.stream.bytesToString()}');
-    // }
+    profileService.profilePut(name, birthdate, gender, color, _image, context);
+
+    navigateToHome();
   }
 
   @override

@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:sopf_front/constans/text_styles.dart';
-import 'package:sopf_front/managers/managers_api_client.dart';
 import 'package:sopf_front/screens/calendar/calenderPage.dart';
 
 class EventList extends StatelessWidget {

@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:logger/logger.dart';
 import 'package:sopf_front/constans/colors.dart';
 import 'package:sopf_front/constans/gaps.dart';
 import 'package:sopf_front/main.dart';
-import 'package:sopf_front/managers/managers_api_client.dart';
 import 'package:sopf_front/navigates.dart';
 import 'package:sopf_front/screens/sign/sign_naver.dart';
 import 'package:sopf_front/services/services_api_client.dart';
@@ -20,6 +20,8 @@ class _SignInState extends State<SignIn> {
   final TextEditingController idController = TextEditingController();
   final TextEditingController passwordController = TextEditingController();
 
+  var logger = Logger();
+
   void initSate() {
     super.initState();
     _checkLoginStatus();
@@ -30,7 +32,7 @@ class _SignInState extends State<SignIn> {
       final accessToken = await apiClient.getValidAccessToken();
       navigateToHome();
     } catch (e) {
-      print('Error checking login status: $e');
+      logger.e('Error checking login status: $e');
     }
   }
 
@@ -76,10 +78,10 @@ class _SignInState extends State<SignIn> {
               SizedBox(height: 10),
               Row(
                 mainAxisAlignment: MainAxisAlignment.center,
-                children: const [
+                children: [
                   NaverButton(),
-                  SizedBox(width: 10),
-                  KakaoButton(),
+                  const SizedBox(width: 10),
+                  const KakaoButton(),
                 ],
               ),
             ],
@@ -199,7 +201,7 @@ class LoginButton extends StatelessWidget {
       width: double.infinity,
       child: ElevatedButton(
         onPressed: () async {
-          await authService.login(context, 'rktgkswh935@naver.com', '1q2w3e4r');
+          await authService.login(context, idController.text, passwordController.text);
         },
         style: ElevatedButton.styleFrom(
           padding: EdgeInsets.symmetric(
@@ -239,10 +241,11 @@ class KakaoButton extends StatelessWidget {
 }
 
 class NaverButton extends StatelessWidget {
-  const NaverButton({super.key});
+  NaverButton({super.key});
 
-  final String clientId = 's_sU87qUfaHToSi_ky8R';
-  final String redirectUri = 'http://15.164.18.65:8080/app/oauth/naver';
+  static String baseUrl = const String.fromEnvironment('API_URL', defaultValue: 'http://default-url.com');
+  final String clientId = const String.fromEnvironment('NAVER_CLIENT_ID', defaultValue: 'null');
+  final String redirectUri = '$baseUrl/app/oauth/naver';
   final String state = 'sofp';
 
   @override

@@ -1,6 +1,7 @@
  import 'package:flutter/material.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:geolocator/geolocator.dart';
+import 'package:logger/logger.dart';
 import 'package:sopf_front/services/services_pharmacy.dart';
 
 import '../../constans/colors.dart';
@@ -19,6 +20,8 @@ class _MapPharmacyState extends State<MapPharmacy> {
   MapType _currentMapType = MapType.normal;
   final Set<Marker> _markers = {};
   final PharmacyService pharmacyService = PharmacyService();
+
+  var logger = Logger();
 
   void _onMapCreated(GoogleMapController controller) {
     mapController = controller;
@@ -74,14 +77,14 @@ class _MapPharmacyState extends State<MapPharmacy> {
   }
 
   void _onNearbyButtonPressed() async {
+    var logger = Logger();
+
     setState(() {
       isNearbySelected = !isNearbySelected;
       isNightSelected = false;
     });
 
     if (_currentPosition != null) {
-      print(
-          'Current Position: Latitude: ${_currentPosition!.latitude}, Longitude: ${_currentPosition!.longitude}');
 
       try {
         final pharmacyList = await pharmacyService.pharmacyAroundGet(
@@ -95,10 +98,10 @@ class _MapPharmacyState extends State<MapPharmacy> {
           _showPharmacyList(pharmacyList);
         }
       } catch (e) {
-        print('Error fetching pharmacies: $e');
+        logger.e('Error fetching pharmacies: $e');
       }
     } else {
-      print('Current Position is not available.');
+      logger.e('Current Position is not available.');
     }
   }
 
@@ -121,7 +124,7 @@ class _MapPharmacyState extends State<MapPharmacy> {
           _showPharmacyList(nightPharmacyList);
         }
       } catch (e) {
-        print('Error fetching night pharmacies: $e');
+        logger.e('Error fetching night pharmacies: $e');
       }
     }
   }
@@ -447,11 +450,6 @@ class _MapPharmacyState extends State<MapPharmacy> {
     );
   }
 
-  void _onCameraMove(CameraPosition position) {
-    print(
-        'Current Position: Latitude: ${position.target.latitude}, Longitude: ${position.target.longitude}');
-  }
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -522,7 +520,6 @@ class _MapPharmacyState extends State<MapPharmacy> {
                 myLocationButtonEnabled: true,
                 mapType: _currentMapType,
                 markers: _markers,
-                onCameraMove: _onCameraMove,
               ),
             ),
           ),

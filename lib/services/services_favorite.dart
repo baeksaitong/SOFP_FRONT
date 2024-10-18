@@ -2,6 +2,7 @@ import 'dart:convert';
 import 'dart:io';
 
 import 'package:flutter/cupertino.dart';
+import 'package:logger/logger.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:provider/provider.dart';
 import 'package:sopf_front/services/services_api_client.dart';
@@ -14,13 +15,14 @@ import 'package:http/http.dart' as http;
 class FavoriteService extends APIClient {
   final JWTManager _jwtManager = JWTManager();
 
+  var logger = Logger();
+
     Future<void> favoritePost(
       BuildContext context, int serialNumber, String imageUrl) async {
     final currentProfile =
         Provider.of<ProfileProvider>(context, listen: false).currentProfile;
     final String? accessToken = await _jwtManager.getAccessToken();
     final url = buildUri('/app/favorite/${currentProfile?.id}');
-    print(accessToken);
 
     // Download the image
     var response = await http.get(Uri.parse(imageUrl));
@@ -53,11 +55,9 @@ class FavoriteService extends APIClient {
 
     if (response.statusCode == 200) {
       // 성공적으로 처리된 경우
-      print('즐겨찾기 추가 완료: ${utf8.decode(response.bodyBytes)}');
     } else {
       // 실패 처리
-      print(response.statusCode);
-      print('즐겨찾기 추가 실패: ${utf8.decode(response.bodyBytes)}');
+      logger.e('즐겨찾기 추가 실패: ${utf8.decode(response.bodyBytes)}');
     }
 
     // Clean up the temporary file
@@ -77,11 +77,9 @@ class FavoriteService extends APIClient {
 
     if (response.statusCode == 200) {
       // 성공적으로 처리된 경우
-      print('즐겨찾기 삭제 성공: ${utf8.decode(response.bodyBytes)}');
     } else {
       // 실패 처리
-      print(response.statusCode);
-      print('즐겨찾기 삭제 실패: ${utf8.decode(response.bodyBytes)}');
+      logger.e('즐겨찾기 삭제 실패: ${utf8.decode(response.bodyBytes)}');
     }
   }
 
@@ -97,13 +95,11 @@ class FavoriteService extends APIClient {
 
     if (response.statusCode == 200) {
       // 성공적으로 처리된 경우
-      print('즐겨찾기 조회 성공: ${utf8.decode(response.bodyBytes)}');
       FavoritesManager().updateFavorites(utf8.decode(response.bodyBytes));
 
     } else {
       // 실패 처리
-      print(response.statusCode);
-      print('즐겨찾기 조회 실패: ${utf8.decode(response.bodyBytes)}');
+      logger.e('즐겨찾기 조회 실패: ${utf8.decode(response.bodyBytes)}');
     }
   }
 }

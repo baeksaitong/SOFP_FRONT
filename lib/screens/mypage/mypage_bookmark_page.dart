@@ -39,7 +39,6 @@ class _MyPageBookMarkPageState extends State<MyPageBookMarkPage> {
   void _toggleBookmark(int index) {
     setState(() {
       favorites[index].isBookmarked = !favorites[index].isBookmarked;
-      print('${favorites[index].serialNumber}, ${favorites[index].imgUrl}');
       if (favorites[index].isBookmarked == true) {
         favoriteService.favoritePost(context, favorites[index].serialNumber, favorites[index].imgUrl);
       } else {

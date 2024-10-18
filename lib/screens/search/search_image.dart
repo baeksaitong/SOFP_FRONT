@@ -6,6 +6,7 @@ import 'package:flutter/material.dart';
 // Package imports:
 import 'package:camera/camera.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:logger/logger.dart';
 
 // Project imports:
 import 'package:sopf_front/constans/colors.dart';
@@ -59,6 +60,8 @@ class _CameraScreenState extends State<CameraScreen> {
   bool _isLoadingImage = false;
   bool _isTakingPicture = false;
 
+  var logger = Logger();
+
   @override
   void initState() {
     super.initState();
@@ -90,13 +93,13 @@ class _CameraScreenState extends State<CameraScreen> {
         }
       }
     } catch (e) {
-      print('갤러리에서 이미지 선택에 실패했습니다: $e');
+      logger.e('갤러리에서 이미지 선택에 실패했습니다: $e');
     }
   }
 
   Future<void> _takePicture() async {
     if (_controller == null || !_controller!.value.isInitialized) {
-      print('Error: 카메라를 선택해주세요.');
+      logger.e('Error: 카메라를 선택해주세요.');
       return;
     }
     if (_isTakingPicture) {
@@ -109,7 +112,7 @@ class _CameraScreenState extends State<CameraScreen> {
       });
       final XFile? picture = await _controller!.takePicture();
       if (picture == null) {
-        print('Error: 사진을 찍지 못했습니다.');
+        logger.e('Error: 사진을 찍지 못했습니다.');
         return;
       }
       if (_firstImageFile == null) {
@@ -124,7 +127,7 @@ class _CameraScreenState extends State<CameraScreen> {
         _showSecondConfirmationDialog();
       }
     } catch (e) {
-      print('사진 촬영에 실패했습니다: $e');
+      logger.e('사진 촬영에 실패했습니다: $e');
     } finally {
       setState(() {
         _isTakingPicture = false;

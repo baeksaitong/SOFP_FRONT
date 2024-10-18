@@ -7,6 +7,7 @@ import 'package:flutter/material.dart';
 
 // Package imports:
 import 'package:image_picker/image_picker.dart';
+import 'package:logger/logger.dart';
 import 'package:provider/provider.dart';
 
 // Project imports:
@@ -44,6 +45,8 @@ class _MultiProfileAddState extends State<MultiProfileAdd> {
   final ProfileService profileService = ProfileService();
   String gender = "남성"; // 초기값 설정
 
+  var logger = Logger();
+
   Future<void> getImage() async {
     final XFile? pickedFile =
     await _picker.pickImage(source: ImageSource.gallery);
@@ -52,7 +55,7 @@ class _MultiProfileAddState extends State<MultiProfileAdd> {
         _image = pickedFile;
       });
     } else {
-      print('No image selected.');
+      logger.e('No image selected.');
     }
   }
 

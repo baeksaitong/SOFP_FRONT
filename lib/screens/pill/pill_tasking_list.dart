@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:sopf_front/managers/managers_api_client.dart';
 import 'package:sopf_front/managers/managers_global_response.dart';
 import 'package:sopf_front/navigates.dart';
 import 'package:sopf_front/providers/provider.dart';
@@ -10,7 +9,7 @@ import '../../constans/colors.dart';
 import '../../constans/text_styles.dart';
 import '../../constans/gaps.dart';
 import '../../managers/managers_category.dart';
-import '../../managers/managers_tasking_drugs.dart';
+import '../../managers/managers_taking_drugs.dart';
 import '../../models/models_category.dart';
 import '../../models/models_taking_drugs_info.dart';
 import '../search/search_shape.dart';
@@ -44,18 +43,15 @@ class _PillTaskingListState extends State<PillTaskingList> {
     await pillService.pillGet(context, null);
     setState(() {
       medications = TakingDrugsManager().drugs;
-      print(medications);
     });
   }
 
   void _initializeCategories() async {
     final currentProfile =
         Provider.of<ProfileProvider>(context, listen: false).currentProfile;
-    print('현재 프로필 : ${currentProfile?.id}');
     await categoryService.categoryGetAll(context, currentProfile!.id);
     setState(() {
       categories = CategoryManager().categories;
-      print(categories);
     });
   }
 
@@ -331,10 +327,7 @@ class _PillTaskingListState extends State<PillTaskingList> {
                     onPressed: selectedCategoryName == null
                         ? null
                         : () async {
-                      print(
-                          '이동하기 클릭 : ${selectedCategoryDetails!.categoryId}');
                       for (int index in selectedIndexes) {
-                        print(index);
                         await pillService.pillPatch(
                             context,
                             medications[index].serialNumber,

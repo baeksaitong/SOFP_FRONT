@@ -2,6 +2,7 @@ import 'dart:convert';
 
 import 'package:camera/camera.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:logger/logger.dart';
 import 'package:provider/provider.dart';
 import 'package:sopf_front/services/services_api_client.dart';
 
@@ -13,6 +14,8 @@ import '../providers/provider.dart';
 
 class ProfileService extends APIClient {
   final JWTManager _jwtManager = JWTManager();
+
+  var logger = Logger();
 
   Future<void> profileAdd(String name, String birthday, String gender,
       String color, String? profileImg) async {
@@ -38,11 +41,9 @@ class ProfileService extends APIClient {
     var jsonResponse = jsonDecode(decodedResponse);
     if (response.statusCode == 200) {
       // 회원가입 성공 처리
-      print('회원가입 성공: $jsonResponse');
     } else {
       // 에러 처리
-      print(response.statusCode);
-      print('회원가입 실패: $jsonResponse');
+      logger.e('회원가입 실패: $jsonResponse');
     }
   }
 
@@ -61,14 +62,12 @@ class ProfileService extends APIClient {
     if (response.statusCode == 200) {
       // 성공적으로 처리된 경우
       String decodedResponse = utf8.decode(response.bodyBytes);
-      print('모든 멤버 출력: $decodedResponse');
 
       Map<String, dynamic> jsonResponse = jsonDecode(decodedResponse);
       return ProfileResponse.fromJson(jsonResponse);
     } else {
       // 실패 처리
-      print(response.statusCode);
-      print('실패했습니다: ${response.body}');
+      logger.e('실패했습니다: ${response.body}');
       return null;
     }
   }
@@ -102,11 +101,9 @@ class ProfileService extends APIClient {
     var response = await http.post(url, headers: headers, body: body);
 
     if (response.statusCode == 200) {
-      print('프로필이 성공적으로 저장되었습니다');
+      logger.e('프로필이 성공적으로 저장되었습니다');
     } else {
-      print('Failed to save profile');
-      print('Status code: ${response.statusCode}');
-      print('Response body: ${response.body}');
+      logger.e('Response body: ${response.body}');
     }
   }
 
@@ -133,7 +130,6 @@ class ProfileService extends APIClient {
     if (response.statusCode == 200) {
       // 응답 데이터를 디코딩
       String decodedResponse = utf8.decode(response.bodyBytes);
-      print('현재 프로필 출력: $decodedResponse');
 
       // JSON 응답을 Profile 객체로 변환
       Map<String, dynamic> jsonResponse = jsonDecode(decodedResponse);
@@ -142,19 +138,20 @@ class ProfileService extends APIClient {
       return ProfileDetail.fromJson(jsonResponse);
     } else {
       // 실패 시 오류 처리
-      print(response.statusCode);
-      print('실패했습니다: ${response.body}');
+      logger.e('실패했습니다: ${response.body}');
       return null;
     }
   }
 
   Future<void> profilePut(
-      String name, String birthdate, String gender, String color, XFile? _image
+      String name, String birthdate, String gender, String color, XFile? _image, BuildContext context
       ) async {
+    final currentProfile =
+        Provider.of<ProfileProvider>(context, listen: false).currentProfile;
     final String? accessToken = await _jwtManager.getAccessToken();
     final GlobalResponseManager responseManager = GlobalResponseManager();
 
-    var url = buildUri('/app/profile');
+    var url = buildUri('/app/profile/${currentProfile?.id}');
     var request = http.MultipartRequest('PUT', url);
     request.headers['Authorization'] = 'Bearer $accessToken';
 
@@ -174,13 +171,16 @@ class ProfileService extends APIClient {
       final responseString = await response.stream.bytesToString();
       responseManager.addResponse(responseString);
 
-      print('프로필이 성공적으로 저장되었습니다');
+      final updatedProfiles = await profileAll();
 
-      profileAll();
+      if (updatedProfiles != null) {
+        // ProfileProvider에 프로필 목록과 현재 프로필 상태 갱신
+        final profileProvider = Provider.of<ProfileProvider>(context, listen: false);
+        profileProvider.setProfileList(updatedProfiles.profileList);
+        profileProvider.setCurrentProfile(updatedProfiles.profileList[0]); // 예시로 첫번째 프로필 선택
+      }
     } else {
-      print('Failed to save profile');
-      print('Status code: ${response.statusCode}');
-      print('Response body: ${await response.stream.bytesToString()}');
+      logger.e('Response body: ${await response.stream.bytesToString()}');
     }
   }
 }
