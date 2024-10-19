@@ -80,7 +80,7 @@ class _SignUpState extends State<SignUp> {
         buttonLabel = '인증번호 확인';
         _timerStarted = true;
       });
-      showCustomDialog(context, '인증번호 전송 완료', '이메일로 인증번호가 전송되었습니다. $baseUrl');
+      showCustomDialog(context, '인증번호 전송 완료', '이메일로 인증번호가 전송되었습니다.');
     } catch (e) {
 
       showCustomDialog(context, '인증번호 전송 실패', '메일 전송에 실패했습니다. 다시 시도해주세요. $baseUrl');
