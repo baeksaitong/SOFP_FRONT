@@ -28,7 +28,7 @@ class _SignUpState extends State<SignUp> {
   final int _seconds = 0;
   bool privacyPolicyAccepted = false; // 개인정보 처리방침 동의 여부 필수체크
   bool emailSubscriptionAccepted = false; // 광고성이메일 수신 동의 여부 선택체크
-  static String baseUrl = const String.fromEnvironment('API_URL', defaultValue: 'http://default-url.com');
+  static String baseUrl = String.fromEnvironment('API_URL', defaultValue: 'http://default-url.com');
 
   final AuthService authService = AuthService();  // AuthService 객체 생성
 
@@ -80,7 +80,7 @@ class _SignUpState extends State<SignUp> {
         buttonLabel = '인증번호 확인';
         _timerStarted = true;
       });
-      showCustomDialog(context, '인증번호 전송 완료', '이메일로 인증번호가 전송되었습니다.');
+      showCustomDialog(context, '인증번호 전송 완료', '이메일로 인증번호가 전송되었습니다. $baseUrl');
     } catch (e) {
 
       showCustomDialog(context, '인증번호 전송 실패', '메일 전송에 실패했습니다. 다시 시도해주세요. $baseUrl');
