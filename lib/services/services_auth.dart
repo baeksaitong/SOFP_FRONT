@@ -87,6 +87,7 @@ class AuthService extends APIClient {
 
   Future<void> idCheck(String email) async {
     final url = buildUri('/app/auth/id-check');
+
     final response = await http.post(
       url,
       headers: <String, String>{

@@ -3,7 +3,7 @@ name: Flutter CI
 on:
   push:
     branches:
-      - main
+      - ver3  # 브랜치 이름을 ver3로 변경
 
 jobs:
   build:
@@ -17,17 +17,12 @@ jobs:
         with:
           flutter-version: 'stable'
 
-      # 환경 변수 설정 (Google Map API Key를 환경 변수로 추가)
-      - name: Set up environment variables
-        run: |
-          echo "GOOGLE_MAP_API_KEY=${{ secrets.GOOGLE_MAP_API_KEY }}" >> $GITHUB_ENV
-
       # 의존성 설치
       - run: flutter pub get
 
-      # 환경 변수를 사용하여 Android APK 빌드
-      - run: flutter build apk --release --dart-define API_URL=${{ secrets.API_URL }}
+      # 환경 변수를 사용하여 빌드
+      - run: flutter build apk --release --dart-define=API_URL=${{ secrets.API_URL }} --dart-define=GOOGLE_MAP_API_KEY=${{ secrets.GOOGLE_MAP_API_KEY }} --dart-define=NAVER_CLIENT_ID=${{ secrets.NAVER_CLIENT_ID }}
 
       # iOS 빌드 (macOS 환경에서만 가능)
-      - run: flutter build ios --release --dart-define API_URL=${{ secrets.API_URL }} --dart-define GOOGLE_MAP_API_KEY=${{ secrets.GOOGLE_MAP_API_KEY }}
+      - run: flutter build ios --release --dart-define=API_URL=${{ secrets.API_URL }} --dart-define=GOOGLE_MAP_API_KEY=${{ secrets.GOOGLE_MAP_API_KEY }} --dart-define=NAVER_CLIENT_ID=${{ secrets.NAVER_CLIENT_ID }}
         if: runner.os == 'macOS'
