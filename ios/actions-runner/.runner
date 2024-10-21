@@ -1,0 +1,9 @@
+﻿{
+  "agentId": 21,
+  "agentName": "home-runner",
+  "poolId": 1,
+  "poolName": "Default",
+  "serverUrl": "https://pipelinesghubeus7.actions.githubusercontent.com/JmalVMSZ4EBS0KoSHvC6RMmAQXb3WO9FAwjkwJraKYE4wA8kit/",
+  "gitHubUrl": "https://github.com/baeksaitong/SOFP_FRONT",
+  "workFolder": "Enter"
+}
