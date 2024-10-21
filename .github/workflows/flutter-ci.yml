@@ -2,8 +2,7 @@ name: Flutter CI
 
 on:
   push:
-    branches:
-      - ver3  # 브랜치 이름을 ver3로 변경
+    branches: [ "ver3" ]  # 또는 배포하려는 브랜치 이름
 
 jobs:
   testing:
