@@ -19,7 +19,7 @@ jobs:
 
       # 토큰 설정
       - name: Use GitHub Token
-        run: echo "${{ secrets.GITHUB_TOKEN }}"
+        run: echo "${{ secrets.GIT_TOKEN }}"
 
       # 의존성 설치
       - run: flutter pub get
