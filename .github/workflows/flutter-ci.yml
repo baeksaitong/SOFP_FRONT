@@ -6,8 +6,8 @@ on:
       - ver3  # 브랜치 이름을 ver3로 변경
 
 jobs:
-  build:
-    runs-on: home-runner
+  testing:
+    runs-on: ubuntu-latest
 
     steps:
       - uses: actions/checkout@v2

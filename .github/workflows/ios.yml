@@ -6,8 +6,8 @@ on:
       - ver3  # 또는 배포하려는 브랜치 이름
 
 jobs:
-  build:
-    runs-on: home-runner
+  testflight:
+    runs-on: ubuntu-latest
 
     steps:
       - name: Checkout the code
