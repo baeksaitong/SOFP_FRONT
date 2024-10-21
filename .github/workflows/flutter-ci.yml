@@ -17,6 +17,10 @@ jobs:
         with:
           flutter-version: 'stable'
 
+      # 토큰 설정
+      - name: Use GitHub Token
+        run: echo "${{ secrets.GITHUB_TOKEN }}"
+
       # 의존성 설치
       - run: flutter pub get
 
