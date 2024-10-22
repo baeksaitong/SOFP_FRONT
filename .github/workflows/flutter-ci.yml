@@ -25,28 +25,3 @@ jobs:
       # 안드로이드 빌드 (Ubuntu에서 사용 가능)
       - name: Build Android APK
         run: flutter build apk --release --dart-define=API_URL=${{ secrets.API_URL }} --dart-define=GOOGLE_MAP_API_KEY=${{ secrets.GOOGLE_MAP_API_KEY }} --dart-define=NAVER_CLIENT_ID=${{ secrets.NAVER_CLIENT_ID }}
-
-  ios-build:
-    runs-on: macos-latest  # iOS 빌드를 위해 macOS 환경 사용
-
-    steps:
-      - uses: actions/checkout@v2
-
-      # Flutter 설치
-      - name: Set up Flutter
-        uses: subosito/flutter-action@v2
-        with:
-          flutter-version: '3.24.3'  # Dart SDK 버전 3.x.x에 맞는 최신 Flutter 버전
-
-      # 의존성 설치
-      - name: Install dependencies
-        run: flutter pub get
-
-      # iOS 빌드
-      - name: Build iOS IPA
-        run: flutter build ios --release --dart-define=API_URL=${{ secrets.API_URL }} --dart-define=GOOGLE_MAP_API_KEY=${{ secrets.GOOGLE_MAP_API_KEY }} --dart-define=NAVER_CLIENT_ID=${{ secrets.NAVER_CLIENT_ID }}
-
-      # TestFlight 업로드
-      - name: Upload to TestFlight
-        run: |
-          xcrun altool --upload-app --type ios --file build/ios/ipa/*.ipa --apiKey ${{ secrets.APP_STORE_CONNECT_API_KEY }} --apiIssuer ${{ secrets.APP_STORE_CONNECT_ISSUER_ID }} --keyID ${{ secrets.APP_STORE_CONNECT_KEY_ID }}

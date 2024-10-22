@@ -2,31 +2,31 @@ name: Build and Distribute to TestFlight
 
 on:
   push:
-    branches: [ "main" ]  # 또는 배포하려는 브랜치 이름
+    branches:
+      - main # 또는 배포하려는 브랜치 이름
 
 jobs:
-  testflight:
-    runs-on: ubuntu-latest
+  ios-build:
+    runs-on: macos-latest  # iOS 빌드를 위해 macOS 환경 사용
 
     steps:
-      - name: Checkout the code
-        uses: actions/checkout@v2
+      - uses: actions/checkout@v2
 
+      # Flutter 설치
       - name: Set up Flutter
         uses: subosito/flutter-action@v2
         with:
-          flutter-version: 'stable'
+          flutter-version: '3.24.3'  # Dart SDK 버전 3.x.x에 맞는 최신 Flutter 버전
 
-      # 토큰 설정
-      - name: Use GitHub Token
-        run: echo "${{ secrets.GIT_TOKEN }}"
-
+      # 의존성 설치
       - name: Install dependencies
         run: flutter pub get
 
-      - name: Build iOS
-        run: flutter build ipa --release --dart-define=API_URL=${{ secrets.API_URL }} --dart-define=GOOGLE_MAP_API_KEY=${{ secrets.GOOGLE_MAP_API_KEY }} --dart-define=NAVER_CLIENT_ID=${{ secrets.NAVER_CLIENT_ID }}
+      # iOS 빌드
+      - name: Build iOS IPA
+        run: flutter build ios --release --dart-define=API_URL=${{ secrets.API_URL }} --dart-define=GOOGLE_MAP_API_KEY=${{ secrets.GOOGLE_MAP_API_KEY }} --dart-define=NAVER_CLIENT_ID=${{ secrets.NAVER_CLIENT_ID }}
 
+      # TestFlight 업로드
       - name: Upload to TestFlight
         run: |
           xcrun altool --upload-app --type ios --file build/ios/ipa/*.ipa --apiKey ${{ secrets.APP_STORE_CONNECT_API_KEY }} --apiIssuer ${{ secrets.APP_STORE_CONNECT_ISSUER_ID }} --keyID ${{ secrets.APP_STORE_CONNECT_KEY_ID }}
