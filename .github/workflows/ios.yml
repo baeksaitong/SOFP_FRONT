@@ -18,6 +18,21 @@ jobs:
         with:
           flutter-version: '3.24.3'  # Dart SDK 버전 3.x.x에 맞는 최신 Flutter 버전
 
+      # 인증서 및 프로비저닝 프로파일 설치
+      - name: Decrypt and Install Certificates
+        env:
+          CERTIFICATE_BASE64: ${{ secrets.IOS_CERTIFICATE_BASE64 }}
+          CERTIFICATE_PASSWORD: ${{ secrets.IOS_CERTIFICATE_PASSWORD }}
+          PROVISIONING_PROFILE_BASE64: ${{ secrets.IOS_PROVISIONING_PROFILE_BASE64 }}
+        run: |
+          echo "$CERTIFICATE_BASE64" | base64 --decode > ios_distribution.cer
+          echo "$PROVISIONING_PROFILE_BASE64" | base64 --decode > provisioning_profile.mobileprovision
+          security create-keychain -p "" build.keychain
+          security import ios_distribution.cer -k ~/Library/Keychains/build.keychain -P "$CERTIFICATE_PASSWORD" -T /usr/bin/codesign
+          security set-key-partition-list -S apple-tool:,apple: -s -k "" build.keychain
+          mkdir -p ~/Library/MobileDevice/Provisioning\ Profiles
+          cp provisioning_profile.mobileprovision ~/Library/MobileDevice/Provisioning\ Profiles/
+
       # 의존성 설치
       - name: Install dependencies
         run: flutter pub get

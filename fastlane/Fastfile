@@ -1,0 +1,14 @@
+default_platform(:ios)
+
+platform :ios do
+  desc "Push a new beta build to TestFlight"
+  lane :beta do
+    build_app(
+      workspace: "Runner.xcworkspace",   # Xcode 워크스페이스 경로
+      scheme: "Runner",                  # 스킴 이름
+      export_method: "app-store",        # 배포 방식, TestFlight 배포 시 "app-store"를 사용
+      clean: true                        # 빌드 전 클린 작업 수행
+    )
+    upload_to_testflight                 # TestFlight로 업로드
+  end
+end
