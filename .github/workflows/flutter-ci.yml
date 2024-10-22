@@ -2,11 +2,10 @@ name: Flutter CI
 
 on:
   push:
-    branches:
-      - ver3  # 브랜치 이름을 ver3로 변경
+    branches: [ "ver3" ]  # 또는 배포하려는 브랜치 이름
 
 jobs:
-  build:
+  testing:
     runs-on: ubuntu-latest
 
     steps:
@@ -16,6 +15,10 @@ jobs:
       - uses: subosito/flutter-action@v2
         with:
           flutter-version: 'stable'
+
+      # 토큰 설정
+      - name: Use GitHub Token
+        run: echo "${{ secrets.GIT_TOKEN }}"
 
       # 의존성 설치
       - run: flutter pub get

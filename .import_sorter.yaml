@@ -1,0 +1,12 @@
+custom_sort_order:
+  - dart:core
+  - dart:async
+  - dart:math
+  - dart:convert
+  - dart:io
+  - package:flutter/material.dart
+  - package:flutter/cupertino.dart
+  - package:flutter/widgets.dart
+  - third-party-packages
+  - package:
+  - relative

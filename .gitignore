@@ -1,0 +1,22 @@
+# Flutter/Dart/Pub related
+.dart_tool/
+.flutter-plugins
+.flutter-plugins-dependencies
+.packages
+.pub-cache
+build/
+ios/Pods/
+
+# IntelliJ related
+.idea/
+*.iml
+
+# VS Code related
+.vscode/
+
+# Generated files
+*.log
+pubspec.lock
+
+# Environment variables
+.env
