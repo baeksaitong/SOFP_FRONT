@@ -78,7 +78,7 @@ class _SearchResultImageState extends State<SearchResultImage> {
   void _initializeDrugs() async {
     showLoading(context, delayed: true); // 로딩 표시
 
-    await searchService.searchTextAndShape(context, 'null', null, null, null, null, null, null);
+    await searchService.searchImagePost(context, widget.firstImageFile, widget.secondImageFile);
 
     hideLoading(context); // 로딩 숨기기
 

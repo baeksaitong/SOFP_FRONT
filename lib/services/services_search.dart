@@ -1,7 +1,9 @@
+import 'dart:async';
 import 'dart:convert';
 import 'dart:ffi';
 import 'dart:io';
 
+import 'package:camera/camera.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:provider/provider.dart';
@@ -118,6 +120,59 @@ class SearchService extends APIClient {
       // 실패 처리
       print(response.statusCode);
       print('실패: ${utf8.decode(response.bodyBytes)}');
+    }
+  }
+
+  Future<void> searchImagePost(BuildContext context, XFile? firstImage, XFile? secondImage) async {
+    final currentProfile = Provider.of<ProfileProvider>(context, listen: false).currentProfile;
+    final String? accessToken = await _jwtManager.getAccessToken();
+
+    if (accessToken == null) {
+      print('엑세스 토큰이 없습니다.');
+      return;
+    }
+
+    final url = Uri.parse('http://3.39.8.147:8080/app/search/image');
+    var headers = {
+      'Authorization': 'Bearer $accessToken',
+    };
+
+    var request = http.MultipartRequest('POST', url);
+    request.headers.addAll(headers);
+    request.fields['profileId'] = currentProfile!.id;
+    request.fields['lastId'] = ''; // 필요시 수정
+    request.fields['limit'] = '10';  // 필요시 수정
+
+    // Attach images if available
+    if (firstImage != null) {
+      request.files.add(await http.MultipartFile.fromPath('images', firstImage.path));
+    }
+    if (secondImage != null) {
+      request.files.add(await http.MultipartFile.fromPath('images', secondImage.path));
+    }
+
+    // Create a client with a custom timeout
+    final client = http.Client();
+
+    try {
+      // Send the request with a custom timeout
+      var response = await client.send(request).timeout(Duration(seconds: 30)); // 30초로 타임아웃 설정
+      if (response.statusCode == 200) {
+        final jsonResponse = await response.stream.bytesToString();
+        DrugsManager().addDrugs(jsonResponse);
+        print('검색 완료 정보: $jsonResponse');
+        print('검색 완료: ${DrugsManager().drugs.length}개의 알약이 검색됨');
+      } else {
+        print('검색 실패: 상태 코드 ${response.statusCode}');
+      }
+    } on TimeoutException catch (e) {
+      print('타임아웃 발생: 요청 시간이 초과되었습니다. $e');
+    } on SocketException catch (e) {
+      print('SocketException 발생: $e');
+    } catch (e) {
+      print('예상치 못한 오류 발생: $e');
+    } finally {
+      client.close(); // 클라이언트 종료
     }
   }
 }
