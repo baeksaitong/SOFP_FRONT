@@ -5,7 +5,8 @@ import 'package:flutter/material.dart';
 
 // Package imports:
 import 'package:image_picker/image_picker.dart';
-import 'package:camera/camera.dart'; // 카메라 관련 패키지
+import 'package:camera/camera.dart';
+import 'package:path/path.dart' as path; // 파일 경로에서 이름과 확장자를 얻기 위한 패키지
 
 // Project imports:
 import 'package:sopf_front/constans/colors.dart';
@@ -24,7 +25,7 @@ import '../../../navigates.dart';
 class SearchResultImage extends StatefulWidget {
   final XFile? firstImageFile;
   final XFile? secondImageFile;
-  final List<CameraDescription> cameras; // 카메라 리스트 추가
+  final List<CameraDescription> cameras;
 
   const SearchResultImage({super.key, this.firstImageFile, this.secondImageFile, required this.cameras});
 
@@ -35,8 +36,8 @@ class SearchResultImage extends StatefulWidget {
 class _SearchResultImageState extends State<SearchResultImage> {
   List<DrugInfo> drugs = [];
   List<FavoriteInfo> favorites = [];
-  final FavoriteService favoriteService = FavoriteService(); // 즐겨찾기 관련 서비스 인스턴스
-  final SearchService searchService = SearchService(); // 검색 관련 서비스 인스턴스
+  final FavoriteService favoriteService = FavoriteService();
+  final SearchService searchService = SearchService();
 
   void _toggleBookmark(int index) {
     setState(() {
@@ -54,18 +55,35 @@ class _SearchResultImageState extends State<SearchResultImage> {
   @override
   void initState() {
     super.initState();
+
+    // 첫 번째 이미지 파일 정보 출력
+    if (widget.firstImageFile != null) {
+      String firstFileName = path.basename(widget.firstImageFile!.path);
+      String firstFileExtension = path.extension(widget.firstImageFile!.path);
+      print("First Image File Name: $firstFileName");
+      print("First Image File Extension: $firstFileExtension");
+    }
+
+    // 두 번째 이미지 파일 정보 출력
+    if (widget.secondImageFile != null) {
+      String secondFileName = path.basename(widget.secondImageFile!.path);
+      String secondFileExtension = path.extension(widget.secondImageFile!.path);
+      print("Second Image File Name: $secondFileName");
+      print("Second Image File Extension: $secondFileExtension");
+    }
+
     _initializeDrugs();
   }
 
   void _initializeDrugs() async {
-    showLoading(context, delayed: true); // Show loading spinner with delay
+    showLoading(context, delayed: true); // 로딩 표시
 
     await searchService.searchTextAndShape(context, 'null', null, null, null, null, null, null);
 
-    hideLoading(context); // Hide loading spinner
+    hideLoading(context); // 로딩 숨기기
 
     favorites = FavoritesManager().favorites;
-    drugs = DrugsManager().drugs; // GlobalManager에서 직접 데이터를 가져옵니다.
+    drugs = DrugsManager().drugs;
     for (var drug in drugs) {
       for (var favorite in favorites) {
         if (drug.serialNumber == favorite.serialNumber) {
@@ -77,12 +95,11 @@ class _SearchResultImageState extends State<SearchResultImage> {
     setState(() {});
   }
 
-  // **SearchImage로 이동하는 로직**
   void _retakePhotos() {
     Navigator.push(
       context,
       MaterialPageRoute(
-        builder: (context) => SearchImage(cameras: widget.cameras), // SearchImage로 이동
+        builder: (context) => SearchImage(cameras: widget.cameras),
       ),
     );
   }
@@ -100,7 +117,7 @@ class _SearchResultImageState extends State<SearchResultImage> {
               context,
               MaterialPageRoute(builder: (context) => HomePage()),
                   (Route<dynamic> route) => false,
-            ); // **뒤로 가기 동작**
+            );
           },
         ),
       ),
@@ -120,7 +137,7 @@ class _SearchResultImageState extends State<SearchResultImage> {
                         children: [
                           widget.firstImageFile != null
                               ? Image.file(
-                            File(widget.firstImageFile!.path), // **첫 번째 이미지**
+                            File(widget.firstImageFile!.path),
                             width: 100,
                             height: 100,
                           )
@@ -128,7 +145,7 @@ class _SearchResultImageState extends State<SearchResultImage> {
                           Gaps.w8,
                           widget.secondImageFile != null
                               ? Image.file(
-                            File(widget.secondImageFile!.path), // **두 번째 이미지**
+                            File(widget.secondImageFile!.path),
                             width: 100,
                             height: 100,
                           )
@@ -153,15 +170,15 @@ class _SearchResultImageState extends State<SearchResultImage> {
                       width: 86,
                       height: 40,
                       decoration: BoxDecoration(
-                        color: AppColors.vibrantTeal, // 버튼 색상
-                        borderRadius: BorderRadius.circular(8), // 모서리 구부리기
+                        color: AppColors.vibrantTeal,
+                        borderRadius: BorderRadius.circular(8),
                       ),
                       child: TextButton(
                         onPressed: _retakePhotos,
                         child: Text(
                           '재촬영하기',
                           style: AppTextStyles.body5M14.copyWith(
-                            color: AppColors.softTeal, // 글자 색상
+                            color: AppColors.softTeal,
                           ),
                         ),
                       ),
