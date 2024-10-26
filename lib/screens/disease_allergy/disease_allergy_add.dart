@@ -124,13 +124,16 @@ class _DiseaseAllergyAddState extends State<DiseaseAllergyAdd> {
               runSpacing: 8.0,
               children: allergies.map((allergy) {
                 return Chip(
-                  label: Text(allergy),
+                  label: Text(
+                    allergy,
+                    style: AppTextStyles.body4S14.copyWith(color: Colors.white), // 글씨체를 body4S14로 설정하고 색상은 흰색으로 설정
+                  ),
                   onDeleted: () {
                     setState(() {
                       allergies.remove(allergy);
                     });
                   },
-                  backgroundColor: AppColors.wh,
+                  backgroundColor: AppColors.vibrantTeal, // Chip의 배경색을 vibrantTeal로 설정
                   elevation: 0,
                   shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(8),
@@ -139,6 +142,7 @@ class _DiseaseAllergyAddState extends State<DiseaseAllergyAdd> {
                 );
               }).toList(),
             ),
+
             Gaps.h10,
             Container(
               width: double.infinity,

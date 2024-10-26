@@ -106,6 +106,7 @@ class _CalendarPageState extends State<CalendarPage> {
   Color _selectedColor = AppColors.customBlue; // 선택된 계정 색상
   List<String> _selectedProfileIds = []; // 선택된 프로필 ID 리스트
   final CategoryService categoryService = CategoryService();
+  Map<String, bool> _intakeCheckedState = {}; // 체크박스 상태 관리
 
   @override
   void initState() {
@@ -140,13 +141,133 @@ class _CalendarPageState extends State<CalendarPage> {
     );
   }
 
-  // 날짜를 선택할 때 호출되는 함수
+// 날짜를 선택할 때 호출되는 함수
   void _onDaySelected(DateTime selectedDay, DateTime focusedDay) {
     setState(() {
-      _selectedDay = selectedDay; // 선택된 날짜를 업데이트
-      _focusedDay = focusedDay; // 집중된 날짜를 업데이트
+      _selectedDay = selectedDay;
+      _focusedDay = focusedDay;
     });
+    _showDayDetailBottomSheet(context, selectedDay);
   }
+
+  void _showDayDetailBottomSheet(BuildContext context, DateTime selectedDay) {
+    showModalBottomSheet(
+      context: context,
+      isScrollControlled: true,
+      shape: const RoundedRectangleBorder(
+        borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
+      ),
+      builder: (BuildContext context) {
+        return StatefulBuilder(
+          builder: (BuildContext context, StateSetter setModalState) {
+            final events = _getEventsForDay(selectedDay); // 해당 날짜의 이벤트 가져오기
+            return DraggableScrollableSheet(
+              expand: false, // 화면을 가득 채우지 않도록 설정
+              initialChildSize: 0.4, // 초기 크기 설정
+              minChildSize: 0.3, // 최소 크기 설정
+              maxChildSize: 0.8, // 최대 크기 설정
+              builder: (BuildContext context, ScrollController scrollController) {
+                return Padding(
+                  padding: const EdgeInsets.all(16.0),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      // 선택된 날짜 표시
+                      Text(
+                        DateFormat('MM월 dd일').format(selectedDay),
+                        style: AppTextStyles.title2B20,
+                      ),
+                      const SizedBox(height: 16.0),
+                      // 이벤트가 없을 때 메시지 출력
+                      if (events.isEmpty)
+                        Expanded(
+                          child: Center(
+                            child: Column(
+                              mainAxisAlignment: MainAxisAlignment.center, // 중앙 배치
+                              children: [
+                                Text(
+                                  '해당 날짜에 복용 일정이 없습니다',
+                                  style: AppTextStyles.body2M16.copyWith(color: Colors.grey),
+                                ),
+                              ],
+                            ),
+                          ),
+                        )
+                      else
+                        Expanded(
+                          child: ListView.builder(
+                            controller: scrollController,
+                            itemCount: events.length,
+                            itemBuilder: (context, index) {
+                              final event = events[index];
+                              bool isChecked = _intakeCheckedState[event.name] ?? false;
+                              return Container(
+                                margin: const EdgeInsets.symmetric(vertical: 8.0),
+                                padding: const EdgeInsets.all(8.0),
+                                decoration: BoxDecoration(
+                                  color: AppColors.gr150,
+                                  border: Border(
+                                    left: BorderSide(
+                                      color: event.color,
+                                      width: 5.0,
+                                    ),
+                                  ),
+                                ),
+                                child: Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    Row(
+                                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                      children: [
+                                        Text(
+                                          event.name,
+                                          style: AppTextStyles.body2M16,
+                                        ),
+                                        IconButton(
+                                          icon: const Icon(Icons.arrow_forward),
+                                          onPressed: () {
+                                            // 이벤트 세부 정보 페이지로 이동
+                                          },
+                                        ),
+                                      ],
+                                    ),
+                                    const Divider(),
+                                    ...event.intakeTimeList.map((time) {
+                                      return Row(
+                                        children: [
+                                          Checkbox(
+                                            value: isChecked,
+                                            onChanged: (bool? value) {
+                                              setModalState(() {
+                                                _intakeCheckedState[event.name] = value ?? false;
+                                              });
+                                              _saveEvents(); // 체크박스 상태 업데이트 후 이벤트 저장
+                                            },
+                                            activeColor: AppColors.vibrantTeal,
+                                          ),
+                                          const SizedBox(width: 8.0),
+                                          Text(time),
+                                        ],
+                                      );
+                                    }).toList(),
+                                  ],
+                                ),
+                              );
+                            },
+                          ),
+                        ),
+                    ],
+                  ),
+                );
+              },
+            );
+          },
+        );
+      },
+    );
+  }
+
+
 
   // 달력 형식이 변경될 때 호출되는 함수
   void _onFormatChanged(CalendarFormat format) {
@@ -188,6 +309,9 @@ class _CalendarPageState extends State<CalendarPage> {
       _selectedAccount = selectedAccounts.keys.join(', ');
       _selectedColor = selectedAccounts.values.first;
       _selectedProfileIds = selectedProfileIds;
+
+      // 이전 계정의 이벤트 데이터를 초기화
+      _events.clear();
     });
 
     await _saveSelectedProfiles(); // 선택된 프로필 저장
@@ -333,6 +457,7 @@ class _CalendarPageState extends State<CalendarPage> {
             children: [
               _buildCalendarHeader(),
               SizedBox(
+                height: MediaQuery.of(context).size.height * 0.8,
                 child: TableCalendar(
                   locale: 'ko_KR', // 한국어 로케일 설정
                   firstDay: DateTime.utc(2010, 10, 16), // 달력의 시작 날짜
@@ -416,7 +541,6 @@ class _CalendarPageState extends State<CalendarPage> {
                 ),
               ),
               const SizedBox(height: 16.0), // 달력과 약 목록 사이에 공간 추가
-              _buildEventList(), // 약 목록 표시
             ],
           ),
         ),
@@ -454,7 +578,7 @@ class _CalendarPageState extends State<CalendarPage> {
           margin: const EdgeInsets.symmetric(vertical: 8.0),
           padding: const EdgeInsets.all(8.0),
           decoration: BoxDecoration(
-            color: Colors.white,
+            color: AppColors.gr150,
             border: Border(
               left: BorderSide(
                 color: event.color, // 이벤트 색상 사용
@@ -485,14 +609,14 @@ class _CalendarPageState extends State<CalendarPage> {
                 return Row(
                   children: [
                     Checkbox(
-                      value: false,
+                      value: _intakeCheckedState[event.name] ?? false, // 체크박스 상태
                       onChanged: (bool? value) {
                         setState(() {
-                          // Check if any of the intake times have been taken
+                          _intakeCheckedState[event.name] = value ?? false; // 상태 업데이트
                         });
-                        _saveEvents();
+                        _saveEvents(); // 이벤트 저장
                       },
-                      activeColor: Colors.blue, // 체크박스 색상 설정
+                      activeColor: AppColors.vibrantTeal, // 체크박스 색상 설정
                     ),
                     const SizedBox(width: 8.0),
                     Text(time),
