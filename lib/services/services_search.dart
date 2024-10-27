@@ -1,21 +1,19 @@
 import 'dart:async';
 import 'dart:convert';
-import 'dart:ffi';
 import 'dart:io';
 
 import 'package:camera/camera.dart';
 import 'package:flutter/cupertino.dart';
-import 'package:path_provider/path_provider.dart';
 import 'package:provider/provider.dart';
 import 'package:sopf_front/services/services_api_client.dart';
 import 'package:sopf_front/services/services_pill.dart';
 
 import '../managers/managers_drugs.dart';
-import '../managers/managers_favorites.dart';
 import '../managers/managers_jwt.dart';
 import '../models/models_drug_info_detail.dart';
 import '../providers/provider.dart';
 import 'package:http/http.dart' as http;
+import 'package:path/path.dart' as path; // 파일 경로에서 이름과 확장자를 얻기 위한 패키지
 
 class SearchService extends APIClient {
   final JWTManager _jwtManager = JWTManager();
@@ -143,13 +141,23 @@ class SearchService extends APIClient {
     request.fields['lastId'] = ''; // 필요시 수정
     request.fields['limit'] = '10';  // 필요시 수정
 
-    // Attach images if available
-    if (firstImage != null) {
-      request.files.add(await http.MultipartFile.fromPath('images', firstImage.path));
-    }
-    if (secondImage != null) {
-      request.files.add(await http.MultipartFile.fromPath('images', secondImage.path));
-    }
+    // 첫 번째 이미지 추가
+    request.files.add(
+      await http.MultipartFile.fromPath(
+        'images',  // 서버에서 받을 필드명
+        firstImage!.path,
+        filename: path.basename(firstImage.path),  // 파일명 설정
+      ),
+    );
+
+    // 두 번째 이미지 추가
+    request.files.add(
+      await http.MultipartFile.fromPath(
+        'images',
+        secondImage!.path,
+        filename: path.basename(secondImage.path),
+      ),
+    );
 
     // Create a client with a custom timeout
     final client = http.Client();
@@ -163,6 +171,7 @@ class SearchService extends APIClient {
         print('검색 완료 정보: $jsonResponse');
         print('검색 완료: ${DrugsManager().drugs.length}개의 알약이 검색됨');
       } else {
+        print('검색 실패: $response');
         print('검색 실패: 상태 코드 ${response.statusCode}');
       }
     } on TimeoutException catch (e) {

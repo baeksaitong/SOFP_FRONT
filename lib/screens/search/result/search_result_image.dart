@@ -61,6 +61,7 @@ class _SearchResultImageState extends State<SearchResultImage> {
       String firstFileName = path.basename(widget.firstImageFile!.path);
       String firstFileExtension = path.extension(widget.firstImageFile!.path);
       print("First Image File Name: $firstFileName");
+      print("First Image File Name: $firstFileName");
       print("First Image File Extension: $firstFileExtension");
     }
 
