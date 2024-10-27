@@ -912,6 +912,7 @@ class ShapeSearchPage extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
+        elevation: 0, // 그림자를 없애서 색 변화 방지
         leading: IconButton(
           icon: Icon(Icons.arrow_back),
           onPressed: () {

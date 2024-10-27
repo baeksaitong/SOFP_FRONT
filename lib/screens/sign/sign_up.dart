@@ -78,22 +78,26 @@ class _SignUpState extends State<SignUp> {
     );
   }
 
-
-  // 인증번호 전송 버튼 클릭 시 수행되는 함수
+  // 이메일 인증번호 전송 후 확인하는 함수
   void onSendVerificationButtonClicked() async {
     try {
-      await authService.mailSend(email);
-      setState(() {
-        buttonLabel = '인증번호 확인';
-        _timerStarted = true;
-      });
-      showCustomDialog(context, '인증번호 전송 완료', '이메일로 인증번호가 전송되었습니다.');
-    } catch (e) {
+      bool idVerified = await authService.mailSend(email);
 
-      showCustomDialog(context, '인증번호 전송 실패', '메일 전송에 실패했습니다. 다시 시도해주세요. $baseUrl');
+      if(idVerified) {
+        setState(() {
+          buttonLabel = '인증번호 확인';
+          _timerStarted = true;
+        });
+        showCustomDialog(context, '인증번호 전송 완료', '이메일로 인증번호가 전송되었습니다.');
+      } else {
+        showCustomDialog(context, '이미 존재하는 아이디입니다.', '다른 아이디로 시도해주세요.');
+      }
+    } catch (e) {
+      showCustomDialog(context, '인증번호 전송 실패', '메일 전송에 실패했습니다. 다시 시도해주세요.');
     }
   }
 
+  // 인증번호 확인 버튼 클릭 시 수행되는 함수
   void onVerificationButtonClicked() async {
     try {
       bool isVerified = await authService.mailCheck(email, emailCode!);
@@ -107,41 +111,29 @@ class _SignUpState extends State<SignUp> {
     }
   }
 
-  // 성별 선택 시 수행되는 함수
-  void onGenderChanged(String? value) {
-    setState(() {
-      gender = value ?? ''; // 선택된 성별을 저장
-    });
-  }
-
+  // 회원가입 버튼 클릭 시 수행되는 함수
   void onSignupButtonClicked() async {
     if (name.isEmpty || email.isEmpty || gender.isEmpty || dateOfBirth == null || _password == null || emailCode == null || !privacyPolicyAccepted) {
-      // 필수 입력 항목이 채워지지 않았을 때 모달
       showCustomDialog(context, '회원가입 실패', '모든 필수 입력란을 채워주시고, 개인정보 처리방침에 동의해주세요.');
-    } else {
-      try {
-        // 이메일 인증 번호 확인
-        bool isVerified = await authService.mailCheck(email, emailCode!);
-        if (!isVerified) {
-          // 인증번호가 맞지 않으면 모달 띄우기
-          showCustomDialog(context, '인증 실패', '인증번호가 올바르지 않습니다.');
-        } else {
-          // 모든 필수 입력란이 채워져 있으면 회원가입 진행
-          await authService.signUp(
-              name,
-              dateOfBirth!.replaceAll('.', '-'),
-              email,
-              gender == '남자' ? 'MALE' : 'FEMALE',
-              _password!,
-              emailSubscriptionAccepted
-          );
-          // 회원가입 성공 모달
-          showCustomDialog(context, '회원가입 완료', '회원가입이 성공적으로 완료되었습니다.');
-        }
-      } catch (e) {
-        // 회원가입 오류 처리
-        showCustomDialog(context, '회원가입 실패', '회원가입 중 오류가 발생했습니다. 다시 시도해주세요.');
-      }
+      return;
+    }
+
+    try {
+      // 회원가입 진행
+      await authService.signUp(
+        name,
+        dateOfBirth!.replaceAll('.', '-'),
+        email,
+        gender == '남자' ? 'MALE' : 'FEMALE',
+        _password!,
+        emailSubscriptionAccepted,
+      );
+
+      // 회원가입 성공 모달
+      showCustomDialog(context, '회원가입 완료', '회원가입이 성공적으로 완료되었습니다.');
+    } catch (e) {
+      // 회원가입 오류 처리
+      showCustomDialog(context, '회원가입 실패', '회원가입 중 오류가 발생했습니다. 다시 시도해주세요.');
     }
   }
 
@@ -171,6 +163,7 @@ class _SignUpState extends State<SignUp> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
+        elevation: 0, // 그림자를 없애서 색 변화 방지
         leading: IconButton(
           onPressed: () {
             Navigator.pop(context);

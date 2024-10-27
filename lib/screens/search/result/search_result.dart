@@ -217,6 +217,7 @@ class _SearchResultState extends State<SearchResult> {
     return Scaffold(
       backgroundColor: AppColors.wh,
       appBar: AppBar(
+        elevation: 0, // 그림자를 없애서 색 변화 방지
         scrolledUnderElevation: 0,
         backgroundColor: AppColors.wh,
         title: Text(

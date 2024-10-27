@@ -402,10 +402,11 @@ class _PillTaskingListState extends State<PillTaskingList> {
       backgroundColor: AppColors.wh,
       appBar: AppBar(
         title: Text('복용중인 알약', style: AppTextStyles.title1B24),
+        elevation: 0, // 그림자를 없애서 색 변화 방지
         leading: IconButton(
           icon: Icon(Icons.arrow_back),
           onPressed: () {
-            Navigator.pop(context);
+            navigateToHome();
           },
         ),
         backgroundColor: AppColors.wh,

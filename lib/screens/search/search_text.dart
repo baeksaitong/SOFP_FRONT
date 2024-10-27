@@ -170,6 +170,7 @@ class _TextSearchDetailState extends State<TextSearchDetail> {
     return Scaffold(
       backgroundColor: AppColors.wh,
       appBar: AppBar(
+
         backgroundColor: AppColors.wh,
         title: Text(
           '알약 검색',

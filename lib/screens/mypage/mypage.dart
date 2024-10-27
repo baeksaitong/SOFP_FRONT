@@ -4,6 +4,7 @@ import 'dart:convert';
 
 // Flutter imports:
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 
 // Package imports:
 import 'package:http/http.dart' as http;
@@ -350,7 +351,7 @@ class _MyPageState extends State<MyPage> {
 
     return Scaffold(
       backgroundColor: AppColors.wh,
-      body: ListView(
+        body: ListView(
         padding: const EdgeInsets.symmetric(horizontal: 20),
         children: [
           Gaps.h60,
@@ -363,8 +364,8 @@ class _MyPageState extends State<MyPage> {
           buildPageNavigationSection(context),
         ],
       ),
-    );
-  }
+  );
+}
 
   Widget buildProfileHeader() {
     final profileProvider = Provider.of<ProfileProvider>(context);

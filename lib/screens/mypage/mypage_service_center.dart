@@ -22,6 +22,7 @@ class _MyPageServiceCenterState extends State<MyPageServiceCenter> {
     return Scaffold(
       backgroundColor: AppColors.wh,
       appBar: AppBar(
+        elevation: 0, // 그림자를 없애서 색 변화 방지
         title: Text(
           '고객센터',
           style: AppTextStyles.body1S16.copyWith(color: AppColors.gr700),

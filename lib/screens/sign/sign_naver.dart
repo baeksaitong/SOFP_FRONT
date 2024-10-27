@@ -61,6 +61,7 @@ class _SignNaverState extends State<SignNaver> {
       url: widget.authUrl,
       appBar: AppBar(
         title: Text('Naver OAuth Login'),
+        elevation: 0, // 그림자를 없애서 색 변화 방지
       ),
     );
   }

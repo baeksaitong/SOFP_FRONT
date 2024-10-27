@@ -19,6 +19,7 @@ class _MultiProfileEditState extends State<MultiProfileEdit> {
     return Scaffold(
       backgroundColor: AppColors.wh,
       appBar: AppBar(
+        elevation: 0, // 그림자를 없애서 색 변화 방지
         title: Text('Multi Profile Edit'),
         backgroundColor: AppColors.vibrantTeal,
       ),

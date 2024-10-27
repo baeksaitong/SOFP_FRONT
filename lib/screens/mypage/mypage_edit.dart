@@ -104,6 +104,7 @@ class _MyPageEditState extends State<MyPageEdit> {
     return Scaffold(
       backgroundColor: AppColors.wh,
       appBar: AppBar(
+        elevation: 0, // 그림자를 없애서 색 변화 방지
         title: Text(
           '회원정보 변경',
           style: TextStyle(

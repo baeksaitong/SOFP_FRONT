@@ -51,6 +51,7 @@ class _MyPageBookMarkPageState extends State<MyPageBookMarkPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
+        elevation: 0, // 그림자를 없애서 색 변화 방지
         backgroundColor: AppColors.wh,
         leading: IconButton(
           icon: const Icon(Icons.arrow_back, color: Colors.black),
@@ -58,7 +59,6 @@ class _MyPageBookMarkPageState extends State<MyPageBookMarkPage> {
             Navigator.pop(context);
           },
         ),
-        elevation: 0,
       ),
       body: Container(
         color: AppColors.wh,

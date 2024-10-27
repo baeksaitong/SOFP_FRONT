@@ -72,6 +72,7 @@ class _PillCategoryPlusState extends State<PillCategoryPlus> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
+        elevation: 0, // 그림자를 없애서 색 변화 방지
         title: const Text('복용중인 알약', style: AppTextStyles.body1S16),
         centerTitle: true,
         leading: IconButton(

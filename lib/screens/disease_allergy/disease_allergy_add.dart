@@ -98,6 +98,7 @@ class _DiseaseAllergyAddState extends State<DiseaseAllergyAdd> {
       appBar: AppBar(
         automaticallyImplyLeading: false,
         backgroundColor: AppColors.wh,
+        elevation: 0, // 그림자를 없애서 색 변화 방지
       ),
       body: Padding(
         padding: const EdgeInsets.all(20.0),

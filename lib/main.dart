@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 
 // Package imports:
 import 'package:camera/camera.dart';
+import 'package:flutter/services.dart';
 
 import 'package:provider/provider.dart';
 import 'package:sopf_front/constans/text_styles.dart';
@@ -38,6 +39,12 @@ void main() async {
   if (cameras.isNotEmpty) {
     firstCamera = cameras.first;
   }
+
+  SystemChrome.setSystemUIOverlayStyle(
+    SystemUiOverlayStyle(
+      statusBarColor: AppColors.wh,
+    )
+  );
 
   runApp(
     MultiProvider(

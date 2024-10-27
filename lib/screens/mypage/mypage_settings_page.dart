@@ -22,6 +22,7 @@ class _MyPageSettingsPageState extends State<MyPageSettingsPage> {
     return Scaffold(
       backgroundColor: AppColors.wh,
       appBar: AppBar(
+        elevation: 0, // 그림자를 없애서 색 변화 방지
         title: Text('환경설정',
             style: AppTextStyles.body1S16.copyWith(color: AppColors.bk)),
         backgroundColor: Colors.white,
@@ -32,7 +33,6 @@ class _MyPageSettingsPageState extends State<MyPageSettingsPage> {
           },
         ),
         centerTitle: true,
-        elevation: 0,
       ),
       body: Padding(
         padding: const EdgeInsets.all(16.0),

@@ -107,7 +107,7 @@ class AuthService extends APIClient {
     }
   }
 
-  Future<void> mailSend(String email) async {
+  Future<bool> mailSend(String email) async {
     final url = buildUri('/app/verification/mail/send');
     final response = await http.post(
       url,
@@ -122,8 +122,10 @@ class AuthService extends APIClient {
     var decodedResponse = utf8.decode(response.bodyBytes);
 
     if (response.statusCode == 200) {
+      return true;
     } else {
       logger.e('전송 실패 : $decodedResponse'); // 오류 메시지가 일반 텍스트인 경우
+      return false;
     }
   }
 

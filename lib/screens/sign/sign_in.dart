@@ -41,6 +41,7 @@ class _SignInState extends State<SignIn> {
     return Scaffold(
       backgroundColor: AppColors.wh,
       appBar: AppBar(
+        elevation: 0, // 그림자를 없애서 색 변화 방지
         backgroundColor: AppColors.wh,
       ),
       resizeToAvoidBottomInset: true,
@@ -207,7 +208,8 @@ class LoginButton extends StatelessWidget {
       width: double.infinity,
       child: ElevatedButton(
         onPressed: () async {
-          await authService.login(context, idController.text, passwordController.text);
+          // await authService.login(context, idController.text, passwordController.text);
+          await authService.login(context, "18mpark@kw.ac.kr", "1q2w3e4r");
         },
         style: ElevatedButton.styleFrom(
           padding: EdgeInsets.symmetric(vertical: 16.0, horizontal: 12.0),

@@ -25,6 +25,7 @@ class SearchImage extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
+        elevation: 0, // 그림자를 없애서 색 변화 방지
         title: Text(
           '사진 검색',
           textAlign: TextAlign.center,

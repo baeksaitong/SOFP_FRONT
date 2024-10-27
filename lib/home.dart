@@ -154,6 +154,7 @@ class _HomePageState extends State<HomePage> {
       appBar: AppBar(
         automaticallyImplyLeading: false,
         backgroundColor: AppColors.wh,
+        elevation: 0, // 그림자를 없애서 색 변화 방지
       ),
       body: _widgetOptions.elementAt(_selectedIndex),
       bottomNavigationBar: CustomBottomNavigationBar(

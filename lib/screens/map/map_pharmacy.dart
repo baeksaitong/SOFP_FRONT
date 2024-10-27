@@ -454,6 +454,7 @@ class _MapPharmacyState extends State<MapPharmacy> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
+        elevation: 0, // 그림자를 없애서 색 변화 방지
         automaticallyImplyLeading: false,
         backgroundColor: AppColors.wh,
         title: Align(

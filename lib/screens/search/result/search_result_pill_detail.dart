@@ -100,6 +100,7 @@ class _SearchResultPillDetailState extends State<SearchResultPillDetail> {
 
     return Scaffold(
       appBar: AppBar(
+        elevation: 0, // 그림자를 없애서 색 변화 방지
         title: Text('알약 상세 정보', style: AppTextStyles.body1S16),
         centerTitle: true,
         leading: IconButton(

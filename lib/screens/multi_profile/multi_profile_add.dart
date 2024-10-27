@@ -90,6 +90,7 @@ class _MultiProfileAddState extends State<MultiProfileAdd> {
     return Scaffold(
       backgroundColor: AppColors.wh,
       appBar: AppBar(
+        elevation: 0, // 그림자를 없애서 색 변화 방지
         title: Text(
           '멀티프로필 추가',
           style: TextStyle(
