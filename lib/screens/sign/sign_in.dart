@@ -48,11 +48,17 @@ class _SignInState extends State<SignIn> {
         child: Container(
           height: MediaQuery.of(context).size.height,
           alignment: Alignment.center,
-          padding: EdgeInsets.all(20.0),
+          padding: const EdgeInsets.all(20.0),
           child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
+            mainAxisAlignment: MainAxisAlignment.start, // 전체적으로 위로 정렬
+            crossAxisAlignment: CrossAxisAlignment.center, // 가운데 정렬
             children: [
-              // Image.asset('promiss.png'),
+              Image.asset(
+                'assets/signinpill.png',
+                width: 150,
+                height: 150,
+              ),
+              SizedBox(height: 20), // 이미지 아래 간격
               CustomTextField(
                 label: '아이디',
                 hintText: '아이디를 입력하세요',
@@ -166,14 +172,13 @@ class SignupButton extends StatelessWidget {
           navigateToSignUp();
         },
         style: ElevatedButton.styleFrom(
-          padding: EdgeInsets.symmetric(
-              vertical: 16.0, horizontal: 12.0),
-          backgroundColor: Color(0xFFFFFFFF),
+          padding: EdgeInsets.symmetric(vertical: 16.0, horizontal: 12.0),
+          backgroundColor: const Color(0xFFFFFFFF),
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(10.0),
           ),
         ),
-        child: Text(
+        child: const Text(
           '회원가입',
           style: TextStyle(
             color: Color(0xFF0BC2AC),
@@ -188,7 +193,7 @@ class LoginButton extends StatelessWidget {
   LoginButton({
     super.key,
     required this.passwordController,
-    required this.idController
+    required this.idController,
   });
 
   final TextEditingController passwordController;
@@ -205,14 +210,13 @@ class LoginButton extends StatelessWidget {
           await authService.login(context, idController.text, passwordController.text);
         },
         style: ElevatedButton.styleFrom(
-          padding: EdgeInsets.symmetric(
-              vertical: 16.0, horizontal: 12.0),
-          backgroundColor: Color(0xFF0BC2AC),
+          padding: EdgeInsets.symmetric(vertical: 16.0, horizontal: 12.0),
+          backgroundColor: const Color(0xFF0BC2AC),
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(10.0),
           ),
         ),
-        child: Text(
+        child: const Text(
           '로그인',
           style: TextStyle(
             color: Colors.white,
@@ -233,7 +237,7 @@ class KakaoButton extends StatelessWidget {
         // Handle Kakao login button pressed
       },
       child: Ink.image(
-        image: AssetImage('assets/kakao_icon.png'),
+        image: const AssetImage('assets/kakao_icon.png'),
         width: 50,
         height: 50,
       ),
@@ -259,11 +263,10 @@ class NaverButton extends StatelessWidget {
             '&redirect_uri=$redirectUri'
             '&state=$state';
         navigatorKey.currentState?.push(
-            MaterialPageRoute(builder: (context) => SignNaver(authUrl))
-        );
+            MaterialPageRoute(builder: (context) => SignNaver(authUrl)));
       },
       child: Ink.image(
-        image: AssetImage('assets/naver_icon.png'),
+        image: const AssetImage('assets/naver_icon.png'),
         width: 50,
         height: 50,
       ),

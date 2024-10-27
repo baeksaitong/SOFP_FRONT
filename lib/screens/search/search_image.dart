@@ -7,6 +7,7 @@ import 'package:flutter/material.dart';
 import 'package:camera/camera.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:logger/logger.dart';
+import 'package:permission_handler/permission_handler.dart'; // 카메라 권한 요청을 위한 패키지
 
 // Project imports:
 import 'package:sopf_front/constans/colors.dart';
@@ -56,7 +57,6 @@ class _CameraScreenState extends State<CameraScreen> {
   XFile? _firstImageFile;
   XFile? _secondImageFile;
   final ImagePicker _picker = ImagePicker();
-  File? _latestImage;
   bool _isLoadingImage = false;
   bool _isTakingPicture = false;
 
@@ -65,12 +65,25 @@ class _CameraScreenState extends State<CameraScreen> {
   @override
   void initState() {
     super.initState();
+    _checkCameraPermission();
+  }
+
+  Future<void> _checkCameraPermission() async {
+    var status = await Permission.camera.status;
+    if (!status.isGranted) {
+      status = await Permission.camera.request();
+      if (!status.isGranted) {
+        _showErrorDialog('카메라 권한이 필요합니다.');
+        return;
+      }
+    }
     _initializeCamera();
   }
 
   Future<void> _initializeCamera() async {
     if (widget.cameras.isNotEmpty) {
-      _controller = CameraController(widget.cameras.first, ResolutionPreset.high);
+      _controller =
+          CameraController(widget.cameras.first, ResolutionPreset.high);
       await _controller!.initialize();
       setState(() {});
     }
@@ -78,7 +91,8 @@ class _CameraScreenState extends State<CameraScreen> {
 
   Future<void> _loadImagesFromGallery() async {
     try {
-      final List<XFile>? pickedFiles = await _picker.pickMultiImage();  // 여러 이미지를 선택하도록 변경
+      final List<XFile>? pickedFiles =
+          await _picker.pickMultiImage(); // 여러 이미지를 선택하도록 변경
       if (pickedFiles != null) {
         if (pickedFiles.length == 2) {
           // 정확히 2장의 사진이 선택되었을 때만 처리
@@ -176,7 +190,8 @@ class _CameraScreenState extends State<CameraScreen> {
       context: context,
       builder: (BuildContext context) {
         return AlertDialog(
-          title: Text('알림',
+          title: Text(
+            '알림',
             style: TextStyle(
               fontSize: 22,
               fontWeight: FontWeight.w600,
@@ -187,7 +202,8 @@ class _CameraScreenState extends State<CameraScreen> {
           content: Text('알약의 뒷면 촬영으로 넘어갈까요? \n다시 촬영하려면 아니오를 누르시오'),
           actions: <Widget>[
             TextButton(
-              child: Text('아니요',
+              child: Text(
+                '아니요',
                 style: TextStyle(
                   fontSize: 14,
                   fontWeight: FontWeight.w600,
@@ -203,7 +219,8 @@ class _CameraScreenState extends State<CameraScreen> {
               },
             ),
             TextButton(
-              child: Text('네',
+              child: Text(
+                '네',
                 style: TextStyle(
                   fontSize: 14,
                   fontWeight: FontWeight.w600,
@@ -290,7 +307,8 @@ class _CameraScreenState extends State<CameraScreen> {
       MaterialPageRoute(
         builder: (context) => SearchResultImage(
           firstImageFile: _firstImageFile, // **첫 번째 이미지 파일 전달**
-          secondImageFile: _secondImageFile, // **두 번째 이미지 파일 전달**
+          secondImageFile: _secondImageFile,
+          cameras: widget.cameras, // **두 번째 이미지 파일 전달**
         ),
       ),
     );
