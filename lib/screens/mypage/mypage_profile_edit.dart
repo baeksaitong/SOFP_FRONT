@@ -156,8 +156,11 @@ class _MyPageProfileEditState extends State<MyPageProfileEdit> {
                       backgroundImage: _image != null
                           ? FileImage(File(_image!.path))
                           : (_networkImageUrl != null && _networkImageUrl!.isNotEmpty
-                          ? NetworkImage(_networkImageUrl!) as ImageProvider<Object>
+                          ? (Uri.tryParse(_networkImageUrl!)?.isAbsolute == true
+                          ? NetworkImage(_networkImageUrl!)
+                          : AssetImage('assets/mypageEdit/user-icon.png') as ImageProvider)
                           : AssetImage('assets/mypageEdit/user-icon.png')),
+
                     ),
 
                   ),
