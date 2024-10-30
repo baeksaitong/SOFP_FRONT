@@ -8,7 +8,7 @@ import 'package:sopf_front/constans/gaps.dart';
 import 'package:sopf_front/managers/managers_global_response.dart';
 import 'package:sopf_front/managers/managers_jwt.dart';
 import 'package:sopf_front/models/models_profile.dart';
-import 'package:sopf_front/services/services_profile.dart'; // Profile 모델
+import 'package:sopf_front/services/services_profile.dart';
 
 class MyPageProfileEdit extends StatefulWidget {
   final String profileId;
@@ -21,7 +21,7 @@ class MyPageProfileEdit extends StatefulWidget {
 
 class _MyPageProfileEditState extends State<MyPageProfileEdit> {
   XFile? _image;
-  String? _networkImageUrl; // 프로필 이미지 URL을 저장할 변수
+  String? _networkImageUrl;
   final ImagePicker _picker = ImagePicker();
   final TextEditingController nameController = TextEditingController();
   final TextEditingController birthdateController = TextEditingController();
@@ -30,14 +30,15 @@ class _MyPageProfileEditState extends State<MyPageProfileEdit> {
   final ProfileService profileService = ProfileService();
 
   String gender = "MALE";
-  String color = "#FFFFFF";
-  bool isLoading = true; // 로딩 상태를 위한 변수
+  String color = "";  // 초기값 없이 빈 문자열 설정
+  ColorItem? selectedColorItem;
+  bool isLoading = true;
 
   @override
   void initState() {
     super.initState();
     birthdateController.addListener(_updateBirthdayFormat);
-    _loadProfileDetail(); // 프로필 상세 정보 로딩
+    _loadProfileDetail();
   }
 
   Future<void> _loadProfileDetail() async {
@@ -47,8 +48,8 @@ class _MyPageProfileEditState extends State<MyPageProfileEdit> {
         nameController.text = profileDetail.name;
         birthdateController.text = profileDetail.birthday;
         gender = profileDetail.gender;
-        color = profileDetail.color;
-        _networkImageUrl = profileDetail.imgURL ?? 'assets/mypageEdit/user-icon.png'; // 기본 이미지 처리
+        color = profileDetail.color;  // 서버에서 전달된 색상 이름 사용
+        _networkImageUrl = profileDetail.imgURL ?? 'assets/mypageEdit/user-icon.png';
       });
     } else {
       print('프로필 로드 실패');
@@ -146,7 +147,8 @@ class _MyPageProfileEditState extends State<MyPageProfileEdit> {
         child: Column(
           children: <Widget>[
             Center(
-              child: Column(
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.center,
                 children: <Widget>[
                   GestureDetector(
                     onTap: getImage,
@@ -160,14 +162,21 @@ class _MyPageProfileEditState extends State<MyPageProfileEdit> {
                           ? NetworkImage(_networkImageUrl!)
                           : AssetImage('assets/mypageEdit/user-icon.png') as ImageProvider)
                           : AssetImage('assets/mypageEdit/user-icon.png')),
-
                     ),
-
                   ),
-                  Gaps.h20,
+                  SizedBox(width: 16), // 아이콘과 버튼 간격 추가
+                  RgbButton(
+                    onColorSelected: (ColorItem selected) {
+                      setState(() {
+                        selectedColorItem = selected;
+                        color = selected.text; // 선택한 색상 이름으로 저장
+                      });
+                    },
+                  ),
                 ],
               ),
             ),
+            Gaps.h20,
             Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: <Widget>[
@@ -258,6 +267,7 @@ class _MyPageProfileEditState extends State<MyPageProfileEdit> {
   }
 }
 
+// CustomTextField 클래스 추가
 class CustomTextField extends StatelessWidget {
   final String label;
   final String hintText;
@@ -316,3 +326,180 @@ class CustomTextField extends StatelessWidget {
     );
   }
 }
+
+// RgbButton 클래스와 ColorItem 모델 추가
+class RgbButton extends StatefulWidget {
+  final Function(ColorItem) onColorSelected;
+
+  const RgbButton({Key? key, required this.onColorSelected}) : super(key: key);
+
+  @override
+  State<RgbButton> createState() => _RgbButtonState();
+}
+
+class _RgbButtonState extends State<RgbButton> {
+  ColorItem? selectedColorItem;
+  Color? finalColor;
+  String? finalText;
+
+  void resetSelection() {
+    setState(() {
+      selectedColorItem = null;
+      finalColor = null;
+      finalText = null;
+      for (var item in colorItems) {
+        item.isSelected = false;
+      }
+    });
+  }
+
+  Widget customRgbCircle() {
+    return Container(
+      height: 22,
+      width: 22,
+      decoration: BoxDecoration(
+        color: finalColor,
+        borderRadius: BorderRadius.all(Radius.circular(45)),
+      ),
+    );
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return OutlinedButton(
+      style: OutlinedButton.styleFrom(
+        side: BorderSide.none,
+        padding: EdgeInsets.zero,
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.all(Radius.circular(10)),
+        ),
+        backgroundColor: AppColors.wh,
+        minimumSize: Size(75.5, 75.5),
+      ),
+      onPressed: () async {
+        final ColorItem? selected = await showModalBottomSheet<ColorItem>(
+          context: context,
+          builder: (BuildContext context) {
+            return Container(
+              height: 300,
+              decoration: BoxDecoration(
+                borderRadius: BorderRadius.all(Radius.circular(20)),
+                color: AppColors.gr150,
+              ),
+              padding: EdgeInsets.fromLTRB(24, 30, 24, 0),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    '색상 선택',
+                    style: AppTextStyles.title3S18,
+                  ),
+                  Gaps.h16,
+                  Expanded(
+                    child: GridView.count(
+                      crossAxisCount: 8,
+                      crossAxisSpacing: 6,
+                      mainAxisSpacing: 10,
+                      childAspectRatio: (36 / 62),
+                      children: List.generate(colorItems.length, (index) {
+                        return GestureDetector(
+                          onTap: () {
+                            setState(() {
+                              if (selectedColorItem != null) {
+                                selectedColorItem!.isSelected = false;
+                              }
+                              selectedColorItem = colorItems[index];
+                              selectedColorItem!.isSelected = true;
+                            });
+                            Navigator.of(context).pop(selectedColorItem);
+                          },
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.center,
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              Container(
+                                height: 22,
+                                width: 22,
+                                decoration: BoxDecoration(
+                                  color: colorItems[index].color,
+                                  borderRadius: BorderRadius.all(Radius.circular(45)),
+                                  border: colorItems[index].isSelected
+                                      ? Border.all(width: 2.0, color: Colors.redAccent)
+                                      : null,
+                                ),
+                              ),
+                              Gaps.h10,
+                              Text(
+                                colorItems[index].text,
+                                textAlign: TextAlign.center,
+                                style: AppTextStyles.body5M14.copyWith(color: AppColors.gr800),
+                              )
+                            ],
+                          ),
+                        );
+                      }),
+                    ),
+                  ),
+                  Gaps.h32,
+                ],
+              ),
+            );
+          },
+        );
+        if (selected != null) {
+          setState(() {
+            finalColor = selected.color;
+            finalText = selected.text;
+            widget.onColorSelected(selected);
+            for (var item in colorItems) {
+              item.isSelected = false;
+            }
+          });
+        }
+      },
+      child: Column(
+        children: [
+          finalColor != null
+              ? customRgbCircle()
+              : Image.asset(
+            'assets/solar_pallete-2-bold-duotone.png',
+            width: 32,
+            height: 32,
+          ),
+          Gaps.h4,
+          Text(
+            finalText ?? '색상',
+            style: AppTextStyles.body5M14.copyWith(color: AppColors.bk),
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+class ColorItem {
+  final Color color;
+  final String text;
+  bool isSelected;
+
+  ColorItem({required this.color, required this.text, this.isSelected = false});
+}
+
+final List<ColorItem> colorItems = [
+  ColorItem(color: Colors.white, text: '하양'),
+  ColorItem(color: Colors.yellow, text: '노랑'),
+  ColorItem(color: Colors.orange, text: '주황'),
+  ColorItem(color: Colors.pink, text: '분홍'),
+  ColorItem(color: Colors.red, text: '빨강'),
+  ColorItem(color: Colors.brown, text: '갈색'),
+  ColorItem(color: Colors.lightGreen, text: '연두'),
+  ColorItem(color: Colors.green, text: '초록'),
+  ColorItem(color: Colors.blueGrey, text: '청록'),
+  ColorItem(color: Colors.blue, text: '파랑'),
+  ColorItem(color: Colors.indigo, text: '남색'),
+  ColorItem(color: Colors.deepPurple, text: '자주'),
+  ColorItem(color: Colors.purple, text: '보라'),
+  ColorItem(color: Colors.grey, text: '회색'),
+  ColorItem(color: Colors.black, text: '검정'),
+  ColorItem(color: Color(0x00d9d9d9), text: '투명'),
+];
