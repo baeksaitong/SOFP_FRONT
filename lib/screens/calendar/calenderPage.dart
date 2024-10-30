@@ -19,6 +19,7 @@ import 'package:sopf_front/screens/search/search_shape.dart';
 import '../../constans/colors.dart';
 import '../../constans/text_styles.dart';
 import '../../constans/gaps.dart';
+import '../../services/services_notification.dart';
 
 class CalendarDetails {
   final String id;
@@ -88,6 +89,30 @@ class CalendarDetailsManager {
 
   CalendarDetails? getCategoryDetails(String categoryId) {
     return calendarDetailsMap[categoryId];
+  }
+}
+
+// 약 복용 시간을 기반으로 알림을 예약하는 함수
+void scheduleIntakeNotifications(List<String> intakeTimeList, String medicationName) {
+  for (String time in intakeTimeList) {
+    DateTime now = DateTime.now();
+    List<String> timeParts = time.split(':');
+    DateTime scheduledTime = DateTime(
+      now.year,
+      now.month,
+      now.day,
+      int.parse(timeParts[0]), // 시간
+      int.parse(timeParts[1]), // 분
+    );
+
+    // 현재 시간 이후인 경우에만 알림 예약
+    if (scheduledTime.isAfter(now)) {
+      NotificationService.scheduleNotification(
+        scheduledTime,
+        '약 복용 알림',
+        '$medicationName 복용할 시간입니다.',
+      );
+    }
   }
 }
 
@@ -162,6 +187,12 @@ class _CalendarPageState extends State<CalendarPage> {
         return StatefulBuilder(
           builder: (BuildContext context, StateSetter setModalState) {
             final events = _getEventsForDay(selectedDay); // 해당 날짜의 이벤트 가져오기
+
+            // 알림 예약 호출 추가
+            for (final event in events) {
+              scheduleIntakeNotifications(event.intakeTimeList, event.name);
+            }
+
             return DraggableScrollableSheet(
               expand: false, // 화면을 가득 채우지 않도록 설정
               initialChildSize: 0.4, // 초기 크기 설정

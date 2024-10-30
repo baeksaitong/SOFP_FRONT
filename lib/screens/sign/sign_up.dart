@@ -355,12 +355,7 @@ class _SignUpState extends State<SignUp> {
                     flex: 2,
                     child: VerificationButton(
                       onPressed: () async {
-                        try {
-                          await authService.mailCheck(email, emailCode!);
-                          showCustomDialog(context, '이메일 인증 완료', '이메일 인증이 완료되었습니다.');
-                        } catch (error) {
-                          showCustomDialog(context, '인증 실패', '인증번호가 올바르지 않습니다.');
-                        }
+                        onVerificationButtonClicked();
                       },
                     ),
                   ),
@@ -397,14 +392,6 @@ class _SignUpState extends State<SignUp> {
               ElevatedButton(
                 onPressed: () async {
                   onSignupButtonClicked();
-                  final String? Birth = dateOfBirth?.replaceAll('.', '-');
-                  if (gender == "남자") {
-                    await authService.signUp(
-                        name, Birth!, email, "male", _password!, true);
-                  } else {
-                    await authService.signUp(
-                        name, Birth!, email, "female", _password!, true);
-                  }
                 },
                 style: ButtonStyle(
                   backgroundColor: MaterialStateProperty.all<Color>(

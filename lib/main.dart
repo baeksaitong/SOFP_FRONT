@@ -12,6 +12,7 @@ import 'package:sopf_front/constans/text_styles.dart';
 // Project imports:
 import 'package:sopf_front/providers/provider.dart';
 import 'package:sopf_front/screens/sign/sign_in.dart';
+import 'package:sopf_front/services/services_notification.dart';
 import 'constans/colors.dart';
 import 'home.dart';
 import 'providers/provider_loading.dart';
@@ -46,6 +47,14 @@ void main() async {
     )
   );
 
+  WidgetsFlutterBinding.ensureInitialized();
+// NotificationService 초기화
+  await NotificationService.initialize();
+
+  // 지금부터 5초 후에 알림 테스트
+  DateTime now = DateTime.now();
+  DateTime scheduledTime = now.add(Duration(seconds: 5));
+  NotificationService.scheduleNotification(scheduledTime, "테스트 알림", "이것은 테스트 알림입니다.");
   runApp(
     MultiProvider(
       providers: [
