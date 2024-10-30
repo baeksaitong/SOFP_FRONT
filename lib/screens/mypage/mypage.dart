@@ -11,8 +11,8 @@ import 'package:provider/provider.dart';
 // Project imports:
 import 'package:sopf_front/constans/colors.dart';
 import 'package:sopf_front/constans/text_styles.dart';
-
 import 'package:sopf_front/navigates.dart';
+import 'package:sopf_front/screens/multi_profile/multi_profile_add.dart';
 import '../../constans/gaps.dart';
 import '../../managers/managers_jwt.dart';
 import '../sign/sign_in.dart';
@@ -20,11 +20,128 @@ import 'mypage_edit.dart';
 import 'mypage_profile_edit.dart';
 import '../../providers/provider.dart';
 
+class Profile {
+  final String id;
+  final String name;
+  final String color;
+  final String? imgURL;
+
+  Profile({
+    required this.id,
+    required this.name,
+    required this.color,
+    this.imgURL,
+  });
+
+  Map<String, dynamic> toJson() => {
+    'id': id,
+    'name': name,
+    'color': color,
+    'imgURL': imgURL,
+  };
+}
+
 class MyPage extends StatefulWidget {
   const MyPage({super.key});
 
   @override
   _MyPageState createState() => _MyPageState();
+}
+
+class MultiProfileBottomSheet extends StatelessWidget {
+  final Function() onProfileAdd;
+
+  const MultiProfileBottomSheet({Key? key, required this.onProfileAdd}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    final profileProvider = Provider.of<ProfileProvider>(context, listen: false);
+
+    return Container(
+      decoration: BoxDecoration(
+        borderRadius: BorderRadius.all(Radius.circular(20)),
+        color: AppColors.wh,
+      ),
+      child: Padding(
+        padding: EdgeInsets.symmetric(horizontal: 24, vertical: 16),
+        child: SingleChildScrollView(
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Gaps.h20,
+              Text(
+                '멀티 프로필',
+                style: AppTextStyles.title3S18.copyWith(color: AppColors.gr800),
+              ),
+              Gaps.h16,
+              ListView.builder(
+                shrinkWrap: true,
+                physics: NeverScrollableScrollPhysics(),
+                itemCount: profileProvider.profileList.length,
+                itemBuilder: (context, index) {
+                  final profile = profileProvider.profileList[index];
+                  return Column(
+                    children: [
+                      InkWell(
+                        onTap: () {
+                          profileProvider.setCurrentProfile(profile);
+                          Navigator.pop(context);
+                        },
+                        child: Container(
+                          height: 48,
+                          color: AppColors.gr150,
+                          child: Row(
+                            children: [
+                              Container(
+                                width: 2,
+                                color: getColorFromText(profile.color),
+                              ),
+                              Gaps.w12,
+                              CircleAvatar(
+                                backgroundColor: getColorFromText(profile.color),
+                                radius: 10,
+                              ),
+                              Gaps.w12,
+                              Text(
+                                profile.name,
+                                style: AppTextStyles.body2M16.copyWith(color: AppColors.gr900),
+                              ),
+                            ],
+                          ),
+                        ),
+                      ),
+                      if (index != profileProvider.profileList.length - 1) Gaps.h10,
+                    ],
+                  );
+                },
+              ),
+              Center(
+                child: Container(
+                  width: 335,
+                  height: 52,
+                  child: ElevatedButton(
+                    onPressed: onProfileAdd,
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor: AppColors.softTeal,
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(8),
+                      ),
+                    ),
+                    child: Text(
+                      '프로필 추가하기',
+                      style: AppTextStyles.body1S16.copyWith(color: AppColors.vibrantTeal),
+                    ),
+                  ),
+                ),
+              ),
+              Gaps.h24,
+            ],
+          ),
+        ),
+      ),
+    );
+  }
 }
 
 class _MyPageState extends State<MyPage> {
@@ -136,7 +253,7 @@ class _MyPageState extends State<MyPage> {
       );
       if (response.statusCode == 200) {
         print('Allergies and diseases updated successfully.');
-        fetchAllergiesAndDiseases(); // 업데이트 후 다시 불러오기
+        fetchAllergiesAndDiseases();
       } else {
         print('Failed to update allergies and diseases. Status code: ${response.statusCode}');
       }
@@ -160,7 +277,7 @@ class _MyPageState extends State<MyPage> {
       );
       if (response.statusCode == 200) {
         print('Medications updated successfully.');
-        fetchMedications(); // 업데이트 후 다시 불러오기
+        fetchMedications();
       } else {
         print('Failed to update medications. Status code: ${response.statusCode}');
       }
@@ -188,8 +305,7 @@ class _MyPageState extends State<MyPage> {
 
         if (response.statusCode == 200) {
           setState(() {
-            searchResults = List<String>.from(
-                json.decode(utf8.decode(response.bodyBytes))['DiseaseAllergyList']);
+            searchResults = List<String>.from(json.decode(utf8.decode(response.bodyBytes))['DiseaseAllergyList']);
           });
         } else {
           print('Failed to search allergies. Status code: ${response.statusCode}');
@@ -211,8 +327,7 @@ class _MyPageState extends State<MyPage> {
                 child: Column(
                   mainAxisSize: MainAxisSize.min,
                   children: [
-                    Text("알레르기 & 질병 수정",
-                        style: TextStyle(fontSize: 16, fontWeight: FontWeight.w600)),
+                    Text("알레르기 & 질병 수정", style: TextStyle(fontSize: 16, fontWeight: FontWeight.w600)),
                     Gaps.h10,
                     TextField(
                       controller: textEditingController,
@@ -223,10 +338,7 @@ class _MyPageState extends State<MyPage> {
                           child: TextButton(
                             child: Text(
                               "추가 +",
-                              style: TextStyle(
-                                color: AppColors.wh,
-                                fontWeight: FontWeight.w600,
-                              ),
+                              style: TextStyle(color: AppColors.wh, fontWeight: FontWeight.w600),
                             ),
                             onPressed: () {},
                           ),
@@ -237,7 +349,7 @@ class _MyPageState extends State<MyPage> {
                       ),
                       onChanged: (value) {
                         setModalState(() {
-                          onSearch(value); // 실시간 검색
+                          onSearch(value);
                         });
                       },
                     ),
@@ -250,9 +362,7 @@ class _MyPageState extends State<MyPage> {
                           bool isSelected = _selectedAllergiesanddisease.contains(item);
                           return ListTile(
                             title: Text(item),
-                            trailing: isSelected
-                                ? Icon(Icons.check_box)
-                                : Icon(Icons.check_box_outline_blank),
+                            trailing: isSelected ? Icon(Icons.check_box) : Icon(Icons.check_box_outline_blank),
                             onTap: () {
                               setModalState(() {
                                 toggleSelection(item);
@@ -266,9 +376,9 @@ class _MyPageState extends State<MyPage> {
                     Gaps.h20,
                     ElevatedButton(
                       onPressed: () {
-                        Navigator.pop(context); // 닫기 전에 상태 업데이트
-                        updateAllergiesAndDiseases(); // 서버로 업데이트 요청
-                        setState(() {}); // InfoSection 업데이트를 위한 상태 갱신
+                        Navigator.pop(context);
+                        updateAllergiesAndDiseases();
+                        setState(() {});
                       },
                       style: ElevatedButton.styleFrom(
                         backgroundColor: AppColors.softTeal,
@@ -339,8 +449,7 @@ class _MyPageState extends State<MyPage> {
                 child: Column(
                   mainAxisSize: MainAxisSize.min,
                   children: [
-                    Text("내가 복용 중인 약 수정",
-                        style: TextStyle(fontSize: 18, fontWeight: FontWeight.w600)),
+                    Text("내가 복용 중인 약 수정", style: TextStyle(fontSize: 18, fontWeight: FontWeight.w600)),
                     Gaps.h10,
                     TextField(
                       controller: textEditingController,
@@ -358,7 +467,7 @@ class _MyPageState extends State<MyPage> {
                       ),
                       onChanged: (value) {
                         setModalState(() {
-                          onSearch(value); // 실시간 검색
+                          onSearch(value);
                         });
                       },
                     ),
@@ -371,9 +480,7 @@ class _MyPageState extends State<MyPage> {
                           bool isSelected = _selectedMedications.contains(item);
                           return ListTile(
                             title: Text(item),
-                            trailing: isSelected
-                                ? Icon(Icons.check_box)
-                                : Icon(Icons.check_box_outline_blank),
+                            trailing: isSelected ? Icon(Icons.check_box) : Icon(Icons.check_box_outline_blank),
                             onTap: () {
                               setModalState(() {
                                 toggleSelectionMedications(item);
@@ -387,9 +494,9 @@ class _MyPageState extends State<MyPage> {
                     Gaps.h20,
                     ElevatedButton(
                       onPressed: () {
-                        Navigator.pop(context); // 닫기 전에 상태 업데이트
-                        updateMedications(); // 서버로 업데이트 요청
-                        setState(() {}); // InfoSection 업데이트를 위한 상태 갱신
+                        Navigator.pop(context);
+                        updateMedications();
+                        setState(() {});
                       },
                       style: ElevatedButton.styleFrom(
                         backgroundColor: AppColors.softTeal,
@@ -451,10 +558,8 @@ class _MyPageState extends State<MyPage> {
           Gaps.h60,
           buildProfileHeader(),
           Gaps.h60,
-          buildInfoSection(
-              context, '내 알레르기 및 질병', "알레르기 및 질병 정보를 입력하세요.", 'allergy'),
-          buildInfoSection(
-              context, '내가 복용 중인 약', "복용 중인 약 정보를 입력하세요.", 'medication'),
+          buildInfoSection(context, '내 알레르기 및 질병', "알레르기 및 질병 정보를 입력하세요.", 'allergy'),
+          buildInfoSection(context, '내가 복용 중인 약', "복용 중인 약 정보를 입력하세요.", 'medication'),
           buildPageNavigationSection(context),
         ],
       ),
@@ -485,10 +590,7 @@ class _MyPageState extends State<MyPage> {
                 padding: EdgeInsets.only(left: 20),
                 child: Text(
                   '${currentProfile?.name ?? '이름없음'} 님',
-                  style: TextStyle(
-                      fontSize: 24,
-                      fontFamily: 'Pretendard',
-                      fontWeight: FontWeight.w700),
+                  style: TextStyle(fontSize: 24, fontFamily: 'Pretendard', fontWeight: FontWeight.w700),
                 ),
               ),
               TextButton(
@@ -497,8 +599,7 @@ class _MyPageState extends State<MyPage> {
                     Navigator.push(
                       context,
                       MaterialPageRoute(
-                        builder: (context) =>
-                            MyPageEdit(profileId: currentProfile.id),
+                        builder: (context) => MyPageEdit(profileId: currentProfile.id),
                       ),
                     );
                   }
@@ -519,8 +620,7 @@ class _MyPageState extends State<MyPage> {
                   Navigator.push(
                     context,
                     MaterialPageRoute(
-                      builder: (context) =>
-                          MyPageProfileEdit(profileId: currentProfile?.id ?? ''),
+                      builder: (context) => MyPageProfileEdit(profileId: currentProfile?.id ?? ''),
                     ),
                   );
                 },
@@ -542,14 +642,9 @@ class _MyPageState extends State<MyPage> {
     );
   }
 
-  Widget buildInfoSection(BuildContext context, String title, String prompt,
-      String type) {
-    List<String> selectedItems = type == 'allergy'
-        ? _allergiesanddisease
-        : _medications;
-    Function showEditSheet = type == 'allergy'
-        ? showEditAllergiesBottomSheet
-        : showEditMedicationsBottomSheet;
+  Widget buildInfoSection(BuildContext context, String title, String prompt, String type) {
+    List<String> selectedItems = type == 'allergy' ? _allergiesanddisease : _medications;
+    Function showEditSheet = type == 'allergy' ? showEditAllergiesBottomSheet : showEditMedicationsBottomSheet;
 
     return Container(
       width: double.infinity,
@@ -630,6 +725,16 @@ class _MyPageState extends State<MyPage> {
     return Column(
       children: [
         buildNavigationItem(context, Icons.person, "멀티 프로필", () {
+          showModalBottomSheet(
+            context: context,
+            builder: (context) => MultiProfileBottomSheet(
+              onProfileAdd: () {
+                Navigator.pop(context);
+              },
+            ),
+          ).then((_) {
+            fetchProfile();
+          });
         }),
         Gaps.h16,
         buildNavigationItem(context, Icons.star, "즐겨찾기", () {
@@ -655,7 +760,6 @@ class _MyPageState extends State<MyPage> {
     );
   }
 
-
   Future<void> _logout(BuildContext context) async {
     await JWTManager().deleteTokens();
     Navigator.pushAndRemoveUntil(
@@ -665,8 +769,7 @@ class _MyPageState extends State<MyPage> {
     );
   }
 
-  Widget buildNavigationItem(BuildContext context, IconData icon, String title,
-      VoidCallback onTap) {
+  Widget buildNavigationItem(BuildContext context, IconData icon, String title, VoidCallback onTap) {
     return ListTile(
       leading: Icon(icon, color: AppColors.gr700),
       title: Text(
