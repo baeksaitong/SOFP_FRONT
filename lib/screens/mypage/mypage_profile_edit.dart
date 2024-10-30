@@ -96,12 +96,20 @@ class _MyPageProfileEditState extends State<MyPageProfileEdit> {
       print('프로필이 성공적으로 저장되었습니다');
 
       profileService.profileAll();
+
+      // 저장 성공 시 MyPage로 이동
+      Navigator.pop(context); // 이전 화면으로 돌아감
+
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text('프로필 정보를 반영하려면 애플리케이션을 재시동해주세요.')),
+      );
     } else {
       print('Failed to save profile');
       print('Status code: ${response.statusCode}');
       print('Response body: ${await response.stream.bytesToString()}');
     }
   }
+
 
   @override
   void dispose() {
