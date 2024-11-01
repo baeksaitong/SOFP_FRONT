@@ -21,6 +21,7 @@ import 'package:sopf_front/services/services_disease_allergy.dart';
 import 'package:sopf_front/services/services_pill.dart';
 import '../../constans/gaps.dart';
 import '../../managers/managers_jwt.dart';
+import '../multi_profile/multi_profile_add.dart';
 import '../sign/sign_in.dart';
 import 'mypage_edit.dart';
 import 'mypage_profile_edit.dart';
@@ -31,6 +32,102 @@ class MyPage extends StatefulWidget {
 
   @override
   _MyPageState createState() => _MyPageState();
+}
+
+class MultiProfileBottomSheet extends StatelessWidget {
+  final Function() onProfileAdd;
+
+  const MultiProfileBottomSheet({Key? key, required this.onProfileAdd}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    final profileProvider = Provider.of<ProfileProvider>(context, listen: false);
+
+    return Container(
+      decoration: BoxDecoration(
+        borderRadius: BorderRadius.all(Radius.circular(20)),
+        color: AppColors.wh,
+      ),
+      child: Padding(
+        padding: EdgeInsets.symmetric(horizontal: 24, vertical: 16),
+        child: SingleChildScrollView(
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Gaps.h20,
+              Text(
+                '멀티 프로필',
+                style: AppTextStyles.title3S18.copyWith(color: AppColors.gr800),
+              ),
+              Gaps.h16,
+              ListView.builder(
+                shrinkWrap: true,
+                physics: NeverScrollableScrollPhysics(),
+                itemCount: profileProvider.profileList.length,
+                itemBuilder: (context, index) {
+                  final profile = profileProvider.profileList[index];
+                  return Column(
+                    children: [
+                      InkWell(
+                        onTap: () {
+                          profileProvider.setCurrentProfile(profile);
+                          Navigator.pop(context);
+                        },
+                        child: Container(
+                          height: 48,
+                          color: AppColors.gr150,
+                          child: Row(
+                            children: [
+                              Container(
+                                width: 2,
+                                color: getColorFromText(profile.color),
+                              ),
+                              Gaps.w12,
+                              CircleAvatar(
+                                backgroundColor: getColorFromText(profile.color),
+                                radius: 10,
+                              ),
+                              Gaps.w12,
+                              Text(
+                                profile.name,
+                                style: AppTextStyles.body2M16.copyWith(color: AppColors.gr900),
+                              ),
+                            ],
+                          ),
+                        ),
+                      ),
+                      if (index != profileProvider.profileList.length - 1) Gaps.h10,
+                    ],
+                  );
+                },
+              ),
+              Center(
+                child: Container(
+                  width: 335,
+                  height: 52,
+                  child: ElevatedButton(
+                    onPressed: onProfileAdd,
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor: AppColors.softTeal,
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(8),
+                      ),
+                    ),
+                    child: Text(
+                      '프로필 추가하기',
+                      style: AppTextStyles.body1S16.copyWith(color: AppColors.vibrantTeal),
+                    ),
+                  ),
+                ),
+              ),
+              Gaps.h24,
+            ],
+          ),
+        ),
+      ),
+    );
+  }
 }
 
 class _MyPageState extends State<MyPage> {
@@ -536,6 +633,16 @@ class _MyPageState extends State<MyPage> {
     return Column(
       children: [
         buildNavigationItem(context, Icons.person, "멀티 프로필", () {
+          showModalBottomSheet(
+            context: context,
+            builder: (context) => MultiProfileBottomSheet(
+              onProfileAdd: () {
+                Navigator.pop(context);
+              },
+            ),
+          ).then((_) {
+            fetchProfile();
+          });
         }),
         Gaps.h16,
         buildNavigationItem(context, Icons.star, "즐겨찾기", () {

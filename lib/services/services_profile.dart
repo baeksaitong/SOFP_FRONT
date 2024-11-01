@@ -175,9 +175,11 @@ class ProfileService extends APIClient {
 
       if (updatedProfiles != null) {
         // ProfileProvider에 프로필 목록과 현재 프로필 상태 갱신
-        final profileProvider = Provider.of<ProfileProvider>(context, listen: false);
+        final profileProvider = Provider.of<ProfileProvider>(
+            context, listen: false);
         profileProvider.setProfileList(updatedProfiles.profileList);
-        profileProvider.setCurrentProfile(updatedProfiles.profileList[0]); // 예시로 첫번째 프로필 선택
+        profileProvider.setCurrentProfile(
+            updatedProfiles.profileList[0]); // 예시로 첫번째 프로필 선택
       }
     } else {
       logger.e('Response body: ${await response.stream.bytesToString()}');
