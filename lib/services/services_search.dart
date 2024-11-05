@@ -169,14 +169,16 @@ class SearchService extends APIClient {
       // Send the request with a custom timeout
       var response = await client
           .send(request)
-          .timeout(Duration(seconds: 30)); // 30초로 타임아웃 설정
+          .timeout(Duration(seconds: 300)); // 30초로 타임아웃 설정
       if (response.statusCode == 200) {
         final jsonResponse = await response.stream.bytesToString();
         DrugsManager().addDrugs(jsonResponse);
         print('검색 완료 정보: $jsonResponse');
         print('검색 완료: ${DrugsManager().drugs.length}개의 알약이 검색됨');
       } else {
-        print('검색 실패: $response');
+        // 응답 내용을 확인하기 위해 bytesToString() 사용
+        final errorResponse = await response.stream.bytesToString();
+        print('검색 실패: $errorResponse');
         print('검색 실패: 상태 코드 ${response.statusCode}');
       }
     } on TimeoutException catch (e) {
