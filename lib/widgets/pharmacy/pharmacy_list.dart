@@ -1,9 +1,6 @@
 // Flutter imports:
 import 'package:flutter/material.dart';
 
-// Project imports:
-import 'package:sopf_front/constans/colors.dart';
-
 class PharmacyList extends StatelessWidget {
   final ScrollController scrollController;
   final List<Map<String, dynamic>> list;

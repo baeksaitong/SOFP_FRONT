@@ -1,5 +1,3 @@
-import 'dart:io';
-
 // Flutter imports:
 import 'package:flutter/material.dart';
 
@@ -11,9 +9,7 @@ import 'package:permission_handler/permission_handler.dart'; // 카메라 권한
 
 // Project imports:
 import 'package:sopf_front/constans/colors.dart';
-import 'package:sopf_front/constans/text_styles.dart';
 import 'package:sopf_front/constans/gaps.dart';
-import 'package:sopf_front/navigates.dart';
 import 'result/search_result_image.dart';
 
 class SearchImage extends StatelessWidget {

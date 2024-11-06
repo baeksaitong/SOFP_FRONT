@@ -5,7 +5,6 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 // Project imports:
-import 'package:sopf_front/managers/managers_global_response.dart';
 import 'package:sopf_front/providers/provider.dart';
 import 'package:sopf_front/services/services_category.dart';
 import 'package:sopf_front/services/services_pill.dart';
@@ -17,7 +16,6 @@ import '../../models/models_category.dart';
 import '../../models/models_taking_drugs_info.dart';
 import '../../navigates.dart';
 import '../search/search_shape.dart';
-import '../search/search_text.dart';
 
 import '../../constans/text_styles.dart'; // 원하는 글꼴 스타일이 정의된 파일을 임포트
 

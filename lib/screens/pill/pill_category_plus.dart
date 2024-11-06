@@ -7,7 +7,6 @@ import 'package:sopf_front/navigates.dart';
 import 'package:sopf_front/services/services_category.dart';
 import '../../constans/gaps.dart';
 
-import 'package:intl/intl.dart'; // 추가: 시간을 형식에 맞게 변환하기 위해 사용
 import '../../constans/colors.dart'; // 색상 정의 파일
 import '../../constans/text_styles.dart'; // 텍스트 스타일 정의 파일
 

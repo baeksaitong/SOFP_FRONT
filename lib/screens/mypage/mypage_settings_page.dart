@@ -4,7 +4,6 @@ import 'package:flutter/material.dart';
 // Project imports:
 import '../../constans/colors.dart';
 import '../../constans/text_styles.dart';
-import '../../constans/gaps.dart';
 
 class MyPageSettingsPage extends StatefulWidget {
   const MyPageSettingsPage({super.key});

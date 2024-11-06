@@ -1,9 +1,6 @@
 // Flutter imports:
 import 'package:flutter/material.dart';
 
-// Project imports:
-import 'package:sopf_front/constans/colors.dart';
-import 'package:sopf_front/constans/text_styles.dart';
 
 class PharmacyDetail extends StatelessWidget {
   final ScrollController scrollController;

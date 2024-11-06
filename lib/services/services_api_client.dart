@@ -1,5 +1,3 @@
-import 'dart:convert';
-
 import 'package:sopf_front/managers/managers_jwt.dart';
 
 class APIClient {

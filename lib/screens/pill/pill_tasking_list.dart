@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:sopf_front/managers/managers_global_response.dart';
 import 'package:sopf_front/navigates.dart';
 import 'package:sopf_front/providers/provider.dart';
 import 'package:sopf_front/services/services_category.dart';
@@ -13,7 +12,6 @@ import '../../managers/managers_taking_drugs.dart';
 import '../../models/models_category.dart';
 import '../../models/models_taking_drugs_info.dart';
 import '../search/search_shape.dart';
-import '../search/search_text.dart';
 
 class PillTaskingList extends StatefulWidget {
   const PillTaskingList({super.key});

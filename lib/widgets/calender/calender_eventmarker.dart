@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:table_calendar/table_calendar.dart';
 import 'package:sopf_front/screens/calendar/calenderPage.dart';
 
 class EventMarker extends StatelessWidget {

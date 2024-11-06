@@ -1,9 +1,5 @@
-import 'dart:convert';
-import 'dart:ffi';
-
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
 import 'package:sopf_front/constans/colors.dart';
 import 'package:sopf_front/constans/gaps.dart';
 import 'package:sopf_front/constans/text_styles.dart';
@@ -11,20 +7,13 @@ import 'package:sopf_front/managers/managers_drugs.dart';
 import 'package:sopf_front/managers/managers_favorites.dart';
 import 'package:sopf_front/models/models_drug_info.dart';
 import 'package:sopf_front/models/models_favorite_info.dart';
-import 'package:sopf_front/providers/provider.dart';
 import 'package:flutter/widgets.dart';
-import 'package:sopf_front/home.dart';
-import 'package:sopf_front/main.dart';
 
 // Project imports:
 import 'package:sopf_front/navigates.dart';
-import 'package:sopf_front/screens/search/result/search_result_pill_detail.dart';
 import 'package:sopf_front/screens/search/search_shape.dart';
 import 'package:sopf_front/services/services_favorite.dart';
 import 'package:sopf_front/services/services_search.dart';
-import 'package:sopf_front/screens/search/search_shape.dart';
-
-import '../../../navigates.dart';
 
 class SearchResult extends StatefulWidget {
   final String searchKeyword;

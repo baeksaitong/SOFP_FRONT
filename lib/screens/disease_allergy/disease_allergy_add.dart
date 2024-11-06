@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:logger/logger.dart';
 import 'package:provider/provider.dart';
 import 'package:sopf_front/constans/colors.dart';
@@ -7,7 +6,6 @@ import 'package:sopf_front/constans/text_styles.dart';
 import 'package:sopf_front/constans/gaps.dart';
 import 'package:sopf_front/providers/provider.dart';
 import 'package:sopf_front/navigates.dart';
-import 'package:sopf_front/home.dart';
 import 'package:sopf_front/services/services_disease_allergy.dart';
 
 import '../../widgets/disease_allergy/disease_allergy_bottom_sheet.dart';

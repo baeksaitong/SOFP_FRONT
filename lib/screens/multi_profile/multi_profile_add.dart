@@ -15,16 +15,9 @@ import 'package:sopf_front/constans/colors.dart';
 import 'package:sopf_front/constans/gaps.dart';
 import 'package:sopf_front/constans/text_styles.dart';
 import 'package:sopf_front/navigates.dart';
-import 'package:sopf_front/screens/search/search_shape.dart';
 import 'package:sopf_front/services/services_profile.dart';
-import 'package:sopf_front/services/services_auth.dart';
 
 // Widget imports:
-import 'package:sopf_front/widgets/multi_profile/birthdate_picker.dart';
-import 'package:sopf_front/widgets/multi_profile/color_selector.dart';
-import 'package:sopf_front/widgets/multi_profile/gender_selector.dart';
-import 'package:sopf_front/widgets/multi_profile/profile_image_picker.dart';
-
 import '../../models/models_profile.dart';
 import '../../providers/provider.dart';
 

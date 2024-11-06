@@ -1,12 +1,10 @@
 // Dart imports:
-import 'dart:convert';
 import 'dart:io';
 
 // Flutter imports:
 import 'package:flutter/material.dart';
 
 // Package imports:
-import 'package:http/http.dart' as http;
 import 'package:image_picker/image_picker.dart';
 import 'package:logger/logger.dart';
 
@@ -14,7 +12,6 @@ import 'package:logger/logger.dart';
 import 'package:sopf_front/constans/colors.dart';
 import 'package:sopf_front/services/services_member.dart';
 import '../../constans/gaps.dart';
-import '../../managers/managers_jwt.dart';
 import '../../models/models_member_info.dart';
 
 class MyPageEdit extends StatefulWidget {

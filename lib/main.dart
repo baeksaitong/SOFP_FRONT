@@ -6,14 +6,12 @@ import 'package:camera/camera.dart';
 import 'package:flutter/services.dart';
 
 import 'package:provider/provider.dart';
-import 'package:sopf_front/constans/text_styles.dart';
 
 
 // Project imports:
 import 'package:sopf_front/providers/provider.dart';
 import 'package:sopf_front/screens/sign/sign_in.dart';
 import 'constans/colors.dart';
-import 'home.dart';
 import 'providers/provider_loading.dart';
 
 /* hanjo

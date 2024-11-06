@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:sopf_front/constans/colors.dart';
 
 class InfoTile extends StatelessWidget {
   final String title;

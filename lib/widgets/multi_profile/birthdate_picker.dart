@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:sopf_front/constans/colors.dart';
-import 'package:sopf_front/constans/text_styles.dart';
 
 class BirthdatePicker extends StatelessWidget {
   final String label;

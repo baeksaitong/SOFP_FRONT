@@ -1,9 +1,7 @@
 import 'dart:io';
 import 'package:flutter/material.dart';
-import 'package:http/http.dart' as http;
 import 'package:image_picker/image_picker.dart';
 import 'package:logger/logger.dart';
-import 'package:provider/provider.dart';
 import 'package:sopf_front/constans/colors.dart';
 import 'package:sopf_front/constans/text_styles.dart';
 import 'package:sopf_front/constans/gaps.dart';
@@ -11,9 +9,6 @@ import 'package:sopf_front/managers/managers_global_response.dart';
 import 'package:sopf_front/managers/managers_jwt.dart';
 import 'package:sopf_front/models/models_profile.dart';
 import 'package:sopf_front/navigates.dart';
-import 'package:sopf_front/services/services_profile.dart';
-
-import '../../providers/provider.dart'; // Profile 모델
 import 'package:sopf_front/services/services_profile.dart';
 
 class MyPageProfileEdit extends StatefulWidget {

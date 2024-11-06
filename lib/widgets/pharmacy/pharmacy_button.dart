@@ -1,8 +1,6 @@
 // Flutter imports:
 import 'package:flutter/material.dart';
 
-// Project imports:
-import 'package:sopf_front/constans/colors.dart';
 
 class PharmacyButton extends StatelessWidget {
   final bool isSelected;

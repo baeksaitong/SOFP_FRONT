@@ -1,7 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:sopf_front/constans/colors.dart';
 import 'package:sopf_front/constans/gaps.dart';
-import 'package:sopf_front/constans/text_styles.dart';
 
 class PillCategoryForm extends StatefulWidget {
   final TextEditingController categoryNameController;
