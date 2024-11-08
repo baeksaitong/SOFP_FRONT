@@ -14,6 +14,8 @@ import 'package:sopf_front/constans/colors.dart';
 import 'package:sopf_front/constans/text_styles.dart';
 import 'package:sopf_front/constans/gaps.dart';
 import 'package:sopf_front/navigates.dart';
+import 'package:sopf_front/services/services_search.dart';
+import '../../managers/managers_drugs.dart';
 import 'result/search_result_image.dart';
 
 class SearchImage extends StatelessWidget {
@@ -60,6 +62,7 @@ class _CameraScreenState extends State<CameraScreen> {
   final ImagePicker _picker = ImagePicker();
   bool _isLoadingImage = false;
   bool _isTakingPicture = false;
+  SearchService searchService = SearchService();
 
   var logger = Logger();
 
@@ -291,8 +294,9 @@ class _CameraScreenState extends State<CameraScreen> {
                   color: AppColors.vibrantTeal,
                 ),
               ),
-              onPressed: () {
+              onPressed: () async {
                 Navigator.of(context).pop();
+
                 _navigateToSearchResultPage(); // **검색 버튼 클릭 시 호출**
               },
             ),

@@ -76,6 +76,8 @@ class _SearchResultImageState extends State<SearchResultImage> {
   }
 
   void _initializeDrugs() async {
+    DrugsManager().clearDrugs();
+
     showLoading(context, delayed: true); // 로딩 표시
 
     await searchService.searchImagePost(context, widget.firstImageFile, widget.secondImageFile);
